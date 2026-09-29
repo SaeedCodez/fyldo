@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII, the Arabic decimal separator (U+066B) as \".\" and the Arabic thousands separator (U+066C) is removed: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
   "cases": [
     { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
     { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
@@ -139,7 +139,11 @@
     { "name": "url: ASCII is untouched", "type": "url", "input": "https://example.com/a-1", "expect": "https://example.com/a-1" },
     { "name": "email: Persian digits in the local part", "type": "email", "input": "user۱۲@example.com", "expect": "user12@example.com" },
     { "name": "email: Arabic-Indic digits in the domain", "type": "email", "input": "user@example٢.com", "expect": "user@example2.com" },
-    { "name": "email: all ten of each script", "type": "email", "input": "a۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩@example.com", "expect": "a01234567890123456789@example.com" }
+    { "name": "email: all ten of each script", "type": "email", "input": "a۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩@example.com", "expect": "a01234567890123456789@example.com" },
+    { "name": "url: Persian separators are read too", "type": "url", "input": "https://example٫com/page/۱٬۰۰۰", "expect": "https://example.com/page/1000" },
+    { "name": "email: Persian decimal separator in the domain", "type": "email", "input": "user@example٫com", "expect": "user@example.com" },
+    { "name": "text keeps the Persian separators", "type": "text", "input": "۱٬۲۳۴٫۵", "expect": "۱٬۲۳۴٫۵" },
+    { "name": "password keeps the Persian separators", "type": "password", "input": "a٫b٬c", "expect": "a٫b٬c" }
   ],
 
   "numbers": [
@@ -167,8 +171,14 @@
     { "name": "a thousands comma is not a number", "input": "1,000", "expect": "1,000" },
     { "name": "an exponent is not a number", "input": "1e3", "expect": "1e3" },
     { "name": "a lone minus is not a number yet", "input": "-", "expect": "-" },
-    { "name": "the Persian decimal separator is not read", "input": "۱٫۵", "expect": "1٫5" },
-    { "name": "the Persian thousands separator is not read", "input": "۱۲٬۳۴۵", "expect": "12٬345" },
+    { "name": "the Persian decimal separator reads as a dot", "input": "۱٫۵", "expect": 1.5 },
+    { "name": "the Persian thousands separator is dropped", "input": "۱۲٬۳۴۵", "expect": 12345 },
+    { "name": "both Persian separators", "input": "۱٬۲۳۴٫۵۶", "expect": 1234.56 },
+    { "name": "a leading Persian decimal separator", "input": "٫۵", "expect": 0.5 },
+    { "name": "negative with both Persian separators", "input": "-۱٬۲۳۴٫۵", "expect": -1234.5 },
+    { "name": "the Persian decimal separator with ASCII digits", "input": "3٫14", "expect": 3.14 },
+    { "name": "two Persian decimal separators are not a number", "input": "۱٫۲٫۳", "expect": "1.2.3" },
+    { "name": "a lone Persian thousands separator is nothing", "input": "٬", "expect": "" },
     { "name": "a JSON integer", "input": 7, "expect": 7 },
     { "name": "a JSON float", "input": 2.5, "expect": 2.5 },
     { "name": "a whole float becomes an int", "input": 4.0, "expect": 4 },

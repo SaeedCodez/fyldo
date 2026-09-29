@@ -203,6 +203,25 @@ describe('number field', () => {
     expect(input).toHaveValue('129');
     expect(input.selectionStart).toBe(2);
   });
+
+  it('the Persian separators: ٫ is read as a decimal point, ٬ is dropped', async () => {
+    const onValue = vi.fn();
+    render(<Harness onValue={onValue} />);
+    const input = screen.getByLabelText('Amount');
+    await userEvent.type(input, '۱٬۲۳۴٫۵');
+    expect(input).toHaveValue('1234.5');
+    expect(onValue).toHaveBeenLastCalledWith(1234.5);
+  });
+
+  it('the caret stays after the text before it when a dropped ٬ shortens that text', async () => {
+    render(<Harness initial={1000} />);
+    const input = screen.getByLabelText('Amount') as HTMLInputElement;
+    input.focus();
+    input.setSelectionRange(1, 1);
+    await userEvent.keyboard('٬');
+    expect(input).toHaveValue('1000');
+    expect(input.selectionStart).toBe(1);
+  });
 });
 
 describe('URL and email inputs', () => {

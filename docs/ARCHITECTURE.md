@@ -249,7 +249,7 @@ $all   = Fyldo::instance( 'acme-seo' )->all( 'general' );
 - Values never include fields not in the schema; unknown keys are dropped on write.
 - `password` fields are **write-only**: never sent to the browser; the UI shows a "•••• set" placeholder; omit/`null` = keep, `""` = clear. The browser's value for the field is `null` (one is stored, leave it) or `''` (none); typing replaces, emptying after typing clears. It is stored and returned by `Instance::get()` exactly as typed (never trimmed), `autocomplete` defaults to `new-password`, and it cannot have a `default`.
 - `notice` fields are **display only**: not in `Page::fields()`, so never stored, never in `values`, never sent to or accepted from REST (an id in a payload is ignored like any unknown key). They accept only `label` (title, optional), `description` (the message, required) and `tone` (`gray|blue|green|amber|red`, default gray).
-- `number` values are `int|float`, `''` when empty; Persian (۰-۹) and Arabic-Indic (٠-٩) digits are read as ASCII in the browser as the user types and again in PHP; `url` and `email` do the same, `text` and `password` never do.
+- `number` values are `int|float`, `''` when empty; Persian (۰-۹) and Arabic-Indic (٠-٩) digits are read as ASCII in the browser as the user types and again in PHP, the Persian decimal separator `٫` as `.` and the thousands separator `٬` is dropped; `url` and `email` do the same, `text` and `password` never do.
 
 ---
 
