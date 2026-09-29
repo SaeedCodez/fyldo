@@ -11,6 +11,8 @@ const channel = process.env.PLAYWRIGHT_CHANNEL || undefined;
 
 export default defineConfig({
   testDir: './e2e',
+  // Figma reference PNGs (exported through the figma-console MCP) double as the expected screenshots.
+  snapshotPathTemplate: 'tests/visual/figma/{arg}{ext}',
   timeout: 30_000,
   expect: { timeout: 7_000 },
   fullyParallel: true,

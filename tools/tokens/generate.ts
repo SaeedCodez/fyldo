@@ -179,7 +179,8 @@ export function generate(
     if (why) warnings.push(`Effect style "${e.name}" skipped: ${why}.`);
     return !why;
   });
-  const effectVar = (name: string) => '--fyldo-shadow-' + name.replace(/[\s/]+/g, '-').toLowerCase();
+  // `Shadow/Medium` → --fyldo-shadow-medium (utility `shadow-medium`); `Focus/Input` → --fyldo-shadow-focus-input.
+  const effectVar = (name: string) => '--fyldo-shadow-' + name.replace(/^Shadow\//, '').replace(/[\s/]+/g, '-').toLowerCase();
   root.push('  /* Effects */');
   for (const e of effects) {
     root.push(`  ${effectVar(e.name)}: ${e.layers.map((l) => `${px(l.x)} ${px(l.y)} ${px(l.blur)} ${px(l.spread)} ${l.color}`).join(', ')};`);

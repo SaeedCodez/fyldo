@@ -16,3 +16,4 @@ composer.lock
 .vscode/
 tokens/.raw/
 e2e/.auth/
+tests/visual/**/*-actual.png

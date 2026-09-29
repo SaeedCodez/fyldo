@@ -157,10 +157,10 @@
   --fyldo-font-mono-fa: "Fyldo Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --fyldo-font-sans-fa: "Fyldo Vazirmatn", "Fyldo Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   /* Effects */
-  --fyldo-shadow-shadow-small: 0px 2px 2px 0px #0000000a;
-  --fyldo-shadow-shadow-medium: 0px 4px 8px -4px #0000000a, 0px 16px 24px -8px #0000000f;
-  --fyldo-shadow-shadow-large: 0px 1px 1px 0px #00000005, 0px 8px 16px -4px #0000000a, 0px 24px 32px -8px #0000000f;
-  --fyldo-shadow-shadow-thumb: 0px 1px 2px 0px #00000029, 0px 0px 0px 0.5px #00000014;
+  --fyldo-shadow-small: 0px 2px 2px 0px #0000000a;
+  --fyldo-shadow-medium: 0px 4px 8px -4px #0000000a, 0px 16px 24px -8px #0000000f;
+  --fyldo-shadow-large: 0px 1px 1px 0px #00000005, 0px 8px 16px -4px #0000000a, 0px 24px 32px -8px #0000000f;
+  --fyldo-shadow-thumb: 0px 1px 2px 0px #00000029, 0px 0px 0px 0.5px #00000014;
   --fyldo-shadow-focus-input: 0px 0px 0px 3px #0000001a;
   --fyldo-shadow-focus-input-error: 0px 0px 0px 3px #da2f3529;
   /* Active fonts (RTL switches below) */
@@ -383,10 +383,10 @@
   --radius-none: var(--fyldo-radius-none);
   --radius-sm: var(--fyldo-radius-sm);
   --radius-xs: var(--fyldo-radius-xs);
-  --shadow-shadow-small: var(--fyldo-shadow-shadow-small);
-  --shadow-shadow-medium: var(--fyldo-shadow-shadow-medium);
-  --shadow-shadow-large: var(--fyldo-shadow-shadow-large);
-  --shadow-shadow-thumb: var(--fyldo-shadow-shadow-thumb);
+  --shadow-small: var(--fyldo-shadow-small);
+  --shadow-medium: var(--fyldo-shadow-medium);
+  --shadow-large: var(--fyldo-shadow-large);
+  --shadow-thumb: var(--fyldo-shadow-thumb);
   --shadow-focus-input: var(--fyldo-shadow-focus-input);
   --shadow-focus-input-error: var(--fyldo-shadow-focus-input-error);
 }

@@ -20,30 +20,33 @@ export interface ButtonProps extends Omit<ComponentPropsWithoutRef<typeof BaseBu
 }
 
 /*
- * Figma draws the 1px stroke INSIDE the box, so widths are the same for every type. With a real CSS border we take the
- * border from the padding: 12 → 11, 16 → 15, 20 → 19 (`px-2.75` = 11px on the 4px spacing scale).
+ * Figma auto-layout COUNTS the 1px stroke in the layout: a variant with a stroke is 2px wider than one without
+ * (Primary 68 · Secondary 70 · Primary Disabled 70 · Loading +22 for the spinner). So padding is always 12/16/20 and the
+ * border exists only where Figma has a stroke: Secondary always, every other type only when disabled/loading.
  */
 const SIZE: Record<ButtonSize, string> = {
-  sm: 'fy:h-8 fy:px-2.75 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
-  md: 'fy:h-10 fy:px-3.75 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
-  lg: 'fy:h-12 fy:px-4.75 fy:gap-2 fy:rounded-md fy:text-button-16',
+  sm: 'fy:h-8 fy:px-3 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
+  md: 'fy:h-10 fy:px-4 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
+  lg: 'fy:h-12 fy:px-5 fy:gap-2 fy:rounded-md fy:text-button-16',
 };
 
 const VARIANT: Record<ButtonVariant, string> = {
-  primary:
-    'fy:bg-action-primary fy:text-text-inverse fy:border-transparent fy:hover:bg-action-primary-hover',
+  primary: 'fy:bg-action-primary fy:text-text-inverse fy:hover:bg-action-primary-hover',
   secondary:
-    'fy:bg-action-secondary fy:text-text-primary fy:border-border-default fy:hover:bg-action-secondary-hover fy:hover:border-border-hover',
-  tertiary: 'fy:bg-transparent fy:text-text-primary fy:border-transparent fy:hover:bg-action-tertiary-hover',
-  error: 'fy:bg-action-danger fy:text-text-inverse fy:border-transparent fy:hover:bg-action-danger-hover',
+    'fy:border fy:border-border-default fy:bg-action-secondary fy:text-text-primary fy:hover:border-border-hover fy:hover:bg-action-secondary-hover',
+  tertiary: 'fy:bg-transparent fy:text-text-primary fy:hover:bg-action-tertiary-hover',
+  error: 'fy:bg-action-danger fy:text-text-inverse fy:hover:bg-action-danger-hover',
 };
 
 /** Disabled and Loading look identical (Figma): pale fill + inside stroke; Tertiary has neither. */
+const DISABLED_BASE = 'fy:data-disabled:cursor-not-allowed fy:data-disabled:text-text-disabled';
+const DISABLED_FILLED =
+  'fy:data-disabled:border fy:data-disabled:border-border-default fy:data-disabled:bg-action-disabled fy:data-disabled:hover:border-border-default fy:data-disabled:hover:bg-action-disabled';
 const DISABLED: Record<ButtonVariant, string> = {
-  primary: 'fy:data-disabled:bg-action-disabled fy:data-disabled:text-text-disabled fy:data-disabled:border-border-default fy:data-disabled:hover:bg-action-disabled',
-  secondary: 'fy:data-disabled:bg-action-disabled fy:data-disabled:text-text-disabled fy:data-disabled:border-border-default fy:data-disabled:hover:bg-action-disabled fy:data-disabled:hover:border-border-default',
-  tertiary: 'fy:data-disabled:bg-transparent fy:data-disabled:text-text-disabled fy:data-disabled:border-transparent fy:data-disabled:hover:bg-transparent',
-  error: 'fy:data-disabled:bg-action-disabled fy:data-disabled:text-text-disabled fy:data-disabled:border-border-default fy:data-disabled:hover:bg-action-disabled',
+  primary: `${DISABLED_BASE} ${DISABLED_FILLED}`,
+  secondary: `${DISABLED_BASE} ${DISABLED_FILLED}`,
+  tertiary: `${DISABLED_BASE} fy:data-disabled:bg-transparent fy:data-disabled:hover:bg-transparent`,
+  error: `${DISABLED_BASE} ${DISABLED_FILLED}`,
 };
 
 export function Button({
@@ -71,12 +74,11 @@ export function Button({
       data-size={size}
       data-loading={loading ? '' : undefined}
       className={cn(
-        'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:border fy:select-none fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out',
         'fy:focus-ring',
         SIZE[size],
         VARIANT[variant],
         DISABLED[variant],
-        'fy:data-disabled:cursor-not-allowed',
         className as string | undefined,
       )}
     >
