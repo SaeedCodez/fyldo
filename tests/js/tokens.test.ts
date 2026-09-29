@@ -9,8 +9,7 @@ const read = <T>(file: string): T => JSON.parse(readFileSync(resolve(__dirname, 
 const snapshot = read<TokenSnapshot>('tokens/figma.tokens.json');
 const styles = read<StyleSnapshot>('tokens/figma.styles.json');
 
-/** The Figma file may not have the approved focus tokens yet; everything else is tested against the real snapshot. */
-const dev = () => generate(snapshot, styles, { allowMissing: true });
+const dev = () => generate(snapshot, styles);
 
 describe('snapshot normalisation', () => {
   it('lower-cases hex and drops an opaque alpha byte', () => {
@@ -122,10 +121,9 @@ describe('generator', () => {
     expect(dev().css).toContain('--spacing: 4px;');
   });
 
-  it('is STRICT: a missing Figma token fails the build and names it (the fallback is for local development only)', () => {
+  it('is STRICT and has no fallback: a missing Figma token fails the build and names it', () => {
     const without: TokenSnapshot = { ...snapshot, tokens: snapshot.tokens.filter((t) => !REQUIRED_TOKENS.includes(t.name)) };
-    expect(() => generate(without, styles)).toThrow(/focus\/ring-neutral, focus\/border/);
-    expect(generate(without, styles, { allowMissing: true }).warnings.join(' ')).toContain('FALLBACK');
+    expect(() => generate(without, styles)).toThrow(/focus\/ring-neutral, focus\/border, border\/input, border\/input-hover/);
   });
 
   it('resolves aliases to final colours and detects cycles', () => {

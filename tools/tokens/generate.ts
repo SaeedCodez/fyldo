@@ -15,11 +15,9 @@ import type { StyleSnapshot, Token, TokenSnapshot } from './snapshot.ts';
 
 export interface GenerateOptions {
   rootSelector: string;
-  /** Local development only: fall back when the Figma focus tokens are not there yet. CI never sets this. */
-  allowMissing: boolean;
 }
 
-export const DEFAULTS: GenerateOptions = { rootSelector: '[data-fyldo-v1]', allowMissing: false };
+export const DEFAULTS: GenerateOptions = { rootSelector: '[data-fyldo-v1]' };
 
 /** Figma font names → the self-hosted families we ship (Vazirmatn replaces IRANYekanX in code). */
 export const FONT_STACKS: Record<string, string> = {
@@ -49,7 +47,7 @@ export const SHADCN_MAP: Record<string, string> = {
   destructive: 'action.danger',
   'destructive-foreground': 'text.inverse',
   border: 'border.default',
-  input: 'border.default',
+  input: 'border.input',
   ring: 'focus.ring-neutral',
   sidebar: 'background.subtle',
   'sidebar-foreground': 'text.primary',
@@ -62,7 +60,7 @@ export const SHADCN_MAP: Record<string, string> = {
 };
 
 /** Tokens the components rely on that Figma must define (besides those in SHADCN_MAP). */
-export const REQUIRED_TOKENS = ['color.focus.ring-neutral', 'color.focus.border'];
+export const REQUIRED_TOKENS = ['color.focus.ring-neutral', 'color.focus.border', 'color.border.input', 'color.border.input-hover'];
 
 /** Effect styles that are intentionally not generated. */
 export const SKIPPED_EFFECTS: Record<string, string> = {
@@ -72,12 +70,6 @@ export const SKIPPED_EFFECTS: Record<string, string> = {
 /** Variables that exist in Figma but must never reach the code. */
 export const SKIPPED_TOKENS: Record<string, string> = {
   'color.focus.ring': 'blue focus ring — never used; the neutral ring comes from focus/ring-neutral',
-};
-
-/** Fallbacks used only with `allowMissing` (local development while Figma is catching up). */
-const FALLBACKS: Record<string, string> = {
-  'color.focus.ring-neutral': 'color.action.primary',
-  'color.focus.border': 'color.action.primary',
 };
 
 const byName = (snapshot: TokenSnapshot) => new Map(snapshot.tokens.map((t) => [t.name, t]));
@@ -144,13 +136,12 @@ export function generate(
   );
   if (missing.length > 0) {
     const list = missing.map((m) => m.replace(/^color\./, '').replace(/\./g, '/')).join(', ');
-    if (!opts.allowMissing) throw new Error(`Figma is missing token(s) the code needs: ${list}. Add them in Figma, then re-run figma:sync.`);
-    warnings.push(`FALLBACK in use for missing Figma token(s): ${list} — development only, CI must not allow this.`);
+    throw new Error(`Figma is missing token(s) the code needs: ${list}. Add them in Figma, then refresh the snapshot (docs/figma-token-fixes.md §3).`);
   }
 
   const reference = (path: string): string => {
     const full = `color.${path}`;
-    const token = tokens.get(full) ?? (opts.allowMissing && FALLBACKS[full] ? tokens.get(FALLBACKS[full] as string) : undefined);
+    const token = tokens.get(full);
     if (!token) throw new Error(`Unknown token ${full}`);
     return `var(${cssName(token)})`;
   };

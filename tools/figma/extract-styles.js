@@ -1,8 +1,8 @@
 /**
  * Runs INSIDE Figma (figma-console MCP → figma_execute). Returns text + effect styles as compact JSON.
- * The result is saved (by the developer / the assistant) as tokens/figma.styles.json.
+ * The result is saved (by the developer / the assistant) as tokens/.raw/styles.json; `npm run tokens:snapshot` turns it into tokens/figma.styles.json.
  *
- *   npm run figma:sync documents the full procedure (variables via figma_export_tokens, styles via this file).
+ *   docs/figma-token-fixes.md §3 documents the full procedure (variables via figma_export_tokens or extract-variables.js, styles via this file).
  */
 const hex8 = (c) =>
   '#' +

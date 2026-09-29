@@ -101,6 +101,18 @@
       "css": "--fyldo-border-hover"
     },
     {
+      "name": "color.border.input",
+      "type": "color",
+      "value": "{primitives.color.gray.700}",
+      "css": "--fyldo-border-input"
+    },
+    {
+      "name": "color.border.input-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.900}",
+      "css": "--fyldo-border-input-hover"
+    },
+    {
       "name": "color.border.strong",
       "type": "color",
       "value": "{primitives.color.gray.600}",
@@ -124,7 +136,7 @@
     {
       "name": "color.control.off",
       "type": "color",
-      "value": "{primitives.color.gray.500}",
+      "value": "{primitives.color.gray.700}",
       "description": "Toggle track (off)",
       "css": "--fyldo-control-off"
     },
@@ -138,7 +150,7 @@
     {
       "name": "color.control.off-hover",
       "type": "color",
-      "value": "{primitives.color.gray.600}",
+      "value": "{primitives.color.gray.900}",
       "description": "Toggle track (off, hover)",
       "css": "--fyldo-control-off-hover"
     },
@@ -171,11 +183,23 @@
       "css": "--fyldo-control-thumb"
     },
     {
+      "name": "color.focus.border",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "css": "--fyldo-focus-border"
+    },
+    {
       "name": "color.focus.ring",
       "type": "color",
       "value": "{primitives.color.blue.700}",
       "description": "Focus ring",
       "css": "--fyldo-focus-ring"
+    },
+    {
+      "name": "color.focus.ring-neutral",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "css": "--fyldo-focus-ring-neutral"
     },
     {
       "name": "color.icon.primary",
@@ -226,7 +250,7 @@
     {
       "name": "color.status.error.subtle",
       "type": "color",
-      "value": "{primitives.color.red.300}",
+      "value": "{primitives.color.red.200}",
       "description": "Subtle badge background",
       "css": "--fyldo-status-error-subtle"
     },
@@ -251,7 +275,7 @@
     {
       "name": "color.status.info.solid",
       "type": "color",
-      "value": "{primitives.color.blue.700}",
+      "value": "{primitives.color.blue.800}",
       "css": "--fyldo-status-info-solid"
     },
     {
@@ -314,7 +338,7 @@
     {
       "name": "color.status.success.solid",
       "type": "color",
-      "value": "{primitives.color.green.700}",
+      "value": "{primitives.color.green.900}",
       "css": "--fyldo-status-success-solid"
     },
     {
@@ -420,7 +444,7 @@
     {
       "name": "color.text.tertiary",
       "type": "color",
-      "value": "{primitives.color.gray.700}",
+      "value": "{primitives.color.gray.850}",
       "description": "Placeholders & hints",
       "css": "--fyldo-text-tertiary"
     },
@@ -621,6 +645,12 @@
       "type": "color",
       "value": "#7d7d7d",
       "css": "--fyldo-gray-800"
+    },
+    {
+      "name": "primitives.color.gray.850",
+      "type": "color",
+      "value": "#737373",
+      "css": "--fyldo-gray-850"
     },
     {
       "name": "primitives.color.gray.900",

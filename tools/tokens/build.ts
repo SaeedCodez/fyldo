@@ -1,8 +1,6 @@
 /**
  * npm run tokens         → writes app/styles/tokens.generated.css
  * npm run tokens:check   → regenerates in memory and fails when the committed file differs (CI)
- *
- * TOKENS_ALLOW_MISSING=1 lets local development continue while Figma lacks tokens; CI never sets it.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -13,9 +11,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const target = resolve(root, 'app/styles/tokens.generated.css');
 const read = (file: string) => JSON.parse(readFileSync(resolve(root, file), 'utf8'));
 
-const { css, warnings } = generate(read('tokens/figma.tokens.json'), read('tokens/figma.styles.json'), {
-  allowMissing: process.env.TOKENS_ALLOW_MISSING === '1',
-});
+const { css, warnings } = generate(read('tokens/figma.tokens.json'), read('tokens/figma.styles.json'));
 for (const w of warnings) console.warn(`tokens: warning: ${w}`);
 
 if (process.argv.includes('--check')) {
