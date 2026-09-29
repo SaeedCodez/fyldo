@@ -50,6 +50,16 @@ export interface SelectFieldDef extends FieldBase {
   options: SelectOptionDef[];
 }
 
+export interface MultiSelectFieldDef extends FieldBase {
+  type: 'multi_select';
+  placeholder: string;
+  /** The search row in the popup. */
+  searchable: boolean;
+  /** The Clear button in the field. */
+  clearable: boolean;
+  options: SelectOptionDef[];
+}
+
 export interface TextareaFieldDef extends FieldBase {
   type: 'textarea';
   placeholder: string;
@@ -80,7 +90,15 @@ export interface RadioFieldDef extends FieldBase {
   options: ChoiceOptionDef[];
 }
 
-export type FieldDef = TextFieldDef | TextareaFieldDef | ToggleFieldDef | CheckboxFieldDef | CheckboxGroupFieldDef | RadioFieldDef | SelectFieldDef;
+export type FieldDef =
+  | TextFieldDef
+  | TextareaFieldDef
+  | ToggleFieldDef
+  | CheckboxFieldDef
+  | CheckboxGroupFieldDef
+  | RadioFieldDef
+  | SelectFieldDef
+  | MultiSelectFieldDef;
 
 export interface SectionDef {
   id: string;

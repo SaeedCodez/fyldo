@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php) and Vitest (tests/js/validation.test.ts). `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max. For a list value (checkbox group) min/max count the selected items and an empty list still counts against min.",
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php) and Vitest (tests/js/validation.test.ts). `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min.",
   "cases": [
     { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
     { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
@@ -77,6 +77,20 @@
     { "name": "list: min is checked before max", "rules": { "min": 3, "max": 1 }, "value": ["a", "b"], "expect": "min" },
     { "name": "list: numeric-looking values compare as strings", "rules": { "allowed": ["1", "2"], "min": 1 }, "value": ["2"], "expect": null },
     { "name": "list: required + min + allowed pass together", "rules": { "required": true, "min": 1, "max": 2, "allowed": ["a", "b", "c"] }, "value": ["a", "c"], "expect": null },
+
+    { "name": "multi select: nothing selected passes when optional", "rules": { "allowed": ["post", "page", "product"], "max": 2 }, "value": [], "expect": null },
+    { "name": "multi select: required and empty fails before min", "rules": { "required": true, "min": 2, "allowed": ["post", "page", "product"] }, "value": [], "expect": "required" },
+    { "name": "multi select: min 2 with one selected", "rules": { "required": true, "min": 2, "allowed": ["post", "page", "product"] }, "value": ["post"], "expect": "min" },
+    { "name": "multi select: min 0 accepts an empty list", "rules": { "min": 0 }, "value": [], "expect": null },
+    { "name": "multi select: max 0 rejects any selection", "rules": { "max": 0 }, "value": ["post"], "expect": "max" },
+    { "name": "multi select: exactly at max", "rules": { "max": 3, "allowed": ["a", "b", "c", "d"] }, "value": ["a", "b", "c"], "expect": null },
+    { "name": "multi select: one over max", "rules": { "max": 3, "allowed": ["a", "b", "c", "d"] }, "value": ["a", "b", "c", "d"], "expect": "max" },
+    { "name": "multi select: min and max window", "rules": { "min": 2, "max": 3, "allowed": ["a", "b", "c", "d"] }, "value": ["b", "d"], "expect": null },
+    { "name": "multi select: a stranger among valid values", "rules": { "min": 1, "allowed": ["a", "b"] }, "value": ["a", "b", "c"], "expect": "allowed" },
+    { "name": "multi select: values are case-sensitive", "rules": { "allowed": ["post", "page"] }, "value": ["Post"], "expect": "allowed" },
+    { "name": "multi select: a nested value is not an option", "rules": { "allowed": ["a", "b"] }, "value": [["a"]], "expect": "allowed" },
+    { "name": "multi select: Persian option values", "rules": { "allowed": ["نوشته", "برگه", "محصول"], "min": 1 }, "value": ["برگه", "محصول"], "expect": null },
+    { "name": "multi select: Persian stranger", "rules": { "allowed": ["نوشته", "برگه"] }, "value": ["برگه", "محصول"], "expect": "allowed" },
 
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }

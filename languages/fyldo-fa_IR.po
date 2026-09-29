@@ -120,3 +120,34 @@ msgid "%d character over the limit."
 msgid_plural "%d characters over the limit."
 msgstr[0] "%d نویسه بیشتر از حد مجاز است."
 msgstr[1] "%d نویسه بیشتر از حد مجاز است."
+
+msgid "Remove %s"
+msgstr "حذف %s"
+
+msgid "%s removed"
+msgstr "%s حذف شد"
+
+msgid "Selection cleared"
+msgstr "انتخاب‌ها پاک شد"
+
+msgid "Clear all"
+msgstr "پاک کردن همه"
+
+msgid "Search…"
+msgstr "جستجو…"
+
+msgid "Search options"
+msgstr "جستجوی گزینه‌ها"
+
+msgid "No results found."
+msgstr "نتیجه‌ای پیدا نشد."
+
+msgid "%s selected"
+msgid_plural "%s selected"
+msgstr[0] "%s مورد انتخاب شده"
+msgstr[1] "%s مورد انتخاب شده"
+
+msgid "%s more selected"
+msgid_plural "%s more selected"
+msgstr[0] "%s مورد دیگر انتخاب شده"
+msgstr[1] "%s مورد دیگر انتخاب شده"

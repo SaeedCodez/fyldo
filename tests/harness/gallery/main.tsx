@@ -6,6 +6,9 @@
  *   ?c=checkbox&checked=0|1|indeterminate&state=disabled&label=…      ?c=radio&checked=1&label=…
  *   ?c=checkbox-group / ?c=radio-group — the option cards of the "Checkbox & Radio · Usage" frame
  *       (?title=&description=&options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled&value=post&parent=All)
+ *       options are value:label:description:disabled:icon
+ *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
+ *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
@@ -18,7 +21,9 @@ import { FieldShell } from '../../../app/components/ui/field-shell';
 import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
+import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
 import { SelectField } from '../../../app/components/ui/select-field';
+import { Tag, type TagSize } from '../../../app/components/ui/tag';
 import { TextField } from '../../../app/components/ui/text-field';
 import { Toggle } from '../../../app/components/ui/toggle';
 import { setLocaleData } from '../../../app/i18n';
@@ -51,13 +56,13 @@ const roles = [
 const param = (name: string, fallback = ''): string => q.get(name) ?? fallback;
 
 /** `options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled` → option list. */
-function optionsParam(): Array<{ value: string; label: string; description?: string; disabled?: boolean }> {
+function optionsParam(): Array<{ value: string; label: string; description?: string; disabled?: boolean; icon?: string }> {
   return param('options')
     .split('|')
     .filter(Boolean)
     .map((raw) => {
-      const [value = '', label = '', description = '', flag = ''] = raw.split(':');
-      return { value, label, ...(description ? { description } : {}), ...(flag === 'disabled' ? { disabled: true } : {}) };
+      const [value = '', label = '', description = '', flag = '', icon = ''] = raw.split(':');
+      return { value, label, ...(description ? { description } : {}), ...(flag === 'disabled' ? { disabled: true } : {}), ...(icon ? { icon } : {}) };
     });
 }
 
@@ -92,10 +97,38 @@ function RadioGroupDemo() {
   return <RadioGroup options={optionsParam()} value={value} onValueChange={setValue} />;
 }
 
+function MultiSelectDemo() {
+  const [value, setValue] = useState<string[]>(param('value').split(',').filter(Boolean));
+  const error = state === 'error' ? param('error') : undefined;
+  return (
+    <div style={{ width: 320 }}>
+      <MultiSelectField
+        label={param('label')}
+        description={param('helper')}
+        placeholder={param('placeholder')}
+        size={size}
+        options={optionsParam()}
+        value={value}
+        onValueChange={setValue}
+        maxVisibleTags={q.get('max') === null ? undefined : Number(param('max'))}
+        clearable={q.get('clear') === '1'}
+        searchable={q.get('search') !== '0'}
+        menuFooter={q.get('footer') !== '0'}
+        error={error}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
+}
+
 function Variant() {
   switch (q.get('c')) {
     case 'textarea':
       return <TextareaDemo />;
+    case 'tag':
+      return <Tag label={param('label', 'Posts')} size={(q.get('size') === 'md' ? 'md' : 'sm') as TagSize} disabled={state === 'disabled'} onRemove={q.get('removable') === '0' ? undefined : () => undefined} />;
+    case 'multi-select':
+      return <MultiSelectDemo />;
     case 'checkbox':
       return (
         <Checkbox
@@ -180,7 +213,7 @@ function Variant() {
         </div>
       );
     default:
-      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group</p>;
+      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select</p>;
   }
 }
 

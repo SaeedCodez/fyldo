@@ -21,28 +21,51 @@ export interface CheckboxProps extends Omit<ComponentPropsWithoutRef<typeof Base
 const BOX = [
   'fy:group/box fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:border',
   'fy:border-control-border fy:bg-background-default fy:text-control-thumb fy:transition-colors fy:duration-100 fy:ease-out',
-  'fy:hover:border-control-border-hover fy:group-hover/option:border-control-border-hover',
-  'fy:data-checked:border-0 fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover fy:data-checked:group-hover/option:bg-control-on-hover',
+  'fy:hover:border-control-border-hover fy:group-hover/option:border-control-border-hover fy:group-data-[highlighted]/option:border-control-border-hover',
+  'fy:data-checked:border-0 fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover fy:data-checked:group-hover/option:bg-control-on-hover fy:data-checked:group-data-[highlighted]/option:bg-control-on-hover',
   'fy:data-indeterminate:border-0 fy:data-indeterminate:bg-control-on fy:data-indeterminate:hover:bg-control-on-hover fy:data-indeterminate:group-hover/option:bg-control-on-hover',
   'fy:data-disabled:cursor-not-allowed fy:data-disabled:border-border-default fy:data-disabled:bg-surface-disabled',
-  'fy:data-disabled:hover:border-border-default fy:data-disabled:group-hover/option:border-border-default',
-  'fy:data-disabled:data-checked:border-0 fy:data-disabled:data-checked:bg-control-on-disabled fy:data-disabled:data-checked:hover:bg-control-on-disabled fy:data-disabled:data-checked:group-hover/option:bg-control-on-disabled',
+  'fy:data-disabled:hover:border-border-default fy:data-disabled:group-hover/option:border-border-default fy:data-disabled:group-data-[highlighted]/option:border-border-default',
+  'fy:data-disabled:data-checked:border-0 fy:data-disabled:data-checked:bg-control-on-disabled fy:data-disabled:data-checked:hover:bg-control-on-disabled fy:data-disabled:data-checked:group-hover/option:bg-control-on-disabled fy:data-disabled:data-checked:group-data-[highlighted]/option:bg-control-on-disabled',
   'fy:data-disabled:data-indeterminate:border-0 fy:data-disabled:data-indeterminate:bg-control-on-disabled fy:data-disabled:data-indeterminate:hover:bg-control-on-disabled fy:data-disabled:data-indeterminate:group-hover/option:bg-control-on-disabled',
   'fy:focus-ring',
 ].join(' ');
+
+const GLYPH = (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    {/* Figma: Check 7.5×5.25 at (4.25, 5.63), Dash 7 wide at (4.5, 8) inside the 16px box */}
+    <path data-glyph="check" d="M4.25 8.375L6.75 10.875L11.75 5.625" className="fy:group-data-[indeterminate]/box:hidden" />
+    <path data-glyph="dash" d="M4.5 8H11.5" className="fy:hidden fy:group-data-[indeterminate]/box:block" />
+  </svg>
+);
 
 /** The bare 16px box. Inside a Setting Row / group the surrounding Field names it. */
 function CheckboxBox({ className, ...props }: Omit<CheckboxProps, 'label' | 'description'>): ReactElement {
   return (
     <BaseCheckbox.Root {...props} data-slot="fy-checkbox" className={cn(BOX, className)}>
       <BaseCheckbox.Indicator className="fy:absolute fy:inset-0" data-slot="fy-checkbox-indicator">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-          {/* Figma: Check 7.5×5.25 at (4.25, 5.63), Dash 7 wide at (4.5, 8) inside the 16px box */}
-          <path data-glyph="check" d="M4.25 8.375L6.75 10.875L11.75 5.625" className="fy:group-data-[indeterminate]/box:hidden" />
-          <path data-glyph="dash" d="M4.5 8H11.5" className="fy:hidden fy:group-data-[indeterminate]/box:block" />
-        </svg>
+        {GLYPH}
       </BaseCheckbox.Indicator>
     </BaseCheckbox.Root>
+  );
+}
+
+/**
+ * The same 16px box drawn as a picture, for a row that is itself the control (a listbox option in a Multi Select):
+ * no input, no role — the option carries `aria-selected`. Hover and keyboard highlight come from the option
+ * (`group/option`, `data-highlighted`).
+ */
+export function CheckboxMark({ checked, disabled }: { checked: boolean; disabled?: boolean }): ReactElement {
+  return (
+    <span
+      aria-hidden="true"
+      data-slot="fy-checkbox"
+      data-checked={checked ? '' : undefined}
+      data-disabled={disabled ? '' : undefined}
+      className={cn(BOX, 'fy:pointer-events-none')}
+    >
+      {checked ? <span className="fy:absolute fy:inset-0">{GLYPH}</span> : null}
+    </span>
   );
 }
 
