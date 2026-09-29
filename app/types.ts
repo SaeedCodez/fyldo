@@ -50,7 +50,37 @@ export interface SelectFieldDef extends FieldBase {
   options: SelectOptionDef[];
 }
 
-export type FieldDef = TextFieldDef | ToggleFieldDef | SelectFieldDef;
+export interface TextareaFieldDef extends FieldBase {
+  type: 'textarea';
+  placeholder: string;
+  rows: number;
+  resize: 'vertical' | 'none';
+}
+
+export interface CheckboxFieldDef extends FieldBase {
+  type: 'checkbox';
+}
+
+export interface ChoiceOptionDef {
+  value: string;
+  label: string;
+  disabled: boolean;
+  description?: string;
+}
+
+export interface CheckboxGroupFieldDef extends FieldBase {
+  type: 'checkbox_group';
+  /** Label of the "all" checkbox; empty = none. */
+  parent: string;
+  options: ChoiceOptionDef[];
+}
+
+export interface RadioFieldDef extends FieldBase {
+  type: 'radio';
+  options: ChoiceOptionDef[];
+}
+
+export type FieldDef = TextFieldDef | TextareaFieldDef | ToggleFieldDef | CheckboxFieldDef | CheckboxGroupFieldDef | RadioFieldDef | SelectFieldDef;
 
 export interface SectionDef {
   id: string;

@@ -2,11 +2,22 @@
  * Renders ONE component variant from the query string, for the Figma parity tests and for visual review.
  *   ?c=button&variant=primary&size=sm&state=default
  *   ?c=input&size=sm&state=error        ?c=toggle&size=md&checked=1&state=disabled       ?c=select&size=lg&state=filled
+ *   ?c=textarea&state=error&label=…&placeholder=…&value=…&helper=…&error=…&count=172&limit=160&rows=4
+ *   ?c=checkbox&checked=0|1|indeterminate&state=disabled&label=…      ?c=radio&checked=1&label=…
+ *   ?c=checkbox-group / ?c=radio-group — the option cards of the "Checkbox & Radio · Usage" frame
+ *       (?title=&description=&options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled&value=post&parent=All)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
+import { Field } from '@base-ui/react/field';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button, type ButtonSize, type ButtonVariant } from '../../../app/components/ui/button';
+import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
+import { FieldShell } from '../../../app/components/ui/field-shell';
+import { GroupField } from '../../../app/components/ui/group-field';
+import { RadioGroup } from '../../../app/components/ui/radio';
+import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { SelectField } from '../../../app/components/ui/select-field';
 import { TextField } from '../../../app/components/ui/text-field';
 import { Toggle } from '../../../app/components/ui/toggle';
@@ -37,8 +48,85 @@ const roles = [
   { value: 'admin', label: 'Administrator' },
 ];
 
+const param = (name: string, fallback = ''): string => q.get(name) ?? fallback;
+
+/** `options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled` → option list. */
+function optionsParam(): Array<{ value: string; label: string; description?: string; disabled?: boolean }> {
+  return param('options')
+    .split('|')
+    .filter(Boolean)
+    .map((raw) => {
+      const [value = '', label = '', description = '', flag = ''] = raw.split(':');
+      return { value, label, ...(description ? { description } : {}), ...(flag === 'disabled' ? { disabled: true } : {}) };
+    });
+}
+
+function TextareaDemo() {
+  const [value, setValue] = useState(param('value'));
+  const count = q.get('count') === null ? [...value].length : Number(param('count'));
+  const limit = q.get('limit') === null ? undefined : Number(param('limit'));
+  const error = state === 'error' ? param('error') : undefined;
+  return (
+    <div style={{ width: 360 }}>
+      <FieldShell label={param('label')} disabled={state === 'disabled'} error={error} footer={<TextareaFooter description={param('helper')} error={error} count={count} limit={limit} />}>
+        <Textarea
+          value={value}
+          onValueChange={setValue}
+          placeholder={param('placeholder')}
+          rows={Number(param('rows', '4'))}
+          resize={param('resize', 'vertical') as 'vertical' | 'none'}
+          disabled={state === 'disabled'}
+        />
+      </FieldShell>
+    </div>
+  );
+}
+
+function CheckboxGroupDemo() {
+  const [value, setValue] = useState<string[]>(param('value').split(',').filter(Boolean));
+  return <CheckboxGroup options={optionsParam()} value={value} onValueChange={setValue} parent={param('parent') || undefined} />;
+}
+
+function RadioGroupDemo() {
+  const [value, setValue] = useState(param('value'));
+  return <RadioGroup options={optionsParam()} value={value} onValueChange={setValue} />;
+}
+
 function Variant() {
   switch (q.get('c')) {
+    case 'textarea':
+      return <TextareaDemo />;
+    case 'checkbox':
+      return (
+        <Checkbox
+          label={param('label', 'Send email notifications')}
+          description={q.get('description') ?? undefined}
+          defaultChecked={q.get('checked') === '1'}
+          indeterminate={q.get('checked') === 'indeterminate'}
+          disabled={state === 'disabled'}
+        />
+      );
+    case 'radio':
+      return (
+        <Field.Root disabled={state === 'disabled'}>
+          <RadioGroup
+            aria-label={param('label', 'Full width')}
+            options={[{ value: 'a', label: param('label', 'Full width'), description: q.get('description') ?? undefined }]}
+            value={q.get('checked') === '1' ? 'a' : ''}
+            onValueChange={() => undefined}
+            disabled={state === 'disabled'}
+          />
+        </Field.Root>
+      );
+    case 'checkbox-group':
+    case 'radio-group':
+      return (
+        <div style={{ width: 354 }}>
+          <GroupField label={param('title')} description={param('description')} disabled={state === 'disabled'}>
+            {q.get('c') === 'radio-group' ? <RadioGroupDemo /> : <CheckboxGroupDemo />}
+          </GroupField>
+        </div>
+      );
     case 'button':
       return (
         <Button
@@ -92,7 +180,7 @@ function Variant() {
         </div>
       );
     default:
-      return <p>Pick a component: ?c=button|input|toggle|select</p>;
+      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group</p>;
   }
 }
 

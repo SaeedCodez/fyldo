@@ -20,7 +20,15 @@ final class FieldFactory {
 	 * @return array<int,class-string<AbstractField>>
 	 */
 	public static function classes(): array {
-		return array( TextField::class, ToggleField::class, SelectField::class );
+		return array(
+			TextField::class,
+			TextareaField::class,
+			ToggleField::class,
+			CheckboxField::class,
+			CheckboxGroupField::class,
+			RadioField::class,
+			SelectField::class,
+		);
 	}
 
 	/**

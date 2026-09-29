@@ -81,6 +81,15 @@ if ( ! function_exists( 'sanitize_text_field' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sanitize_textarea_field' ) ) {
+	function sanitize_textarea_field( $str ) {
+		$str = strip_tags( (string) $str );
+		$str = str_replace( array( "\r\n", "\r" ), "\n", $str );
+		$str = implode( "\n", array_map( 'trim', explode( "\n", $str ) ) );
+		return trim( $str );
+	}
+}
+
 if ( ! function_exists( 'esc_url_raw' ) ) {
 	function esc_url_raw( $url ) {
 		$url = trim( (string) $url );

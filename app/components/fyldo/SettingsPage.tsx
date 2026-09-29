@@ -27,7 +27,7 @@ export function SettingsPage({ page, api }: SettingsPageProps): ReactElement {
     if (!focusAfterErrors.current || !firstInvalid) return;
     focusAfterErrors.current = false;
     column.current
-      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.id}"] :is(input, button, [role="switch"], [role="combobox"])`)
+      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.id}"] :is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])`)
       ?.focus();
   }, [state.errors, firstInvalid]);
 

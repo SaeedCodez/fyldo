@@ -31,8 +31,8 @@ final class Rules {
 			);
 		}
 
-		if ( self::is_empty( $value ) ) {
-			return null; // Optional and empty: nothing else to check.
+		if ( self::is_empty( $value ) && ! is_array( $value ) ) {
+			return null; // Optional and empty: nothing else to check. (An empty list still counts against `min`.)
 		}
 
 		if ( is_string( $value ) ) {
@@ -71,6 +71,28 @@ final class Rules {
 			}
 			if ( isset( $rules['max'] ) && $value > $rules['max'] ) {
 				return self::fail( 'max', array( 'max' => $rules['max'] ) );
+			}
+		}
+
+		// For a list (checkbox group, multi select) `min` / `max` count the selected items.
+		if ( is_array( $value ) ) {
+			if ( isset( $rules['min'] ) && count( $value ) < (int) $rules['min'] ) {
+				return self::fail(
+					'min',
+					array(
+						'min'   => (int) $rules['min'],
+						'items' => true,
+					)
+				);
+			}
+			if ( isset( $rules['max'] ) && count( $value ) > (int) $rules['max'] ) {
+				return self::fail(
+					'max',
+					array(
+						'max'   => (int) $rules['max'],
+						'items' => true,
+					)
+				);
 			}
 		}
 

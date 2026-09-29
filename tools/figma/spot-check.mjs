@@ -35,7 +35,7 @@ chk('input', { Size: 'Small', State: 'Focus' }, ['Control'], FX, 'Focus/Input', 
 chk('input', { Size: 'Small', State: 'Error' }, ['Control'], STROKE, 'status/error/solid', '4.2 Error stroke');
 chk('textarea', { State: 'Default' }, ['Control'], H, 104, '4.3 default height 104');
 chk('textarea', { State: 'Default' }, ['Control'], P4, [8, 12, 8, 12], '4.3 padding 12/8');
-chk('textarea', { State: 'Default' }, [], W, 320, '4.3 "As Input" (320 wide)');
+chk('textarea', { State: 'Default' }, [], W, 360, '4.3 width 360');
 chk('toggle', { Size: 'Small', Checked: 'False', State: 'Default' }, ['Track'], (n) => [n.width, n.height], [28, 16], '4.4 Small track 28x16');
 chk('toggle', { Size: 'Medium', Checked: 'False', State: 'Default' }, ['Track'], (n) => [n.width, n.height], [36, 20], '4.4 Medium track 36x20');
 chk('toggle', { Size: 'Medium', Checked: 'False', State: 'Default' }, [], G, 12, '4.4 Medium gap to text 12');
@@ -80,7 +80,7 @@ chk('tabs', {}, [], W, 800, '4.10 width 800');
 chk('tabs', {}, [], G, 4, '4.10 gap 4');
 chk('tabs', {}, ['Divider'], H, 1, '4.10 1 px bottom divider');
 chk('top-navigation', {}, ['Header'], H, 48, '4.10 row 1 height 48');
-chk('top-navigation', {}, ['Header'], PY, [12, 12], '4.10 row 1 padding-y 12');
+chk('top-navigation', {}, ['Header'], PY, [12, 4], '4.10 row 1 padding top 12 / bottom 4');
 chk('top-navigation', {}, ['Navigation'], H, 48, '4.10 row 2 height 48');
 chk('setting-row', { Layout: 'Inline' }, [], PY, [20, 20], '4.11 padding-y 20');
 chk('setting-row', { Layout: 'Inline' }, [], G, 32, '4.11 Inline gap 32');

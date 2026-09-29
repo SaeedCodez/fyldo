@@ -28,7 +28,7 @@ export function fyldoStatic(): Plugin {
     },
     async writeBundle() {
       writeFileSync(resolve(outDir, 'boot.js'), BOOT_JS);
-      const fonts = buildFonts();
+      const fonts = buildFonts(outDir);
       const icons = await buildIconModules(resolve(outDir, 'icons'));
       console.log(`fyldo-static: boot.js, ${fonts.length} font files, ${icons} icon modules`);
     },

@@ -158,6 +158,7 @@ add_action(
 			)
 		);
 		$fyldo->add_page( 'general', require __DIR__ . '/page.php' );
+		$fyldo->add_page( 'fields', require __DIR__ . '/fields.php' ); // M2: reached through the #/fields route
 	}
 );
 `;
@@ -173,6 +174,7 @@ export function makeDemos(): void {
     rmSync(dir, { recursive: true, force: true });
     mkdirSync(dir, { recursive: true });
     cpSync(resolve(root, 'tests/fixtures/slice-page.php'), resolve(dir, 'page.php'));
+    cpSync(resolve(root, 'tests/fixtures/form-fields-page.php'), resolve(dir, 'fields.php'));
 
     if (demo.kind === 'strauss') {
       strauss(dir, demo.fyldoVersion);

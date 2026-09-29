@@ -176,9 +176,13 @@ test('Fyldo leaves no window global behind, and the page has no console errors',
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  // WordPress itself loads the admin avatar from gravatar.com: answer every non-local request with an empty body so
+  // this test is about Fyldo, not about the network the suite happens to run on (offline, or behind a TLS-inspecting proxy).
+  await page.route((url) => !['localhost', '127.0.0.1'].includes(url.hostname), (route) => route.fulfill({ status: 200, contentType: 'image/gif', body: '' }));
 
   await page.goto(NORMAL);
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+  await page.waitForLoadState('networkidle'); // lazy icon modules are requested after first paint
 
   const keys = await page.evaluate(() => Object.getOwnPropertyNames(window).filter((k) => /fyldo/i.test(k)));
   expect(keys).toEqual([]); // the config variable was read and deleted

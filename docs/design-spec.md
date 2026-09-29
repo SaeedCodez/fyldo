@@ -259,7 +259,7 @@ Vertical stack, gap 8, width fills (Figma 320): `Label` → `Control` → `Helpe
 
 ### 4.3 Textarea (8:3307)
 
-As Input but control padding `12/8`, inner gap 2, default height 104 (≈4 rows), stretches when resized; 6×6 resize glyph at the bottom-end corner (`border/strong`, `border/default` disabled); helper row = helper text + **counter** (Mono/12, `text/tertiary`, e.g. `104/160`) at the end. Error: counter and message use `status/error/text` ("172/160"). One size only.
+Input pattern (label → control → helper row, same tokens and states) but **360 wide** (not Input's 320); control padding `12/8`, inner gap 2, default height 104 (≈4 rows), stretches when resized; 6×6 resize glyph at the bottom-end corner (`border/strong`, `border/default` disabled); helper row = helper text + **counter** (Mono/12, `text/tertiary`, e.g. `104/160`) at the end. Error: counter and message use `status/error/text` ("172/160"). One size only.
 
 ### 4.4 Toggle (8:3669)
 
@@ -308,7 +308,7 @@ Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 60 (padding
 
 Tab: vertical, 48 high; inner content 32 high, padding 12/6, gap 6, radius md; label Label/14 `text/secondary`; optional 16 icon, optional count Badge; 2 px **Indicator** under the tab. Hover fill `surface/hover`; Active label `text/primary` + Indicator fill `action/primary`; Focus fill `background/default`; Disabled `text/disabled`. Tabs: 800 wide row, gap 4, 1 px bottom divider `border/default`.
 
-Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (48, padding 24/12, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with trailing icon). Row 2 (48, padding 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels.
+Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (height 48; padding-x 24, **top 12 / bottom 4**, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with trailing icon). Row 2 (48, padding 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels.
 
 ### 4.11 Setting Row (18:2719), Section Card (18:2913)
 

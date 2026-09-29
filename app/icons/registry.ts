@@ -12,8 +12,10 @@ const warned = new Set<string>();
 const listeners = new Set<() => void>();
 
 const defaultLoader: Loader = async (key) => {
-  // Icons live next to app.js (assets/dist/icons/<key>.js); the URL is never processed by the bundler.
-  const url = new URL(`./icons/${key}.js`, import.meta.url).href;
+  // Icons live next to app.js (assets/dist/icons/<key>.js). The relative path is built in a variable on purpose: Vite treats
+  // `new URL(`./icons/${key}.js`, import.meta.url)` as an asset glob and rewrites it to `undefined` in the production bundle.
+  const relative = ['.', 'icons', `${key}.js`].join('/');
+  const url = new URL(relative, import.meta.url).href;
   const mod = (await import(/* @vite-ignore */ url)) as { default: IconNode[] };
   return mod.default;
 };

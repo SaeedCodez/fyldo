@@ -1,0 +1,123 @@
+{
+    "id": "fields",
+    "title": "Content",
+    "description": "How your content is described, shown and indexed.",
+    "icon": "document-text",
+    "group": "",
+    "save": "global",
+    "tabs": [],
+    "sections": [
+        {
+            "id": "seo",
+            "tab": "",
+            "title": "SEO",
+            "description": "How your content appears in search results.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "meta_description",
+                    "type": "textarea",
+                    "label": "Default meta description",
+                    "description": "Used as the default meta description.",
+                    "default": "Fyldo is a lightweight settings framework.",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "max_length": 160
+                    },
+                    "placeholder": "Describe your site in a sentence or two…",
+                    "rows": 4,
+                    "resize": "vertical"
+                },
+                {
+                    "id": "post_types",
+                    "type": "checkbox_group",
+                    "label": "Show on",
+                    "description": "Post types where this block is displayed.",
+                    "default": [
+                        "post",
+                        "page"
+                    ],
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "min": 1,
+                        "allowed": [
+                            "post",
+                            "page"
+                        ]
+                    },
+                    "parent": "All post types",
+                    "options": [
+                        {
+                            "value": "post",
+                            "label": "Posts",
+                            "disabled": false
+                        },
+                        {
+                            "value": "page",
+                            "label": "Pages",
+                            "disabled": false
+                        },
+                        {
+                            "value": "product",
+                            "label": "Products",
+                            "disabled": true,
+                            "description": "Available in Pro."
+                        }
+                    ]
+                },
+                {
+                    "id": "layout",
+                    "type": "radio",
+                    "label": "Layout",
+                    "description": "How content is laid out on the page.",
+                    "default": "full",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "required": true,
+                        "allowed": [
+                            "full",
+                            "boxed"
+                        ]
+                    },
+                    "options": [
+                        {
+                            "value": "full",
+                            "label": "Full width",
+                            "disabled": false,
+                            "description": "Content spans the entire screen."
+                        },
+                        {
+                            "value": "boxed",
+                            "label": "Boxed",
+                            "disabled": false,
+                            "description": "Content sits in a centered 1200px column."
+                        }
+                    ]
+                },
+                {
+                    "id": "agree",
+                    "type": "checkbox",
+                    "label": "I agree to the terms",
+                    "description": "You must accept the terms to continue.",
+                    "default": false,
+                    "disabled": false,
+                    "layout": "inline",
+                    "validate": {}
+                }
+            ]
+        }
+    ],
+    "values": {
+        "meta_description": "Fyldo is a lightweight settings framework.",
+        "post_types": [
+            "post",
+            "page"
+        ],
+        "layout": "full",
+        "agree": false
+    },
+    "revision": "rev-1"
+}

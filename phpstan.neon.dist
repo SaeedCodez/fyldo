@@ -8,6 +8,5 @@ parameters:
 		- fyldo.php
 	treatPhpDocTypesAsCertain: false
 	ignoreErrors:
-		# Array shapes are documented in prose/PHPDoc where it matters; these two identifiers are pure noise at level 8.
+		# Array shapes are documented in prose/PHPDoc where it matters; this identifier is pure noise at level 8.
 		- identifier: missingType.iterableValue
-		- identifier: missingType.generics

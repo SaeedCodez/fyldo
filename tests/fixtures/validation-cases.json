@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php) and Vitest (tests/js/validation.test.ts). `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max.",
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php) and Vitest (tests/js/validation.test.ts). `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max. For a list value (checkbox group) min/max count the selected items and an empty list still counts against min.",
   "cases": [
     { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
     { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
@@ -53,6 +53,30 @@
     { "name": "max: above", "rules": { "max": 5 }, "value": 6, "expect": "max" },
     { "name": "max: equal", "rules": { "max": 5 }, "value": 5, "expect": null },
     { "name": "min/max: float inside", "rules": { "min": 0, "max": 1 }, "value": 0.5, "expect": null },
+
+    { "name": "textarea: a line break is one character", "rules": { "max_length": 3 }, "value": "a\nb", "expect": null },
+    { "name": "textarea: one over with line breaks", "rules": { "max_length": 3 }, "value": "a\nbc", "expect": "max_length" },
+    { "name": "textarea: Persian multi-line counts code points", "rules": { "max_length": 11 }, "value": "سایت\nمن\nاست", "expect": null },
+    { "name": "textarea: Persian multi-line one over", "rules": { "max_length": 10 }, "value": "سایت\nمن\nاست", "expect": "max_length" },
+    { "name": "textarea: over the limit is an error, never truncated (172/160)", "rules": { "max_length": 160 }, "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "expect": "max_length" },
+    { "name": "textarea: exactly at the limit (160/160)", "rules": { "max_length": 160 }, "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", "expect": null },
+    { "name": "textarea: whitespace-only counts as text", "rules": { "required": true }, "value": "   ", "expect": null },
+
+    { "name": "radio: always required, empty fails", "rules": { "required": true, "allowed": ["index", "noindex"] }, "value": "", "expect": "required" },
+    { "name": "radio: member", "rules": { "required": true, "allowed": ["index", "noindex"] }, "value": "noindex", "expect": null },
+    { "name": "radio: stranger", "rules": { "required": true, "allowed": ["index", "noindex"] }, "value": "follow", "expect": "allowed" },
+
+    { "name": "list: required, empty list fails", "rules": { "required": true }, "value": [], "expect": "required" },
+    { "name": "list: optional empty list passes", "rules": { "allowed": ["a", "b"] }, "value": [], "expect": null },
+    { "name": "list min: empty list fails min 1", "rules": { "min": 1 }, "value": [], "expect": "min" },
+    { "name": "list min: below", "rules": { "min": 2 }, "value": ["a"], "expect": "min" },
+    { "name": "list min: exact", "rules": { "min": 2 }, "value": ["a", "b"], "expect": null },
+    { "name": "list max: above", "rules": { "max": 2 }, "value": ["a", "b", "c"], "expect": "max" },
+    { "name": "list max: exact", "rules": { "max": 2 }, "value": ["a", "b"], "expect": null },
+    { "name": "list: allowed is checked before min", "rules": { "allowed": ["a", "b"], "min": 3 }, "value": ["z"], "expect": "allowed" },
+    { "name": "list: min is checked before max", "rules": { "min": 3, "max": 1 }, "value": ["a", "b"], "expect": "min" },
+    { "name": "list: numeric-looking values compare as strings", "rules": { "allowed": ["1", "2"], "min": 1 }, "value": ["2"], "expect": null },
+    { "name": "list: required + min + allowed pass together", "rules": { "required": true, "min": 1, "max": 2, "allowed": ["a", "b", "c"] }, "value": ["a", "c"], "expect": null },
 
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }

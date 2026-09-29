@@ -100,3 +100,23 @@ msgstr "مقداری حداکثر برابر با %s وارد کنید."
 
 msgid "This value is not valid."
 msgstr "این مقدار معتبر نیست."
+
+msgid "Select at least %d option."
+msgid_plural "Select at least %d options."
+msgstr[0] "دست‌کم %d گزینه را انتخاب کنید."
+msgstr[1] "دست‌کم %d گزینه را انتخاب کنید."
+
+msgid "Select no more than %d option."
+msgid_plural "Select no more than %d options."
+msgstr[0] "حداکثر %d گزینه را می‌توانید انتخاب کنید."
+msgstr[1] "حداکثر %d گزینه را می‌توانید انتخاب کنید."
+
+msgid "%d character remaining."
+msgid_plural "%d characters remaining."
+msgstr[0] "%d نویسه باقی مانده است."
+msgstr[1] "%d نویسه باقی مانده است."
+
+msgid "%d character over the limit."
+msgid_plural "%d characters over the limit."
+msgstr[0] "%d نویسه بیشتر از حد مجاز است."
+msgstr[1] "%d نویسه بیشتر از حد مجاز است."

@@ -45,10 +45,20 @@ final class Messages {
 				return __( 'Choose one of the available options.', 'fyldo' );
 
 			case 'min':
+				if ( ! empty( $params['items'] ) ) {
+					$min = (int) ( $params['min'] ?? 0 );
+					/* translators: %d: minimum number of selected options. */
+					return sprintf( _n( 'Select at least %d option.', 'Select at least %d options.', $min, 'fyldo' ), $min );
+				}
 				/* translators: %s: minimum allowed number. */
 				return sprintf( __( 'Enter a value of at least %s.', 'fyldo' ), (string) ( $params['min'] ?? '' ) );
 
 			case 'max':
+				if ( ! empty( $params['items'] ) ) {
+					$max = (int) ( $params['max'] ?? 0 );
+					/* translators: %d: maximum number of selected options. */
+					return sprintf( _n( 'Select no more than %d option.', 'Select no more than %d options.', $max, 'fyldo' ), $max );
+				}
 				/* translators: %s: maximum allowed number. */
 				return sprintf( __( 'Enter a value of at most %s.', 'fyldo' ), (string) ( $params['max'] ?? '' ) );
 

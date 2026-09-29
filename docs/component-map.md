@@ -108,6 +108,8 @@ Base: shadcn `textarea` inside `FieldShell`.
 ```ts
 type TextareaFieldProps = TextFieldProps & { rows?: number /*default 4 (=104px)*/; showCounter?: boolean; code?: boolean; resize?: 'vertical'|'none' };
 ```
+*Implemented in M2 part 1:* `Textarea` (bordered control), `TextareaFooter` (helper/error + counter, one row), `TextareaField` (the full Figma "Textarea", 360 wide). Height = Figma's 104 px at `rows` 4, +20 px per row; the resize handle is the native resizer repainted as Figma's 6×6 glyph (Chromium/WebKit; other engines keep theirs). `code` is not built (the `code` field type is later). The counter uses the page's numerals (`Intl`), Mono/12 in EN and Label/12 in FA (as Figma), and announces only at 90 % / 100 % / over.
+
 **Gaps:** ➕ Counter (Mono/12, `text/tertiary`; turns `status/error/text` and the field goes Error when `value.length > maxLength` — **never truncates**, so do not pass `maxLength` to the DOM element). ➕ Custom 6×6 resize glyph (native `resize: vertical` + pseudo-element). ➕ `code` → Geist Mono + `dir="ltr"` + `spellcheck=false`. Counter announces via `aria-live="polite"` only at thresholds (90 %, 100 %) to avoid noise.
 
 ### 2.5 Toggle — Figma `Toggle` (8:3669)
@@ -132,6 +134,8 @@ Base: shadcn `checkbox` → Base UI `Checkbox` + **Base UI `CheckboxGroup`** (fo
 type CheckboxProps = { checked?: boolean | 'indeterminate'; onCheckedChange?; label?; description?; disabled?; value?: string };
 type CheckboxGroupFieldProps = { legend: string; description?; options: {value,label,description?,disabled?}[]; value; onValueChange; parent?: {label} };
 ```
+*Implemented in M2 part 1:* `Checkbox` (bare box, or with label/description), `CheckboxGroup` (+ optional `parent`; parent state counts the ENABLED options; value reported in option order), `GroupField` (stand-alone legend/description/options/error). Inside a Setting Row (`group` mode) the row title names the group (`aria-labelledby`) and its description describes it; options are `Field.Item`s. The 16 px gap between a group's description and its first option is measured from the *Checkbox & Radio · Usage* frame (it is in no component JSON; 12 px fits clearly worse). Figma has no focus indicator here: the approved neutral ring (O5) is drawn.
+
 **Gaps:** 🔧 shadcn box is 16 px but uses `radius-[4px]`+ ring; use `radius/xs`, `control/*` tokens, 1.75 px check stroke. ➕ Indeterminate glyph (7 px dash). ➕ Group: `<fieldset>` + `<legend>`, children indented 24 px toward reading direction, parent checkbox drives `indeterminate`. ➕ The single-checkbox-as-instant-setting anti-pattern (rule 14): dev-mode warning when a lone `Checkbox` is bound to a field with `save: 'instant'`.
 
 ### 2.7 Radio & Radio group — Figma `Radio` (8:4114)
@@ -140,6 +144,8 @@ Base: shadcn `radio-group` → Base UI `RadioGroup` + `Radio.Root/Indicator`, in
 ```ts
 type RadioGroupFieldProps = { legend: string; description?; options: {value,label,description?,disabled?}[]; value; onValueChange; orientation?: 'vertical'|'horizontal' };
 ```
+*Implemented in M2 part 1:* `RadioGroup` (vertical only — horizontal is not in Figma), `radio` requires a `default` that is an enabled option, ≥ 2 options, and warns from 6 (`_doing_it_wrong`). PHP exports `required` + `allowed` so the browser mirrors both.
+
 **Gaps:** ➕ Vertical stack with 12 px gaps; the whole row is the target. ➕ "Always give radio groups a default selection" — PHP schema **requires** `default` for `radio` fields (validated at registration). ➕ 2–5 options guard: dev-mode warning suggesting `select` at ≥ 6 (rule 14).
 
 ### 2.8 Select — Figma `Select` (8:5055) + `Select Menu` (8:5157, Single) + `Menu Item` (8:4601)
