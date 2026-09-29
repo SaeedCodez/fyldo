@@ -50,7 +50,9 @@ jobs:
       - name: Unit tests (includes the WCAG contrast test — no expected failures)
         run: npm test
       - name: Translations are complete
-        run: npm run i18n
+        run: |
+          sudo apt-get install -y gettext
+          npm run i18n
 
   e2e:
     name: Playwright on wp-env

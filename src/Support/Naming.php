@@ -45,8 +45,13 @@ final class Naming {
 		return $slug . '_' . $page;
 	}
 
+	/**
+	 * REST namespace `fyldo-{slug}/v{major}`.
+	 *
+	 * @return non-falsy-string
+	 */
 	public static function rest_namespace( string $slug ): string {
-		return 'fyldo-' . $slug . '/v' . self::major();
+		return self::non_falsy( 'fyldo-' . $slug . '/v' . self::major() );
 	}
 
 	public static function handle( string $slug, string $version ): string {
@@ -71,8 +76,13 @@ final class Naming {
 		return 'X-Fyldo-Nonce';
 	}
 
+	/**
+	 * Per-instance hook name `fyldo/{slug}/{event}`; never empty, so it can be handed to apply_filters()/do_action().
+	 *
+	 * @return non-empty-string
+	 */
 	public static function hook( string $slug, string $event ): string {
-		return 'fyldo/' . $slug . '/' . $event;
+		return self::non_empty( 'fyldo/' . $slug . '/' . $event );
 	}
 
 	public static function dom_id( string $slug ): string {
@@ -82,5 +92,33 @@ final class Naming {
 	/** Name of the root attribute (static per major because the built CSS is shared). */
 	public static function root_attribute(): string {
 		return 'data-fyldo-v' . self::major();
+	}
+
+	/**
+	 * Runtime guard behind the non-empty return types: an identifier must never be empty.
+	 *
+	 * @return non-empty-string
+	 * @throws \LogicException When the value is empty.
+	 */
+	private static function non_empty( string $value ): string {
+		if ( '' === $value ) {
+			throw new \LogicException( 'Fyldo built an empty identifier.' );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Like non_empty(), and not "0" either (WordPress rejects falsy namespaces).
+	 *
+	 * @return non-falsy-string
+	 * @throws \LogicException When the value is empty or "0".
+	 */
+	private static function non_falsy( string $value ): string {
+		if ( '' === $value || '0' === $value ) {
+			throw new \LogicException( 'Fyldo built an empty identifier.' );
+		}
+
+		return $value;
 	}
 }

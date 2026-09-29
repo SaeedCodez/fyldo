@@ -30,7 +30,8 @@ abstract class AbstractBooleanField extends AbstractField {
 	}
 
 	protected function sanitize_value( $raw ) {
-		return rest_sanitize_boolean( $raw );
+		// Scalars go through core's string-aware sanitizer ("false", "0"); anything else keeps PHP's own truthiness.
+		return is_scalar( $raw ) ? rest_sanitize_boolean( $raw ) : (bool) $raw;
 	}
 
 	protected function implicit_check( $value ): ?array {
