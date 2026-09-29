@@ -2,7 +2,7 @@
 
 A settings-page framework for WordPress plugin developers. Declare **pages → sections → fields** in PHP; Fyldo renders a modern React admin UI (Vercel/Geist look, English + Persian/RTL) and validates and saves the values through the REST API.
 
-> **Status:** Milestone 1 (vertical slice) is implemented — see [docs/ARCHITECTURE.md §13](docs/ARCHITECTURE.md#13-milestones-ordered-each-ends-with-green-ci-and-a-demo). Not released; do not bundle it in a plugin before `1.0.0` (see decision O8).
+> **Status:** Milestones 1 (vertical slice) and 2 (field library) and the first part of Milestone 3 (the shell: Sidebar or Top Navigation, Tabs, client-side routing with real links) are implemented — see [docs/ARCHITECTURE.md §13](docs/ARCHITECTURE.md#13-milestones-ordered-each-ends-with-green-ci-and-a-demo). Not released; do not bundle it in a plugin before `1.0.0` (see decision O8).
 
 ```php
 use Fyldo\V1\Fyldo;
