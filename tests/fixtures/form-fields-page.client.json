@@ -68,6 +68,76 @@
                     ]
                 },
                 {
+                    "id": "sitemap_types",
+                    "type": "multi_select",
+                    "label": "Include in sitemap",
+                    "description": "Content types listed in the XML sitemap.",
+                    "default": [
+                        "post",
+                        "page"
+                    ],
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "min": 1,
+                        "max": 5,
+                        "allowed": [
+                            "post",
+                            "page",
+                            "product",
+                            "author",
+                            "category",
+                            "tag",
+                            "media"
+                        ]
+                    },
+                    "placeholder": "Select content types…",
+                    "searchable": true,
+                    "clearable": true,
+                    "options": [
+                        {
+                            "value": "post",
+                            "label": "Posts",
+                            "disabled": false
+                        },
+                        {
+                            "value": "page",
+                            "label": "Pages",
+                            "disabled": false
+                        },
+                        {
+                            "value": "product",
+                            "label": "Products",
+                            "disabled": false
+                        },
+                        {
+                            "value": "author",
+                            "label": "Authors",
+                            "disabled": false
+                        },
+                        {
+                            "value": "category",
+                            "label": "Categories",
+                            "disabled": false
+                        },
+                        {
+                            "value": "tag",
+                            "label": "Tags",
+                            "disabled": false
+                        },
+                        {
+                            "value": "media",
+                            "label": "Media",
+                            "disabled": false
+                        },
+                        {
+                            "value": "comment",
+                            "label": "Comments",
+                            "disabled": true
+                        }
+                    ]
+                },
+                {
                     "id": "layout",
                     "type": "radio",
                     "label": "Layout",
@@ -113,6 +183,10 @@
     "values": {
         "meta_description": "Fyldo is a lightweight settings framework.",
         "post_types": [
+            "post",
+            "page"
+        ],
+        "sitemap_types": [
             "post",
             "page"
         ],

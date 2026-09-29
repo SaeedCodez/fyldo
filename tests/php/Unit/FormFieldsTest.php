@@ -1,6 +1,6 @@
 <?php
 /**
- * Milestone 2 field types: textarea, checkbox, checkbox_group, radio.
+ * Milestone 2 field types: textarea, checkbox, checkbox_group, radio, multi_select.
  *
  * @package Fyldo
  */
@@ -35,6 +35,27 @@ final class FormFieldsTest extends TestCase {
 						'post'    => 'Posts',
 						'page'    => 'Pages',
 						'product' => 'Products',
+					),
+				),
+				$extra
+			)
+		);
+	}
+
+	private function multi( array $extra = array() ) {
+		return FieldFactory::create(
+			array_merge(
+				array(
+					'id'      => 'sitemap_types',
+					'type'    => 'multi_select',
+					'label'   => 'Include in sitemap',
+					'options' => array(
+						'post'     => 'Posts',
+						'page'     => 'Pages',
+						'product'  => 'Products',
+						'author'   => 'Authors',
+						'category' => 'Categories',
+						'tag'      => 'Tags',
 					),
 				),
 				$extra
@@ -191,6 +212,87 @@ final class FormFieldsTest extends TestCase {
 		$this->assertSame( 1, $calls );
 	}
 
+	// ── Multi select ───────────────────────────────────────────────────────────────────────────────────
+
+	public function test_multi_select_value_is_a_list_of_known_options_in_option_order(): void {
+		$field = $this->multi();
+
+		$this->assertSame( array( 'post', 'tag' ), $field->sanitize( array( 'tag', 'post', 'tag' ) ) );
+		$this->assertSame( array(), $field->sanitize( 'post' ), 'A scalar is not a list.' );
+		$this->assertSame( array( 'page' ), $field->sanitize( array( 'page', array( 'nested' ), true, null ) ), 'Non-scalars and booleans are dropped.' );
+		$this->assertSame( array(), $field->default_value() );
+		$this->assertSame( '[]', wp_json_encode( $field->to_client()['default'] ), 'An empty selection is a JSON list, not an object.' );
+	}
+
+	public function test_multi_select_only_allows_enabled_options_and_reports_strangers(): void {
+		$field = $this->multi(
+			array(
+				'options' => array(
+					array( 'value' => 'post', 'label' => 'Posts' ),
+					array( 'value' => 'page', 'label' => 'Pages' ),
+					array( 'value' => 'product', 'label' => 'Products', 'disabled' => true ),
+				),
+			)
+		);
+
+		$sanitized = $field->sanitize( array( 'post', 'attachment' ) );
+		$this->assertSame( array( 'post', 'attachment' ), $sanitized, 'Unknown values are kept so they can be reported, never dropped silently.' );
+		$this->assertSame( 'Choose one of the available options.', $field->validate( $sanitized ) );
+		$this->assertSame( 'Choose one of the available options.', $field->validate( array( 'product' ) ), 'A disabled option cannot be chosen.' );
+		$this->assertNull( $field->validate( array( 'post', 'page' ) ) );
+		$this->assertTrue( $field->to_client()['options'][2]['disabled'], 'Disabled options stay visible.' );
+		$this->assertEquals( array( 'allowed' => array( 'post', 'page' ) ), (array) $field->to_client()['validate'] );
+	}
+
+	public function test_multi_select_min_and_max_count_the_selected_options(): void {
+		$field = $this->multi( array( 'validate' => array( 'min' => 1, 'max' => 3 ) ) );
+
+		$this->assertSame( 'Select at least 1 option.', $field->validate( array() ) );
+		$this->assertNull( $field->validate( array( 'post' ) ) );
+		$this->assertNull( $field->validate( array( 'post', 'page', 'tag' ) ) );
+		$this->assertSame( 'Select no more than 3 options.', $field->validate( array( 'post', 'page', 'tag', 'author' ) ) );
+		$this->assertSame( 'Select no more than 1 option.', $this->multi( array( 'validate' => array( 'max' => 1 ) ) )->validate( array( 'post', 'page' ) ) );
+	}
+
+	public function test_multi_select_required_and_optional(): void {
+		$this->assertNull( $this->multi()->validate( array() ), 'Optional: nothing selected is fine.' );
+		$this->assertSame( 'This field is required.', $this->multi( array( 'validate' => array( 'required' => true ) ) )->validate( array() ) );
+	}
+
+	public function test_multi_select_exports_its_options_and_display_settings(): void {
+		$client = $this->multi( array( 'placeholder' => 'Select content types…', 'default' => array( 'page', 'post' ) ) )->to_client();
+
+		$this->assertSame( 'multi_select', $client['type'] );
+		$this->assertSame( 'stacked', $client['layout'] );
+		$this->assertSame( 'Select content types…', $client['placeholder'] );
+		$this->assertTrue( $client['searchable'], 'The popup search row is on by default.' );
+		$this->assertFalse( $client['clearable'], 'The inline Clear button is opt-in (Figma "Clear button" defaults to off).' );
+		$this->assertSame( array( 'page', 'post' ), $client['default'] );
+		$this->assertCount( 6, $client['options'] );
+		$this->assertSame( array( 'value' => 'post', 'label' => 'Posts', 'disabled' => false ), $client['options'][0] );
+
+		$custom = $this->multi( array( 'searchable' => false, 'clearable' => true ) )->to_client();
+		$this->assertFalse( $custom['searchable'] );
+		$this->assertTrue( $custom['clearable'] );
+	}
+
+	public function test_multi_select_options_may_be_a_callable_resolved_lazily_once(): void {
+		$calls = 0;
+		$field = $this->multi(
+			array(
+				'options' => static function () use ( &$calls ) {
+					++$calls;
+					return array( 'a' => 'A', 'b' => 'B' );
+				},
+			)
+		);
+
+		$this->assertSame( 0, $calls );
+		$this->assertSame( array( 'a' ), $field->sanitize( array( 'a' ) ) );
+		$field->to_client();
+		$this->assertSame( 1, $calls );
+	}
+
 	// ── Radio ──────────────────────────────────────────────────────────────────────────────────────────
 
 	public function test_radio_accepts_only_enabled_options_and_is_never_empty(): void {
@@ -255,6 +357,7 @@ final class FormFieldsTest extends TestCase {
 		$radio = array( 'id' => 'r', 'type' => 'radio', 'label' => 'Radio', 'options' => array( 'a' => 'A', 'b' => 'B' ), 'default' => 'a' );
 		$group = array( 'id' => 'g', 'type' => 'checkbox_group', 'label' => 'Group', 'options' => array( 'a' => 'A', 'b' => 'B' ) );
 		$area  = array( 'id' => 't', 'type' => 'textarea', 'label' => 'Text' );
+		$multi = array( 'id' => 'm', 'type' => 'multi_select', 'label' => 'Multi', 'options' => array( 'a' => 'A', 'b' => 'B', 'c' => 'C' ) );
 
 		return array(
 			'radio without default'          => array( array_diff_key( $radio, array( 'default' => 1 ) ), 'needs a `default`' ),
@@ -269,6 +372,14 @@ final class FormFieldsTest extends TestCase {
 			'group empty options'            => array( array_merge( $group, array( 'options' => array() ) ), 'no options' ),
 			'group default not a list'       => array( array_merge( $group, array( 'default' => 'a' ) ), 'list of option values' ),
 			'group default not an option'    => array( array_merge( $group, array( 'default' => array( 'z' ) ) ), 'not enabled options' ),
+			'multi without options'          => array( array_diff_key( $multi, array( 'options' => 1 ) ), 'needs `options`' ),
+			'multi default not a list'       => array( array_merge( $multi, array( 'default' => 'a' ) ), 'list of option values' ),
+			'multi default not an option'    => array( array_merge( $multi, array( 'default' => array( 'z' ) ) ), 'not enabled options' ),
+			'multi min not an int'           => array( array_merge( $multi, array( 'validate' => array( 'min' => '1' ) ) ), 'whole number of options' ),
+			'multi max negative'             => array( array_merge( $multi, array( 'validate' => array( 'max' => -1 ) ) ), 'whole number of options' ),
+			'multi min above max'            => array( array_merge( $multi, array( 'validate' => array( 'min' => 3, 'max' => 2 ) ) ), 'greater than `max`' ),
+			'multi min above the options'    => array( array_merge( $multi, array( 'validate' => array( 'min' => 4 ) ) ), 'only 3 options can be chosen' ),
+			'multi unknown key'              => array( array_merge( $multi, array( 'parent' => 'All' ) ), 'unknown key' ),
 			'textarea rows too small'        => array( array_merge( $area, array( 'rows' => 1 ) ), 'between 2 and 30' ),
 			'textarea rows not an int'       => array( array_merge( $area, array( 'rows' => '4' ) ), 'between 2 and 30' ),
 			'textarea bad resize'            => array( array_merge( $area, array( 'resize' => 'both' ) ), '"vertical" or "none"' ),
@@ -294,6 +405,7 @@ final class FormFieldsTest extends TestCase {
 							array( 'id' => 'agree', 'type' => 'checkbox', 'label' => 'I agree' ),
 							array( 'id' => 'post_types', 'type' => 'checkbox_group', 'label' => 'Show on', 'options' => array( 'post' => 'Posts', 'page' => 'Pages', 'product' => 'Products' ), 'default' => array( 'post' ), 'validate' => array( 'min' => 1 ) ),
 							array( 'id' => 'robots', 'type' => 'radio', 'label' => 'Visibility', 'options' => array( 'index' => 'Index', 'noindex' => 'Noindex' ), 'default' => 'index' ),
+							array( 'id' => 'sitemap', 'type' => 'multi_select', 'label' => 'Sitemap', 'options' => array( 'post' => 'Posts', 'page' => 'Pages', 'tag' => 'Tags' ), 'default' => array( 'post' ), 'validate' => array( 'min' => 1, 'max' => 2 ) ),
 						),
 					),
 				),
@@ -307,7 +419,7 @@ final class FormFieldsTest extends TestCase {
 		$instance = $this->instance();
 
 		$this->assertSame(
-			array( 'meta_description' => '', 'agree' => false, 'post_types' => array( 'post' ), 'robots' => 'index' ),
+			array( 'meta_description' => '', 'agree' => false, 'post_types' => array( 'post' ), 'robots' => 'index', 'sitemap' => array( 'post' ) ),
 			$instance->all( 'general' )
 		);
 
@@ -318,12 +430,13 @@ final class FormFieldsTest extends TestCase {
 				'agree'            => 'true',
 				'post_types'       => array( 'product', 'post' ),
 				'robots'           => 'noindex',
+				'sitemap'          => array( 'tag', 'post' ),
 			)
 		);
 
 		$this->assertSame( 'ok', $result['status'] );
 		$this->assertSame(
-			array( 'meta_description' => "Two\nlines", 'agree' => true, 'post_types' => array( 'post', 'product' ), 'robots' => 'noindex' ),
+			array( 'meta_description' => "Two\nlines", 'agree' => true, 'post_types' => array( 'post', 'product' ), 'robots' => 'noindex', 'sitemap' => array( 'post', 'tag' ) ),
 			$instance->all( 'general' )
 		);
 	}
@@ -337,6 +450,7 @@ final class FormFieldsTest extends TestCase {
 				'meta_description' => str_repeat( 'x', 21 ),
 				'post_types'       => array(),
 				'robots'           => 'follow',
+				'sitemap'          => array( 'post', 'page', 'tag' ),
 			)
 		);
 
@@ -346,6 +460,7 @@ final class FormFieldsTest extends TestCase {
 				'meta_description' => 'Use no more than 20 characters.',
 				'post_types'       => 'Select at least 1 option.',
 				'robots'           => 'Choose one of the available options.',
+				'sitemap'          => 'Select no more than 2 options.',
 			),
 			$result['errors']
 		);
@@ -353,11 +468,12 @@ final class FormFieldsTest extends TestCase {
 	}
 
 	public function test_a_stored_value_that_no_longer_validates_falls_back_to_the_default(): void {
-		$GLOBALS['__fyldo_test_options']['acme-seo_general'] = array( 'post_types' => array( 'post', 'removed-type' ), 'robots' => 'removed-option' );
+		$GLOBALS['__fyldo_test_options']['acme-seo_general'] = array( 'post_types' => array( 'post', 'removed-type' ), 'robots' => 'removed-option', 'sitemap' => array( 'page', 'gone' ) );
 
 		$values = $this->instance()->all( 'general' );
 
 		$this->assertSame( array( 'post' ), $values['post_types'] );
 		$this->assertSame( 'index', $values['robots'] );
+		$this->assertSame( array( 'post' ), $values['sitemap'] );
 	}
 }

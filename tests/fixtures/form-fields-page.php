@@ -1,6 +1,6 @@
 <?php
 /**
- * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent) and Radio group.
+ * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group and Multi Select.
  * Used by: the PHPUnit contract test, tools/dev/dump-slice.php (→ form-fields-page.client.json for the Vitest save
  * flow) and every e2e demo plugin (page id `fields`).
  *
@@ -39,6 +39,26 @@ return array(
 						array( 'value' => 'post', 'label' => 'Posts' ),
 						array( 'value' => 'page', 'label' => 'Pages' ),
 						array( 'value' => 'product', 'label' => 'Products', 'description' => 'Available in Pro.', 'disabled' => true ),
+					),
+				),
+				array(
+					'id'          => 'sitemap_types',
+					'type'        => 'multi_select',
+					'label'       => 'Include in sitemap',
+					'description' => 'Content types listed in the XML sitemap.',
+					'placeholder' => 'Select content types…',
+					'clearable'   => true,
+					'default'     => array( 'post', 'page' ),
+					'validate'    => array( 'min' => 1, 'max' => 5 ),
+					'options'     => array(
+						array( 'value' => 'post', 'label' => 'Posts' ),
+						array( 'value' => 'page', 'label' => 'Pages' ),
+						array( 'value' => 'product', 'label' => 'Products' ),
+						array( 'value' => 'author', 'label' => 'Authors' ),
+						array( 'value' => 'category', 'label' => 'Categories' ),
+						array( 'value' => 'tag', 'label' => 'Tags' ),
+						array( 'value' => 'media', 'label' => 'Media' ),
+						array( 'value' => 'comment', 'label' => 'Comments', 'disabled' => true ),
 					),
 				),
 				array(
