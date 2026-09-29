@@ -96,7 +96,7 @@ type TextFieldProps = {
 | Error | `error` prop → border `status/error/solid` + `Focus/Input Error` halo (always on) |
 | Disabled | `disabled` → `surface/disabled`, `text/disabled` |
 
-**Gaps:** 🔧 shadcn Input is 36 px with ring focus — replace with 32/40/48, Copy/14 (Copy/16 at `lg`), halo tokens. ➕ Error row layout (16 px `info-circle` + Copy/13). ➕ Validation timing: show error only after blur or submit (rule 7) — implemented in the form layer (`touched` state), not the component. ➕ LTR-in-RTL rule for `url|email`/`code`. ➕ **Neutralise wp-admin `input:focus` blue ring** (ARCHITECTURE §8.2). ⚠ Input border contrast (design-spec D4).
+**Gaps:** 🔧 shadcn Input is 36 px with ring focus — replace with 32/40/48, Copy/14 (Copy/16 at `lg`), halo tokens. ➕ Error row layout (16 px `info-circle` + Copy/13). ➕ Validation timing: show error only after blur or submit (rule 7) — implemented in the form layer (`touched` state), not the component. ➕ LTR-in-RTL rule for `url|email`/`code`. ➕ **Neutralise wp-admin `input:focus` blue ring** (ARCHITECTURE §8.2). Input border contrast was fixed in Figma before M1 (design-spec D4).
 
 ### 2.4 Textarea — Figma `Textarea` (8:3307)
 
@@ -119,7 +119,7 @@ type ToggleProps = { checked?; defaultChecked?; onCheckedChange?; label?: string
 | State Disabled | `disabled` — thumb loses `Shadow/Thumb` |
 | RTL | thumb travel reversed via `[dir=rtl]` (Base UI exposes `--thumb-…`/`data-checked`; we translate with a logical utility) |
 
-**Gaps:** 🔧 shadcn sizes (18.4×32 / 14×24) replaced. ➕ Label/description block with the switch aligned to the first line; the row is one click target (label `htmlFor`). ➕ Off-state contrast note (D6). ➕ `Show label=false` → require `aria-label`.
+**Gaps:** 🔧 shadcn sizes (18.4×32 / 14×24) replaced. ➕ Label/description block with the switch aligned to the first line; the row is one click target (label `htmlFor`). Off-state track contrast is fixed in Figma before M1 (D6). ➕ `Show label=false` → require `aria-label`.
 
 ### 2.6 Checkbox & Checkbox group — Figma `Checkbox` (8:4351)
 
@@ -184,7 +184,7 @@ Base: shadcn `badge` (custom variants; shadcn's are 4 fixed variants).
 ```ts
 type BadgeProps = { tone?: 'gray'|'blue'|'green'|'amber'|'red'; style?: 'subtle'|'solid'; size?: 'sm'|'md'; icon?: IconName; children: ReactNode /*1–2 words*/ };
 ```
-**Gaps:** 🔧 pill radius, sizes 20/24, icon 12. ➕ Tone × style matrix from status tokens (Amber Solid uses dark text). ⚠ Solid contrast (D9). Never interactive, no `role`. Prop named `tone` (Figma) but `style` collides with React's `style` → code prop is **`appearance`** (`'subtle'|'solid'`).
+**Gaps:** 🔧 pill radius, sizes 20/24, icon 12. ➕ Tone × style matrix from status tokens (Amber Solid uses dark text). Solid contrast fixed in Figma before M1 (D9). Never interactive, no `role`. Prop named `tone` (Figma) but `style` collides with React's `style` → code prop is **`appearance`** (`'subtle'|'solid'`).
 
 ### 3.2 Notice — Figma `Notice` (8:5763)
 Base: shadcn `alert` (`Alert, AlertTitle, AlertDescription, AlertAction`).

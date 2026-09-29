@@ -371,7 +371,9 @@ These are collected as designer questions in [ARCHITECTURE.md §15](./ARCHITECTU
 
 ---
 
-## 9. Design issues found (need a decision — none were silently "fixed")
+## 9. Design issues found (original findings, 2026-09-29)
+
+> **Status update:** the token failures below (D3–D6, D9) and the missing focus tokens (`focus/ring-neutral`, `focus/border`) are being **fixed in Figma by the owner before M1** (decision O4/O5). The code is built against the **re-read, fixed** values; the numbers in this section describe the file as it was on 2026-09-29 and are kept as the record of *why* the changes were made. Sections 1–4 are re-verified against the file at the start of M1 (see `tokens/figma.tokens.json`).
 
 Contrast is computed from the Figma token values (WCAG 2.x formula, against `background/default` #fff unless noted).
 
