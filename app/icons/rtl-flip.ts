@@ -5,11 +5,9 @@
  */
 export const RTL_FLIP: ReadonlySet<string> = new Set([
   'arrowleft',
-  'arrowleft1',
   'arrowleft2',
   'arrowleft3',
   'arrowright',
-  'arrowright1',
   'arrowright2',
   'arrowright3',
   'arrowcircleleft',
@@ -22,7 +20,6 @@ export const RTL_FLIP: ReadonlySet<string> = new Set([
   'arrowrotateright',
   'back',
   'backsquare',
-  'forwardsquare',
   'forward',
   'next',
   'previous',
@@ -30,7 +27,6 @@ export const RTL_FLIP: ReadonlySet<string> = new Set([
   'sidebarleft',
   'sidebarright',
   'login',
-  'login1',
   'logincurve',
   'logout',
   'logoutcurve',
