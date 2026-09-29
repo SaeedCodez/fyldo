@@ -26,3 +26,23 @@ the pack, stop and ask; do not guess. `node tools/figma/spot-check.mjs` must rep
 - Shared validation fixture `tests/fixtures/validation-cases.json` runs in PHPUnit and Vitest: change rules on both sides.
 - `tests/fixtures/*.client.json` are generated: `php tools/dev/dump-slice.php [form-fields]`.
 - Tokens only (no hex, no arbitrary Tailwind values); logical CSS for RTL; Persian strings go in `languages/fyldo-fa_IR.po`.
+
+## Test policy (from M2 part 3 on)
+- Required: shared validation fixture cases for every new rule (PHPUnit + Vitest), PHPUnit for PHP logic, Vitest for
+  non-trivial component behaviour (keyboard, ARIA). Typecheck, lint, phpcs, PHPStan as before.
+- Visual: ONE pixel test per new component (default variant, EN + FA) against the pack PNG. No per-variant parity tests
+  for new components; the existing parity suites stay as they are.
+- WordPress e2e: add new fields to the existing save round-trip spec. No new spec files unless a milestone adds a new
+  WordPress integration (routing, admin notices, and so on).
+- Coexistence and isolation suites: untouched, run by CI only.
+
+## Working efficiently (cloud sessions)
+- CI is the full check. Locally, run only the tests for what you changed:
+  `npx vitest run <file>`, `composer test -- --filter <Name>`, `npx playwright test --project=harness -g "<component>"`.
+- Do not run the full Playwright suite or a "baseline" run. Run the WordPress project locally only when you changed
+  PHP↔REST↔UI wiring, and then only the related spec.
+- When a test fails, rerun only that test after the fix, not the whole suite.
+- After pushing, check CI once after about 6 minutes; don't poll. Fix, push and wait again only if something failed.
+- Composer in the cloud sandbox: GitHub zipball downloads are blocked, and PHPStan can't be installed. Remove the phpstan
+  packages temporarily (`composer remove --dev --no-update phpstan/phpstan szepeviktor/phpstan-wordpress`), then
+  `composer install`, and restore composer.json/composer.lock with git before committing. CI runs PHPStan.
