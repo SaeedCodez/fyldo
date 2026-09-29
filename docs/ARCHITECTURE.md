@@ -1,0 +1,723 @@
+# Fyldo — Architecture
+
+Status: **Phase 0 proposal — awaiting approval.** No application code exists yet.
+Companion docs: [design-spec.md](./design-spec.md) (what the design says) · [component-map.md](./component-map.md) (how each component is built).
+
+**Verified during phase 0** (so these are facts, not assumptions):
+
+| Fact | How verified |
+|---|---|
+| React shipped by WordPress: **6.5 = 18.2.0**, 6.6–6.9 = **18.3.1**, 7.0 and 7.1 = **18.3.1** | `package.json` at each `wordpress-develop` tag |
+| Latest WordPress is 7.1.2, min PHP still 7.4 | `api.wordpress.org` version-check |
+| Base UI is **`@base-ui/react` 1.8.0**, peers `react|react-dom ^17 \|\| ^18 \|\| ^19`; parts exist for every component we need incl. `toast`, `combobox` (chips), `alert-dialog`, `field`, `fieldset`, `direction-provider`, `csp-provider` | npm registry |
+| shadcn has a **Base UI flavour** (`registry/base-nova/ui/*.tsx`) with `button, input, textarea, switch, checkbox, radio-group, select, combobox, tooltip, toast, empty, field, tabs, alert, alert-dialog, card, badge, spinner, separator` | shadcn registry JSON |
+| Iconsax: `iconsax-react` last published **2021-12** (0.0.8); fork **`iconsax-reactjs`** 0.0.8 published **2025-04**, `sideEffects:false`, **995 one-file-per-icon ESM modules, 7.0 MB raw, each file carries all 6 variants** | `npm pack` + inspection |
+| **Strauss 0.30.0** re-prefixes a package that declares only `"autoload": {"files": [...]}`, rewrites `Fyldo\V1` → `Acme\Vendor\Fyldo\V1` in namespaces, `::class`, fully-qualified refs **and namespace strings**, copies non-PHP assets (`assets/dist`), but does **not** touch global functions, global constants or hook-name strings | ran the PHAR against a fixture package (scratchpad) |
+| Toolchain: Vite 8.3, Tailwind 4.3 (`@tailwindcss/vite`), Vitest 5, Playwright 1.63, `@wordpress/env` 11.16, `@wordpress/i18n` 6.29 (framework-agnostic, has `createI18n`) | npm registry |
+| Local: PHP 8.4.7, Composer 2.8.9, Node 24.16, Docker 29 | shell |
+
+---
+
+## 1. Goals, constraints, support matrix
+
+Fyldo is a settings-page framework: a developer **declares** pages → sections → fields in PHP; Fyldo **renders** a React admin UI and **validates + saves** through the REST API.
+
+| Constraint | Decision |
+|---|---|
+| PHP | ≥ 7.4, tested 7.4–8.4. **Syntax ceiling 7.4**: no constructor promotion, `match`, enums, readonly, union types, named args, nullsafe. Enforced by `PHPCompatibilityWP` (`testVersion 7.4-`). |
+| WordPress | ≥ 6.5 (needed for `Requires Plugins`). Tested on 6.5, latest stable (7.1), trunk. |
+| Browsers | Last 2 evergreen versions (matches WP admin policy). Tailwind v4 raises the floor to **Chrome 111 / Safari 16.4 / Firefox 128** (cascade layers, `@property`, `color-mix`). |
+| Node/npm | **Never required by consumers or end users.** Only by Fyldo contributors/CI. Every release artifact contains prebuilt assets. |
+| Look | Vercel/Geist, **light mode only**, English (LTR default) + Persian (RTL). |
+| Licence | GPL-2.0-or-later (required for wordpress.org and for bundling into GPL plugins). |
+| Modes | (1) Standalone plugin (2) Drop-in folder (3) Composer package — **one codebase, one tree**. |
+| Coexistence | Any number of copies, any versions, must not conflict. |
+
+---
+
+## 2. Repository layout
+
+```
+fyldo/                              ← repo root == the shipped tree (dev-only dirs are export-ignored)
+├─ fyldo.php                        Entry point. Plugin header + tiny bootstrap (require Loader, register copy).
+│                                   The SAME file is the plugin main file, the drop-in include, and the Composer `files` autoload.
+├─ readme.txt / LICENSE / CHANGELOG.md
+├─ composer.json                    autoload = { "files": ["fyldo.php"] } — deliberately NO psr-4 (see §6.4)
+├─ src/                             PHP, namespace Fyldo\V1\…, PSR-4 layout, PHP 7.4 syntax
+│  ├─ Bootstrap/Loader.php          Frozen contract: register(), boot(), on_ready(), loaded_version()   (§6.2)
+│  ├─ Fyldo.php                     Public facade: create(), instance()
+│  ├─ Instance.php                  One per slug: holds pages, menu, assets, REST
+│  ├─ Schema/                       Page, Section, Field definitions, normalisation, registration-time validation
+│  ├─ Fields/                       One class per type: TextField, ToggleField, SelectField … (sanitize + validate + to_client())
+│  ├─ Storage/                      OptionStore (one wp_option per page), revision hashing
+│  ├─ Rest/                         Controller, permission, nonce, error mapping
+│  ├─ Admin/                        Menu registration, screen detection, root markup, PHP notices
+│  ├─ Assets/                       Enqueue (per-instance handles), inline config, fonts, RTL/locale data
+│  ├─ I18n/                         Text-domain loading for bundled copies, JSON locale for the UI
+│  └─ Support/Naming.php            All slug/namespace-derived identifiers (§6.5)
+├─ app/                             React + TS source (NOT shipped)
+│  ├─ main.tsx  boot.ts             Mount, read+delete config global, i18n, isolation
+│  ├─ components/ui/                shadcn/Base UI copies, restyled (Button, Input, Select …)
+│  ├─ components/fyldo/             SettingRow, SectionCard, SaveBar, Sidebar, PageHeader …
+│  ├─ fields/                       Field renderers by `type`, client validation (mirrors PHP)
+│  ├─ icons/                        Icon wrapper, generated name map, RTL_FLIP list, Spinner
+│  ├─ lib/                          cn(), api client, router, dirty-state store, portal context
+│  └─ styles/                       app.css (Tailwind entry), tokens.generated.css, scoped-reset.css, fonts.css
+├─ tokens/                          figma.tokens.json (DTCG snapshot, committed), figma.styles.json (text + effect styles)
+├─ tools/                           tokens/build.ts · figma/extract-styles.js (run via MCP) · icons/build.ts · release/build.ts · fixtures/make-demos.ts
+├─ assets/dist/                     BUILT: boot.js, app.js, chunks/, app.css, fonts.css, fonts/*.woff2, icons/  (gitignored on main; present in release tags)
+├─ languages/                       fyldo.pot · fyldo-fa_IR.po/.mo · fyldo-fa_IR.json (UI strings, loaded by our own loader)
+├─ tests/
+│  ├─ php/        PHPUnit (unit + WP integration)         ├─ js/        Vitest + Testing Library
+│  ├─ fixtures/   validation-cases.json (shared PHP+TS)   └─ visual/    Playwright screenshots + Figma reference PNGs
+├─ e2e/                             Playwright specs · demo plugins (acme-alpha/beta/gamma/delta/omega) · hostile-css plugin
+├─ docs/                            design-spec.md · component-map.md · ARCHITECTURE.md
+├─ .wp-env.json · vite.config.ts · tsconfig.json · components.json · phpcs.xml · phpstan.neon · .gitattributes
+```
+
+`.gitattributes` `export-ignore`s `app/ tools/ tests/ e2e/ docs/ .github/ *.config.* node_modules` so `git archive`, GitHub zipballs and Packagist dists carry only the runtime tree.
+
+---
+
+## 3. PHP public API
+
+**Principles.** Array-first (idiomatic WordPress, easy to generate/serialize/filter), strict registration-time validation with actionable `_doing_it_wrong` messages, no global functions or constants, PHP 7.4 syntax. A fluent builder can be layered later without breaking anything.
+
+### 3.1 A realistic example (all three modes use the same code)
+
+```php
+<?php
+/**
+ * Plugin Name: Acme SEO
+ * Requires Plugins: fyldo          // standalone-dependency mode only; drop this line when bundling
+ */
+
+namespace Acme\Seo;
+
+use Fyldo\V1\Fyldo;
+
+// (a) Drop-in mode:        require_once __DIR__ . '/fyldo/fyldo.php';
+// (b) Composer mode:       require_once __DIR__ . '/vendor/autoload.php';
+// (c) Standalone plugin:   nothing to require — WordPress loads Fyldo because of "Requires Plugins".
+
+// Create instances on `init` (any mode). By then the highest 1.x copy has been selected (§6).
+add_action( 'init', static function () {
+
+	$fyldo = Fyldo::create( 'acme-seo', [                 // slug: [a-z0-9-]{3,40}, unique per site
+		'title'      => __( 'Acme SEO', 'acme-seo' ),
+		'version'    => ACME_SEO_VERSION,                   // shown in the brand badge (optional)
+		'capability' => 'manage_options',                   // default for every page/REST route
+		'navigation' => 'sidebar',                          // 'sidebar' (default) | 'top'
+		'menu'       => [
+			'type'     => 'submenu',                        // 'submenu' | 'top'
+			'parent'   => 'options-general.php',
+			'title'    => __( 'Acme SEO', 'acme-seo' ),
+			'position' => null,
+		],
+		'links'      => [                                   // utility links (sidebar footer / top-right)
+			[ 'label' => __( 'Documentation', 'acme-seo' ), 'url' => 'https://acme.test/docs', 'icon' => 'book', 'external' => true ],
+			[ 'label' => __( 'Help & support', 'acme-seo' ), 'url' => 'https://acme.test/help', 'icon' => 'message-question' ],
+		],
+	] );
+
+	$fyldo->add_group( 'settings', __( 'Settings', 'acme-seo' ) );
+	$fyldo->add_group( 'tools', __( 'Tools', 'acme-seo' ) );
+
+	$fyldo->add_page( 'general', [
+		'title'       => __( 'General', 'acme-seo' ),
+		'description' => __( 'Manage your site’s identity, reading and privacy options.', 'acme-seo' ),
+		'icon'        => 'setting-2',                       // ANY Iconsax name; unknown → nothing rendered + console.warn
+		'group'       => 'settings',
+		'save'        => 'global',                          // 'global' (Save Bar) | 'section' (card footers) — one per page
+		'tabs'        => [                                  // optional sub-pages; never nested
+			'identity' => __( 'Site identity', 'acme-seo' ),
+			'reading'  => __( 'Reading', 'acme-seo' ),
+		],
+		'sections'    => [
+			[
+				'id'          => 'identity',
+				'tab'         => 'identity',
+				'title'       => __( 'Site identity', 'acme-seo' ),
+				'description' => __( 'How your site appears to visitors and search engines.', 'acme-seo' ),
+				'fields'      => [
+					[
+						'id'          => 'site_title',
+						'type'        => 'text',
+						'label'       => __( 'Site title', 'acme-seo' ),
+						'description' => __( 'Shown in the browser tab and in search results.', 'acme-seo' ),
+						'default'     => get_bloginfo( 'name' ),
+						'placeholder' => __( 'My WordPress site', 'acme-seo' ),
+						'validate'    => [ 'required' => true, 'max_length' => 60 ],  // declarative → runs in PHP AND in the browser
+					],
+					[
+						'id'          => 'canonical_base',
+						'type'        => 'url',
+						'label'       => __( 'Canonical base URL', 'acme-seo' ),
+						'validate'    => [ 'schemes' => [ 'https' ] ],
+						// Server-only rule (never mirrored client-side; the server is authoritative):
+						'validate_cb' => static function ( $value ) {
+							return ( $value && ! wp_http_validate_url( $value ) ) ? __( 'This URL is not reachable.', 'acme-seo' ) : true;
+						},
+					],
+					[
+						'id'          => 'meta_description',
+						'type'        => 'textarea',
+						'label'       => __( 'Default meta description', 'acme-seo' ),
+						'rows'        => 4,
+						'validate'    => [ 'max_length' => 160 ],           // shows the live counter; over limit → Error (no truncation)
+					],
+					[
+						'id'      => 'maintenance',
+						'type'    => 'toggle',                              // renders inline in the row
+						'label'   => __( 'Maintenance mode', 'acme-seo' ),
+						'description' => __( 'Show a coming-soon page to visitors. Logged-in admins still see the site.', 'acme-seo' ),
+						'default' => false,
+					],
+				],
+			],
+			[
+				'id'     => 'reading',
+				'tab'    => 'reading',
+				'title'  => __( 'Language & indexing', 'acme-seo' ),
+				'fields' => [
+					[
+						'id'      => 'language',
+						'type'    => 'select',
+						'label'   => __( 'Site language', 'acme-seo' ),
+						'icon'    => 'global',
+						'options' => [ 'en_US' => 'English (United States)', 'fa_IR' => 'فارسی', 'de_DE' => 'Deutsch' /* … */ ],
+						'default' => 'en_US',
+						'searchable' => true,                               // ≥ 6 options → searchable combobox
+					],
+					[
+						'id'      => 'post_types',
+						'type'    => 'multiselect',
+						'label'   => __( 'Show on', 'acme-seo' ),
+						'options' => static function () { return wp_list_pluck( get_post_types( [ 'public' => true ], 'objects' ), 'label', 'name' ); },
+						'default' => [ 'post', 'page' ],
+						'validate'=> [ 'min' => 1 ],
+					],
+					[
+						'id'      => 'robots',
+						'type'    => 'radio',                               // 2–5 visible choices; default REQUIRED
+						'label'   => __( 'Search engine visibility', 'acme-seo' ),
+						'options' => [ 'index' => __( 'Index', 'acme-seo' ), 'noindex' => __( 'Discourage indexing', 'acme-seo' ) ],
+						'default' => 'index',
+					],
+				],
+			],
+			[
+				'id'     => 'danger',
+				'tone'   => 'danger',                                       // Danger Section Card (always last, always confirmed)
+				'title'  => __( 'Reset settings', 'acme-seo' ),
+				'description' => __( 'Restore every Acme SEO option to its default value.', 'acme-seo' ),
+				'action' => [
+					'id'      => 'reset',                                   // POST …/actions/reset (built-in: restore defaults)
+					'label'   => __( 'Reset settings', 'acme-seo' ),
+					'confirm' => [ 'title' => __( 'Reset all settings?', 'acme-seo' ), 'keyword' => 'RESET' ],
+				],
+			],
+		],
+	] );
+
+	// Hooks are per-instance (slug in the name). See §6.5.
+	add_action( 'fyldo/acme-seo/saved', static function ( $page, $new, $old ) { /* flush caches … */ }, 10, 3 );
+} );
+
+// Reading values anywhere (values are plain wp_options: fyldo_acme_seo__general, autoload=no):
+$title = Fyldo::instance( 'acme-seo' )->get( 'general', 'site_title' );     // sanitized, default-filled
+$all   = Fyldo::instance( 'acme-seo' )->all( 'general' );
+```
+
+### 3.2 API surface (v1)
+
+| Symbol | Contract |
+|---|---|
+| `Fyldo::create( string $slug, array $config ): Instance` | Registers one instance. Throws `_doing_it_wrong` and returns the existing one on duplicate slug. Validates config eagerly (unknown keys, types). |
+| `Fyldo::instance( string $slug ): Instance` | Lookup. |
+| `Instance::add_group / add_page` | Chainable. Registration-time validation: unique ids, radio has default, `options` non-empty, icon is a string, `save` is one of two values, danger section has `action`. |
+| `Instance::get / all / update( $page, $values )` | Read (sanitized + defaults) / write programmatically (same sanitize+validate path as REST). |
+| `Instance::admin_notice()` | Server-rendered notice using WP classes (`notice notice-success`) for use **outside** the React screen. |
+| Field types (v1) | `text url email password number textarea code toggle checkbox checkbox_group radio select multiselect` (+ static `notice`). Later, after design: `repeater color media date`. |
+| Declarative `validate` keys | `required min_length max_length pattern min max step schemes allowed min(for multi) max(for multi)` — one JSON vocabulary evaluated by both PHP and TS, tested against one shared fixture file (§12). |
+| Escape hatches | `sanitize_cb`, `validate_cb` (server only), `options` may be a callable, `disabled` may be `true` or a string reason (rendered in the description), `layout` override (`inline\|stacked`). |
+| Registration-time `_doing_it_wrong` | one Primary button per card is a UI concern; the API enforces: one `save` mode per page, no nested tabs, Danger section last. |
+
+### 3.3 Storage & naming defaults (part of the public contract)
+
+- Option name: `fyldo_{slug_with_underscores}__{page}` (override: page-level `'option_name' => 'acme_seo_general'` for migrating existing options). `autoload = false`. Value = **flat** associative array keyed by field id (sections are layout, not storage; moving a field between sections never loses data). Option names ≤ 191 chars → slug ≤ 40, page id ≤ 40.
+- Values never include fields not in the schema; unknown keys are dropped on write.
+- `password` fields are **write-only**: never sent to the browser; the UI shows a "•••• set" placeholder; omit/`null` = keep, `""` = clear.
+
+---
+
+## 4. Data flow
+
+```mermaid
+sequenceDiagram
+  participant PHP as PHP (init)
+  participant WP as wp-admin screen
+  participant JS as React app (in browser)
+  participant REST as REST controller
+  participant DB as wp_options
+
+  PHP->>PHP: Fyldo::create() + add_page() → normalised schema (validated once)
+  WP->>PHP: admin page load (?page=acme-seo)
+  PHP->>WP: <div id="fyldo-acme-seo-root" data-fyldo-v1="acme-seo" dir lang>
+  PHP->>WP: enqueue fyldo-acme-seo-1.4.2 (boot.js) + inline config {schema, values, i18n, rest, nonces, locale}
+  JS->>JS: read config global → delete it → mount into root (portals inside root)
+  JS->>JS: user edits → dirty state → client validation (blur/submit)
+  JS->>REST: PATCH /fyldo-acme-seo/v1/pages/general {values:{changed only}, revision}
+  REST->>REST: cookie auth (X-WP-Nonce) + instance nonce (X-Fyldo-Nonce) + capability
+  REST->>REST: sanitize per field type → validate (declarative + validate_cb) → 422 {errors:{field:msg}} on failure
+  REST->>DB: update_option (merged over stored, only known ids)
+  REST-->>JS: 200 {values (sanitized), revision}
+  JS->>JS: Saved (global bar) / toast only for section mode actions
+```
+
+Key rules:
+
+1. **First paint needs no fetch**: schema and current (sanitized) values are in the inline config. The REST `GET` exists for refresh/conflict recovery.
+2. **Partial `PATCH`** merges changed fields into the stored array; `revision` (hash of stored value) provides optimistic concurrency → `409 fyldo_conflict` with fresh values, shown as a Notice ("changed in another tab — reload").
+3. **Server is authoritative.** Sanitize → validate; the client only mirrors declarative rules for instant feedback. Errors return `422` `{code:"fyldo_invalid", data:{status:422, errors:{<field>: "<message>"}}}`; the UI maps them onto fields and focuses the first invalid one.
+4. **Security stack per request**: (a) WordPress cookie auth **`X-WP-Nonce` = `wp_rest`** (mandatory — without it core treats the user as logged out); (b) an **additional per-instance nonce** with action `fyldo_{slug}_rest` in `X-Fyldo-Nonce` (defence in depth + isolates instances); (c) `current_user_can( $page['capability'] ?? $instance['capability'] )` in `permission_callback` (never `__return_true`); (d) payload cap (default 512 KB), only known field ids, strict types; (e) no user-controlled option names.
+5. **Save patterns** (design rule): `global` → Save Bar, dirty tracking across the whole page, one PATCH with all changed fields; `section` → each card saves only its fields with its own PATCH; the two are mutually exclusive per page (validated at registration).
+6. **Danger actions** are `POST …/actions/{id}` with the same nonce/capability stack; the confirm keyword is checked **server-side** too (sent in the body).
+7. **Multisite**: per-site options and `manage_options` by default; network-scope settings are a later, explicit `scope: network` (site options + `manage_network_options`).
+8. **Uninstall**: Fyldo never deletes consumer data. `Instance::delete_data()` is provided for the consumer's own `uninstall.php`.
+
+---
+
+## 5. Distribution modes and release artifacts
+
+All three modes ship **the same tree** (`fyldo.php`, `src/`, `assets/dist/`, `languages/`, `LICENSE`, `readme.txt`). Modes differ only in *who loads `fyldo.php`*.
+
+| Mode | Who loads `fyldo.php` | Notes |
+|---|---|---|
+| 1. Standalone plugin | WordPress (plugin header) | Consumers declare `Requires Plugins: fyldo` (WP 6.5+). Caveat: WP only resolves dependencies for **wordpress.org slugs**; until Fyldo is on .org, users install the ZIP manually and WP shows the "requires plugin" notice instead of auto-install. |
+| 2. Drop-in folder | Consumer: `require_once __DIR__ . '/fyldo/fyldo.php';` | The folder is the unzipped release. A plugin header inside a nested folder is ignored by WP (only top-level/one-deep plugin files are scanned). |
+| 3. Composer | Composer `files` autoload | `composer require fyldo/fyldo`. `composer.json` intentionally declares **no PSR-4 map** (§6.4). Strauss-compatible (§7). |
+
+### 5.1 How each artifact is built (`npm run release`, CI-only; consumers never run it)
+
+```
+1. tokens:check              regenerate CSS from tokens/figma.tokens.json, fail on drift
+2. npm ci && npm run build   Vite → assets/dist/ (boot.js, app.js, chunks, app.css, fonts.css, fonts/, icons/)
+3. npm run i18n              wp i18n make-pot → languages/fyldo.pot; compile fa_IR .po → .mo + JSON
+4. composer install --no-dev (only to validate autoload/lint; nothing from vendor/ ships)
+5. verify                    php -l on every file (7.4 … 8.4), phpcs, size budgets, bundle has no `window.` writes (§8.6)
+6. assemble  build/fyldo/    git-archive of runtime tree (export-ignore applied) + overlay assets/dist + languages
+7. artifacts
+   ├─ fyldo-<ver>.zip            (plugin)  build/fyldo/  incl. readme.txt, wordpress.org assets excluded
+   ├─ fyldo-dropin-<ver>.zip     (drop-in) same folder, readme.txt removed; unzips to fyldo/
+   └─ Composer package           see below
+```
+
+**Composer with prebuilt assets.** Packagist serves `git archive` of a tag, which cannot contain untracked files. Chosen approach: the release workflow makes a **release commit** on top of the tagged source commit that force-adds `assets/dist` and `languages/*.mo|json`, and tags *that* commit (`v1.4.2`). `main` never contains build output. The tree of that tag is exactly what the ZIPs contain. (Alternative: a read-only mirror repo — see decision O9.) Verified by CI: `composer create-project` a fixture consumer from the tag, run the coexistence suite against it.
+
+**Version source of truth.** One string in `fyldo.php` header (`Version:`) and `composer.json`; `tools/release/build.ts` asserts they match the git tag and that `Loader::register( '<version>' )` reads the same header (no duplicated literal — the entry file parses its own header via `get_file_data` once, cached).
+
+---
+
+## 6. Coexistence design
+
+### 6.1 Verdict on the proposed layering — keep it, with six refinements
+
+The layered strategy (major-versioned namespace → in-major version negotiation → optional Strauss → per-instance identifiers → asset isolation) is the right standard approach and is what Action Scheduler / CMB2 / Freemius converged on. I would change only these things:
+
+1. **Registry = plain data + a frozen mini-Loader**, not the full library. Negotiation must work even when the *first-loaded copy is the oldest*; so the code that runs first must be tiny, dependency-free and never change within a major (§6.2). Contract tests against **every released 1.x tag** enforce this (§12).
+2. **Skip ineligible copies.** Each copy registers `requires_php` / `requires_wp`; the Loader picks the highest *eligible* copy. A 1.6 needing PHP 8.0 on a PHP 7.4 site must not win over a 1.3 bundled by another plugin — otherwise one plugin's upgrade fatals the other. (Recommendation still: raise minimums only in majors — O8.)
+3. **Composer must not own the autoload of `Fyldo\V1\*`.** A PSR-4 entry in `composer.json` would let Composer resolve classes from whichever `vendor/` was autoloaded first, silently defeating negotiation. So Composer only `files`-loads the entry file; **the winning copy registers its own autoloader, prepended** (§6.4). Verified: Strauss processes a `files`-only package correctly.
+3b. **Derive hook/global names from `__NAMESPACE__`, never from literals.** My Strauss probe showed hook-name strings and global constants are *not* rewritten; two Strauss-prefixed copies would otherwise fire the same hook and cross-talk. Everything runtime-global is built from `Support\Naming` (namespace → `fyldo-v1` / `acme-vendor-fyldo-v1`).
+4. **One Fyldo screen per admin page** is an explicit invariant (enforced at render). It makes static, shareable CSS/JS safe: the built CSS scopes on `[data-fyldo-v1]`; the instance slug is the attribute *value*, and every runtime identifier is slug-derived.
+5. **No global functions, constants or `$GLOBALS` keys, ever** (also a Strauss requirement). Class constants and static properties only.
+6. **A different major is a different world**: `V2` has its own Loader, registry, hooks, handles, CSS attribute (`data-fyldo-v2`), REST namespace version. Nothing is shared, so V1 and V2 need no negotiation and may be active together on the same request.
+
+### 6.2 Version negotiation (per major) — the frozen `Loader` contract
+
+```php
+namespace Fyldo\V1\Bootstrap;
+
+final class Loader {
+	const CONTRACT = 1;                                   // bump ⇒ new major
+	private static $copies = [];                          // realpath => ['version','path','requires_php','requires_wp']
+	private static $winner = null;  private static $hooked = false;  private static $ready = [];
+
+	public static function register( string $version, string $path, array $meta = [] ): void { /* add; hook boot once */ }
+	public static function boot(): void                 { /* choose winner; register autoloader; run on_ready callbacks */ }
+	public static function on_ready( callable $cb ): void {}   // runs immediately if already booted
+	public static function loaded_version(): ?string {}        // for diagnostics / tests
+	public static function loaded_path(): ?string {}
+}
+```
+
+Rules:
+
+- `fyldo.php` (identical in every copy):
+  ```php
+  namespace Fyldo\V1;
+  defined( 'ABSPATH' ) || exit;
+  if ( ! class_exists( Bootstrap\Loader::class, false ) ) { require_once __DIR__ . '/src/Bootstrap/Loader.php'; }
+  Bootstrap\Loader::register( /* version parsed from this file's header */, __DIR__, [ 'requires_php' => '7.4', 'requires_wp' => '6.5' ] );
+  ```
+  `Loader::class` is a compile-time constant (no autoload, no string) ⇒ Strauss-safe. The **first copy loaded defines `Loader`**; every later copy just calls its `register()`. Hence the contract freeze: `register/boot/on_ready` signatures and semantics never change inside V1; new data goes in the `$meta` array (extensible, ignored by old Loaders).
+- `register()` hooks `plugins_loaded` at **priority 0** once. All plugin main files have been included by then, so every copy is registered (mu-plugins, plugins, Composer autoload in consumers). Registering **after** `boot()` cannot change the winner: it logs a `_doing_it_wrong` in `WP_DEBUG` ("Fyldo 1.5.0 registered too late; 1.4.2 is active").
+- `boot()`: filter out copies whose `requires_php`/`requires_wp` are unmet → sort by `version_compare()` descending (pre-releases sort below their release), tie → `strcmp( path )` (deterministic) → the winner registers an SPL autoloader for the `Fyldo\V1\` prefix → `<winner>/src/`, **prepended**, prefix taken from `__NAMESPACE__` → `require` nothing else → run `on_ready` callbacks. Then `Instance` code (from the winner) is used for **all** consumers of that major.
+- Consumers create instances on `init` (works in all three modes because `init` > `plugins_loaded`). `Loader::on_ready()` is the escape hatch for code that needs Fyldo earlier.
+- **Consequence = strict semver inside a major**: bundled copy 1.2 in plugin A will run on 1.5 loaded from plugin B. Anything A relied on must keep working. Deprecations live ≥ 1 minor + 6 months, removed only in the next major. Minimum PHP/WP raised only in majors (O8).
+
+### 6.3 What is shared vs isolated
+
+| Layer | Shared across plugins? | Isolation mechanism |
+|---|---|---|
+| PHP classes of one major | **Yes**, the winner's code runs for all | negotiation (§6.2); strict semver |
+| PHP classes of different majors | No | namespace `Fyldo\V1` vs `Fyldo\V2` |
+| PHP classes under Strauss | No | re-prefixed namespace (§7) — a private copy, no negotiation |
+| Instance state (options, REST, hooks, nonces, handles, DOM ids) | **Never** | slug-derived identifiers (§6.5) |
+| Built JS/CSS | Files are per-copy; only the winner's are served | handles include slug **and** version; one screen = one instance |
+| Browser globals | None (§8.6) | ES module + IIFE-free boot; config global read-and-deleted |
+
+### 6.4 Autoloading
+
+- `composer.json`: `"autoload": { "files": ["fyldo.php"] }`, `"autoload-dev"` for tests only. **No `psr-4`.**
+- The winner's autoloader is a 12-line closure: if the class starts with the derived prefix, map the remainder to `src/…​.php` and `require`. It is registered with `prepend = true`, so it wins over any Composer loader registered earlier.
+- Contributors get IDE/PHPUnit PSR-4 via `autoload-dev` + `composer dump-autoload` locally; nothing in the shipped artifact depends on it.
+
+### 6.5 Per-instance runtime identifiers (everything derives from the slug — nothing is literal)
+
+Example: slug `acme-seo`, running Fyldo `1.4.2`, page `general`.
+
+| What | Derived value | Source |
+|---|---|---|
+| Option name | `fyldo_acme_seo__general` (override per page) | `Naming::option( $slug, $page )` |
+| REST namespace | `fyldo-acme-seo/v1` (routes `/pages/(?P<page>…)`, `/pages/…/actions/(?P<action>…)`) | `Naming::rest_ns` |
+| Script handle | `fyldo-acme-seo-1.4.2` (classic `boot.js`) | `Naming::handle( $slug, $ver )` |
+| Style handles | `fyldo-acme-seo-1.4.2` (app.css), `fyldo-acme-seo-fonts-1.4.2` | same |
+| Inline config variable | `window.__fyldo_acme_seo__` (written by `wp_add_inline_script( handle, …, 'before' )`; **read and `delete`d by the app on boot**) | `Naming::config_var` |
+| Nonce actions | `wp_rest` (cookie auth, required) **+** `fyldo_acme-seo_rest` (per-instance) | `Naming::nonce_action` |
+| Hooks (all include slug) | `fyldo/acme-seo/config` (filter) · `…/before_save` · `…/saved` · `…/sanitize/{page}` · `…/validate/{page}` | `Naming::hook( $slug, $event )` |
+| DOM root id | `fyldo-acme-seo-root` | `Naming::dom_id` |
+| CSS root attribute | `data-fyldo-v1="acme-seo"` (attribute **name** per major is static because the CSS file is shared; the **value** is the slug) | built CSS scopes on `[data-fyldo-v1]` |
+| Tailwind classes / CSS vars | `fy:` utility prefix, `--fy-*` custom properties | build-time |
+| Loader-level identifiers (registry, diagnostics hook) | `Naming::vendor_slug()` = `str_replace( '\\', '-', strtolower( namespace ) )` → `fyldo-v1` or `acme-vendor-fyldo-v1` | derived from `__NAMESPACE__` (Strauss-proof) |
+| Text domain (Fyldo's own strings) | `fyldo` (loaded from the winner's `languages/`, not from wp.org) | `I18n\Loader` |
+
+Slug rules: `^[a-z][a-z0-9-]{2,39}$`, unique per site. A second `create()` with the same slug **in the same namespace** is rejected (`_doing_it_wrong`, existing instance returned). Across different namespaces (a Strauss-prefixed copy, another major) Fyldo can only check what WordPress itself exposes — already-registered REST namespaces (`rest_get_server()->get_namespaces()`), admin menu slugs, and existing option names — and the later instance refuses to register on collision (reported via `_doing_it_wrong` under `WP_DEBUG`). Slug uniqueness is therefore a consumer responsibility, documented as "prefix your slug with your plugin's vendor name".
+
+---
+
+## 7. Strauss (optional full isolation) — exact configuration
+
+Purpose: a consumer that wants **zero interaction** with any other Fyldo (no negotiation, its own version pinned) re-prefixes the package into its own namespace. Everything below was run against Strauss **0.30.0** on a fixture package that declares only `files` autoload.
+
+**Consumer's `composer.json`:**
+
+```json
+{
+  "name": "acme/seo",
+  "require": { "fyldo/fyldo": "^1.4" },
+  "require-dev": { "brianhenryie/strauss": "^0.30" },
+  "extra": {
+    "strauss": {
+      "target_directory": "vendor-prefixed",
+      "namespace_prefix": "Acme\\Vendor\\",
+      "classmap_prefix": "Acme_Vendor_",
+      "constant_prefix": "ACME_VENDOR_",
+      "packages": [ "fyldo/fyldo" ],
+      "update_call_sites": false,
+      "delete_vendor_packages": true,
+      "exclude_from_prefix": { "file_patterns": [ "/^psr.*$/" ] }
+    }
+  },
+  "scripts": {
+    "prefix-namespaces": [
+      "@php vendor/bin/strauss",
+      "@composer dump-autoload"
+    ],
+    "post-install-cmd": [ "@prefix-namespaces" ],
+    "post-update-cmd":  [ "@prefix-namespaces" ]
+  },
+  "autoload": { "classmap": [ "vendor-prefixed/" ] }
+}
+```
+
+Result (verified): `Fyldo\V1\Fyldo` → `Acme\Vendor\Fyldo\V1\Fyldo`; `Bootstrap\Loader::class`, fully-qualified `\Fyldo\V1\…`, and the namespace string `'Fyldo\\V1\\Fyldo'` are all rewritten; `assets/dist/**` is copied; the `namespace` header of `fyldo.php` becomes `Acme\Vendor\Fyldo\V1`. The consumer then does:
+
+```php
+require_once __DIR__ . '/vendor-prefixed/autoload.php';       // or classmap via the consumer's vendor/autoload.php
+use Acme\Vendor\Fyldo\V1\Fyldo;                                // same API, private namespace
+```
+
+Behaviour of a prefixed copy:
+
+- It has its **own `Loader`, registry, hooks (`acme-vendor-fyldo-v1/…`), and never negotiates with unprefixed copies**; it wins its own (single-entry) negotiation.
+- Its assets are served from the consumer's own plugin URL. Its CSS/JS are byte-identical to the upstream build (JS is namespace-agnostic), so it still uses `data-fyldo-v1` — safe because of the one-screen-one-instance invariant.
+- Slug uniqueness across prefixed and unprefixed copies is still required (option names, REST namespace, admin menu slug live in shared WordPress tables).
+
+**Code rules that keep Fyldo Strauss-safe** (enforced by a CI lint, `tools/lint/strauss-safe.ts`, plus a Strauss smoke build that loads the prefixed copy in wp-env):
+
+| Rule | Why |
+|---|---|
+| No class names built from strings (`new $c`, `class_exists( 'Fyldo\V1\X' )`, `'\\Fyldo\\V1\\…'` in arrays) except via `X::class` or `__NAMESPACE__ . '\\'` | Strauss rewrites literal namespace strings, but dynamic composition and `str_replace` tricks are invisible to it |
+| No hard-coded namespace in strings that are used **as data** (hook names, handles, option names, CSS attributes, REST namespaces) | Strauss *would* rewrite `'Fyldo\\V1'` in a string, but these identifiers are not namespaces; they must come from `Naming` |
+| **No global functions, no `define()`/global constants, no `$GLOBALS`** | Strauss (0.30) leaves them unprefixed → redeclaration fatals between copies. Class constants/statics only |
+| No `class_alias`, no reflection on class names | rename-unsafe |
+| Templates/PHP files loaded by relative path only (`__DIR__`), never by class-derived path | prefixed copies live in a different directory |
+| Every file `namespace`d; no procedural files besides `fyldo.php` (which is `namespace`d too) | Strauss only rewrites namespaced/class symbols |
+| JS never reads PHP namespace/class names | prefixing is PHP-only |
+
+---
+
+## 8. Asset isolation
+
+### 8.1 React — decision: **bundle our own React 19**, do not use `wp-element`
+
+| | Bundle own React (chosen) | `wp-element` as external |
+|---|---|---|
+| Compatibility | Base UI supports 17/18/19, WP ships 18.2–18.3.1 ⇒ **both work** | works, but tied to WP's React (still 18.3.1 in 7.1) |
+| Isolation | No dependency on WP script handles/globals (`React`, `ReactDOM`, `wp-element`); another plugin overriding the `react` handle can't break us | depends on `window.React` etc.; a plugin that replaces them (they exist) breaks us |
+| `react/jsx-runtime` | bundled | WP has no `react-jsx-runtime` handle before **6.6** → 6.5 would need a classic-runtime build or shim |
+| Version control | we test the exact React we ship; upgrade on our schedule | WP majors change React under us (18→19 one day) |
+| Size | +≈ 55 KB gzip (React + ReactDOM) — but **only on Fyldo screens** | 0 |
+| Duplicate React on a page | Possible only if a plugin enqueues wp-element **on the same screen** (Gutenberg isn't loaded on plain settings screens; two instances never share a screen) — harmless: separate roots, no shared state/context | none |
+| Interaction with other plugins | none | shares hooks state only via React internals — no benefit for us |
+
+Bytes are the only cost, and only on our own screens (target JS budget ≤ 200 KB gzip incl. React, §9.5). If a WP-core-React future is desired it is a build flag (`externals`), not an architecture change.
+
+### 8.2 CSS isolation (both directions: Fyldo ↛ wp-admin, wp-admin ↛ Fyldo)
+
+Facts that shape the design: wp-admin CSS is **unlayered** and globally selects elements (`input[type=text]`, `select`, `textarea`, `a`, `h1–h6`, `.button`, `input:focus { border-color:#2271b1; box-shadow:0 0 0 1px #2271b1 }` — a **blue focus ring that would leak onto our inputs**). Tailwind v4 emits **`@layer`** rules — *any unlayered rule beats any layered rule regardless of specificity*, so stock Tailwind output loses to wp-admin.
+
+Chosen approach ("scoped light DOM, hardened"):
+
+1. **No Preflight, no global reset.** `app.css` imports only `theme` and `utilities`; we write a **scoped reset** (`[data-fyldo-v1] :where(*, ::before, ::after){…}` box-sizing, margin, padding, border, font inheritance, list/heading/button/input normalisation) at zero specificity **inside** the root.
+2. **Tailwind prefix `fy`** (`fy:flex`, theme vars `--fy-*`) so no class or variable can collide with WP or plugins.
+3. **Flatten layers + raise specificity at build time**: a PostCSS step unwraps `@layer` (source order is already correct) and prefixes every selector with `[data-fyldo-v1][data-fyldo-v1]` (specificity +0,2,0; rules that target the root element itself are emitted as compound selectors instead of descendant ones). This beats core `forms.css`/`common.css`, including `input[type=…]:focus` (0,2,1) once the pseudo-class variants are counted. Residual risk: third-party `!important`; covered by the hostile-CSS e2e test (§12) and, as a last resort, the opt-in Shadow DOM mode (O1).
+4. **Explicit neutralisation of the known-hostile core rules** inside the reset: `outline`, `box-shadow`, `border-color` on `:focus` for `input/select/textarea/button/a`, `min-height`, `line-height`, `padding`, `font`, `color`, `background` of form controls — all restated per component from tokens.
+5. **All design tokens are CSS custom properties on the root element**, not `:root` (`[data-fyldo-v1]{ --fy-… }`), with the shadcn names (`--background`, `--primary`, `--ring`, `--radius`, …) mapped there too (§9.2).
+6. **Root element** `#fyldo-{slug}-root[data-fyldo-v1="{slug}"][dir][lang]` with `isolation: isolate`, `position: relative`, its own stacking context; `z-index` of popups defined **relative to the root** so they sit above sticky Save Bar/sidebar but below the WP admin bar (99999) and media modal (160000).
+7. **RTL**: no reliance on WP's auto-loaded `*-rtl.css`; our own logical properties + `@custom-variant rtl` bound to `[dir=rtl]` (not `:dir()`, for older engines).
+8. **Fonts**: `@font-face` families are namespaced (`Fyldo Geist`, `Fyldo Geist Mono`, `Fyldo Vazirmatn`) so they never override a site's `Geist` and never leak as a default; declared in `fonts.css` (document level — `@font-face` can't live in a shadow root).
+
+**Alternative kept ready, not default — Shadow DOM** (`isolation: 'shadow'`): removes the specificity war entirely and satisfies "portals inside the root" trivially. Costs: `@font-face` and Tailwind `@property` must be hoisted to the document, Testing Library needs `within(shadowRoot)`, third-party field extensions can't be styled from the page, and Base UI's focus/outside-press handling inside shadow roots must be proven. The app is written so both modes are a **mount-time switch** (all CSS scopes on the root attribute, which exists in both modes). M1 spike decides whether it's needed (O1).
+
+### 8.3 wp-admin integration realities the design ignores
+
+- **Placement**: Fyldo's root is **not** inside `.wrap`. WordPress core JS (`common.js`) moves every `.notice/.updated/.error` node to just after the first `h1` in `.wrap`; keeping our React tree outside `.wrap` and never using the `notice` class on React notices (§design-spec D8) means core cannot relocate anything of ours. PHP-side notices for the screen are rendered by Fyldo into its own slot.
+- **Bleed layout**: the design's sidebar is full-height next to the admin menu. `#wpcontent` has `padding-left:20px` and `#wpfooter` sits below: the root uses negative margins (`margin: 0 -20px`), `min-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px))`, and hides `#wpfooter` only on Fyldo screens (body class added on our screens). RTL WP uses the mirrored padding — handled by logical margins.
+- **Responsive** (design silent): ≤ 960 px WP auto-folds its menu; ≤ 782 px it goes mobile with a taller admin bar (46 px). Proposal: sidebar → a "Menu" disclosure button above the content that reveals the nav as a drawer; top nav → horizontally scrollable with edge fade; content column `min(800px, 100% − 32px)`; Save Bar full-width with 16 px inset on mobile; modals `max-width: calc(100vw − 32px)`.
+- **Screen Options / Help tabs** (top-right of wp-admin) remain; our sticky header offsets use the admin-bar height variable.
+- **Password managers / autofill / browser translate**: inputs keep `autocomplete` semantics; `translate="no"` on code/value fields.
+
+### 8.4 Icons
+
+- Package: **`iconsax-reactjs`** (maintained fork, peer `react: *`, ESM, `sideEffects:false`). `iconsax-react` is abandoned (2021).
+- **Measured problem**: mapping a kebab name string to a component forces the whole set into the bundle (**995 modules, 7.0 MB raw**, every module carrying Bold/Broken/Bulk/**Linear**/Outline/TwoTone), and PHP lets developers pick *any* icon.
+- Chosen delivery (needs approval — O3): a **build-time codegen** (`tools/icons/build.ts`) that takes the package's own `Linear` component of every icon and emits (a) `assets/dist/icons/<kebab>.js` — one tiny ESM module per icon (~1 KB, Linear paths only) and (b) `icon-names.json`. `<Icon>` lazily `import()`s `icons/<name>.js` on demand; icons Fyldo itself uses (~35) are inlined in the main chunk. Result ≈ 1 MB on disk, ~0 KB on the wire until used. The source of truth remains the Iconsax package (pinned exact version; generated output committed only in release tags).
+  - *Faithful-to-the-letter alternative*: lazy per-icon chunks of the package's **components** (full variants, ~7 MB shipped per copy of Fyldo — heavy for a library embedded in many plugins).
+- `<Icon name="setting-2" size={16} />`: kebab → normalised Pascal (`setting-2` → `Setting2`; leading-digit icons use the package's `I` prefix, e.g. `3d-cube` → `I3Dcube`; alias table generated at build time and checked for collisions). Always `variant="Linear"`, `color="currentColor"`, stroke 1.5 px (as in Figma). Sizes: 16 default, 12 (Badge/Tag), 20 (Large Icon Button), 24 (Empty State). Unknown name → `null` + one `console.warn` per name (`Fyldo: unknown icon "x"`). Decorative ⇒ `aria-hidden="true"`; only `label`led icons get `role="img"`.
+- **RTL flip** (CSS `transform: scaleX(-1)` under `[dir=rtl]`): a small named list in `app/icons/rtl-flip.ts`, seeded with: `arrow-left`, `arrow-left-1..3`, `arrow-right`, `arrow-right-1..3`, `arrow-circle-left/right`, `arrow-square-left/right`, `back`, `back-square`, `forward`, `forward-square`, `next`, `previous`, `backward`, `sidebar-left/right`, `login`, `logout`, `login-curve`, `logout-curve`, `direct-left/right`, `arrow-rotate-left/right`, `rotate-left/right`, `refresh-left-square`, `refresh-right-square`, `textalign-left/right`, `align-left/right`, `document-forward`, `document-previous`, `export`-style external-link arrows (`arrow-up-right`-like are **not** flipped horizontally in Iconsax — treated case by case). Vertical arrows, chevron `arrow-down/up`, `tick-*`, `close-*`, `search-*`, `setting-*` never flip. A unit test asserts that every flip name exists in the generated icon set.
+- Custom icons (Figma `Fyldo · Custom icons`): `Spinner` + logo are our own components (single `Vector`, 1.5 px stroke, `currentColor`).
+
+### 8.5 Fonts (self-hosted, no CDN)
+
+- **Geist** + **Geist Mono** (variable woff2, latin subset, SIL OFL) and **Vazirmatn** (variable woff2, arabic+latin subsets, SIL OFL) in `assets/dist/fonts/`, `font-display: swap`, `unicode-range` split so an English page never downloads the Arabic file and vice-versa. Latin text inside RTL keeps `Vazirmatn`'s Latin glyphs (as Figma does with IRANYekanX); code/URLs use Geist Mono.
+- Stack: `--fy-font-sans: "Fyldo Geist", ui-sans-serif, system-ui, sans-serif;` and `[dir=rtl]{ --fy-font-sans: "Fyldo Vazirmatn", "Fyldo Geist", ui-sans-serif, system-ui, sans-serif }`. Only `fonts.css` is document-level; both files are enqueued by the instance and versioned in the handle.
+- Numerals: `Intl.NumberFormat( locale )` for numbers the UI *formats* (counters, "n selected"), so Persian gets ۰–۹ without a special font build; strings from PO files carry their own digits.
+
+### 8.6 JavaScript packaging, loading and globals
+
+- **Build**: ES modules with code splitting (icons, heavy overlays) — no global exposure. Files: `boot.js` (**classic** script, ~0.4 KB IIFE, the only file WordPress prints as a `<script>`), `app.js` + `chunks/*.js` (ES modules).
+- **Loading**: PHP registers `boot.js` under `fyldo-{slug}-{ver}`, adds the config with `wp_add_inline_script( $handle, 'window.__fyldo_{slug}__=…;', 'before' )`, sets `strategy => defer`. `boot.js` does `import( new URL( 'app.js', document.currentScript.src ) )` (works from any plugin URL, hence for all three modes and Strauss copies). Works on WP 6.5 without the Script Modules API's admin caveats (module data filters arrived later).
+- **Globals**: the only write to `window` is the per-instance config variable, and `app.js` **reads it once and `delete`s it** (also tested: `Object.keys(window)` before/after equals the same set). No `window.Fyldo`, no jQuery, no `wp.*` dependency; `@wordpress/i18n` is **bundled** with `createI18n()` fed from the config (no writes to the global `wp.i18n` store — two Fyldo copies can't clobber each other's translations).
+- **Enqueue only on own screens**: `admin_enqueue_scripts` checks `$hook_suffix === $instance->screen_id()`; nothing is enqueued elsewhere, and no front-end assets exist.
+
+### 8.7 Portals
+
+`FyldoRoot` provides `PortalContainerContext` = the root element. Every Base UI `Portal` (Select, Combobox, Tooltip, Toast, AlertDialog/Dialog) receives `container={root}`; a lint rule forbids `Portal` without `container` in `app/`. Popups therefore inherit the scoped tokens/reset and the hardened selectors, and z-order is defined inside the root's stacking context (`--fy-z-popup: 40; --fy-z-modal: 50; --fy-z-toast: 60`). Toasts also stay inside the root.
+
+---
+
+## 9. Build pipeline
+
+### 9.1 Token pipeline (Figma → code, single source of truth)
+
+```
+Figma variables ──(MCP: figma_export_tokens, format=dtcg)──► tokens/figma.tokens.json        committed snapshot (includes figma variable ids in $extensions)
+Figma text+effect styles ─(MCP: figma_execute tools/figma/extract-styles.js)─► tokens/figma.styles.json   committed snapshot
+                                         │
+                                npm run tokens   (pure Node, no Figma access, runs in CI)
+                                         ▼
+     app/styles/tokens.generated.css   ← @theme inline mapping + [data-fyldo-v1]{ --fy-*, shadcn aliases } + text-style @utility blocks + [dir=rtl] overrides
+     app/styles/tokens.generated.ts    ← name lists for tests (contrast, coverage) and Storybook-free docs
+                                         │
+                           npm run tokens:check   regenerates and fails on git diff (CI)
+```
+
+- **Why two steps**: the MCP is available in an interactive session (locally, through me or the developer), not in CI; the snapshot makes CI deterministic while keeping Figma the source of truth. `npm run figma:sync` documents the exact MCP calls; a stale snapshot is flagged by a PR checklist and, when a maintainer runs it, `tokens:diff` prints token-level changes.
+- **Generated content**
+  - Primitives → `--fy-color-gray-1000` …; semantic tokens → `--fy-action-primary` etc. (aliases preserved: `var(--fy-color-gray-1000)`), spacing `--fy-space-*`, radius `--fy-radius-*`, effects `--fy-shadow-*`, focus tokens.
+  - **shadcn mapping** (all on the root, values are `var()` aliases):
+
+    | shadcn | Fyldo token | shadcn | Fyldo token |
+    |---|---|---|---|
+    | `--background` | `background/default` | `--foreground` | `text/primary` |
+    | `--card` / `--popover` | `background/default` | `--card-foreground` / `--popover-foreground` | `text/primary` |
+    | `--primary` | `action/primary` | `--primary-foreground` | `text/inverse` |
+    | `--secondary` | `action/secondary` | `--secondary-foreground` | `text/primary` |
+    | `--muted` | `surface/default` | `--muted-foreground` | `text/secondary` |
+    | `--accent` | `surface/default` (menu-item hover) | `--accent-foreground` | `text/primary` |
+    | `--destructive` | `action/danger` | `--border` / `--input` | `border/default` |
+    | `--ring` | **`focus/ring-neutral` (new, §11)** | `--radius` | `radius/md` (+ explicit `--radius-xs/sm/md/lg/full`) |
+    | `--sidebar` | `background/subtle` | `--sidebar-accent` | `surface/active` |
+
+    Extra Fyldo tokens are kept 1:1 and exposed as utilities: `surface/*`, `border/{hover,strong}`, `text/{secondary,tertiary,disabled,inverse}`, `icon/*`, `action/*`, `control/*`, `status/*`, `link/default`, `background/{subtle,overlay,inverse}`.
+  - **Text styles** → `@utility text-heading-32 { font-size…; line-height: var(--fy-leading-heading-32); letter-spacing…; font-weight… }` (42 styles → 21 utilities; FA line-heights via `[dir=rtl]` overrides of the `--fy-leading-*` variables; FA tracking forced to 0).
+  - **Effects** → `--fy-shadow-*` and `@utility shadow-*`; `Focus/Input(*)` become `--fy-focus-halo*`.
+  - Figma-plan artefacts are dropped here (no `Locale`, no `(FA)` props): `en/*` and `fa/*` typography tokens collapse to `--fy-font-*` with the RTL switch.
+- **Guard rails (tests)**: every semantic colour has a generated CSS variable; contrast tests assert required pairs against §design-spec thresholds (and document the current known failures as `expectedFail` until decisions O4/O5 land).
+
+### 9.2 Vite (chosen over `@wordpress/scripts`)
+
+Vite 8 (Rolldown) + `@tailwindcss/vite`. Reasons: Tailwind v4's first-class integration (Lightning CSS, no PostCSS config), native ES output with code splitting (icon chunks, lazy overlays), fast HMR against wp-env for contributors, Vitest shares the same config. `@wordpress/scripts` (webpack) earns its keep by externalising WP packages (`wp-element`, `wp-i18n`, dependency-extraction `*.asset.php`) — precisely what §8.1/§8.6 decided *not* to depend on. If we later choose WP-React externals, Vite's `rollupOptions.external` + a generated handle list replaces it.
+
+- `vite.config.ts`: entries `boot` (IIFE, `esbuild` format) and `app` (ES, `manualChunks` for icons/overlays); `assetsInlineLimit: 0`; fixed file names (no hashes — the handle already carries the version, and stable names make the drop-in/Composer trees diffable); `cssCodeSplit: false`; custom plugin `fyldo-css-scope` = layer flattening + `[data-fyldo-v1][data-fyldo-v1]` prefixing (§8.2).
+- `app.css`: `@import "tailwindcss/theme.css" prefix(fy); @import "tailwindcss/utilities.css" prefix(fy); @import "./tokens.generated.css"; @import "./scoped-reset.css";` (no `preflight.css`).
+- Dev: `npm run dev` serves modules from Vite with the boot script pointing at the dev server when `FYLDO_DEV_SERVER` is set in wp-env (never in a release).
+- Lint/format/type: ESLint (typescript-eslint, jsx-a11y, custom rules: no hex colours, no `Portal` without `container`, no arbitrary Tailwind values), Prettier, `tsc --noEmit` strict.
+
+### 9.3 PHP tooling
+
+Composer dev deps: `phpunit`, `wp-phpunit`/`yoast/phpunit-polyfills`, `wp-coding-standards/wpcs`, `phpcompatibility/phpcompatibility-wp` (`testVersion 7.4-`), `phpstan` + `szepeviktor/phpstan-wordpress` (level 8), `brianhenryie/strauss` (smoke build only).
+
+### 9.4 i18n pipeline
+
+`wp i18n make-pot . languages/fyldo.pot --domain=fyldo` over `src/` (PHP) **and** `app/` (TS/TSX; `__`, `_x`, `_n`, `sprintf` from the bundled `@wordpress/i18n`) → `languages/fyldo-fa_IR.po` (hand-translated) → `.mo` (PHP) + `.json` (JED for the UI, generated by `wp i18n make-json`). The PHP side loads the `.mo` for the winner via `load_textdomain( 'fyldo', $winner/languages/fyldo-{locale}.mo )` on `init` (bundled copies don't get translate.wordpress.org files); the JSON is embedded in the instance config as `i18n` (§8.6).
+
+### 9.5 Budgets (CI-enforced with `size-limit`)
+
+JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzip**; CSS ≤ **30 KB gzip**; Boot ≤ 1 KB; fonts on the wire for EN ≈ Geist only; per-icon chunk ≤ 2 KB. Numbers are provisional until M1 measures the slice.
+
+---
+
+## 10. Internationalisation and RTL
+
+- **Strings**: PHP `__()`/`_x()` with text domain `fyldo` for Fyldo's own strings; developers' strings are translated by them (`__( '…', 'acme-seo' )`) before being passed in config. UI strings via bundled `@wordpress/i18n`. Plurals via `_n`. No string concatenation for sentences (placeholders via `sprintf`).
+- **Locale/direction**: `determine_locale()` → `lang`; `is_rtl()` → `dir="rtl"` on the root (WordPress already sets `<html dir>`; we set it explicitly on the root as well so the Shadow mode and tests don't depend on it). Base UI `DirectionProvider` gets the same value.
+- **CSS**: logical properties only (`padding-inline`, `margin-inline-start`, `inset-inline-end`, `text-align: start`), `rtl:` custom variant only where geometry (not just direction) changes (switch thumb travel, icon flips, tab indicator).
+- **Bidi**: URLs/emails/keys/code → `dir="ltr"` + `unicode-bidi: isolate`; user-provided labels in mixed scripts get `dir="auto"` on values (not on labels).
+- **Persian translation**: `fyldo-fa_IR.po` covering every Fyldo UI string ships with Milestone 1 for the slice strings and completes in M5. Formal/informal tone and terminology are decision O10.
+- **Verification**: each component has a Vitest test rendering `dir="rtl"` (arrow flips, order, alignment) and Playwright screenshots of EN and FA compared to the matching Figma frames (§12).
+
+---
+
+## 11. Accessibility (WCAG 2.2 AA) and the focus indicator
+
+**Baseline** (from Base UI + our wrappers): full keyboard operation; correct roles/states; Field wiring (`aria-describedby`, `aria-invalid`, `aria-required`); live regions for save status and toasts; focus management for dialogs; 24×24 minimum target (Toggle track 28×16 has a 44×… label row as target); `prefers-reduced-motion`; `forced-colors` (all state cues also encoded structurally; focus via transparent-outline trick); labels for every control (`hideLabel` still requires `aria-label`); heading structure (`h1` page header, `h2` section cards); landmark regions (`nav`, `main`, `region` for Save Bar); skip link "Skip to settings" at the top of the root.
+
+**Focus indicator proposal** (design has none; blue `Focus/Ring` is unused — design-spec D1–D3):
+
+- Non-field controls (Button, Icon Button, Toggle, Checkbox, Radio, Tab, Nav Item, Menu Item, Tag remove, links): `:focus-visible` → **2 px white gap + 2 px `gray/1000` ring** = the Figma `Focus/Ring` geometry with the neutral token: `box-shadow: 0 0 0 2px var(--fy-color-white), 0 0 0 4px var(--fy-focus-ring); outline: 2px solid transparent;` (transparent outline survives Windows High Contrast). `--fy-focus-ring: gray/1000` (**17.9:1**), monochrome to match Geist. Not blue, not loud; the white gap keeps it visible on dark buttons.
+- Fields (Input, Textarea, Select, Multi Select trigger): keep the design's halo `Focus/Input` **and** darken the border to `focus/border` = `gray/1000` (design says `border/strong` #a8a8a8 = 2.38:1, failing 1.4.11). Field states remain visually consistent with the design for hover/error.
+- Inside popups (Select/Menu items): highlighted item uses fill `surface/default` **plus** a 2 px inset `gray/1000` start-edge bar for keyboard highlight (pointer hover keeps fill only), so keyboard vs pointer are distinguishable.
+- Mouse clicks never show the ring on non-text controls (`:focus-visible` heuristic).
+- Flag: this is a **deviation-by-addition** from Figma; needs designer sign-off (O5). Proposed new tokens for Figma: `focus/ring-neutral` (= gray/1000) and `focus/border`.
+
+**Known token contrast failures** (design-spec §9 D3–D6, D9) are recorded as decisions (O4) and, until decided, implemented **as in Figma** in Milestone 1 with the failing pairs marked in the contrast test (`expectedFail`) so they can't regress silently or be forgotten.
+
+**Motion proposal** (Figma has none): colour transitions 120 ms `ease-out`; popups fade + scale from 0.98 in 150 ms; toast slide-in 200 ms; Save Bar slide/fade 200 ms; **all removed under `prefers-reduced-motion`**.
+
+---
+
+## 12. Testing strategy
+
+| Layer | Tooling | What it proves |
+|---|---|---|
+| PHP unit | PHPUnit 9/10 (+polyfills), no WP loaded | Field sanitize/validate per type, schema normalisation + registration errors, `Naming` derivations, Loader logic (winner selection, eligibility, late registration) in isolation with fake copies |
+| PHP integration | PHPUnit + `wp-phpunit` in wp-env | REST controller: cookie+instance nonce, capability, 401/403/409/422 paths, option round-trip, unknown-key dropping, password write-only, multisite; Loader with two real copies in one request |
+| PHP matrix | GitHub Actions: PHP 7.4/8.0/8.1/8.2/8.3/8.4 × WP 6.5 / 7.1 / trunk (wp-env `phpVersion`/`core`) | syntax ceiling (PHPCompatibilityWP), no deprecations on 8.4 |
+| Shared validation suite | `tests/fixtures/validation-cases.json` consumed by **both** PHPUnit and Vitest | client/server rule parity (`required`, lengths, pattern, url schemes, allowed, min/max, multi min/max, edge cases incl. Unicode, RTL text, numeric strings) |
+| JS unit/component | Vitest 5 + Testing Library; **browser mode (Playwright provider)** for overlay components (Base UI positioning needs real layout); jsdom for logic | props↔variants, ARIA, keyboard, RTL rendering, Icon mapping (unknown name → null + warn, flip list ⊂ icon set), token coverage, contrast pairs, dirty/save state machine |
+| A11y | `@axe-core/playwright` on every component story page and full settings page (EN+FA); manual keyboard script per component (Tab/Shift-Tab, arrows, Esc, Enter/Space) | WCAG 2.2 AA violations = build failure (known token failures allow-listed by id until O4) |
+| Visual vs Figma | Playwright screenshots of a **fixture page** per component/state/locale vs reference PNGs in `tests/visual/figma/` exported through the MCP (`figma_take_screenshot`, scale 2) with a documented per-component tolerance; refresh via a documented MCP session (the MCP is not reachable from CI) | "Button, Input, Toggle, Select match Figma" (M1) and every later component |
+| E2E on wp-env | Playwright: log in, open settings screen, edit, save, reload, persistence, validation errors, EN/FA (`WPLANG`) | vertical slices work end to end |
+| **Coexistence matrix (required)** | wp-env with 5 demo plugins + a hostile-CSS plugin | see below |
+| Strauss smoke | CI job runs Strauss 0.30 on the release tree with a consumer fixture, loads the prefixed copy in wp-env, runs the e2e slice | prefixed copy works; lint rules hold |
+| Composer smoke | `composer create-project` consumer from the release tag/path repo | `files` autoload + winner autoloader work with Composer's own autoloader present |
+| Contract tests | Load the frozen `Loader` from **each previously released 1.x tag** as the "first copy" and negotiate with the current tree | proves the contract is really frozen |
+| Perf/size | `size-limit` (§9.5), Lighthouse-style TTI check on the slice in CI (non-blocking) | budgets |
+
+**Coexistence Playwright suite** (`e2e/coexistence.spec.ts`), all plugins **active at once** in one wp-env site:
+
+| Demo | Bundles | Slug | Purpose |
+|---|---|---|---|
+| `acme-alpha` | Fyldo **1.0.0** (older) | `acme-alpha` | oldest 1.x |
+| `acme-beta` | Fyldo **1.1.0** | `acme-beta` | highest 1.x → must be the winner |
+| `acme-gamma` | Fyldo **1.1.0** (second identical copy, different path) | `acme-gamma` | tie → deterministic winner (lexicographic path), no double load |
+| `acme-delta` | Fyldo **2.0.0** (*synthetic major*, see below) | `acme-delta` | different major coexists |
+| `acme-omega` | Fyldo 1.1.0 **Strauss-prefixed** into `Omega\Vendor` | `acme-omega` | private copy, no negotiation |
+| `hostile-css` | — | — | injects `input,select,textarea,button,h1,h2,a,p{border:5px solid red!important;…}` unscoped, a `:focus` blue ring and a `.notice` mover, on all admin screens |
+
+Assertions: (1) PHP request completes with all copies active (no fatal / redeclaration); (2) `Loader::loaded_version()` = 1.1.0 and only **one** V1 `src/` path is loaded (`get_included_files()`, exposed by a debug REST route under `WP_DEBUG`); (3) each demo's settings page renders and **saves through its own REST namespace** (`fyldo-acme-alpha/v1`, …) with independent option rows; (4) DOM: `data-fyldo-v1="acme-beta"` vs `data-fyldo-v2="acme-delta"`, distinct root ids/handles/nonces; (5) **no globals**: `Object.keys(window)` diff after load is empty (config var deleted); (6) **CSS isolation**: computed style probes of Fyldo inputs/buttons/popups are unchanged with `hostile-css` active, and hostile page elements are unchanged by Fyldo CSS (both directions); (7) popup portals (Select, Tooltip, Toast, Modal) are descendants of the root; (8) only the current screen loads Fyldo assets (network assertions on other admin screens = zero Fyldo requests); (9) EN and FA runs.
+**Synthetic V2:** `tools/fixtures/make-demos.ts` copies the release tree, rewrites namespace `Fyldo\V1 → Fyldo\V2`, `data-fyldo-v1 → v2`, REST/version constants and bumps to 2.0.0 (+ asset rebuild via the same Vite config with `MAJOR=2`). It proves coexistence *mechanics*; the real V2 will be validated by the same suite when it exists.
+
+---
+
+## 13. Milestones (ordered; each ends with green CI and a demo)
+
+| # | Milestone | Scope / exit criteria |
+|---|---|---|
+| **M0** | Phase 0 (this) | design-spec, component-map, ARCHITECTURE, open decisions — **approval gate** |
+| **M1** | **Vertical slice** (as specified) | wp-env + demo plugin registering **one page**: Section Card with **Text input, Toggle, Select** + **Save Bar**; save via REST (nonce+cap+sanitize+validate); **EN + FA (RTL)**; token pipeline runs (`tokens`, `tokens:check`); **Button, Input, Toggle, Select match Figma** (screenshot compare through MCP); **coexistence suite passes** (alpha/beta/gamma/delta + hostile CSS; Strauss smoke); repo scaffolding (Vite, Tailwind, ESLint, PHPCS/PHPStan, PHPUnit, Vitest, CI). Includes the spikes that de-risk the doc: light-DOM hardening vs hostile CSS (O1), Base UI in wp-admin (focus/popups/portals), icon codegen (O3), measured bundle sizes (§9.5) |
+| M2 | Field library | Textarea (counter), Checkbox (+group, indeterminate), Radio group, Multi Select + Tag + overflow, Password/URL/Email/Number, `notice` field, full declarative-validation vocabulary + shared fixture suite, field-level `disabled` reasons |
+| M3 | Shell & layout | Sidebar + Nav Item, Top Navigation, Tabs, Page Header, Setting Row, Section Card (default + danger), **complete Save Bar** (global + per-section), client-side routing with URL sync, dirty tracking, unsaved-changes guard (`beforeunload` + in-app Modal), optimistic concurrency (409 UX), wp-admin integration (bleed layout, notice relocation immunity), responsive behaviour |
+| M4 | Feedback | Toast (manager, limits, timers, pause), Notice, Tooltip on every Icon Button (lint-enforced), Badge, Empty State, Modal (default + danger + typed confirm), danger-zone actions (reset), PHP `admin_notice()` helper |
+| M5 | i18n / RTL / a11y hardening | `.pot` + complete `fa_IR`; every component FA-verified against Figma FA frames; axe clean; keyboard scripts; focus system (§11); contrast decisions applied; reduced-motion + forced-colors; screen-reader pass (NVDA/VoiceOver notes) |
+| M6 | Coexistence & isolation hardening | Full matrix on PHP 7.4–8.4 × WP 6.5/7.1/trunk; Composer + Strauss consumer fixtures in CI; contract tests vs old tags (from the first tag onward); multisite; hostile-CSS variants; size budgets enforced; optional Shadow DOM mode if O1 requires |
+| M7 | Release engineering | `npm run release` (ZIP, drop-in, release-commit tag for Composer), GitHub Actions release workflow, `plugin-check`, `readme.txt`/screenshots, CHANGELOG + semver/deprecation policy doc, upgrade tests (N-1 → N), docs site for developers |
+| M8 | Beta → 1.0 | API freeze review, example plugins (drop-in, Composer, Strauss, Requires Plugins), security review, wordpress.org submission, `1.0.0` |
+| Post | Backlog | repeater, color, media, date, conditional fields (`show_if`), import/export, network-scope settings, field extension API (custom React fields), CLI |
+
+---
+
+## 14. Risks
+
+| Risk | Mitigation |
+|---|---|
+| Light-DOM CSS loses to unknown third-party admin CSS | Specificity bump + neutralisation + hostile-CSS test in M1; Shadow DOM fallback designed in (O1) |
+| Base UI focus/portal behaviour inside wp-admin (admin bar z-index, `#wpwrap` overflow, media modal) | Portal-into-root + own stacking context; M1 spike on Select/Tooltip/Dialog/Toast |
+| Frozen `Loader` mistake becomes permanent for the whole 1.x line | Keep it ~60 lines, contract-tested against every tag, review before 1.0, any doubt ⇒ next major |
+| Iconsax dependency is effectively unmaintained | Pin exact version; codegen output is our artifact; the wrapper API doesn't leak the package |
+| Tailwind v4 browser floor above WP's | Documented (§1); confirm (O11) |
+| Vazirmatn ≠ IRANYekanX metrics | Line-heights are tokens; verify FA screenshots in M1; adjust in the token snapshot, not in components |
+| Figma design fails WCAG in several tokens | Decisions O4/O5; contrast tests keep the debt visible |
+| MCP not available in CI | Committed token snapshot + Figma reference PNGs; documented refresh procedure |
+| `Requires Plugins` depends on wordpress.org slug ownership | Reserve `fyldo` slug early (O9); until then, drop-in/Composer are the primary modes |
+| Release commit strategy surprises Packagist/GitHub users | Documented; mirror repo is a drop-in alternative (O9) |
+| Plugin size growth (fonts + icons) | Per-locale font subsets, lazy icons, budgets in CI |
+
+---
+
+## 15. Open decisions and recommendations
+
+Each item: **question → my recommendation**. Items marked ★ are yours by your own rule (API shape, naming, versioning policy) — I will not proceed on those without an answer.
+
+| # | Decision | Recommendation |
+|---|---|---|
+| ★ **O1** | CSS isolation strategy | **Scoped light DOM, hardened** (§8.2) as default; **Shadow DOM** built as an opt-in mount switch only if the M1 hostile-CSS spike shows the hardening insufficient. Approve? |
+| **O2** | React: bundle vs `wp-element` | **Bundle React 19** (§8.1). Approve? |
+| **O3** | Icon delivery | **Build-time Linear-only codegen from `iconsax-reactjs`, lazy per-icon modules** (≈1 MB on disk) rather than shipping the full 7 MB component set per Fyldo copy. This slightly bends "use the React package directly" (the package remains the pinned source; runtime `<Icon>` renders our extracted Linear SVG). If you insist on package components verbatim: lazy chunks of the components (+7 MB per copy). Which? |
+| ★ **O4** | Accessibility vs "match Figma exactly" where Figma fails WCAG 2.2 AA (field border 1.19:1, placeholder/counter 3.23:1, off-switch track 1.66:1, Solid success/info badge 3.10/4.44:1) | **Match Figma in M1** (fidelity milestone), track failures as `expectedFail` tests, and ask the designer for token fixes before M5: field border → `gray/700`-ish (≥ 3:1), `text/tertiary` → ≥ #767676, off track darker, Solid badges use `*/900`. Approve this sequencing? |
+| ★ **O5** | Focus indicator (§11): neutral 2 px white gap + 2 px `gray/1000` ring for non-fields; field border → `gray/1000` on focus with the existing halo | Approve, or give an alternative look. Needs the two new Figma tokens `focus/ring-neutral`, `focus/border`. |
+| ★ **O6** | Public API shape (§3): array-first config, `Fyldo::create( $slug, $config )`, `add_group/add_page`, flat option per page `fyldo_{slug}__{page}` (override allowed), instance created on `init`, per-instance hooks `fyldo/{slug}/…`, declarative `validate` vocabulary + `validate_cb`/`sanitize_cb`. Alternatives: fluent builder; option names `{slug}_{page}`; nested storage by section | Approve as written, or list changes. (I recommend flat-by-field-id storage: moving a field between sections must not lose data.) |
+| ★ **O7** | Admin menu model | **One admin screen per instance**; pages/tabs are client-side routes (`?page=acme-seo#/general/reading`), each nav item also has a real `href` for no-JS/deep-linking. Not one WP submenu entry per page. Alternative: optionally mirror pages as WP submenu links later. |
+| ★ **O8** | Versioning & support policy | Strict semver **from 1.0.0 GA only**; pre-1.0 betas are published as `1.0.0-beta.N` under `V1` but **must not be bundled in released plugins** (documented). Deprecations survive ≥ 1 minor and ≥ 6 months. **PHP/WP minimums are raised only in a major**, and copies also self-declare requirements so the Loader skips ineligible ones (§6.2). Previous major receives security fixes for 12 months after the next major ships. Approve? |
+| ★ **O9** | Release/distribution mechanics: (a) Composer via a CI-made **release commit** containing `assets/dist` on the tagged commit vs a **read-only mirror repo** (`fyldo/fyldo`, Symfony-split style) with the dev repo separate; (b) reserve wordpress.org slug `fyldo` and Packagist name `fyldo/fyldo`; (c) licence GPL-2.0-or-later | (a) release-commit tags, single repo; (b) yes, reserve both now; (c) GPL-2.0-or-later. |
+| **O10** | Persian: tone (formal *شما* vs neutral UI tone), terminology list (e.g. «ذخیره تغییرات», «نادیده گرفتن»), who reviews | Neutral-formal UI tone; I draft, you (or a native reviewer) sign off in M5. Numerals via `Intl` (Persian digits). |
+| **O11** | Browser floor from Tailwind v4 (Chrome 111 / Safari 16.4 / Firefox 128) | Accept (matches WP's "last 2 versions" policy; document it). |
+| **O12** | Text domain & translations for bundled copies | Domain `fyldo`; bundled copies load their own `.mo`/JSON (no dependence on translate.wordpress.org); when on .org the plugin also gets community translations. |
+| **O13** | Visual regression method | Figma reference PNGs committed under `tests/visual/figma/`, refreshed through an MCP session, compared with per-component tolerance; no Figma access in CI. |
+| **O14** | Multi Select popup with search row (Figma) vs Base UI's canonical "type in chips input" | Follow Figma (search inside the popup); decide at M2 after a spike. |
+| **O15** | Saved-state lifetime on the Save Bar; loading skeleton; responsive layouts; Textarea sizes; Notice `notice`-class reading (D8); Toast tone reading (D9) | Designer questions — my defaults: Saved stays until next edit or 4 s then slides out; skeleton = card outlines; responsive per §8.3; Textarea single size; React notices never get `.notice`; toast tone = icon glyph + colour only. |
+
+**Requested next step:** answer O1–O9 (or "approve all recommendations"), and the designer questions in O15 as you see fit. I will then start Milestone 1 exactly as specified in §13.
