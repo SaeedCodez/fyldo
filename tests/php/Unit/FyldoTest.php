@@ -88,6 +88,28 @@ final class FyldoTest extends TestCase {
 			'bad navigation'  => array( array( 'title' => 'x', 'navigation' => 'left' ), 'navigation' ),
 			'bad menu type'   => array( array( 'title' => 'x', 'menu' => array( 'type' => 'floating' ) ), 'menu.type' ),
 			'link w/o url'    => array( array( 'title' => 'x', 'links' => array( array( 'label' => 'Docs' ) ) ), 'label` and `url' ),
+			'bad placement'   => array( array( 'title' => 'x', 'links' => array( array( 'label' => 'Docs', 'url' => 'https://x.test', 'placement' => 'sidebar' ) ) ), 'placement' ),
+		);
+	}
+
+	public function test_links_default_to_the_footer_and_may_go_to_the_page_header(): void {
+		$config = ( new Instance(
+			'acme-seo',
+			array(
+				'title' => 'Acme SEO',
+				'links' => array(
+					array( 'label' => 'Documentation', 'url' => 'https://acme.test/docs', 'icon' => 'book', 'external' => true ),
+					array( 'label' => 'Changelog', 'url' => 'https://acme.test/changes', 'placement' => 'header' ),
+				),
+			)
+		) )->config();
+
+		$this->assertSame(
+			array(
+				array( 'label' => 'Documentation', 'url' => 'https://acme.test/docs', 'icon' => 'book', 'external' => true, 'placement' => 'footer' ),
+				array( 'label' => 'Changelog', 'url' => 'https://acme.test/changes', 'icon' => '', 'external' => false, 'placement' => 'header' ),
+			),
+			$config['links']
 		);
 	}
 

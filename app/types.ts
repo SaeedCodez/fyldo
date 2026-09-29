@@ -144,14 +144,26 @@ export interface SectionDef {
   action?: Record<string, unknown>;
 }
 
+/** A sub-page of a page, reached at `#/<page>/<tab>`. */
+export interface TabDef {
+  id: string;
+  label: string;
+  /** Iconsax name, or '' for none. */
+  icon: string;
+  /** Count badge text, or '' for none. */
+  badge: string;
+}
+
 export interface PageDef {
   id: string;
   title: string;
   description: string;
   icon: string;
   group: string;
+  /** Nav Item badge ("needs attention"), or '' for none. */
+  badge: string;
   save: 'global' | 'section';
-  tabs: { id: string; label: string }[];
+  tabs: TabDef[];
   sections: SectionDef[];
   values: Record<string, FieldValue>;
   revision: string;
@@ -162,7 +174,8 @@ export interface LinkDef {
   url: string;
   icon: string;
   external: boolean;
-  placement: string;
+  /** `footer`: sidebar footer / top navigation utilities. `header`: Page Header actions. */
+  placement: 'footer' | 'header';
 }
 
 export interface JedLocaleData {

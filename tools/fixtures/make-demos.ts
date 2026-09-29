@@ -25,12 +25,14 @@ interface Demo {
   title: string;
   fyldoVersion: string;
   kind: Kind;
+  /** Layout of the settings screen (M3): the Sidebar (default) or the Top Navigation. */
+  navigation?: 'sidebar' | 'top';
 }
 
 export const DEMOS: Demo[] = [
   { slug: 'acme-alpha', title: 'Acme Alpha', fyldoVersion: '1.0.0', kind: 'v1' },
   { slug: 'acme-beta', title: 'Acme Beta', fyldoVersion: '1.1.0', kind: 'v1' },
-  { slug: 'acme-gamma', title: 'Acme Gamma', fyldoVersion: '1.1.0', kind: 'v1' },
+  { slug: 'acme-gamma', title: 'Acme Gamma', fyldoVersion: '1.1.0', kind: 'v1', navigation: 'top' },
   { slug: 'acme-delta', title: 'Acme Delta', fyldoVersion: '2.0.0', kind: 'v2' },
   { slug: 'acme-omega', title: 'Acme Omega', fyldoVersion: '1.1.0', kind: 'strauss' },
 ];
@@ -148,17 +150,25 @@ add_action(
 		$fyldo = \\${namespace}\\Fyldo::create(
 			'${demo.slug}',
 			array(
-				'title'   => '${demo.title}',
-				'version' => '1.0.0',
-				'menu'    => array(
+				'title'      => '${demo.title}',
+				'version'    => '1.0.0',
+				'navigation' => '${demo.navigation ?? 'sidebar'}',
+				'menu'       => array(
 					'type'   => 'submenu',
 					'parent' => 'options-general.php',
 					'title'  => '${demo.title}',
 				),
+				'links'      => array(
+					array( 'label' => 'Documentation', 'url' => 'https://example.com/docs', 'icon' => 'book', 'external' => true ),
+					array( 'label' => 'Help & support', 'url' => 'https://example.com/help', 'icon' => 'message-question', 'external' => true ),
+				),
 			)
 		);
-		$fyldo->add_page( 'general', require __DIR__ . '/page.php' );
-		$fyldo->add_page( 'fields', require __DIR__ . '/fields.php' ); // M2: reached through the #/fields route
+		$fyldo->add_group( 'settings', 'Settings' );
+		$fyldo->add_group( 'tools', 'Tools' );
+		$fyldo->add_page( 'general', array_merge( require __DIR__ . '/page.php', array( 'group' => 'settings' ) ) );
+		$fyldo->add_page( 'fields', array_merge( require __DIR__ . '/fields.php', array( 'group' => 'settings', 'badge' => 3 ) ) ); // M2: #/fields
+		$fyldo->add_page( 'advanced', require __DIR__ . '/advanced.php' ); // M3: tabs, #/advanced/<tab>
 	}
 );
 `;
@@ -175,6 +185,7 @@ export function makeDemos(): void {
     mkdirSync(dir, { recursive: true });
     cpSync(resolve(root, 'tests/fixtures/slice-page.php'), resolve(dir, 'page.php'));
     cpSync(resolve(root, 'tests/fixtures/form-fields-page.php'), resolve(dir, 'fields.php'));
+    cpSync(resolve(root, 'tests/fixtures/tabs-page.php'), resolve(dir, 'advanced.php'));
 
     if (demo.kind === 'strauss') {
       strauss(dir, demo.fyldoVersion);
