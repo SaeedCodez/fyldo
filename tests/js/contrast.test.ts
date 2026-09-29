@@ -13,7 +13,6 @@ import { resolveColor } from '../../tools/tokens/generate';
 import type { TokenSnapshot } from '../../tools/tokens/snapshot';
 
 const snapshot = JSON.parse(readFileSync(resolve(__dirname, '../../tokens/figma.tokens.json'), 'utf8')) as TokenSnapshot;
-const has = (name: string) => snapshot.tokens.some((t) => t.name === `color.${name.replace(/\//g, '.')}`);
 const color = (name: string) => parseHex(resolveColor(snapshot, `color.${name.replace(/\//g, '.')}`));
 const ratio = (fg: string, bg: string) => contrast(color(fg), color(bg));
 
@@ -50,13 +49,9 @@ const TEXT: Array<[fg: string, bg: string, why: string]> = [
   ['text/primary', 'status/warning/solid', 'solid badge (warning) — dark text on amber'],
 ];
 
-// The visual boundary of a text field. If the designer introduces a dedicated field-border token, it is used instead of border/default.
-const FIELD_BORDER = has('border/input') ? 'border/input' : 'border/default';
-const FIELD_BORDER_HOVER = has('border/input-hover') ? 'border/input-hover' : 'border/hover';
-
 const UI: Array<[fg: string, bg: string, why: string]> = [
-  [FIELD_BORDER, 'background/default', 'text field boundary (1.4.11)'],
-  [FIELD_BORDER_HOVER, 'background/default', 'text field hover boundary'],
+  ['border/input', 'background/default', 'text field boundary (1.4.11)'],
+  ['border/input-hover', 'background/default', 'text field hover boundary'],
   ['focus/border', 'background/default', 'focused field boundary'],
   ['focus/ring-neutral', 'background/default', 'keyboard focus ring (against the white gap)'],
   ['control/border', 'background/default', 'checkbox / radio boundary'],

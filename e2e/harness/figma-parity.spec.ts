@@ -138,7 +138,7 @@ test.describe('Input', () => {
       expect(s.height).toBe(`${spec.control}px`);
       expect(s['border-top-left-radius']).toBe(`${spec.radius}px`);
       expect(s['border-top-width']).toBe('1px');
-      expect(s['border-top-color']).toBe(token('border/default'));
+      expect(s['border-top-color']).toBe(token('border/input')); // Figma: Control frame bound to border/input
       expect(s['background-color']).toBe(token('background/default'));
       expect(s['column-gap']).toBe('8px');
 
@@ -170,7 +170,7 @@ test.describe('Input', () => {
 
     let wrapper = await wrapperOf('default');
     await wrapper.hover();
-    expect((await style(wrapper, ['border-top-color']))['border-top-color']).toBe(token('border/hover'));
+    expect((await style(wrapper, ['border-top-color']))['border-top-color']).toBe(token('border/input-hover'));
 
     wrapper = await wrapperOf('filled');
     await expect(page.locator('input')).toHaveValue('Fyldo');
@@ -185,8 +185,11 @@ test.describe('Input', () => {
     await expect(page.locator('input')).toHaveAttribute('aria-invalid', 'true');
 
     wrapper = await wrapperOf('disabled');
-    const disabled = await style(wrapper, ['background-color']);
+    const disabled = await style(wrapper, ['background-color', 'border-top-color']);
     expect(disabled['background-color']).toBe(token('surface/disabled'));
+    expect(disabled['border-top-color']).toBe(token('border/default')); // Disabled keeps border/default in Figma
+    await wrapper.hover({ force: true });
+    expect((await style(wrapper, ['border-top-color']))['border-top-color']).toBe(token('border/default'));
     expect((await style(page.locator('label'), ['color'])).color).toBe(token('text/disabled'));
     await expect(page.locator('input')).toBeDisabled();
   });
@@ -196,7 +199,7 @@ test('Input focus: the approved neutral border (Figma token focus/border) + the 
   const stage = await open(page, { c: 'input', size: 'sm', state: 'default' });
   await page.locator('input').focus();
   const focused = await style(stage.locator('[data-slot=fy-input]'), ['border-top-color', 'box-shadow']);
-  // Needs the Figma token `focus/border` (approved in decision O5, not in the file yet → this fails until it is added).
+  // Figma token `focus/border` (decision O5).
   expect(focused['border-top-color']).toBe(token('focus/border'));
   expect(shadows(focused['box-shadow'] as string)).toEqual([shadow('#0000001a', 0, 0, 0, 3)]); // Focus/Input: 3px rgba(0,0,0,.10)
 });
@@ -276,7 +279,7 @@ test.describe('Select', () => {
       const s = await style(trigger, ['height', 'border-top-left-radius', 'border-top-color', 'background-color', 'font-size', 'line-height']);
       expect(s.height).toBe(`${spec.control}px`);
       expect(s['border-top-left-radius']).toBe(`${spec.radius}px`);
-      expect(s['border-top-color']).toBe(token('border/default'));
+      expect(s['border-top-color']).toBe(token('border/input'));
       expect(s['font-size']).toBe(`${spec.size}px`);
       expect(s['line-height']).toBe(`${spec.lh}px`);
 
@@ -300,7 +303,9 @@ test.describe('Select', () => {
     expect(shadows(error['box-shadow'] as string)).toEqual([shadow('#da2f3529', 0, 0, 0, 3)]);
 
     stage = await open(page, { c: 'select', size: 'sm', state: 'disabled' });
-    expect((await style(stage.getByRole('combobox'), ['background-color']))['background-color']).toBe(token('surface/disabled'));
+    const off = await style(stage.getByRole('combobox'), ['background-color', 'border-top-color']);
+    expect(off['background-color']).toBe(token('surface/disabled'));
+    expect(off['border-top-color']).toBe(token('border/default'));
   });
 
   test('open: focus look, arrow-up, menu as wide as the field 4px below, check at the END of the selected row', async ({ page }) => {
@@ -311,7 +316,7 @@ test.describe('Select', () => {
 
     const open$ = await style(trigger, ['border-top-color', 'box-shadow']);
     expect(shadows(open$['box-shadow'] as string)).toEqual([shadow('#0000001a', 0, 0, 0, 3)]); // open = the focus look
-    expect(open$['border-top-color']).not.toBe(token('border/default'));
+    expect(open$['border-top-color']).toBe(token('focus/border')); // Open uses focus/border
     await expect(trigger.locator('svg[data-fyldo-icon="arrowup2"]')).toBeVisible();
 
     const menu = page.locator('[data-slot=fy-select-menu]');

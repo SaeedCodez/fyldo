@@ -17,6 +17,7 @@ const CASES: Array<{ name: string; scale: number; params: Record<string, string>
   { name: 'button-secondary', scale: 4, params: { c: 'button', variant: 'secondary', size: 'sm' } },
   { name: 'button-loading', scale: 4, params: { c: 'button', variant: 'primary', size: 'sm', state: 'loading' } },
   { name: 'toggle-on', scale: 4, params: { c: 'toggle', size: 'sm', checked: '1' } },
+  { name: 'toggle-off', scale: 4, params: { c: 'toggle', size: 'sm', checked: '0' } }, // track = control/off (gray/700 after the O4 fix)
   { name: 'select-default', scale: 3, params: { c: 'select', size: 'sm', state: 'default' } },
 ];
 

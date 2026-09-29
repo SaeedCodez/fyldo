@@ -12,8 +12,8 @@ export type ControlSize = ButtonSize;
  */
 export const CONTROL_BASE = [
   'fy:flex fy:w-full fy:items-center fy:gap-2 fy:border fy:bg-background-default fy:text-text-primary',
-  'fy:border-border-default fy:transition-colors fy:duration-100 fy:ease-out',
-  'fy:hover:border-border-hover',
+  'fy:border-border-input fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:hover:border-border-input-hover',
   // keyboard/pointer focus on the control inside: neutral border + Figma's soft halo
   'fy:has-[:focus-visible]:border-focus-border fy:has-[:focus-visible]:shadow-focus-input',
   // popup open (Select): same look as focus
@@ -23,7 +23,7 @@ export const CONTROL_BASE = [
   'fy:group-data-[invalid]/field:hover:border-status-error-solid fy:group-data-[invalid]/field:has-[:focus-visible]:border-status-error-solid',
   // disabled
   'fy:group-data-[disabled]/field:cursor-not-allowed fy:group-data-[disabled]/field:bg-surface-disabled fy:group-data-[disabled]/field:text-text-disabled',
-  'fy:group-data-[disabled]/field:hover:border-border-default',
+  'fy:group-data-[disabled]/field:border-border-default fy:group-data-[disabled]/field:hover:border-border-default',
 ].join(' ');
 
 export const CONTROL_SIZE: Record<ControlSize, string> = {
