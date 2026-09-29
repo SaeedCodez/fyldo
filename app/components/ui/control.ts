@@ -10,8 +10,8 @@ export type ControlSize = ButtonSize;
  * States come from the surrounding `Field.Root` (`group/field`): invalid and disabled are data attributes on it, and
  * keyboard focus is the control's own `:focus-visible` (text inputs match it for pointer focus too).
  */
-export const CONTROL_BASE = [
-  'fy:flex fy:w-full fy:items-center fy:gap-2 fy:border fy:bg-background-default fy:text-text-primary',
+export const CONTROL_LOOK = [
+  'fy:border fy:bg-background-default fy:text-text-primary',
   'fy:border-border-input fy:transition-colors fy:duration-100 fy:ease-out',
   'fy:hover:border-border-input-hover',
   // keyboard/pointer focus on the control inside: neutral border + Figma's soft halo
@@ -25,6 +25,9 @@ export const CONTROL_BASE = [
   'fy:group-data-[disabled]/field:cursor-not-allowed fy:group-data-[disabled]/field:bg-surface-disabled fy:group-data-[disabled]/field:text-text-disabled',
   'fy:group-data-[disabled]/field:border-border-default fy:group-data-[disabled]/field:hover:border-border-default',
 ].join(' ');
+
+/** The look plus the single-line layout (Input, Select trigger, Textarea wrapper). Multi Select lays itself out: it uses CONTROL_LOOK. */
+export const CONTROL_BASE = `fy:flex fy:w-full fy:items-center fy:gap-2 ${CONTROL_LOOK}`;
 
 export const CONTROL_SIZE: Record<ControlSize, string> = {
   sm: 'fy:h-8 fy:px-3 fy:rounded-sm fy:text-copy-14',

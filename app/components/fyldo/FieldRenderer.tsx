@@ -4,6 +4,7 @@ import type { FieldDef, FieldValue } from '../../types';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { Input } from '../ui/input';
+import { MultiSelect } from '../ui/multi-select';
 import { RadioGroup } from '../ui/radio';
 import { Select } from '../ui/select';
 import { Textarea, TextareaFooter } from '../ui/textarea';
@@ -113,6 +114,23 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur }
               onChange(field.id, next);
               onBlur(field.id);
             }}
+          />
+        </SettingRow>
+      );
+
+    case 'multi_select':
+      return (
+        <SettingRow {...common}>
+          <MultiSelect
+            options={field.options}
+            value={list(value)}
+            placeholder={field.placeholder}
+            searchable={field.searchable}
+            clearable={field.clearable}
+            disabled={disabled}
+            aria-label={field.label}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
           />
         </SettingRow>
       );

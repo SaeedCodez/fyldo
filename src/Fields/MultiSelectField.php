@@ -24,6 +24,10 @@ final class MultiSelectField extends AbstractListField {
 		return 'Multi select';
 	}
 
+	protected function option_keys(): array {
+		return array( 'icon' );
+	}
+
 	protected function default_layout(): string {
 		return 'stacked';
 	}

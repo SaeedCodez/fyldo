@@ -181,7 +181,16 @@ type TagProps = { label: string; size?: 'sm'|'md'; onRemove?: () => void /* abse
 | Select Menu Multi: Options | `Combobox.List` of `Combobox.Item` with leading `Checkbox` (Menu Item Type=Multi) |
 | Select Menu Multi: Footer | ➕ custom (“n selected” Label/13 + Secondary sm “Clear” button) |
 
-**Gaps:** ⚠ Figma shows a search row **inside the popup**; Base UI Combobox's canonical multiple pattern types in the chips input. Decision needed at Milestone 2: keep Figma (input inside popup — needs `Combobox.Input` in `Popup` with the "input inside popup" recipe) vs canonical. Recommendation: **follow Figma** (matches the design and works better on mobile). ➕ Overflow computation. ➕ Backspace removes the last chip (Base UI default) — keep. ➕ Live region announcing “{label} selected/removed”.
+*Implemented in M2 part 2:* `Tag` (Small 20 / Medium 24; removable, or without `onRemove` the non-removable overflow chip with a screen-reader label), `MultiSelect` (the bordered field = `Combobox.Trigger` rendered as a `div`, popup = Search · options · Footer) and `MultiSelectField` (the full Figma "Multi Select"). Decisions, all from the pack:
+
+- **O14 resolved: the search row is inside the popup** (`Combobox.Input`), the field is the trigger. The Figma footer button is **Tertiary Small "Clear all"** (not Secondary), and the popup is exactly as wide as the field, 4px below it.
+- Field: min-height 34 / 42 / 50 (the stroke counts in the layout), padding 6/12 · 8/12 · 12/12; with tags the start padding is 6 · 8 · 12 (read from the pack). Tags are Small in a Small field and Medium in Medium and Large ones; they wrap with 4px gaps; the chevron column stays beside the first line. `maxVisibleTags` (default 3, as drawn) → the rest is the non-removable "+n" chip. Selected values are always reported in option order, the order the server stores.
+- Menu Item Multi: the leading checkbox is `CheckboxMark` (the Checkbox box drawn as a picture — the option itself carries `aria-selected`; nested inputs would be invalid), optional `icon` after it, no trailing tick. Hover and keyboard highlight share the Hover look.
+- Keyboard: on the field Enter / Space / ↓ open, Backspace (or Delete) removes the last tag; in the popup type to filter, ↑ ↓, Enter toggles, **Space toggles while the search is empty** (otherwise it is a space in the query), Backspace on an empty search removes the last tag, Esc closes and focus returns to the field. The filter is kept after ticking so several results of one query can be picked. Tag remove buttons and the inline Clear are pointer targets (`tabIndex=-1`); the keyboard has Backspace and the footer's Clear all.
+- The inline **Clear button** (Figma `Clear button`, off by default → `clearable`): the pack's hidden `Clear` layer (16px close-circle, `icon/tertiary`, 8px before the chevron).
+- `searchable: false` hides the search row (Figma `Search` off); the list is then not filterable. The footer is `menuFooter` (Figma `Footer`).
+- **Design gap (flag for the owner):** the pack draws no *empty result* state. "No results found." reuses the Menu Item geometry (36px row, 8px padding, Copy/14 `text/tertiary`) — nothing new was invented, but it is not Figma.
+- Screen readers: the field is a `combobox` named by its label; the tags are text in it; removals and Clear are announced in a polite status region.
 
 ### 2.10 Tag — see 2.9. Also usable standalone (filters). Radius `xs`, fill `surface/default`, hover `surface/hover`.
 
@@ -289,7 +298,7 @@ Base: ➕ custom composition over `Field` (`Field.Root/Label/Description`). `Con
 ```ts
 type SettingRowProps = { title: string; description?: string; badge?: BadgeProps; layout?: 'inline'|'stacked'; divider?: boolean /*true; false on last row*/; control: ReactNode; error?: string };
 ```
-**Layout rule from the PHP schema:** `toggle`, `checkbox` ⇒ `inline`; `text|textarea|select|multiselect|number` ⇒ `stacked`; `radio`/`checkbox_group` ⇒ `stacked` (with `Fieldset`). Overridable per field (`'layout' => 'inline'`).
+**Layout rule from the PHP schema:** `toggle`, `checkbox` ⇒ `inline`; `text|textarea|select|multi_select|number` ⇒ `stacked`; `radio`/`checkbox_group` ⇒ `stacked` (with `Fieldset`). Overridable per field (`'layout' => 'inline'`).
 **Gaps:** ➕ Label association (inline Toggle: title is the switch label via `aria-labelledby`; description via `aria-describedby`). ➕ Divider auto-off on last row (CSS `:last-child`, prop override). ➕ Disabled propagation + “why disabled” text (rule 14). ➕ Conditional visibility hook (`show_if`) — later milestone.
 
 ### 4.5 Section Card — Figma `Section Card` (18:2913)
@@ -335,7 +344,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `checkbox_group` | `CheckboxGroupField` | stacked | subset of allowed keys | min/max selected |
 | `radio` | `RadioGroupField` | stacked | one of allowed keys (else default) | required, allowed |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
-| `multiselect` | `MultiSelectField` | stacked | subset of allowed keys | min/max selected |
+| `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `notice` (static) | `Notice` | full width | — | — |
 | *later* `repeater`, `color`, `media`, `code editor`, `date` | out of scope until designed | | | |
 

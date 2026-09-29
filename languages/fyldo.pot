@@ -44,6 +44,47 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
+#: app/components/ui/multi-select.tsx:111
+msgid "%s removed"
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:119
+msgid "Selection cleared"
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:199
+msgid "%s more selected"
+msgid_plural "%s more selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/components/ui/multi-select.tsx:209
+#: app/components/ui/multi-select.tsx:284
+msgid "Clear all"
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:249
+msgid "Search…"
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:250
+msgid "Search options"
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:256
+msgid "No results found."
+msgstr ""
+
+#: app/components/ui/multi-select.tsx:281
+msgid "%s selected"
+msgid_plural "%s selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: app/components/ui/tag.tsx:62
+msgid "Remove %s"
+msgstr ""
+
 #: app/components/ui/textarea.tsx:96
 msgid "%d character remaining."
 msgid_plural "%d characters remaining."

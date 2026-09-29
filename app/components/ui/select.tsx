@@ -28,7 +28,7 @@ export interface SelectProps {
 }
 
 /** Popup: 8 items × 36 + 7 × 2 gaps + 2 × 4 padding, then it scrolls (design rule: cap at ~8 items). */
-const POPUP_MAX_HEIGHT = 310;
+export const POPUP_MAX_HEIGHT = 310;
 
 /**
  * One-of-many field (6+ options). Base UI Select in the Figma "Select" / "Select Menu" / "Menu Item" look:

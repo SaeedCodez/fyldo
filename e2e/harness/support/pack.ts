@@ -36,6 +36,7 @@ export interface Node {
     itemSpacing?: number;
     counterAxisAlignItems?: string;
     primaryAxisAlignItems?: string;
+    minHeight?: number;
   };
   cornerRadius?: number;
   fills?: Paint[];
@@ -50,6 +51,8 @@ export interface Node {
     letterSpacing: { unit: string; value: number };
     fillToken?: string;
   };
+  /** A nested component instance (not walked further): which variant it is and the visible text overrides. */
+  instance?: { component: string; variant: string; componentProperties: Record<string, { type: string; value: unknown }>; texts: Record<string, string> };
   /** An Iconsax instance (not walked further). */
   icon?: { name: string; size: number; variant: string; colour: string };
   children?: Node[];

@@ -293,6 +293,14 @@ final class FormFieldsTest extends TestCase {
 		$this->assertSame( 1, $calls );
 	}
 
+	public function test_multi_select_options_may_carry_an_icon(): void {
+		$field = $this->multi( array( 'options' => array( array( 'value' => 'en', 'label' => 'English', 'icon' => 'global' ), array( 'value' => 'fa', 'label' => 'Persian' ) ) ) );
+
+		$options = $field->to_client()['options'];
+		$this->assertSame( 'global', $options[0]['icon'] );
+		$this->assertArrayNotHasKey( 'icon', $options[1] );
+	}
+
 	// ── Radio ──────────────────────────────────────────────────────────────────────────────────────────
 
 	public function test_radio_accepts_only_enabled_options_and_is_never_empty(): void {

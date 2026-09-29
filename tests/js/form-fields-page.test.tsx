@@ -23,7 +23,7 @@ function setup(api: Partial<Api> = {}) {
   return { savePage };
 }
 
-describe('Form fields page (Textarea, Checkbox, Checkbox group, Radio group) — the whole save flow', () => {
+describe('Form fields page (Textarea, Checkbox, Checkbox group, Radio group, Multi Select) — the whole save flow', () => {
   it('renders every field from the PHP description with its default', () => {
     setup();
     expect(screen.getByRole('textbox', { name: 'Default meta description' })).toHaveValue('Fyldo is a lightweight settings framework.');
@@ -98,5 +98,26 @@ describe('Form fields page (Textarea, Checkbox, Checkbox group, Radio group) —
     await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
     expect(await screen.findByText('Choose one of the available options.')).toBeVisible();
     expect(screen.getByRole('radiogroup', { name: 'Layout' })).toHaveAttribute('aria-invalid', 'true');
+  });
+  it('Multi Select: shows the default as tags, saves the picked list in option order, and blocks `max` with the PHP message', async () => {
+    const { savePage } = setup();
+    const field = screen.getByRole('combobox', { name: 'Include in sitemap' });
+    expect(field).toHaveTextContent('PostsPages');
+
+    await userEvent.click(field);
+    await userEvent.click(await screen.findByRole('option', { name: 'Tags' }));
+    await userEvent.click(screen.getByRole('option', { name: 'Products' }));
+    await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
+    expect(savePage).toHaveBeenCalledWith('fields', { sitemap_types: ['post', 'page', 'product', 'tag'] }, 'rev-1');
+  });
+
+  it('Multi Select: `max: 5` is enforced in the browser before anything is sent', async () => {
+    const { savePage } = setup();
+    await userEvent.click(screen.getByRole('combobox', { name: 'Include in sitemap' }));
+    for (const label of ['Products', 'Authors', 'Categories', 'Tags']) await userEvent.click(await screen.findByRole('option', { name: label }));
+    await userEvent.keyboard('{Escape}');
+    await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
+    expect(savePage).not.toHaveBeenCalled();
+    expect(await screen.findByText('Select no more than 5 options.')).toBeVisible();
   });
 });
