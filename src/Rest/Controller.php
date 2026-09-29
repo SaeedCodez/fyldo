@@ -161,7 +161,7 @@ final class Controller {
 		$store = $this->instance->store();
 
 		return array(
-			'values'   => (object) $store->values( $page ),
+			'values'   => (object) $store->client_values( $page ),
 			'revision' => $store->revision( $page ),
 		);
 	}

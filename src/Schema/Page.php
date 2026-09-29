@@ -29,7 +29,7 @@ final class Page {
 	/** @var Section[] */
 	private $sections = array();
 
-	/** @var AbstractField[] indexed by field id */
+	/** @var AbstractField[] Fields that own a value, indexed by field id (display-only fields are not in here). */
 	private $fields = array();
 
 	/**
@@ -82,6 +82,7 @@ final class Page {
 		);
 
 		$section_ids = array();
+		$field_ids   = array();
 		foreach ( (array) ( $config['sections'] ?? array() ) as $section_config ) {
 			$section = new Section( (array) $section_config );
 
@@ -95,10 +96,14 @@ final class Page {
 			}
 
 			foreach ( $section->fields() as $field ) {
-				if ( isset( $this->fields[ $field->id() ] ) ) {
+				if ( isset( $field_ids[ $field->id() ] ) ) {
 					throw new ConfigException( sprintf( 'Page "%1$s": duplicate field id "%2$s" (field ids are the storage keys and must be unique per page).', $id, $field->id() ) );
 				}
-				$this->fields[ $field->id() ] = $field;
+				$field_ids[ $field->id() ] = true;
+
+				if ( $field->is_stored() ) {
+					$this->fields[ $field->id() ] = $field;
+				}
 			}
 
 			$this->sections[] = $section;
@@ -133,7 +138,11 @@ final class Page {
 		return $this->sections;
 	}
 
-	/** @return array<string,AbstractField> */
+	/**
+	 * The fields that own a value: what is stored, sanitized and saved. A `notice` is in a section, not in here.
+	 *
+	 * @return array<string,AbstractField>
+	 */
 	public function fields(): array {
 		return $this->fields;
 	}

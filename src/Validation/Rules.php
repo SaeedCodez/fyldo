@@ -15,8 +15,11 @@ namespace Fyldo\V1\Validation;
  */
 final class Rules {
 
-	/** Rules understood by both PHP and the client. */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'allowed', 'min', 'max' );
+	/**
+	 * Rules understood by both PHP and the client, in evaluation order. `email` and `number` are implied by the field
+	 * type (the value must be an address / a number); the others are declared by the developer.
+	 */
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'allowed', 'min', 'max', 'step' );
 
 	/**
 	 * @param array<string,mixed> $rules Field `validate` array.
@@ -53,6 +56,10 @@ final class Rules {
 			if ( ! empty( $rules['email'] ) && false === filter_var( $value, FILTER_VALIDATE_EMAIL ) ) {
 				return self::fail( 'email', array() );
 			}
+			// A number field stores int|float; text that could not be read as a number stays a string and lands here.
+			if ( ! empty( $rules['number'] ) ) {
+				return self::fail( 'number', array() );
+			}
 		}
 
 		if ( isset( $rules['allowed'] ) ) {
@@ -71,6 +78,9 @@ final class Rules {
 			}
 			if ( isset( $rules['max'] ) && $value > $rules['max'] ) {
 				return self::fail( 'max', array( 'max' => $rules['max'] ) );
+			}
+			if ( isset( $rules['step'] ) && $rules['step'] > 0 && ! self::on_step( $value, $rules['step'], $rules['min'] ?? 0 ) ) {
+				return self::fail( 'step', array( 'step' => $rules['step'] ) );
 			}
 		}
 
@@ -100,6 +110,46 @@ final class Rules {
 	}
 
 	/**
+	 * Registration-time check of the rule parameters, so a typo fails loudly instead of validating nothing.
+	 * Returns a sentence for the developer, or null when the rule set is well-formed.
+	 *
+	 * @param array<string,mixed> $rules Field `validate` array (keys already checked against KNOWN).
+	 */
+	public static function config_error( array $rules ): ?string {
+		foreach ( array( 'min_length', 'max_length' ) as $key ) {
+			if ( isset( $rules[ $key ] ) && ( ! is_int( $rules[ $key ] ) || $rules[ $key ] < 0 ) ) {
+				return sprintf( '`%s` must be a whole number, 0 or more.', $key );
+			}
+		}
+
+		foreach ( array( 'min', 'max' ) as $key ) {
+			if ( isset( $rules[ $key ] ) && ! is_int( $rules[ $key ] ) && ! is_float( $rules[ $key ] ) ) {
+				return sprintf( '`%s` must be a number.', $key );
+			}
+		}
+
+		if ( isset( $rules['min'], $rules['max'] ) && $rules['min'] > $rules['max'] ) {
+			return '`min` is greater than `max`.';
+		}
+
+		if ( isset( $rules['step'] ) && ( ( ! is_int( $rules['step'] ) && ! is_float( $rules['step'] ) ) || $rules['step'] <= 0 ) ) {
+			return '`step` must be a number greater than 0.';
+		}
+
+		if ( isset( $rules['pattern'] ) && ( ! is_string( $rules['pattern'] ) || '' === $rules['pattern'] || false === @preg_match( self::delimit( $rules['pattern'] ), '' ) ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- a bad developer pattern is reported, not fatal.
+			return '`pattern` must be a valid regular expression (JavaScript syntax, no delimiters).';
+		}
+
+		foreach ( array( 'schemes', 'allowed' ) as $key ) {
+			if ( isset( $rules[ $key ] ) && ( ! is_array( $rules[ $key ] ) || ( 'schemes' === $key && array() === $rules[ $key ] ) ) ) {
+				return sprintf( '`%s` must be a list (and `schemes` cannot be empty).', $key );
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Empty means: null, empty string, or empty array. `false` and `0` are values (a toggle can be off).
 	 *
 	 * @param mixed $value Value.
@@ -122,10 +172,27 @@ final class Rules {
 	 * `new RegExp( source ).test( value )`). Only the common subset is supported on both sides.
 	 */
 	private static function matches( string $source, string $value ): bool {
-		$delimited = '~' . str_replace( '~', '\~', $source ) . '~u';
-		$result    = @preg_match( $delimited, $value ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- invalid developer patterns must not break the request.
+		$result = @preg_match( self::delimit( $source ), $value ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- invalid developer patterns must not break the request.
 
 		return 1 === $result;
+	}
+
+	private static function delimit( string $source ): string {
+		return '~' . str_replace( '~', '\~', $source ) . '~u';
+	}
+
+	/**
+	 * Whether `$value` sits on the grid `base + n × step`. The tolerance absorbs binary floating point (0.3 on a 0.1
+	 * grid); the client evaluates the very same expression on IEEE doubles.
+	 *
+	 * @param int|float $value Value.
+	 * @param int|float $step  Grid size, greater than 0.
+	 * @param int|float $base  Grid origin (the `min` rule, or 0).
+	 */
+	private static function on_step( $value, $step, $base ): bool {
+		$steps = ( $value - $base ) / $step;
+
+		return abs( $steps - round( $steps ) ) <= 1e-9 * max( 1.0, abs( $steps ) );
 	}
 
 	/**

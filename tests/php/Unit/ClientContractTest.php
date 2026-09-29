@@ -22,7 +22,7 @@ final class ClientContractTest extends TestCase {
 		$instance->add_page( 'general', require dirname( __DIR__, 2 ) . '/fixtures/slice-page.php' );
 
 		$page   = $instance->page( 'general' );
-		$actual = json_decode( (string) wp_json_encode( $page->to_client( $instance->all( 'general' ), 'rev-1' ) ), true );
+		$actual = json_decode( (string) wp_json_encode( $page->to_client( $instance->store()->client_values( $page ), 'rev-1' ) ), true );
 
 		$expected = json_decode( (string) file_get_contents( dirname( __DIR__, 2 ) . '/fixtures/slice-page.client.json' ), true );
 
@@ -38,7 +38,7 @@ final class ClientContractTest extends TestCase {
 		$instance->add_page( 'fields', require dirname( __DIR__, 2 ) . '/fixtures/form-fields-page.php' );
 
 		$page   = $instance->page( 'fields' );
-		$actual = json_decode( (string) wp_json_encode( $page->to_client( $instance->all( 'fields' ), 'rev-1' ) ), true );
+		$actual = json_decode( (string) wp_json_encode( $page->to_client( $instance->store()->client_values( $page ), 'rev-1' ) ), true );
 
 		$expected = json_decode( (string) file_get_contents( dirname( __DIR__, 2 ) . '/fixtures/form-fields-page.client.json' ), true );
 

@@ -50,6 +50,21 @@ final class OptionStore {
 	}
 
 	/**
+	 * `values()` as the browser may see it: write-only fields (password) say whether a value is set, never what it is.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function client_values( Page $page ): array {
+		$values = $this->values( $page );
+
+		foreach ( $page->fields() as $id => $field ) {
+			$values[ $id ] = $field->client_value( $values[ $id ] );
+		}
+
+		return $values;
+	}
+
+	/**
 	 * Persist values (only known field ids are kept).
 	 *
 	 * @param array<string,mixed> $values Sanitized values keyed by field id.

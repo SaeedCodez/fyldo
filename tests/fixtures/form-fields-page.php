@@ -1,6 +1,7 @@
 <?php
 /**
- * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group and Multi Select.
+ * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group, Multi Select,
+ * and the input fields (URL, email, password, number, a notice and a disabled field with its reason).
  * Used by: the PHPUnit contract test, tools/dev/dump-slice.php (→ form-fields-page.client.json for the Vitest save
  * flow) and every e2e demo plugin (page id `fields`).
  *
@@ -78,6 +79,56 @@ return array(
 					'label'       => 'I agree to the terms',
 					'description' => 'You must accept the terms to continue.',
 					'default'     => false,
+				),
+			),
+		),
+		array(
+			'id'          => 'connection',
+			'title'       => 'Connection',
+			'description' => 'How this site talks to the outside world.',
+			'fields'      => array(
+				array(
+					'id'          => 'connection_note',
+					'type'        => 'notice',
+					'tone'        => 'blue',
+					'label'       => 'Before you connect',
+					'description' => 'Keys are stored in the database and are never shown again.',
+				),
+				array(
+					'id'          => 'canonical_base',
+					'type'        => 'url',
+					'label'       => 'Canonical URL',
+					'description' => 'The address search engines should use.',
+					'placeholder' => 'https://example.com',
+					'validate'    => array( 'schemes' => array( 'https' ) ),
+				),
+				array(
+					'id'          => 'contact_email',
+					'type'        => 'email',
+					'label'       => 'Contact email',
+					'placeholder' => 'name@example.com',
+				),
+				array(
+					'id'          => 'api_key',
+					'type'        => 'password',
+					'label'       => 'API key',
+					'description' => 'Paste the key from your provider.',
+					'validate'    => array( 'min_length' => 8 ),
+				),
+				array(
+					'id'          => 'per_page',
+					'type'        => 'number',
+					'label'       => 'Items per page',
+					'description' => 'Between 5 and 100, in steps of 5.',
+					'default'     => 10,
+					'validate'    => array( 'min' => 5, 'max' => 100, 'step' => 5 ),
+				),
+				array(
+					'id'          => 'license_key',
+					'type'        => 'text',
+					'label'       => 'License key',
+					'default'     => 'FYLDO-FREE',
+					'disabled'    => 'Managed by your hosting provider.',
 				),
 			),
 		),

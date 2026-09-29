@@ -22,6 +22,9 @@ final class FieldFactory {
 	public static function classes(): array {
 		return array(
 			TextField::class,
+			NumberField::class,
+			PasswordField::class,
+			NoticeField::class,
 			TextareaField::class,
 			ToggleField::class,
 			CheckboxField::class,

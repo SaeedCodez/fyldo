@@ -7,8 +7,10 @@
 
 namespace Fyldo\V1\Fields;
 
+use Fyldo\V1\Validation\Digits;
+
 /**
- * Renders an Input.
+ * Renders an Input. `url` and `email` values are read with ASCII digits (a Persian keyboard types ۰-۹).
  */
 final class TextField extends AbstractField {
 
@@ -47,6 +49,10 @@ final class TextField extends AbstractField {
 		}
 
 		$text = sanitize_text_field( (string) $raw );
+
+		if ( 'text' !== $this->type() ) {
+			$text = Digits::to_ascii( $text );
+		}
 
 		switch ( $this->type() ) {
 			case 'url':
