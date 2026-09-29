@@ -43,8 +43,9 @@ final class Saver {
 		$errors = array();
 
 		foreach ( $page->fields() as $id => $field ) {
-			// Unknown ids are ignored; disabled fields cannot be changed.
-			if ( ! array_key_exists( $id, $incoming ) || $field->is_disabled() ) {
+			// Unknown ids (and display-only fields, which are not in `fields()`) are ignored; disabled fields cannot be
+			// changed; a write-only field sent as `null` keeps what is stored.
+			if ( ! array_key_exists( $id, $incoming ) || $field->is_disabled() || $field->keeps_stored( $incoming[ $id ] ) ) {
 				continue;
 			}
 
@@ -101,7 +102,7 @@ final class Saver {
 		return array(
 			'status'   => $status,
 			'errors'   => $errors,
-			'values'   => $store->values( $page ),
+			'values'   => $store->client_values( $page ),
 			'revision' => $store->revision( $page ),
 		);
 	}

@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactElement } from 'react';
 import { usePageForm } from '../../lib/page-form';
 import type { Api } from '../../lib/api';
-import type { PageDef } from '../../types';
+import type { FieldValue, PageDef } from '../../types';
 import { FieldRenderer } from './FieldRenderer';
 import { PageHeader } from './PageHeader';
 import { SaveBar, type SaveBarState } from './SaveBar';
@@ -42,7 +42,7 @@ export function SettingsPage({ page, api }: SettingsPageProps): ReactElement {
               <FieldRenderer
                 key={field.id}
                 field={field}
-                value={state.values[field.id] ?? field.default}
+                value={field.type === 'notice' ? null : field.id in state.values ? (state.values[field.id] as FieldValue) : field.default}
                 error={state.errors[field.id]}
                 divider={index < section.fields.length - 1}
                 onChange={setValue}

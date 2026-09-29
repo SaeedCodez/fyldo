@@ -8,6 +8,7 @@
  *       (?title=&description=&options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled&value=post&parent=All)
  *       options are value:label:description:disabled:icon
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
+ *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
@@ -22,6 +23,7 @@ import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
+import { Notice, type NoticeTone } from '../../../app/components/ui/notice';
 import { SelectField } from '../../../app/components/ui/select-field';
 import { Tag, type TagSize } from '../../../app/components/ui/tag';
 import { TextField } from '../../../app/components/ui/text-field';
@@ -129,6 +131,14 @@ function Variant() {
       return <Tag label={param('label', 'Posts')} size={(q.get('size') === 'md' ? 'md' : 'sm') as TagSize} disabled={state === 'disabled'} onRemove={q.get('removable') === '0' ? undefined : () => undefined} />;
     case 'multi-select':
       return <MultiSelectDemo />;
+    case 'notice':
+      return (
+        <div style={{ width: 560 }}>
+          <Notice tone={param('tone', 'gray') as NoticeTone} title={param('title') || undefined}>
+            {param('message')}
+          </Notice>
+        </div>
+      );
     case 'checkbox':
       return (
         <Checkbox
@@ -213,7 +223,7 @@ function Variant() {
         </div>
       );
     default:
-      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select</p>;
+      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice</p>;
   }
 }
 

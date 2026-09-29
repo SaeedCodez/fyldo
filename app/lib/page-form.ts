@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import { __ } from '../i18n';
-import type { FieldDef, FieldValue, PageDef } from '../types';
+import { isValueField, type FieldValue, type PageDef, type ValueFieldDef } from '../types';
 import { ApiError, type Api } from './api';
 import { validateValue } from './validation';
 
@@ -60,7 +60,12 @@ export function dirtyIds(state: FormState): string[] {
   return Object.keys(state.values).filter((id) => !valuesEqual(state.values[id], state.saved[id]));
 }
 
-const allFields = (page: PageDef): FieldDef[] => page.sections.flatMap((s) => s.fields);
+/** Fields that hold a value; a `notice` is display only and never part of the form. */
+const valueFields = (page: PageDef): ValueFieldDef[] => page.sections.flatMap((s) => s.fields).filter(isValueField);
+
+/** A stored password the user has not touched is `null` ("keep"): nothing to validate. */
+const validateFieldValue = (field: ValueFieldDef, value: FieldValue | undefined): string | null =>
+  field.type === 'password' && value === null ? null : validateValue(field.validate, value);
 
 /** How long the "All changes saved" bar stays before it slides out (design decision O15). */
 export const SAVED_LINGER_MS = 4000;
@@ -68,7 +73,7 @@ export const SAVED_LINGER_MS = 4000;
 export function usePageForm(page: PageDef, api: Api) {
   const [state, dispatch] = useReducer(reducer, page, initialState);
   const dirty = useMemo(() => dirtyIds(state), [state]);
-  const fields = useMemo(() => new Map(allFields(page).map((f) => [f.id, f])), [page]);
+  const fields = useMemo(() => new Map(valueFields(page).map((f) => [f.id, f])), [page]);
   const latest = useRef(state);
   latest.current = state;
 
@@ -86,7 +91,7 @@ export function usePageForm(page: PageDef, api: Api) {
     (id: string): boolean => {
       const field = fields.get(id);
       if (!field) return true;
-      const error = validateValue(field.validate, latest.current.values[id]);
+      const error = validateFieldValue(field, latest.current.values[id]);
       dispatch({ type: 'invalid', errors: error ? { ...latest.current.errors, [id]: error } : without(latest.current.errors, id) });
       return error === null;
     },
@@ -95,12 +100,13 @@ export function usePageForm(page: PageDef, api: Api) {
 
   const save = useCallback(async (): Promise<boolean> => {
     const current = latest.current;
-    const changed = dirtyIds(current);
+    // A disabled field cannot be changed (the server ignores it too): it is never validated nor sent.
+    const changed = dirtyIds(current).filter((id) => fields.get(id)?.disabled === false);
 
     const errors: Record<string, string> = {};
     for (const id of changed) {
       const field = fields.get(id);
-      const error = field && !field.disabled ? validateValue(field.validate, current.values[id]) : null;
+      const error = field ? validateFieldValue(field, current.values[id]) : null;
       if (error) errors[id] = error;
     }
     if (Object.keys(errors).length > 0) {

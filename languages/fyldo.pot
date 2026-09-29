@@ -9,11 +9,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29T19:46:26+00:00\n"
+"POT-Creation-Date: 2026-09-29T21:44:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+
+#: app/components/fyldo/FieldRenderer.tsx:170
+msgid ""
+"A value is already saved. Leave this empty to keep it, or type a new one to "
+"replace it."
+msgstr ""
+
+#: app/components/fyldo/FieldRenderer.tsx:174
+msgid "•••• set"
+msgstr ""
 
 #: app/components/fyldo/SaveBar.tsx:25
 msgid "You have unsaved changes"
@@ -28,7 +38,7 @@ msgid "All changes saved"
 msgstr ""
 
 #: app/components/fyldo/SaveBar.tsx:30
-#: app/lib/page-form.ts:123
+#: app/lib/page-form.ts:129
 msgid "Couldn't save. Check your connection and try again."
 msgstr ""
 
@@ -81,6 +91,26 @@ msgid_plural "%s selected"
 msgstr[0] ""
 msgstr[1] ""
 
+#: app/components/ui/notice.tsx:11
+msgid "Note"
+msgstr ""
+
+#: app/components/ui/notice.tsx:12
+msgid "Information"
+msgstr ""
+
+#: app/components/ui/notice.tsx:13
+msgid "Success"
+msgstr ""
+
+#: app/components/ui/notice.tsx:14
+msgid "Warning"
+msgstr ""
+
+#: app/components/ui/notice.tsx:15
+msgid "Error"
+msgstr ""
+
 #: app/components/ui/tag.tsx:62
 msgid "Remove %s"
 msgstr ""
@@ -97,14 +127,13 @@ msgid_plural "%d characters over the limit."
 msgstr[0] ""
 msgstr[1] ""
 
-#: fyldo.php:3
-#: fyldo.php:8
+#: fyldo.php
 #. Plugin Name of the plugin
 #. Author of the plugin
 msgid "Fyldo"
 msgstr ""
 
-#: fyldo.php:4
+#: fyldo.php
 #. Description of the plugin
 msgid ""
 "Settings-page framework for WordPress plugin developers. Declare pages, "
@@ -149,12 +178,12 @@ msgid "The request is too large."
 msgstr ""
 
 #: src/Validation/Messages.php:22
-#: app/lib/validation.ts:86
+#: app/lib/validation.ts:95
 msgid "This field is required."
 msgstr ""
 
 #: src/Validation/Messages.php:27
-#: app/lib/validation.ts:89
+#: app/lib/validation.ts:98
 #. translators: %d: minimum number of characters.
 #, php-format
 msgid "Use at least %d character."
@@ -163,7 +192,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/Validation/Messages.php:32
-#: app/lib/validation.ts:93
+#: app/lib/validation.ts:102
 #. translators: %d: maximum number of characters.
 #, php-format
 msgid "Use no more than %d character."
@@ -172,27 +201,32 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/Validation/Messages.php:35
-#: app/lib/validation.ts:96
+#: app/lib/validation.ts:105
 msgid "This value is not in the expected format."
 msgstr ""
 
 #: src/Validation/Messages.php:39
-#: app/lib/validation.ts:98
+#: app/lib/validation.ts:107
 msgid "Enter a valid URL."
 msgstr ""
 
 #: src/Validation/Messages.php:42
-#: app/lib/validation.ts:100
+#: app/lib/validation.ts:109
 msgid "Enter a valid email address."
 msgstr ""
 
 #: src/Validation/Messages.php:45
-#: app/lib/validation.ts:102
+#: app/lib/validation.ts:111
+msgid "Enter a number."
+msgstr ""
+
+#: src/Validation/Messages.php:48
+#: app/lib/validation.ts:113
 msgid "Choose one of the available options."
 msgstr ""
 
-#: src/Validation/Messages.php:51
-#: app/lib/validation.ts:106
+#: src/Validation/Messages.php:54
+#: app/lib/validation.ts:119
 #. translators: %d: minimum number of selected options.
 #, php-format
 msgid "Select at least %d option."
@@ -200,15 +234,15 @@ msgid_plural "Select at least %d options."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Validation/Messages.php:54
-#: app/lib/validation.ts:108
+#: src/Validation/Messages.php:57
+#: app/lib/validation.ts:121
 #. translators: %s: minimum allowed number.
 #, php-format
 msgid "Enter a value of at least %s."
 msgstr ""
 
-#: src/Validation/Messages.php:60
-#: app/lib/validation.ts:112
+#: src/Validation/Messages.php:63
+#: app/lib/validation.ts:125
 #. translators: %d: maximum number of selected options.
 #, php-format
 msgid "Select no more than %d option."
@@ -216,14 +250,21 @@ msgid_plural "Select no more than %d options."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Validation/Messages.php:63
-#: app/lib/validation.ts:114
+#: src/Validation/Messages.php:66
+#: app/lib/validation.ts:127
 #. translators: %s: maximum allowed number.
 #, php-format
 msgid "Enter a value of at most %s."
 msgstr ""
 
-#: src/Validation/Messages.php:66
-#: app/lib/validation.ts:116
+#: src/Validation/Messages.php:70
+#: app/lib/validation.ts:115
+#. translators: %s: the step, e.g. 5 (the value must be a multiple of it, counted from the minimum).
+#, php-format
+msgid "Enter a value in steps of %s."
+msgstr ""
+
+#: src/Validation/Messages.php:73
+#: app/lib/validation.ts:129
 msgid "This value is not valid."
 msgstr ""

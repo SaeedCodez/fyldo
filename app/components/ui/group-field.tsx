@@ -13,7 +13,7 @@ const GroupLabelContext = createContext<GroupLabels>({});
 /** ARIA wiring a group control takes from the row that shows its title (Setting Row, GroupField). */
 export const useGroupLabels = (): GroupLabels => useContext(GroupLabelContext);
 
-/** Provides the ids a group control needs to be named ("Show on") and described by its surrounding row. */
+/** Provides the ids a group control needs to be named ("Show on") and described by its surrounding row. `descriptionId` may list several ids (description, disabled reason). */
 export function GroupLabelProvider({ titleId, descriptionId, children }: { titleId: string; descriptionId?: string; children: ReactNode }): ReactElement {
   const labels: GroupLabels = { 'aria-labelledby': titleId, ...(descriptionId ? { 'aria-describedby': descriptionId } : {}) };
   return <GroupLabelContext.Provider value={labels}>{children}</GroupLabelContext.Provider>;

@@ -71,6 +71,16 @@ abstract class AbstractField {
 		return array();
 	}
 
+	/** Keys the type accepts. Display-only types narrow this to what they render. */
+	protected function accepted_keys(): array {
+		return array_merge( self::COMMON_KEYS, $this->extra_keys() );
+	}
+
+	/** Every control has a visible or accessible name; a display-only type may go without. */
+	protected function requires_label(): bool {
+		return true;
+	}
+
 	/**
 	 * Concrete types add their own normalisation (and may extend `validate` rules) here.
 	 *
@@ -103,6 +113,20 @@ abstract class AbstractField {
 		return (string) $this->config['label'];
 	}
 
+	/** Whether the field owns a value in the option. Display-only types (`notice`) do not: they never reach storage or REST. */
+	public function is_stored(): bool {
+		return true;
+	}
+
+	/**
+	 * An incoming value that means "leave what is stored alone" (a write-only password sent as `null`).
+	 *
+	 * @param mixed $raw Raw value from the request.
+	 */
+	public function keeps_stored( $raw ): bool { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- overridden by write-only types.
+		return false;
+	}
+
 	/** A disabled field ignores incoming values. */
 	public function is_disabled(): bool {
 		return false !== $this->config['disabled'];
@@ -115,6 +139,16 @@ abstract class AbstractField {
 	 */
 	public function default_value() {
 		return array_key_exists( 'default', $this->config ) ? $this->config['default'] : $this->fallback_default();
+	}
+
+	/**
+	 * The value as the browser receives it. Write-only types hide the real one.
+	 *
+	 * @param mixed $value Stored (sanitized) value.
+	 * @return mixed
+	 */
+	public function client_value( $value ) {
+		return $value;
 	}
 
 	/**
@@ -221,12 +255,12 @@ abstract class AbstractField {
 			throw new ConfigException( sprintf( 'Field id "%s" is invalid: use lower-case letters, digits, "_" or "-" (max 64 characters).', $id ) );
 		}
 
-		$unknown = array_diff( array_keys( $config ), self::COMMON_KEYS, $this->extra_keys() );
+		$unknown = array_diff( array_keys( $config ), $this->accepted_keys() );
 		if ( array() !== $unknown ) {
 			throw new ConfigException( sprintf( 'Field "%1$s" has unknown key(s): %2$s.', $id, implode( ', ', $unknown ) ) );
 		}
 
-		if ( ! isset( $config['label'] ) || '' === trim( (string) $config['label'] ) ) {
+		if ( $this->requires_label() && ( ! isset( $config['label'] ) || '' === trim( (string) $config['label'] ) ) ) {
 			throw new ConfigException( sprintf( 'Field "%s" needs a label (every control has a visible or accessible name).', $id ) );
 		}
 
@@ -245,16 +279,28 @@ abstract class AbstractField {
 		if ( ! is_bool( $disabled ) && ! is_string( $disabled ) ) {
 			throw new ConfigException( sprintf( 'Field "%s": disabled must be a boolean or a string explaining why.', $id ) );
 		}
+		// The reason is what people read (and screen readers announce): an empty one is just `true`.
+		if ( is_string( $disabled ) ) {
+			$disabled = '' === trim( $disabled ) ? true : trim( $disabled );
+		}
 
 		$normalized                = $config;
 		$normalized['id']          = $id;
 		$normalized['type']        = (string) ( $config['type'] ?? '' );
-		$normalized['label']       = (string) $config['label'];
+		$normalized['label']       = isset( $config['label'] ) ? (string) $config['label'] : '';
 		$normalized['description'] = isset( $config['description'] ) ? (string) $config['description'] : '';
 		$normalized['layout']      = $layout;
 		$normalized['validate']    = $rules;
 		$normalized['disabled']    = $disabled;
 
-		return $this->normalize_type( $normalized );
+		$normalized = $this->normalize_type( $normalized );
+
+		// After the type had its say (it may derive rules), so a type's own, more specific message comes first.
+		$problem = Rules::config_error( (array) $normalized['validate'] );
+		if ( null !== $problem ) {
+			throw new ConfigException( sprintf( 'Field "%1$s": %2$s', $id, $problem ) );
+		}
+
+		return $normalized;
 	}
 }

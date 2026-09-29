@@ -31,7 +31,7 @@ final class ClientConfig {
 			if ( ! current_user_can( $instance->capability_for( $page ) ) ) {
 				continue;
 			}
-			$pages[] = $page->to_client( $store->values( $page ), $store->revision( $page ) );
+			$pages[] = $page->to_client( $store->client_values( $page ), $store->revision( $page ) );
 		}
 
 		$client = array(

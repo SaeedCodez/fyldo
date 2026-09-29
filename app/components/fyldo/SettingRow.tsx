@@ -7,8 +7,10 @@ import { GroupLabelProvider } from '../ui/group-field';
 export interface SettingRowProps {
   title: string;
   description?: string;
-  /** Why the control is disabled (rendered under the description). */
+  /** Why the control is disabled: shown under the description and part of the control's accessible description. */
   disabledReason?: string;
+  /** Extra state for screen readers only (a password that is already set), described like the description. */
+  srNote?: string;
   /** Short status label next to the title ("Pro", "Beta"). */
   badge?: ReactNode;
   /** `inline`: on/off controls at the end of the row. `stacked`: inputs under the description. */
@@ -37,6 +39,7 @@ export function SettingRow({
   title,
   description,
   disabledReason,
+  srNote,
   badge,
   layout = 'stacked',
   divider = true,
@@ -52,6 +55,9 @@ export function SettingRow({
   const inline = layout === 'inline';
   const titleId = useId();
   const descriptionId = useId();
+  const reasonId = useId();
+  // A group control (checkbox group, radio group) is described by the ids of its row; the others by Base UI's Field.
+  const groupDescribedBy = [description ? descriptionId : '', disabledReason ? reasonId : ''].filter(Boolean).join(' ');
 
   return (
     <Field.Root
@@ -87,12 +93,24 @@ export function SettingRow({
             <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">{description}</Field.Description>
           )
         ) : null}
-        {disabledReason ? <p className="fy:text-copy-13 fy:text-text-secondary">{disabledReason}</p> : null}
+        {disabledReason ? (
+          // Stays `text-secondary` even though the row is disabled: the reason is the one thing that must remain readable.
+          group ? (
+            <p id={reasonId} data-slot="fy-disabled-reason" className="fy:text-copy-13 fy:text-text-secondary">
+              {disabledReason}
+            </p>
+          ) : (
+            <Field.Description data-slot="fy-disabled-reason" className="fy:text-copy-13 fy:text-text-secondary">
+              {disabledReason}
+            </Field.Description>
+          )
+        ) : null}
+        {srNote && !group ? <Field.Description className="fy:sr-only">{srNote}</Field.Description> : null}
       </div>
 
       <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(wide ? 'fy:w-90' : 'fy:w-80', 'fy:max-w-full'))}>
         {group ? (
-          <GroupLabelProvider titleId={titleId} descriptionId={description ? descriptionId : undefined}>
+          <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
             {children}
           </GroupLabelProvider>
         ) : (

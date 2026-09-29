@@ -41,6 +41,9 @@ final class Messages {
 			case 'email':
 				return __( 'Enter a valid email address.', 'fyldo' );
 
+			case 'number':
+				return __( 'Enter a number.', 'fyldo' );
+
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
 
@@ -61,6 +64,10 @@ final class Messages {
 				}
 				/* translators: %s: maximum allowed number. */
 				return sprintf( __( 'Enter a value of at most %s.', 'fyldo' ), (string) ( $params['max'] ?? '' ) );
+
+			case 'step':
+				/* translators: %s: the step, e.g. 5 (the value must be a multiple of it, counted from the minimum). */
+				return sprintf( __( 'Enter a value in steps of %s.', 'fyldo' ), (string) ( $params['step'] ?? '' ) );
 
 			default:
 				return __( 'This value is not valid.', 'fyldo' );

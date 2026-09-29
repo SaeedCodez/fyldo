@@ -221,3 +221,47 @@ for (const g of GROUPS) {
     await close();
   });
 }
+
+// ── Notice (the static part: tone icon, title, message) ──────────────────────────────────────────────────
+// One test per locale for the default variant (Tone=Gray). EN compares the whole component; FA compares the icon box
+// (its text is set in a different font than Figma's, its layout is the same mirrored one).
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Notice ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('notice', { Locale: locale, Tone: 'Gray' });
+    const root = v.node;
+    const icon = layer(root, 'Icon');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'notice',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      tone: 'gray',
+      title: layer(root, 'Content', 'Title').text?.characters ?? '',
+      message: layer(root, 'Content', 'Message').text?.characters ?? '',
+    });
+    await still(page);
+    const size = pngSize(readFileSync(pngPath('notice', v)));
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('notice', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const pad = 4;
+      const ours = await box(stage.locator('[data-slot=fy-notice] svg'));
+      const s = await box(stage);
+      const region: Rect = { x: icon.x - pad, y: icon.y - pad, width: icon.width + pad * 2, height: icon.height + pad * 2 };
+      await comparePixels({
+        page,
+        testInfo,
+        reference: pngPath('notice', v),
+        scale: SCALE,
+        stage,
+        referenceRegion: region,
+        // our 16px glyph centred in the same 16×24 box, measured from the stage's top-left
+        actualRegion: { x: ours.x - s.x - pad, y: ours.y - s.y - (icon.height - 16) / 2 - pad, width: region.width, height: region.height },
+        maxDiffRatio: 0.03,
+      });
+      // the box must be exactly as tall as Figma draws it when the text fits on one line each (74 in FA)
+      const boxHeight = (await box(stage.locator('[data-slot=fy-notice]'))).height;
+      if (Math.abs(boxHeight - size.height / SCALE) > 26) throw new Error(`Notice height ${boxHeight} is far from the pack's ${size.height / SCALE}`);
+    }
+    await close();
+  });
+}
