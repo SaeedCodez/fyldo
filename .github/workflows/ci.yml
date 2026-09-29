@@ -27,9 +27,11 @@ jobs:
       # PHPUnit 9.6 / PHPCS 3.x support the whole 7.4–8.4 range.
       - run: composer install --no-interaction --no-progress
       - run: composer test
-      - name: Coding standards + PHP 7.4 syntax ceiling
+      - name: Coding standards + PHP 7.4 syntax ceiling + static analysis (level 8)
         if: matrix.php == '8.2'
-        run: composer lint
+        run: |
+          composer lint
+          composer analyse
 
   js:
     name: Tokens · types · lint · unit

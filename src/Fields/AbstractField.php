@@ -57,7 +57,11 @@ abstract class AbstractField {
 	 */
 	abstract protected function sanitize_value( $raw );
 
-	/** Value used when nothing is stored. */
+	/**
+	 * Value used when nothing is stored.
+	 *
+	 * @return mixed
+	 */
 	protected function fallback_default() {
 		return '';
 	}
@@ -104,7 +108,11 @@ abstract class AbstractField {
 		return false !== $this->config['disabled'];
 	}
 
-	/** Default value, fully sanitized. */
+	/**
+	 * Default value, fully sanitized.
+	 *
+	 * @return mixed
+	 */
 	public function default_value() {
 		return array_key_exists( 'default', $this->config ) ? $this->config['default'] : $this->fallback_default();
 	}

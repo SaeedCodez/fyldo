@@ -23,7 +23,7 @@
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
     "env:clean": "wp-env clean all",
-    "size": "size-limit",
+    "size": "size-limit && node tools/dev/check-icon-size.mjs",
     "tokens:snapshot": "tsx tools/tokens/snapshot.ts",
     "i18n:pot": "tsx tools/i18n/pot.ts",
     "i18n:compile": "tsx tools/i18n/compile.ts",

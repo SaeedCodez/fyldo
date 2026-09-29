@@ -22,6 +22,11 @@ final class ToggleField extends AbstractField {
 		return 'inline';
 	}
 
+	/**
+	 * A toggle is off unless configured otherwise.
+	 *
+	 * @return bool
+	 */
 	protected function fallback_default() {
 		return false;
 	}

@@ -145,8 +145,13 @@ final class Controller {
 	}
 
 	private function page( \WP_REST_Request $request ): Page {
-		// authorize() already proved the page exists.
-		return $this->instance->page( (string) $request['page'] );
+		$page = $this->instance->page( (string) $request['page'] );
+		if ( null === $page ) {
+			// authorize() already proved the page exists; reaching this means a route was registered without it.
+			throw new \LogicException( 'Fyldo: REST callback ran without an authorised page.' );
+		}
+
+		return $page;
 	}
 
 	/**

@@ -1,0 +1,13 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 8
+	paths:
+		- src
+		- fyldo.php
+	treatPhpDocTypesAsCertain: false
+	ignoreErrors:
+		# Array shapes are documented in prose/PHPDoc where it matters; these two identifiers are pure noise at level 8.
+		- identifier: missingType.iterableValue
+		- identifier: missingType.generics
