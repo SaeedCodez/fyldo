@@ -63,7 +63,7 @@ add_action(
 				'callback'            => static function () {
 					global $wpdb;
 					// Every fixture instance stores `acme-<name>_<page>`.
-					$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'acme-%\\_general'" ); // phpcs:ignore
+					$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'acme-%\\_general' OR option_name LIKE 'acme-%\\_fields'" ); // phpcs:ignore
 					wp_cache_flush();
 					return array( 'reset' => true );
 				},

@@ -48,7 +48,7 @@ function isEmail(value: string): boolean {
 
 export function check(rules: RuleSet, value: unknown): Failure | null {
   if (rules.required && isEmpty(value)) return fail('required');
-  if (isEmpty(value)) return null;
+  if (isEmpty(value) && !Array.isArray(value)) return null; // (an empty list still counts against `min`)
 
   if (typeof value === 'string') {
     const len = length(value);
@@ -68,6 +68,12 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
   if (typeof value === 'number') {
     if (rules.min !== undefined && value < rules.min) return fail('min', { min: rules.min });
     if (rules.max !== undefined && value > rules.max) return fail('max', { max: rules.max });
+  }
+
+  // For a list (checkbox group, multi select) `min` / `max` count the selected items.
+  if (Array.isArray(value)) {
+    if (rules.min !== undefined && value.length < rules.min) return fail('min', { min: rules.min, items: true });
+    if (rules.max !== undefined && value.length > rules.max) return fail('max', { max: rules.max, items: true });
   }
 
   return null;
@@ -95,8 +101,16 @@ export function messageFor(failure: Failure): string {
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
     case 'min':
+      if (failure.params.items) {
+        const min = Number(failure.params.min ?? 0);
+        return sprintf(_n('Select at least %d option.', 'Select at least %d options.', min, 'fyldo'), min);
+      }
       return sprintf(__('Enter a value of at least %s.', 'fyldo'), String(failure.params.min ?? ''));
     case 'max':
+      if (failure.params.items) {
+        const max = Number(failure.params.max ?? 0);
+        return sprintf(_n('Select no more than %d option.', 'Select no more than %d options.', max, 'fyldo'), max);
+      }
       return sprintf(__('Enter a value of at most %s.', 'fyldo'), String(failure.params.max ?? ''));
     default:
       return __('This value is not valid.', 'fyldo');

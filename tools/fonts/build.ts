@@ -9,7 +9,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const out = resolve(root, 'assets/dist');
+const DEFAULT_OUT = resolve(root, 'assets/dist');
 
 interface Source {
   pkg: string;
@@ -24,7 +24,7 @@ const SOURCES: Source[] = [
   { pkg: 'vazirmatn', css: 'wght.css', family: 'Fyldo Vazirmatn', subsets: ['arabic', 'latin', 'latin-ext'] },
 ];
 
-export function buildFonts(): string[] {
+export function buildFonts(out: string = DEFAULT_OUT): string[] {
   mkdirSync(resolve(out, 'fonts'), { recursive: true });
   const blocks: string[] = [
     '/* Fyldo fonts — self-hosted, SIL Open Font License 1.1. Families are namespaced on purpose. */',

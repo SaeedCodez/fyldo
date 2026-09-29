@@ -44,3 +44,33 @@ body.fyldo-screen #wpbody-content {
 body.fyldo-screen #wpfooter {
   display: none;
 }
+
+/*
+ * Textarea resize handle. Figma draws a 6×6 glyph (a 6px and a 3px diagonal stroke, border/strong) 6px from the
+ * corner; the native resizer sits in that corner, so it is repainted instead of replaced (Chromium/WebKit; other
+ * engines keep their own handle, which is still fully functional).
+ */
+[data-slot='fy-textarea-control']::-webkit-resizer {
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right 5px bottom 5px / 6px 6px no-repeat,
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right 5px bottom 5px / 3px 3px no-repeat;
+}
+
+[data-slot='fy-textarea-control']:disabled::-webkit-resizer {
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right 5px bottom 5px / 6px 6px no-repeat,
+    linear-gradient(to bottom right, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) right 5px bottom 5px / 3px 3px no-repeat;
+}
+
+/* RTL: the native resizer moves to the bottom-left corner and the glyph mirrors (Figma FA sits 4px from the edge, EN 6px). */
+[data-fyldo-v1][dir='rtl'] [data-slot='fy-textarea-control']::-webkit-resizer {
+  background:
+    linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 6px 6px no-repeat,
+    linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% - 0.5px), var(--fyldo-border-strong) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 3px 3px no-repeat;
+}
+
+[data-fyldo-v1][dir='rtl'] [data-slot='fy-textarea-control']:disabled::-webkit-resizer {
+  background:
+    linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 6px 6px no-repeat,
+    linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 3px 3px no-repeat;
+}

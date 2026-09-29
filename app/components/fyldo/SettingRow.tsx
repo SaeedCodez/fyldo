@@ -1,7 +1,8 @@
 import { Field } from '@base-ui/react/field';
-import type { ReactElement, ReactNode } from 'react';
+import { useId, type ReactElement, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { FieldError } from '../ui/field-shell';
+import { GroupLabelProvider } from '../ui/group-field';
 
 export interface SettingRowProps {
   title: string;
@@ -15,6 +16,12 @@ export interface SettingRowProps {
   /** Bottom divider; off on the last row of a card. */
   divider?: boolean;
   error?: string;
+  /** The control renders its own error row (Textarea: the counter shares it). */
+  errorInControl?: boolean;
+  /** The control is a group (checkbox group, radio group): the title names the group instead of labelling one control. */
+  group?: boolean;
+  /** Figma Textarea is 360 wide; every other control 320. */
+  wide?: boolean;
   disabled?: boolean;
   name?: string;
   /** Field id, exposed for focusing the first invalid field. */
@@ -34,12 +41,17 @@ export function SettingRow({
   layout = 'stacked',
   divider = true,
   error,
+  errorInControl = false,
+  group = false,
+  wide = false,
   disabled,
   name,
   fieldId,
   children,
 }: SettingRowProps): ReactElement {
   const inline = layout === 'inline';
+  const titleId = useId();
+  const descriptionId = useId();
 
   return (
     <Field.Root
@@ -56,22 +68,39 @@ export function SettingRow({
     >
       <div className={cn('fy:flex fy:min-w-0 fy:flex-col fy:gap-1', inline && 'fy:flex-1')}>
         <div className="fy:flex fy:items-center fy:gap-2">
-          <Field.Label className="fy:text-label-14-strong fy:text-text-primary fy:data-[disabled]:text-text-disabled">{title}</Field.Label>
+          {group ? (
+            <div id={titleId} className="fy:text-label-14-strong fy:text-text-primary fy:group-data-[disabled]/field:text-text-disabled">
+              {title}
+            </div>
+          ) : (
+            <Field.Label className="fy:text-label-14-strong fy:text-text-primary fy:data-[disabled]:text-text-disabled">{title}</Field.Label>
+          )}
           {badge}
         </div>
         {description ? (
-          <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
-            {description}
-          </Field.Description>
+          group ? (
+            // A group's description belongs to the group, not to each of its options: plain text, linked by aria-describedby.
+            <p id={descriptionId} className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
+              {description}
+            </p>
+          ) : (
+            <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">{description}</Field.Description>
+          )
         ) : null}
         {disabledReason ? <p className="fy:text-copy-13 fy:text-text-secondary">{disabledReason}</p> : null}
       </div>
 
-      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : 'fy:w-80 fy:max-w-full')}>
-        {children}
-        {error && !inline ? <FieldError>{error}</FieldError> : null}
+      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(wide ? 'fy:w-90' : 'fy:w-80', 'fy:max-w-full'))}>
+        {group ? (
+          <GroupLabelProvider titleId={titleId} descriptionId={description ? descriptionId : undefined}>
+            {children}
+          </GroupLabelProvider>
+        ) : (
+          children
+        )}
+        {error && !inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
       </div>
-      {error && inline ? <FieldError>{error}</FieldError> : null}
+      {error && inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
     </Field.Root>
   );
 }
