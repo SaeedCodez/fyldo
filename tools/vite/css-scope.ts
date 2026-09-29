@@ -4,8 +4,10 @@
  *
  *   1. `@layer` blocks are FLATTENED in declaration order — wp-admin CSS is unlayered, and unlayered rules beat any
  *      layered rule regardless of specificity, so layered output would always lose.
- *   2. Every top-level style rule is prefixed with the root attribute selector, doubled
- *      (`[data-fyldo-v1][data-fyldo-v1] …`, +0,2,0) so it also beats core selectors such as `input[type=text]:focus`.
+ *   2. Every top-level style rule is prefixed with the root attribute selector, doubled and lifted to ID level
+ *      (`[data-fyldo-v1][data-fyldo-v1]:not(#\#) …`, +1,2,0): it beats core selectors such as `input[type=text]:focus`
+ *      AND plugin selectors that use an ID (`#wpbody-content input:focus`). Only `!important` in third-party CSS can
+ *      still win (a documented limit; the opt-in Shadow DOM mode removes it).
  *      Rules that already target the root (`[data-fyldo-v1] …`, `:root`, `:host`, `html`) become compound selectors.
  *   3. `@keyframes` are renamed with a `fyldo-` prefix (global namespace), `body.fyldo-screen …` rules are kept as-is.
  */
@@ -21,7 +23,8 @@ const KEEP_AS_IS = [/^body\.fyldo-screen(?![\w-])/, /^html\.fyldo-screen(?![\w-]
 
 export function scopeSelector(selector: string, root: string): string {
   const s = selector.trim();
-  const bumped = root + root;
+  // `:not(#\#)` matches every element but adds ID-level specificity (a well-known, harmless trick).
+  const bumped = root + root + ':not(#\\#)';
 
   if (KEEP_AS_IS.some((re) => re.test(s))) return s;
   if (s.startsWith(root)) return bumped + s.slice(root.length);

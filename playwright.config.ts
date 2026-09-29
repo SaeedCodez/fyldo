@@ -25,11 +25,19 @@ export default defineConfig({
       use: { baseURL: 'http://127.0.0.1:4173' },
     },
     {
+      name: 'wp-setup',
+      testDir: './e2e/wp',
+      testMatch: /auth\.setup\.ts/,
+      use: { baseURL: process.env.WP_BASE_URL ?? 'http://localhost:8888' },
+    },
+    {
       name: 'wp',
       testDir: './e2e/wp',
+      testIgnore: /auth\.setup\.ts/,
+      dependencies: ['wp-setup'],
       fullyParallel: false,
       workers: 1,
-      use: { baseURL: process.env.WP_BASE_URL ?? 'http://localhost:8888' },
+      use: { baseURL: process.env.WP_BASE_URL ?? 'http://localhost:8888', storageState: 'e2e/.auth/admin.json' },
     },
   ],
   webServer: [

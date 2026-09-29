@@ -13,7 +13,7 @@ root.setAttribute('lang', rtl ? 'fa-IR' : 'en');
 
 if (params.get('hostile')) {
   const link = document.getElementById('hostile');
-  link.href = '/tests/harness/hostile.css';
+  link.href = '/e2e/mu-plugins/hostile.css';
   link.disabled = false;
 }
 

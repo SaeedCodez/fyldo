@@ -1,0 +1,23 @@
+{
+  "core": null,
+  "phpVersion": "8.2",
+  "port": 8888,
+  "testsPort": 8889,
+  "plugins": [
+    "./e2e/.generated/plugins/acme-alpha",
+    "./e2e/.generated/plugins/acme-beta",
+    "./e2e/.generated/plugins/acme-gamma",
+    "./e2e/.generated/plugins/acme-delta",
+    "./e2e/.generated/plugins/acme-omega"
+  ],
+  "mappings": {
+    "wp-content/mu-plugins": "./e2e/mu-plugins"
+  },
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": false,
+    "WP_ENVIRONMENT_TYPE": "local"
+  }
+}

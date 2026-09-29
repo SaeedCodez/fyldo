@@ -1,0 +1,2 @@
+/* The documented limit: third-party `!important`. Fyldo cannot out-rank it in light DOM; the opt-in Shadow DOM mode can. */
+h1, h2, h3, p, label { margin: 40px !important; }

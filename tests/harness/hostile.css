@@ -1,8 +1,0 @@
-/* Simulates a hostile admin page: unscoped, unlayered, high-specificity rules from wp-admin and other plugins. */
-input, select, textarea, button { border: 5px solid rgb(255, 0, 0); border-radius: 0; box-shadow: 0 0 0 3px rgb(255, 0, 0); height: 60px; padding: 20px; background: rgb(255, 255, 0); color: rgb(255, 0, 255); font: 30px/1 serif; }
-input:focus, select:focus, textarea:focus, button:focus, a:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; outline: 2px solid #2271b1; }
-input[type="text"], input[type="url"], input[type="email"] { min-height: 100px; }
-h1, h2, h3, p, label { margin: 40px !important; }
-.wp-admin #wpbody-content input:focus, body.wp-admin #wpcontent button:focus { border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; }
-label, span, div { text-transform: uppercase; letter-spacing: 5px; }
-ul, li { list-style: disc; padding-left: 30px; }

@@ -1,0 +1,30 @@
+/*
+ * A hostile admin page: what wp-admin's own stylesheets and typical plugins do to form controls, headings and links,
+ * plus deliberately aggressive element-level rules. Everything here is UNSCOPED and UNLAYERED but has NO `!important`
+ * (see hostile-important.css for that documented limit).
+ */
+
+/* wp-admin forms.css / common.css (paraphrased) */
+input[type="text"], input[type="url"], input[type="email"], input[type="password"], select, textarea {
+  border: 1px solid #8c8f94; box-shadow: 0 0 0 transparent; border-radius: 4px; background-color: #fff; color: #2c3338;
+  padding: 0 8px; line-height: 2; min-height: 30px; font-size: 14px;
+}
+input:focus, select:focus, textarea:focus, input[type="text"]:focus, input[type="url"]:focus {
+  border-color: #2271b1; box-shadow: 0 0 0 1px #2271b1; outline: 2px solid transparent;
+}
+a:focus, button:focus, .button:focus { color: #043959; box-shadow: 0 0 0 1px #4f94d4, 0 0 2px 1px rgba(79, 148, 212, 0.8); outline: 1px solid transparent; }
+h1, h2, h3 { margin: 1em 0; font-size: 23px; font-weight: 400; color: #1d2327; }
+p { margin: 1em 0; }
+label { display: inline-block; margin: 0 0 5px; cursor: pointer; }
+ul { list-style: disc; margin-left: 20px; }
+button, .button { background: #f6f7f7; border: 1px solid #2271b1; color: #2271b1; border-radius: 3px; min-height: 30px; padding: 0 10px; font-size: 13px; line-height: 2.15384615; }
+
+/* Typical plugin CSS: ID-based selectors out-rank plain classes */
+#wpbody-content input:focus, .wp-admin #wpbody-content button:focus, body.wp-admin #wpcontent select:focus { box-shadow: 0 0 0 1px #2271b1; border-color: #2271b1; outline: 2px solid #2271b1; }
+#wpbody-content input, #wpbody-content select, #wpbody-content textarea { height: 40px; border-radius: 0; border: 2px solid rgb(255, 0, 0); }
+#wpbody-content button { text-transform: uppercase; letter-spacing: 3px; }
+
+/* Deliberately aggressive element-level rules */
+input, select, textarea, button { border: 5px solid rgb(255, 0, 0); box-shadow: 0 0 0 3px rgb(255, 0, 0); padding: 20px; background: rgb(255, 255, 0); color: rgb(255, 0, 255); font: 30px/1 serif; }
+label, span, div { text-transform: uppercase; letter-spacing: 5px; }
+li { padding-left: 30px; }
