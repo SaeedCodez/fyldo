@@ -115,7 +115,7 @@ Weights used: 400, 500, 600.
 | Button/12 | 500 · 12/16 | 500 · 12/18 |
 | Mono/14, /13, /12 | Geist Mono 400 · 14/20, 13/20, 12/16 | same |
 
-Implementation note: the Figma tracking is a fixed px value; in CSS use `em` (−0.04 em on 32, −0.04 em on 24, −0.02 em on 20/16/14) so it scales. FA line-heights are larger — resolve with `[dir=rtl]`/`:lang(fa)` overrides on the same utility (`--fy-leading-*`), not a second set of classes.
+Implementation note: the Figma tracking is a fixed px value; in CSS use `em` (−0.04 em on 32, −0.04 em on 24, −0.02 em on 20/16/14) so it scales. FA line-heights are larger — resolve with `[dir=rtl]`/`:lang(fa)` overrides on the same utility (`--fyldo-leading-*`), not a second set of classes.
 
 ### 1.5 Effects (7)
 

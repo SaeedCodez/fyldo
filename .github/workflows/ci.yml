@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+      # PHPUnit 9.6 / PHPCS 3.x support the whole 7.4–8.4 range.
+      - run: composer install --no-interaction --no-progress
+      - run: composer test
+      - name: Coding standards + PHP 7.4 syntax ceiling
+        if: matrix.php == '8.2'
+        run: composer lint
+
+  js:
+    name: Tokens · types · lint · unit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.2', tools: wp-cli, coverage: none }
+      - run: npm ci
+      - name: Design tokens are in sync with the Figma snapshot (strict: missing Figma tokens fail here)
+        run: npm run tokens:check
+      - run: npm run typecheck
+      - run: npm run lint
+      - name: Unit tests (includes the WCAG contrast test — no expected failures)
+        run: npm test
+      - name: Translations are complete
+        run: npm run i18n
+
+  e2e:
+    name: Playwright on wp-env
+    runs-on: ubuntu-latest
+    needs: [php, js]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.2', coverage: none }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Build the release tree
+        run: npm run build && npm run build:gallery
+      - name: Generate coexistence fixtures (1.0.0, 1.1.0 ×2, synthetic 2.0.0, Strauss-prefixed)
+        run: npx tsx tools/fixtures/make-demos.ts
+      - run: npx wp-env start
+      - name: Figma parity, visual and isolation suites
+        run: npx playwright test
+      - name: Bundle size budgets
+        run: npm run size
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/

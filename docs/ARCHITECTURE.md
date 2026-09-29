@@ -536,7 +536,7 @@ Chosen approach ("scoped light DOM, hardened"):
 
 ### 8.7 Portals
 
-`FyldoRoot` provides `PortalContainerContext` = the root element. Every Base UI `Portal` (Select, Combobox, Tooltip, Toast, AlertDialog/Dialog) receives `container={root}`; a lint rule forbids `Portal` without `container` in `app/`. Popups therefore inherit the scoped tokens/reset and the hardened selectors, and z-order is defined inside the root's stacking context (`--fy-z-popup: 40; --fy-z-modal: 50; --fy-z-toast: 60`). Toasts also stay inside the root.
+`FyldoRoot` provides `PortalContainerContext` = the root element. Every Base UI `Portal` (Select, Combobox, Tooltip, Toast, AlertDialog/Dialog) receives `container={root}`; a lint rule forbids `Portal` without `container` in `app/`. Popups therefore inherit the scoped tokens/reset and the hardened selectors, and z-order is defined inside the root's stacking context (popups `z-50`, Save Bar `z-10`; the root is `isolation: isolate`). Toasts also stay inside the root.
 
 ---
 
@@ -574,9 +574,9 @@ Figma text+effect styles ─(MCP: figma_execute tools/figma/extract-styles.js)�
     | `--sidebar` | `background/subtle` | `--sidebar-accent` | `surface/active` |
 
     Extra Fyldo tokens are kept 1:1 and exposed as utilities: `surface/*`, `border/{hover,strong}`, `text/{secondary,tertiary,disabled,inverse}`, `icon/*`, `action/*`, `control/*`, `status/*`, `link/default`, `background/{subtle,overlay,inverse}`.
-  - **Text styles** → `@utility text-heading-32 { font-size…; line-height: var(--fyldo-leading-heading-32); letter-spacing…; font-weight… }` (42 styles → 21 utilities; FA line-heights via `[dir=rtl]` overrides of the `--fy-leading-*` variables; FA tracking forced to 0).
-  - **Effects** → `--fy-shadow-*` and `@utility shadow-*`; `Focus/Input(*)` become `--fy-focus-halo*`.
-  - Figma-plan artefacts are dropped here (no `Locale`, no `(FA)` props): `en/*` and `fa/*` typography tokens collapse to `--fy-font-*` with the RTL switch.
+  - **Text styles** → `@utility text-heading-32 { font-size…; line-height: var(--fyldo-leading-heading-32); letter-spacing…; font-weight… }` (42 styles → 21 utilities; FA line-heights via `[dir=rtl]` overrides of the `--fyldo-leading-*` variables; FA tracking forced to 0).
+  - **Effects** → `--fyldo-shadow-*` and `@utility shadow-*`; `Focus/Input(*)` become `--fyldo-focus-halo*`.
+  - Figma-plan artefacts are dropped here (no `Locale`, no `(FA)` props): `en/*` and `fa/*` typography tokens collapse to `--fyldo-font-*` with the RTL switch.
 - **Guard rails (tests)**: every semantic colour has a generated CSS variable; the **contrast test asserts every required foreground/background pair** (text ≥ 4.5:1, UI components and focus indicators ≥ 3:1) against the snapshot values with **no `expectedFail` entries** — a failing pair fails the build. The snapshot is only committed once Figma carries the fixed tokens (O4).
 
 ### 9.2 Vite (chosen over `@wordpress/scripts`)
@@ -619,7 +619,7 @@ JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzi
 
 **Focus indicator proposal** (design has none; blue `Focus/Ring` is unused — design-spec D1–D3):
 
-- Non-field controls (Button, Icon Button, Toggle, Checkbox, Radio, Tab, Nav Item, Menu Item, Tag remove, links): `:focus-visible` → **2 px white gap + 2 px `gray/1000` ring** = the Figma `Focus/Ring` geometry with the neutral token: `box-shadow: 0 0 0 2px var(--fy-color-white), 0 0 0 4px var(--fy-focus-ring); outline: 2px solid transparent;` (transparent outline survives Windows High Contrast). `--fy-focus-ring: gray/1000` (**17.9:1**), monochrome to match Geist. Not blue, not loud; the white gap keeps it visible on dark buttons.
+- Non-field controls (Button, Icon Button, Toggle, Checkbox, Radio, Tab, Nav Item, Menu Item, Tag remove, links): `:focus-visible` → **2 px white gap + 2 px `gray/1000` ring** = the Figma `Focus/Ring` geometry with the neutral token: `box-shadow: 0 0 0 2px var(--fyldo-color-white), 0 0 0 4px var(--fyldo-focus-ring); outline: 2px solid transparent;` (transparent outline survives Windows High Contrast). `--fyldo-focus-ring: gray/1000` (**17.9:1**), monochrome to match Geist. Not blue, not loud; the white gap keeps it visible on dark buttons.
 - Fields (Input, Textarea, Select, Multi Select trigger): keep the design's halo `Focus/Input` **and** the border becomes `focus/border` (gray/1000 in the proposal). Field hover/error stay as in the design.
 - **`:focus-visible` only — never `:focus`** for any Fyldo indicator (text fields match `:focus-visible` for pointer focus too, so they still show it on click). **Never blue.**
 - **wp-admin's blue field focus is fully neutralised**: core `forms.css` sets `input/select/textarea:focus { border-color:#2271b1; box-shadow:0 0 0 1px #2271b1; outline:2px solid transparent }` and `a:focus`/`.button:focus` blue shadows. The scoped reset restates `border-color`, `box-shadow` and `outline` for every focusable element **for `:focus` as well as `:focus-visible`** with our tokens (via the specificity-bumped selectors of §8.2), and an e2e assertion samples computed `box-shadow`/`border-color` on focus of every control with the hostile-CSS and real wp-admin styles present (no `#2271b1` / `rgb(34, 113, 177)` anywhere).
@@ -650,6 +650,8 @@ JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzi
 | Composer smoke | `composer create-project` consumer from the release tag/path repo | `files` autoload + winner autoloader work with Composer's own autoloader present |
 | Contract tests | Load the frozen `Loader` from **each previously released 1.x tag** as the "first copy" and negotiate with the current tree | proves the contract is really frozen |
 | Perf/size | `size-limit` (§9.5), Lighthouse-style TTI check on the slice in CI (non-blocking) | budgets |
+
+**What exists after M1** (all green except where noted): PHPUnit **138** tests (loader negotiation incl. ties/prereleases/eligibility/late registration, naming, shared validation fixture, schema, fields, saver incl. conflicts, client-JSON contract) · Vitest (validation fixture parity with PHP, icons, CSS scoping, token generator, form reducer, REST client, component semantics, the whole save flow in jsdom, **contrast test with no `expectedFail`** — currently red for the 10 pairs listed in `docs/figma-token-fixes.md`) · Playwright **harness** (static, fast): ~45 Figma-parity checks (geometry, radii, padding, gap, type scale, resolved token colours, shadows, widths incl. Figma's stroke-in-layout quirk) and 6 pixel comparisons against Figma exports taken through the MCP (`tests/visual/figma/`) · Playwright **wp** (real WordPress 7.x on wp-env): 31 tests — coexistence (5 plugins), isolation/hostile CSS, RTL, REST security. Local runs use `PLAYWRIGHT_CHANNEL=chrome` when the Playwright CDN is unreachable; wp-env runs on Docker in CI and with `--runtime=playground` where Docker Hub is blocked.
 
 **Coexistence Playwright suite** (`e2e/coexistence.spec.ts`), all plugins **active at once** in one wp-env site:
 
