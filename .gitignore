@@ -1,0 +1,16 @@
+node_modules/
+vendor/
+vendor-prefixed/
+build/
+assets/dist/
+e2e/.generated/
+playwright-report/
+test-results/
+.wp-env.override.json
+.tools/
+composer.lock
+*.log
+.DS_Store
+.phpunit.result.cache
+.idea/
+.vscode/

@@ -1,0 +1,80 @@
+<?php
+/**
+ * Reads and writes one wp_option per page.
+ *
+ * @package Fyldo
+ */
+
+namespace Fyldo\V1\Storage;
+
+use Fyldo\V1\Schema\Page;
+
+/**
+ * Flat associative array keyed by field id; autoload disabled.
+ */
+final class OptionStore {
+
+	/**
+	 * Raw stored array (never null).
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function raw( Page $page ): array {
+		$stored = get_option( $page->option_name(), array() );
+
+		return is_array( $stored ) ? $stored : array();
+	}
+
+	/**
+	 * Values for every field of the page: stored value if valid, otherwise the default.
+	 * Unknown stored keys are dropped.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function values( Page $page ): array {
+		$stored = $this->raw( $page );
+		$values = array();
+
+		foreach ( $page->fields() as $id => $field ) {
+			if ( ! array_key_exists( $id, $stored ) ) {
+				$values[ $id ] = $field->default_value();
+				continue;
+			}
+
+			$value = $field->sanitize( $stored[ $id ] );
+			// A stored value that no longer validates (e.g. a removed select option) falls back to the default.
+			$values[ $id ] = null === $field->validate( $value ) ? $value : $field->default_value();
+		}
+
+		return $values;
+	}
+
+	/**
+	 * Persist values (only known field ids are kept).
+	 *
+	 * @param array<string,mixed> $values Sanitized values keyed by field id.
+	 */
+	public function save( Page $page, array $values ): void {
+		$clean = array();
+		foreach ( $page->fields() as $id => $field ) {
+			if ( array_key_exists( $id, $values ) ) {
+				$clean[ $id ] = $values[ $id ];
+			}
+		}
+
+		$name = $page->option_name();
+		if ( false === get_option( $name, false ) ) {
+			add_option( $name, $clean, '', false );
+		} else {
+			update_option( $name, $clean, false );
+		}
+	}
+
+	/** Optimistic-concurrency token of what is stored right now. */
+	public function revision( Page $page ): string {
+		$stored = $this->raw( $page );
+		ksort( $stored );
+
+		return md5( (string) wp_json_encode( $stored ) );
+	}
+}

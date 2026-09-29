@@ -1,0 +1,60 @@
+{
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php) and Vitest (tests/js/validation.test.ts). `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max.",
+  "cases": [
+    { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
+    { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
+    { "name": "required: empty array fails", "rules": { "required": true }, "value": [], "expect": "required" },
+    { "name": "required: false is a value", "rules": { "required": true }, "value": false, "expect": null },
+    { "name": "required: zero is a value", "rules": { "required": true }, "value": 0, "expect": null },
+    { "name": "required: string '0' is a value", "rules": { "required": true }, "value": "0", "expect": null },
+    { "name": "required: text passes", "rules": { "required": true }, "value": "Fyldo", "expect": null },
+    { "name": "optional: empty skips every other rule", "rules": { "min_length": 5, "pattern": "^x$", "email": true }, "value": "", "expect": null },
+
+    { "name": "min_length: too short", "rules": { "min_length": 3 }, "value": "ab", "expect": "min_length" },
+    { "name": "min_length: exact", "rules": { "min_length": 3 }, "value": "abc", "expect": null },
+    { "name": "max_length: too long", "rules": { "max_length": 3 }, "value": "abcd", "expect": "max_length" },
+    { "name": "max_length: exact", "rules": { "max_length": 3 }, "value": "abc", "expect": null },
+    { "name": "max_length: counts code points, not bytes (Persian)", "rules": { "max_length": 4 }, "value": "سایت", "expect": null },
+    { "name": "max_length: Persian one over", "rules": { "max_length": 3 }, "value": "سایت", "expect": "max_length" },
+    { "name": "max_length: emoji is one character", "rules": { "max_length": 1 }, "value": "🙂", "expect": null },
+    { "name": "max_length: accented letters", "rules": { "max_length": 4 }, "value": "café", "expect": null },
+    { "name": "min_length is checked before max_length", "rules": { "min_length": 5, "max_length": 2 }, "value": "abc", "expect": "min_length" },
+
+    { "name": "pattern: matches", "rules": { "pattern": "^[a-z]+$" }, "value": "abc", "expect": null },
+    { "name": "pattern: does not match", "rules": { "pattern": "^[a-z]+$" }, "value": "abc1", "expect": "pattern" },
+    { "name": "pattern: unanchored search semantics", "rules": { "pattern": "b+" }, "value": "abbbc", "expect": null },
+    { "name": "pattern: unicode aware", "rules": { "pattern": "^\\p{L}+$" }, "value": "سایت", "expect": null },
+
+    { "name": "schemes: https allowed", "rules": { "schemes": ["http", "https"] }, "value": "https://example.com/path?q=1", "expect": null },
+    { "name": "schemes: http allowed", "rules": { "schemes": ["http", "https"] }, "value": "http://example.com", "expect": null },
+    { "name": "schemes: ftp rejected", "rules": { "schemes": ["http", "https"] }, "value": "ftp://example.com", "expect": "schemes" },
+    { "name": "schemes: javascript rejected", "rules": { "schemes": ["http", "https"] }, "value": "javascript:alert(1)", "expect": "schemes" },
+    { "name": "schemes: missing scheme rejected", "rules": { "schemes": ["http", "https"] }, "value": "example.com", "expect": "schemes" },
+    { "name": "schemes: only https", "rules": { "schemes": ["https"] }, "value": "http://example.com", "expect": "schemes" },
+    { "name": "schemes: scheme is case-insensitive", "rules": { "schemes": ["https"] }, "value": "HTTPS://example.com", "expect": null },
+    { "name": "schemes: host required", "rules": { "schemes": ["https"] }, "value": "https://", "expect": "schemes" },
+
+    { "name": "email: plain address", "rules": { "email": true }, "value": "hello@example.com", "expect": null },
+    { "name": "email: plus addressing", "rules": { "email": true }, "value": "hello+tag@example.co.uk", "expect": null },
+    { "name": "email: missing at", "rules": { "email": true }, "value": "hello.example.com", "expect": "email" },
+    { "name": "email: no dot in domain", "rules": { "email": true }, "value": "hello@localhost", "expect": "email" },
+    { "name": "email: space inside", "rules": { "email": true }, "value": "hel lo@example.com", "expect": "email" },
+    { "name": "email: double dot in local part", "rules": { "email": true }, "value": "a..b@example.com", "expect": "email" },
+    { "name": "email: trailing dot in local part", "rules": { "email": true }, "value": "a.@example.com", "expect": "email" },
+
+    { "name": "allowed: member", "rules": { "allowed": ["en_US", "fa_IR"] }, "value": "fa_IR", "expect": null },
+    { "name": "allowed: non member", "rules": { "allowed": ["en_US", "fa_IR"] }, "value": "de_DE", "expect": "allowed" },
+    { "name": "allowed: compares as strings", "rules": { "allowed": ["1", "2"] }, "value": "2", "expect": null },
+    { "name": "allowed: multi value all members", "rules": { "allowed": ["a", "b", "c"] }, "value": ["a", "c"], "expect": null },
+    { "name": "allowed: multi value with a stranger", "rules": { "allowed": ["a", "b", "c"] }, "value": ["a", "z"], "expect": "allowed" },
+
+    { "name": "min: below", "rules": { "min": 5 }, "value": 4, "expect": "min" },
+    { "name": "min: equal", "rules": { "min": 5 }, "value": 5, "expect": null },
+    { "name": "max: above", "rules": { "max": 5 }, "value": 6, "expect": "max" },
+    { "name": "max: equal", "rules": { "max": 5 }, "value": 5, "expect": null },
+    { "name": "min/max: float inside", "rules": { "min": 0, "max": 1 }, "value": 0.5, "expect": null },
+
+    { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
+    { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
+  ]
+}
