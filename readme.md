@@ -32,7 +32,7 @@ $title = Fyldo::instance( 'acme-seo' )->get( 'general', 'site_title' );   // sto
 | [docs/design-spec.md](docs/design-spec.md) | Everything read from the Figma file: tokens, components, variants, usage rules, design issues |
 | [docs/component-map.md](docs/component-map.md) | Every Figma component → shadcn / Base UI, props, gaps |
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | API, data flow, three distribution modes, coexistence, Strauss, build, tests, milestones, decisions |
-| [docs/figma-token-fixes.md](docs/figma-token-fixes.md) | The Figma token changes that close the accessibility work |
+| [docs/figma-token-fixes.md](docs/figma-token-fixes.md) | The Figma token changes made for accessibility (applied) and how to refresh the token snapshot |
 
 ## Working on Fyldo (contributors only — end users and plugin developers never need Node)
 
@@ -44,7 +44,7 @@ composer lint                      # PHP 7.4 syntax ceiling + WordPress Coding S
 npm run typecheck && npm run lint  # TypeScript + project ESLint rules (no hex colours, no arbitrary values, portals in root)
 npm test                           # Vitest: units, components, the save flow, WCAG contrast
 
-npm run build                      # tokens → icons → Vite → assets/dist  (TOKENS_ALLOW_MISSING=1 only while Figma lacks tokens)
+npm run build                      # tokens → icons → Vite → assets/dist
 npm run build:gallery              # single-variant pages for the Figma parity tests
 npx tsx tools/fixtures/make-demos.ts   # five demo plugins bundling different Fyldo copies
 npx wp-env start                   # Docker; or: npx wp-env start --runtime=playground

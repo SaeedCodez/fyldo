@@ -373,7 +373,7 @@ These are collected as designer questions in [ARCHITECTURE.md §15](./ARCHITECTU
 
 ## 9. Design issues found (original findings, 2026-09-29)
 
-> **Status update:** the token failures below (D3–D6, D9) and the missing focus tokens (`focus/ring-neutral`, `focus/border`) are being **fixed in Figma by the owner before M1** (decision O4/O5). The code is built against the **re-read, fixed** values; the numbers in this section describe the file as it was on 2026-09-29 and are kept as the record of *why* the changes were made. Sections 1–4 are re-verified against the file at the start of M1 (see `tokens/figma.tokens.json`).
+> **Status update (2026-09-29):** the token failures below (D3–D6, D9) and the missing focus tokens (`focus/ring-neutral`, `focus/border`) were **fixed in Figma by the owner** (decision O4/O5) — plus `border/input`, `border/input-hover` and `color/gray/850` — and the snapshot (`tokens/figma.tokens.json`) was refreshed. The numbers in this section describe the file **as it was before the fix** and are kept as the record of *why* the changes were made.
 
 Contrast is computed from the Figma token values (WCAG 2.x formula, against `background/default` #fff unless noted).
 

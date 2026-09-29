@@ -1,14 +1,13 @@
-# Figma token changes needed before Milestone 1 can be closed
+# Figma token changes for Milestone 1 (applied)
 
 Decision O4 (changed): the failing tokens are fixed **in Figma**, the code is built against the re-read values, and the
 contrast test (`tests/js/contrast.test.ts`) has **no `expectedFail` entries**. Decision O5 adds two focus tokens.
 
-Status on 2026-09-29 (re-read at the start of M1 and again at the end): **the Figma file still has the original values.**
-The code is finished against everything else; these 10 contrast tests are red until the file is updated:
-
-```
-npm run test -- tests/js/contrast.test.ts
-```
+**Status: applied and verified on 2026-09-29.** All 10 items below and the two focus tokens are in the Figma file; the Control
+frames of Input, Textarea, Select and Multi Select are bound to `border/input` / `border/input-hover` (Disabled keeps
+`border/default`; Focus and Open use `focus/border`). The snapshot was refreshed, `app/components/ui/control.ts` uses the new
+tokens, and `tests/js/contrast.test.ts` (no `expectedFail`) is green. The tables below are kept as the record of what changed and why
+("Now" columns describe the file before the fix).
 
 All numbers below are WCAG 2.x contrast ratios computed from the Figma values (`tools/tokens/color.ts`).
 "Suggested" only uses primitives that **already exist** in the file unless stated.
@@ -35,11 +34,17 @@ All numbers below are WCAG 2.x contrast ratios computed from the Figma values (`
 | Figma change | Code that follows (no other change needed) |
 |---|---|
 | `focus/ring-neutral`, `focus/border` added | Generated as `--fyldo-focus-ring-color` / `--fyldo-focus-border-color`; `--ring` (shadcn) maps to the ring token. The generator is **strict**: without them `npm run build` fails and names the missing tokens |
-| `border/input`, `border/input-hover` added | Switch the shared control classes in `app/components/ui/control.ts` from `border-border-default/hover` to the new names (2 lines); the contrast test already prefers `border/input` when it exists |
+| `border/input`, `border/input-hover` added | ✅ Done: the shared control classes in `app/components/ui/control.ts` use `border-input` / `border-input-hover` (disabled keeps `border-default`); shadcn's `--input` maps to `border/input` |
 | Any value change | Re-measure with the figma-console MCP (see below) → `npm run tokens:snapshot` → `npm run tokens` → all utilities follow |
 
 ## 3. Refreshing the snapshot after the Figma edit (needs a session with the figma-console MCP)
 
 1. `figma_export_tokens` with `format: dtcg`, `colorFormat: hex8`, `outputPath: <repo>/tokens/.raw/all.tokens.json`.
+   **Check the variable count** against `figma_get_variables` (`overview.total_variables`). On 2026-09-29 the exporter kept serving a
+   cached variable set (145 instead of 150; `refreshCache`, `figma_get_variables` refresh and `figma_reconnect` did not help). In that case run
+   `tools/figma/extract-variables.js` with `figma_execute` instead — it reads the live document through the Plugin API and returns the same
+   nested DTCG tree — and save its `tree` as `tokens/.raw/all.tokens.json`.
 2. `figma_execute` with `tools/figma/extract-styles.js`; save its result as `tokens/.raw/styles.json`.
-3. `npm run tokens:snapshot && npm run tokens && npm test` (unit, contrast, generator) and `npm run test:e2e`.
+3. `npm run tokens:snapshot && git diff tokens/` — the diff must contain **only** the intended token changes (it is the check that the raw export is complete) — then
+   `npm run tokens && npm test` (unit, contrast, generator) and `npx playwright test` (harness + wp).
+4. Reference PNGs (`tests/visual/figma/*.png`): `figma_take_screenshot` of the variant node at the scale used in `e2e/harness/figma-visual.spec.ts`.

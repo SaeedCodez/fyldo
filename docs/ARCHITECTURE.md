@@ -1,6 +1,6 @@
 # Fyldo — Architecture
 
-Status: **Phase 0 approved 2026-09-29 (with the changes recorded in §15). Milestone 1 implemented (closing item: the Figma token fixes, see docs/figma-token-fixes.md).**
+Status: **Phase 0 approved 2026-09-29 (with the changes recorded in §15). Milestone 1 complete (2026-09-29: the Figma token fixes are applied and the snapshot refreshed — see docs/figma-token-fixes.md).**
 Companion docs: [design-spec.md](./design-spec.md) (what the design says) · [component-map.md](./component-map.md) (how each component is built).
 
 **Verified during phase 0** (so these are facts, not assumptions):
@@ -556,7 +556,7 @@ Figma text+effect styles ─(MCP: figma_execute tools/figma/extract-styles.js)�
                            npm run tokens:check   regenerates and fails on git diff (CI)
 ```
 
-- **Why two steps**: the MCP is available in an interactive session (locally, through me or the developer), not in CI; the snapshot makes CI deterministic while keeping Figma the source of truth. `npm run figma:sync` documents the exact MCP calls; a stale snapshot is flagged by a PR checklist and, when a maintainer runs it, `tokens:diff` prints token-level changes.
+- **Why two steps**: the MCP is available in an interactive session (locally, through me or the developer), not in CI; the snapshot makes CI deterministic while keeping Figma the source of truth. `docs/figma-token-fixes.md` §3 documents the exact MCP calls (`figma_export_tokens`, or `tools/figma/extract-variables.js` when the exporter serves a stale cache); a stale snapshot is flagged by a PR checklist and, when a maintainer runs it, `tokens:diff` prints token-level changes.
 - **Generated content**
   - Names come from **Figma's own WEB code syntax** on each variable (`--fyldo-action-primary`, `--fyldo-gray-1000`, `--fyldo-space-8`); tokens without one (`background/inverse`, `background/overlay`) get the same rule applied to their path. Aliases are preserved (`--fyldo-action-primary: var(--fyldo-gray-1000)`). Effects: `Shadow/Medium` → `--fyldo-shadow-medium` / utility `fy:shadow-medium`, `Focus/Input` → `--fyldo-shadow-focus-input`. **All sizes are px** (a plugin or theme that changes the root font-size must not resize the UI); the spacing scale equals Tailwind's 4 px scale, so `p-3` *is* `space/12` and a test asserts it. The blue `focus/ring` token and `Focus/Ring` effect are never emitted (warned + tested).
   - **shadcn mapping** (all on the root, values are `var()` aliases):
@@ -577,7 +577,7 @@ Figma text+effect styles ─(MCP: figma_execute tools/figma/extract-styles.js)�
   - **Text styles** → `@utility text-heading-32 { font-size…; line-height: var(--fyldo-leading-heading-32); letter-spacing…; font-weight… }` (42 styles → 21 utilities; FA line-heights via `[dir=rtl]` overrides of the `--fyldo-leading-*` variables; FA tracking forced to 0).
   - **Effects** → `--fyldo-shadow-*` and `@utility shadow-*`; `Focus/Input(*)` become `--fyldo-focus-halo*`.
   - Figma-plan artefacts are dropped here (no `Locale`, no `(FA)` props): `en/*` and `fa/*` typography tokens collapse to `--fyldo-font-*` with the RTL switch.
-- **Guard rails (tests)**: every semantic colour has a generated CSS variable; the **contrast test asserts every required foreground/background pair** (text ≥ 4.5:1, UI components and focus indicators ≥ 3:1) against the snapshot values with **no `expectedFail` entries** — a failing pair fails the build. The snapshot is only committed once Figma carries the fixed tokens (O4).
+- **Guard rails (tests)**: every semantic colour has a generated CSS variable; the **contrast test asserts every required foreground/background pair** (text ≥ 4.5:1, UI components and focus indicators ≥ 3:1) against the snapshot values with **no `expectedFail` entries** — a failing pair fails the build. The snapshot was committed only once Figma carried the fixed tokens (O4); the generator has **no fallback** for a missing token — it fails the build and names it.
 
 ### 9.2 Vite (chosen over `@wordpress/scripts`)
 
@@ -627,7 +627,7 @@ JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzi
 - Mouse clicks never show the ring on non-text controls (`:focus-visible` heuristic).
 - Approved (O5). The designer adds the tokens `focus/ring-neutral` and `focus/border` to Figma; the generator reads them from the snapshot like any other token (no hard-coded fallback).
 
-**Token contrast failures** (design-spec §9 D3–D6, D9) are **fixed in Figma before M1** (O4, changed) and the code is built against the fixed values, re-read at the start of M1. The contrast test has **no `expectedFail` entries**.
+**Token contrast failures** (design-spec §9 D3–D6, D9) were **fixed in Figma before M1 closed** (O4, changed; applied and re-snapshotted 2026-09-29) and the code is built against the fixed values. The contrast test has **no `expectedFail` entries** and is green.
 
 **Motion proposal** (Figma has none): colour transitions 120 ms `ease-out`; popups fade + scale from 0.98 in 150 ms; toast slide-in 200 ms; Save Bar slide/fade 200 ms; **all removed under `prefers-reduced-motion`**.
 
@@ -651,7 +651,7 @@ JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzi
 | Contract tests | Load the frozen `Loader` from **each previously released 1.x tag** as the "first copy" and negotiate with the current tree | proves the contract is really frozen |
 | Perf/size | `size-limit` (§9.5), Lighthouse-style TTI check on the slice in CI (non-blocking) | budgets |
 
-**What exists after M1** (all green except where noted): PHPUnit **138** tests (loader negotiation incl. ties/prereleases/eligibility/late registration, naming, shared validation fixture, schema, fields, saver incl. conflicts, client-JSON contract) · Vitest (validation fixture parity with PHP, icons, CSS scoping, token generator, form reducer, REST client, component semantics, the whole save flow in jsdom, **contrast test with no `expectedFail`** — currently red for the 10 pairs listed in `docs/figma-token-fixes.md`) · Playwright **harness** (static, fast): ~45 Figma-parity checks (geometry, radii, padding, gap, type scale, resolved token colours, shadows, widths incl. Figma's stroke-in-layout quirk) and 6 pixel comparisons against Figma exports taken through the MCP (`tests/visual/figma/`) · Playwright **wp** (real WordPress 7.x on wp-env): 31 tests — coexistence (5 plugins), isolation/hostile CSS, RTL, REST security. Local runs use `PLAYWRIGHT_CHANNEL=chrome` when the Playwright CDN is unreachable; wp-env runs on Docker in CI and with `--runtime=playground` where Docker Hub is blocked.
+**What exists after M1** (all green): PHPUnit **162** tests (loader negotiation incl. ties/prereleases/eligibility/late registration, naming, shared validation fixture, schema, fields, saver incl. conflicts, client-JSON contract) · Vitest (validation fixture parity with PHP, icons, CSS scoping, token generator, form reducer, REST client, component semantics, the whole save flow in jsdom, **contrast test with no `expectedFail`**, 161 tests in total) · Playwright **harness** (static, fast, 53 tests): 45 Figma-parity checks (geometry, radii, padding, gap, type scale, resolved token colours incl. the `border/input`, `border/input-hover`, `focus/border` states, shadows, widths incl. Figma's stroke-in-layout quirk) and 7 pixel comparisons against Figma exports taken through the MCP (`tests/visual/figma/`) · Playwright **wp** (real WordPress 7.x on wp-env): 31 tests — coexistence (5 plugins), isolation/hostile CSS, RTL, REST security. Local runs use `PLAYWRIGHT_CHANNEL=chrome` when the Playwright CDN is unreachable; wp-env runs on Docker in CI and with `--runtime=playground` where Docker Hub is blocked.
 
 **Coexistence Playwright suite** (`e2e/coexistence.spec.ts`), all plugins **active at once** in one wp-env site:
 
@@ -674,7 +674,7 @@ Assertions: (1) PHP request completes with all copies active (no fatal / redecla
 | # | Milestone | Scope / exit criteria |
 |---|---|---|
 | **M0** | Phase 0 (this) | design-spec, component-map, ARCHITECTURE, open decisions — **approval gate** |
-| **M1** ✅ | **Vertical slice** (as specified) — *implemented; only the Figma token fixes remain (docs/figma-token-fixes.md)* | wp-env + demo plugin registering **one page**: Section Card with **Text input, Toggle, Select** + **Save Bar**; save via REST (nonce+cap+sanitize+validate); **EN + FA (RTL)**; token pipeline runs (`tokens`, `tokens:check`); **Button, Input, Toggle, Select match Figma** (screenshot compare through MCP); **coexistence suite passes** (alpha/beta/gamma/delta + hostile CSS; Strauss smoke); repo scaffolding (Vite, Tailwind, ESLint, PHPCS/PHPStan, PHPUnit, Vitest, CI). Includes the spikes that de-risk the doc: light-DOM hardening vs hostile CSS (O1), Base UI in wp-admin (focus/popups/portals), icon codegen + boot-time icon preload (O3), measured bundle sizes (§9.5). **First step of M1: re-read the Figma variables and build against the fixed values (O4); contrast test without `expectedFail`** |
+| **M1** ✅ **complete** | **Vertical slice** (as specified) — *done 2026-09-29; built against the fixed Figma tokens* | wp-env + demo plugin registering **one page**: Section Card with **Text input, Toggle, Select** + **Save Bar**; save via REST (nonce+cap+sanitize+validate); **EN + FA (RTL)**; token pipeline runs (`tokens`, `tokens:check`); **Button, Input, Toggle, Select match Figma** (screenshot compare through MCP); **coexistence suite passes** (alpha/beta/gamma/delta + hostile CSS; Strauss smoke); repo scaffolding (Vite, Tailwind, ESLint, PHPCS/PHPStan, PHPUnit, Vitest, CI). Includes the spikes that de-risk the doc: light-DOM hardening vs hostile CSS (O1), Base UI in wp-admin (focus/popups/portals), icon codegen + boot-time icon preload (O3), measured bundle sizes (§9.5). **First step of M1: re-read the Figma variables and build against the fixed values (O4); contrast test without `expectedFail`** |
 | M2 | Field library | Textarea (counter), Checkbox (+group, indeterminate), Radio group, Multi Select + Tag + overflow, Password/URL/Email/Number, `notice` field, full declarative-validation vocabulary + shared fixture suite, field-level `disabled` reasons |
 | M3 | Shell & layout | Sidebar + Nav Item, Top Navigation, Tabs, Page Header, Setting Row, Section Card (default + danger), **complete Save Bar** (global + per-section), client-side routing with URL sync, dirty tracking, unsaved-changes guard (`beforeunload` + in-app Modal), optimistic concurrency (409 UX), wp-admin integration (bleed layout, notice relocation immunity), responsive behaviour |
 | M4 | Feedback | Toast (manager, limits, timers, pause), Notice, Tooltip on every Icon Button (lint-enforced), Badge, Empty State, Modal (default + danger + typed confirm), danger-zone actions (reset), PHP `admin_notice()` helper |
@@ -696,7 +696,7 @@ Assertions: (1) PHP request completes with all copies active (no fatal / redecla
 | Iconsax dependency is effectively unmaintained | Pin exact version; codegen output is our artifact; the wrapper API doesn't leak the package |
 | Tailwind v4 browser floor above WP's | Documented (§1); confirm (O11) |
 | Vazirmatn ≠ IRANYekanX metrics | Line-heights are tokens; verify FA screenshots in M1; adjust in the token snapshot, not in components |
-| Figma design fails WCAG in several tokens | Fixed in Figma before M1 (O4); contrast test with no `expectedFail` blocks regressions |
+| Figma design fails WCAG in several tokens | Fixed in Figma (O4, done); contrast test with no `expectedFail` blocks regressions |
 | MCP not available in CI | Committed token snapshot + Figma reference PNGs; documented refresh procedure |
 | `Requires Plugins` depends on wordpress.org slug ownership | Slug can't be reserved early; submit at M8. Until approval the dependency mode is documented as unavailable and drop-in/Composer are the supported modes |
 | Release commit strategy surprises Packagist/GitHub users | Documented; mirror repo is a drop-in alternative (O9) |
