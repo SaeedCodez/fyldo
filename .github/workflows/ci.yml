@@ -43,7 +43,7 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with: { php-version: '8.2', tools: wp-cli, coverage: none }
       - run: npm ci
-      - name: Design tokens are in sync with the Figma snapshot (strict: missing Figma tokens fail here)
+      - name: "Design tokens are in sync with the Figma snapshot (strict: missing Figma tokens fail here)"
         run: npm run tokens:check
       - run: npm run typecheck
       - run: npm run lint

@@ -75,12 +75,10 @@ node tools/figma/pack.mjs index && node tools/figma/pack.mjs verify
 - `verify` fails when a set lacks JSON or PNGs, variant counts differ from Figma, a PNG is empty/invalid, or the variable count
   is not the one in `tokens/figma.tokens.json`.
 
-## Known differences from docs/design-spec.md (recorded, not fixed)
+## Differences from docs/design-spec.md
 
-| Where | Spec says | Figma has |
-|---|---|---|
-| Textarea width (§4.3, "As Input") | Input pattern (320) | 360 wide |
-| Top Navigation row 1 padding (§4.10, "padding 24/12") | vertical 12 | top 12, **bottom 4** (height still 48) |
+None. Two mismatches found by `tools/figma/spot-check.mjs` (Textarea is 360 wide, not "as Input"; Top Navigation row 1 padding is
+top 12 / bottom 4, height still 48) were fixed in the spec, which now follows Figma; the spot-check reports 0 differences.
 
 Everything else spot-checked (90 values over all 27 sets, incl. Button S/M/L 32/40/48, Input 320, Toast 400, Modal 480,
 Save Bar 800×54, shadows and radii) matches. The Tooltip's `max width 240` is set on the label text, not on the bubble.
