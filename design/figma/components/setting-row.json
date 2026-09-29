@@ -1,0 +1,3259 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "18:2719"
+ },
+ "set": {
+  "id": "18:2719",
+  "name": "Setting Row",
+  "kebab": "setting-row",
+  "width": 1616,
+  "height": 392,
+  "variantCount": 4,
+  "componentPropertyDefinitions": {
+   "Title#18:110": {
+    "type": "TEXT",
+    "defaultValue": "Setting title"
+   },
+   "Title (FA)#18:115": {
+    "type": "TEXT",
+    "defaultValue": "عنوان تنظیم"
+   },
+   "Description#18:120": {
+    "type": "TEXT",
+    "defaultValue": "Explain what this option changes and when to use it."
+   },
+   "Description (FA)#18:125": {
+    "type": "TEXT",
+    "defaultValue": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید."
+   },
+   "Show description#18:130": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Badge#18:135": {
+    "type": "BOOLEAN",
+    "defaultValue": false
+   },
+   "Divider#18:140": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   },
+   "Layout": {
+    "type": "VARIANT",
+    "defaultValue": "Inline",
+    "variantOptions": [
+     "Inline",
+     "Stacked"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "18:2645",
+   "name": "Locale=EN, Layout=Inline",
+   "file": "locale-en--layout-inline",
+   "variantProperties": {
+    "Locale": "EN",
+    "Layout": "Inline"
+   },
+   "node": {
+    "name": "Locale=EN, Layout=Inline",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 752,
+    "height": 82,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 20,
+     "paddingRight": 0,
+     "paddingBottom": 20,
+     "paddingLeft": 0,
+     "itemSpacing": 32,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Text",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 20,
+      "width": 684,
+      "height": 42,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 4,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT",
+       "clipsContent": true
+      },
+      "children": [
+       {
+        "name": "Title row",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 20,
+        "width": 78,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 8,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": true
+        },
+        "children": [
+         {
+          "name": "Title",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 0,
+          "y": 20,
+          "width": 78,
+          "height": 20,
+          "layout": {
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#171717",
+            "token": "text/primary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "en/font-family/sans"
+          },
+          "propertyReferences": {
+           "characters": "Title#18:110"
+          },
+          "text": {
+           "characters": "Setting title",
+           "textStyle": "EN/Label/14 Strong",
+           "fontFamily": "Geist",
+           "fontStyle": "Medium",
+           "fontSize": 14,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "LEFT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "WIDTH_AND_HEIGHT",
+           "fillToken": "text/primary"
+          }
+         },
+         {
+          "name": "Badge",
+          "type": "INSTANCE",
+          "visible": false,
+          "opacity": 1,
+          "x": 86,
+          "y": 20,
+          "width": 39,
+          "height": 20,
+          "layout": {
+           "layoutMode": "HORIZONTAL",
+           "paddingTop": 0,
+           "paddingRight": 6,
+           "paddingBottom": 0,
+           "paddingLeft": 6,
+           "itemSpacing": 4,
+           "primaryAxisAlignItems": "CENTER",
+           "counterAxisAlignItems": "CENTER",
+           "primaryAxisSizingMode": "AUTO",
+           "counterAxisSizingMode": "FIXED",
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "cornerRadius": 9999,
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#e0f0ff",
+            "token": "status/info/subtle"
+           }
+          ],
+          "bound": {
+           "itemSpacing": "space/4",
+           "paddingLeft": "space/6",
+           "paddingRight": "space/6",
+           "topLeftRadius": "radius/full",
+           "topRightRadius": "radius/full",
+           "bottomLeftRadius": "radius/full",
+           "bottomRightRadius": "radius/full"
+          },
+          "propertyReferences": {
+           "visible": "Badge#18:135"
+          },
+          "instance": {
+           "component": "Badge",
+           "variant": "Locale=EN, Tone=Blue, Style=Subtle, Size=Small",
+           "componentProperties": {
+            "Icon swap#8:2982": {
+             "type": "INSTANCE_SWAP",
+             "value": "8:31975",
+             "preferredValues": [
+              {
+               "type": "COMPONENT_SET",
+               "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "24628d2b3522273813448485482c2adacdd066b3"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "74c161408f9883a9646c02590ee482517238b215"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "65f94204598c890c12898a924c5acb00f3259632"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+              }
+             ],
+             "valueName": "tick-circle / Property 1=linear"
+            },
+            "Label (FA)#8:2900": {
+             "type": "TEXT",
+             "value": "برچسب"
+            },
+            "Icon#8:2941": {
+             "type": "BOOLEAN",
+             "value": false
+            },
+            "Label#8:2859": {
+             "type": "TEXT",
+             "value": "Beta"
+            },
+            "Locale": {
+             "value": "EN",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Tone": {
+             "value": "Blue",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Style": {
+             "value": "Subtle",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Size": {
+             "value": "Small",
+             "type": "VARIANT",
+             "boundVariables": {}
+            }
+           },
+           "texts": {
+            "Label": "Beta"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "name": "Description",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 44,
+        "width": 684,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show description#18:130",
+         "characters": "Description#18:120"
+        },
+        "text": {
+         "characters": "Explain what this option changes and when to use it.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Control",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 716,
+      "y": 31,
+      "width": 36,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 12,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/12"
+      },
+      "instance": {
+       "component": "Toggle",
+       "variant": "Locale=EN, Size=Medium, Checked=True, State=Default",
+       "componentProperties": {
+        "Show label#8:1753": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label (FA)#8:1654": {
+         "type": "TEXT",
+         "value": "فعال‌سازی کش"
+        },
+        "Description#8:1687": {
+         "type": "TEXT",
+         "value": "Store rendered pages to speed up your site."
+        },
+        "Show description#8:1786": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:1720": {
+         "type": "TEXT",
+         "value": "صفحات ساخته‌شده ذخیره می‌شوند تا سایت سریع‌تر شود."
+        },
+        "Label#8:1621": {
+         "type": "TEXT",
+         "value": "Enable caching"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Size": {
+         "value": "Medium",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "True",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Enable caching"
+       }
+      }
+     },
+     {
+      "name": "Divider",
+      "type": "RECTANGLE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 81,
+      "width": 752,
+      "height": 1,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "layoutPositioning": "ABSOLUTE"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ebebeb",
+        "token": "border/default"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Divider#18:140"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "18:2662",
+   "name": "Locale=EN, Layout=Stacked",
+   "file": "locale-en--layout-stacked",
+   "variantProperties": {
+    "Locale": "EN",
+    "Layout": "Stacked"
+   },
+   "node": {
+    "name": "Locale=EN, Layout=Stacked",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 752,
+    "height": 134,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 20,
+     "paddingRight": 0,
+     "paddingBottom": 20,
+     "paddingLeft": 0,
+     "itemSpacing": 12,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Text",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 20,
+      "width": 752,
+      "height": 42,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 4,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "children": [
+       {
+        "name": "Title row",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 20,
+        "width": 78,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 8,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": true
+        },
+        "children": [
+         {
+          "name": "Title",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 0,
+          "y": 20,
+          "width": 78,
+          "height": 20,
+          "layout": {
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#171717",
+            "token": "text/primary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "en/font-family/sans"
+          },
+          "propertyReferences": {
+           "characters": "Title#18:110"
+          },
+          "text": {
+           "characters": "Setting title",
+           "textStyle": "EN/Label/14 Strong",
+           "fontFamily": "Geist",
+           "fontStyle": "Medium",
+           "fontSize": 14,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 20
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "LEFT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "WIDTH_AND_HEIGHT",
+           "fillToken": "text/primary"
+          }
+         },
+         {
+          "name": "Badge",
+          "type": "INSTANCE",
+          "visible": false,
+          "opacity": 1,
+          "x": 86,
+          "y": 20,
+          "width": 39,
+          "height": 20,
+          "layout": {
+           "layoutMode": "HORIZONTAL",
+           "paddingTop": 0,
+           "paddingRight": 6,
+           "paddingBottom": 0,
+           "paddingLeft": 6,
+           "itemSpacing": 4,
+           "primaryAxisAlignItems": "CENTER",
+           "counterAxisAlignItems": "CENTER",
+           "primaryAxisSizingMode": "AUTO",
+           "counterAxisSizingMode": "FIXED",
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "cornerRadius": 9999,
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#e0f0ff",
+            "token": "status/info/subtle"
+           }
+          ],
+          "bound": {
+           "itemSpacing": "space/4",
+           "paddingLeft": "space/6",
+           "paddingRight": "space/6",
+           "topLeftRadius": "radius/full",
+           "topRightRadius": "radius/full",
+           "bottomLeftRadius": "radius/full",
+           "bottomRightRadius": "radius/full"
+          },
+          "propertyReferences": {
+           "visible": "Badge#18:135"
+          },
+          "instance": {
+           "component": "Badge",
+           "variant": "Locale=EN, Tone=Blue, Style=Subtle, Size=Small",
+           "componentProperties": {
+            "Icon swap#8:2982": {
+             "type": "INSTANCE_SWAP",
+             "value": "8:31975",
+             "preferredValues": [
+              {
+               "type": "COMPONENT_SET",
+               "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "24628d2b3522273813448485482c2adacdd066b3"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "74c161408f9883a9646c02590ee482517238b215"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "65f94204598c890c12898a924c5acb00f3259632"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+              }
+             ],
+             "valueName": "tick-circle / Property 1=linear"
+            },
+            "Label (FA)#8:2900": {
+             "type": "TEXT",
+             "value": "برچسب"
+            },
+            "Icon#8:2941": {
+             "type": "BOOLEAN",
+             "value": false
+            },
+            "Label#8:2859": {
+             "type": "TEXT",
+             "value": "Beta"
+            },
+            "Locale": {
+             "value": "EN",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Tone": {
+             "value": "Blue",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Style": {
+             "value": "Subtle",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Size": {
+             "value": "Small",
+             "type": "VARIANT",
+             "boundVariables": {}
+            }
+           },
+           "texts": {
+            "Label": "Beta"
+           }
+          }
+         }
+        ]
+       },
+       {
+        "name": "Description",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 44,
+        "width": 752,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show description#18:130",
+         "characters": "Description#18:120"
+        },
+        "text": {
+         "characters": "Explain what this option changes and when to use it.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Control",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 74,
+      "width": 320,
+      "height": 40,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Input",
+       "variant": "Locale=EN, Size=Medium, State=Filled",
+       "componentProperties": {
+        "Helper text (FA)#8:1106": {
+         "type": "TEXT",
+         "value": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+        },
+        "Suffix icon swap#8:1402": {
+         "type": "INSTANCE_SWAP",
+         "value": "8:32092",
+         "preferredValues": [
+          {
+           "type": "COMPONENT_SET",
+           "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "24628d2b3522273813448485482c2adacdd066b3"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "74c161408f9883a9646c02590ee482517238b215"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "65f94204598c890c12898a924c5acb00f3259632"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+          }
+         ],
+         "valueName": "close-circle / Property 1=linear"
+        },
+        "Error message#8:1143": {
+         "type": "TEXT",
+         "value": "This title is already in use."
+        },
+        "Placeholder (FA)#8:958": {
+         "type": "TEXT",
+         "value": "سایت وردپرسی من"
+        },
+        "Placeholder#8:921": {
+         "type": "TEXT",
+         "value": "My WordPress site"
+        },
+        "Error message (FA)#8:1180": {
+         "type": "TEXT",
+         "value": "این عنوان قبلاً استفاده شده است."
+        },
+        "Suffix icon#8:1328": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Value (FA)#8:1032": {
+         "type": "TEXT",
+         "value": "فیلدو"
+        },
+        "Label (FA)#8:884": {
+         "type": "TEXT",
+         "value": "عنوان سایت"
+        },
+        "Prefix icon#8:1291": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Helper text#8:1069": {
+         "type": "TEXT",
+         "value": "Shown in the browser tab and search results."
+        },
+        "Show label#8:1217": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Value#8:995": {
+         "type": "TEXT",
+         "value": "Fyldo"
+        },
+        "Prefix icon swap#8:1365": {
+         "type": "INSTANCE_SWAP",
+         "value": "8:24298",
+         "preferredValues": [
+          {
+           "type": "COMPONENT_SET",
+           "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "24628d2b3522273813448485482c2adacdd066b3"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "74c161408f9883a9646c02590ee482517238b215"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "65f94204598c890c12898a924c5acb00f3259632"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+          }
+         ],
+         "valueName": "search-normal / Property 1=linear"
+        },
+        "Show helper#8:1254": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:847": {
+         "type": "TEXT",
+         "value": "Site title"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Size": {
+         "value": "Medium",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Filled",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Value": "Fyldo",
+        "Helper text": "Shown in the browser tab and search results."
+       }
+      }
+     },
+     {
+      "name": "Divider",
+      "type": "RECTANGLE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 133,
+      "width": 752,
+      "height": 1,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "layoutPositioning": "ABSOLUTE"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ebebeb",
+        "token": "border/default"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Divider#18:140"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "18:2682",
+   "name": "Locale=FA, Layout=Inline",
+   "file": "locale-fa--layout-inline",
+   "variantProperties": {
+    "Locale": "FA",
+    "Layout": "Inline"
+   },
+   "node": {
+    "name": "Locale=FA, Layout=Inline",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 752,
+    "height": 88,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 20,
+     "paddingRight": 0,
+     "paddingBottom": 20,
+     "paddingLeft": 0,
+     "itemSpacing": 32,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Control",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 33,
+      "width": 36,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 12,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/12"
+      },
+      "instance": {
+       "component": "Toggle",
+       "variant": "Locale=FA, Size=Medium, Checked=True, State=Default",
+       "componentProperties": {
+        "Description#8:1687": {
+         "type": "TEXT",
+         "value": "Store rendered pages to speed up your site."
+        },
+        "Label#8:1621": {
+         "type": "TEXT",
+         "value": "Enable caching"
+        },
+        "Show label#8:1753": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:1720": {
+         "type": "TEXT",
+         "value": "صفحات ساخته‌شده ذخیره می‌شوند تا سایت سریع‌تر شود."
+        },
+        "Show description#8:1786": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label (FA)#8:1654": {
+         "type": "TEXT",
+         "value": "فعال‌سازی کش"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Size": {
+         "value": "Medium",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "True",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "فعال‌سازی کش"
+       }
+      }
+     },
+     {
+      "name": "Text",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 68,
+      "y": 20,
+      "width": 684,
+      "height": 48,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 4,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MAX",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT",
+       "clipsContent": true
+      },
+      "children": [
+       {
+        "name": "Title row",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 680,
+        "y": 20,
+        "width": 72,
+        "height": 22,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 8,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": true
+        },
+        "children": [
+         {
+          "name": "Badge",
+          "type": "INSTANCE",
+          "visible": false,
+          "opacity": 1,
+          "x": 680,
+          "y": 21,
+          "width": 52,
+          "height": 20,
+          "layout": {
+           "layoutMode": "HORIZONTAL",
+           "paddingTop": 0,
+           "paddingRight": 6,
+           "paddingBottom": 0,
+           "paddingLeft": 6,
+           "itemSpacing": 4,
+           "primaryAxisAlignItems": "CENTER",
+           "counterAxisAlignItems": "CENTER",
+           "primaryAxisSizingMode": "AUTO",
+           "counterAxisSizingMode": "FIXED",
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "cornerRadius": 9999,
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#e0f0ff",
+            "token": "status/info/subtle"
+           }
+          ],
+          "bound": {
+           "itemSpacing": "space/4",
+           "paddingLeft": "space/6",
+           "paddingRight": "space/6",
+           "topLeftRadius": "radius/full",
+           "topRightRadius": "radius/full",
+           "bottomLeftRadius": "radius/full",
+           "bottomRightRadius": "radius/full"
+          },
+          "propertyReferences": {
+           "visible": "Badge#18:135"
+          },
+          "instance": {
+           "component": "Badge",
+           "variant": "Locale=FA, Tone=Blue, Style=Subtle, Size=Small",
+           "componentProperties": {
+            "Icon swap#8:2982": {
+             "type": "INSTANCE_SWAP",
+             "value": "8:31975",
+             "preferredValues": [
+              {
+               "type": "COMPONENT_SET",
+               "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "24628d2b3522273813448485482c2adacdd066b3"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "74c161408f9883a9646c02590ee482517238b215"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "65f94204598c890c12898a924c5acb00f3259632"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+              }
+             ],
+             "valueName": "tick-circle / Property 1=linear"
+            },
+            "Label#8:2859": {
+             "type": "TEXT",
+             "value": "Badge"
+            },
+            "Icon#8:2941": {
+             "type": "BOOLEAN",
+             "value": false
+            },
+            "Label (FA)#8:2900": {
+             "type": "TEXT",
+             "value": "آزمایشی"
+            },
+            "Locale": {
+             "value": "FA",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Tone": {
+             "value": "Blue",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Style": {
+             "value": "Subtle",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Size": {
+             "value": "Small",
+             "type": "VARIANT",
+             "boundVariables": {}
+            }
+           },
+           "texts": {
+            "Label": "آزمایشی"
+           }
+          }
+         },
+         {
+          "name": "Title",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 680,
+          "y": 20,
+          "width": 72,
+          "height": 22,
+          "layout": {
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#171717",
+            "token": "text/primary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "fa/font-family/sans"
+          },
+          "propertyReferences": {
+           "characters": "Title (FA)#18:115"
+          },
+          "text": {
+           "characters": "عنوان تنظیم",
+           "textStyle": "FA/Label/14 Strong",
+           "fontFamily": "IRANYekanX",
+           "fontStyle": "Medium",
+           "fontSize": 14,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "LEFT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "WIDTH_AND_HEIGHT",
+           "fillToken": "text/primary"
+          }
+         }
+        ]
+       },
+       {
+        "name": "Description",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 68,
+        "y": 46,
+        "width": 684,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show description#18:130",
+         "characters": "Description (FA)#18:125"
+        },
+        "text": {
+         "characters": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Divider",
+      "type": "RECTANGLE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 87,
+      "width": 752,
+      "height": 1,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "layoutPositioning": "ABSOLUTE"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ebebeb",
+        "token": "border/default"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Divider#18:140"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "18:2699",
+   "name": "Locale=FA, Layout=Stacked",
+   "file": "locale-fa--layout-stacked",
+   "variantProperties": {
+    "Locale": "FA",
+    "Layout": "Stacked"
+   },
+   "node": {
+    "name": "Locale=FA, Layout=Stacked",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 752,
+    "height": 140,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 20,
+     "paddingRight": 0,
+     "paddingBottom": 20,
+     "paddingLeft": 0,
+     "itemSpacing": 12,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Text",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 20,
+      "width": 752,
+      "height": 48,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 4,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MAX",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "children": [
+       {
+        "name": "Title row",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 680,
+        "y": 20,
+        "width": 72,
+        "height": 22,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 8,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": true
+        },
+        "children": [
+         {
+          "name": "Badge",
+          "type": "INSTANCE",
+          "visible": false,
+          "opacity": 1,
+          "x": 680,
+          "y": 21,
+          "width": 52,
+          "height": 20,
+          "layout": {
+           "layoutMode": "HORIZONTAL",
+           "paddingTop": 0,
+           "paddingRight": 6,
+           "paddingBottom": 0,
+           "paddingLeft": 6,
+           "itemSpacing": 4,
+           "primaryAxisAlignItems": "CENTER",
+           "counterAxisAlignItems": "CENTER",
+           "primaryAxisSizingMode": "AUTO",
+           "counterAxisSizingMode": "FIXED",
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "cornerRadius": 9999,
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#e0f0ff",
+            "token": "status/info/subtle"
+           }
+          ],
+          "bound": {
+           "itemSpacing": "space/4",
+           "paddingLeft": "space/6",
+           "paddingRight": "space/6",
+           "topLeftRadius": "radius/full",
+           "topRightRadius": "radius/full",
+           "bottomLeftRadius": "radius/full",
+           "bottomRightRadius": "radius/full"
+          },
+          "propertyReferences": {
+           "visible": "Badge#18:135"
+          },
+          "instance": {
+           "component": "Badge",
+           "variant": "Locale=FA, Tone=Blue, Style=Subtle, Size=Small",
+           "componentProperties": {
+            "Icon swap#8:2982": {
+             "type": "INSTANCE_SWAP",
+             "value": "8:31975",
+             "preferredValues": [
+              {
+               "type": "COMPONENT_SET",
+               "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "24628d2b3522273813448485482c2adacdd066b3"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "74c161408f9883a9646c02590ee482517238b215"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "65f94204598c890c12898a924c5acb00f3259632"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+              },
+              {
+               "type": "COMPONENT_SET",
+               "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+              }
+             ],
+             "valueName": "tick-circle / Property 1=linear"
+            },
+            "Label#8:2859": {
+             "type": "TEXT",
+             "value": "Badge"
+            },
+            "Icon#8:2941": {
+             "type": "BOOLEAN",
+             "value": false
+            },
+            "Label (FA)#8:2900": {
+             "type": "TEXT",
+             "value": "آزمایشی"
+            },
+            "Locale": {
+             "value": "FA",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Tone": {
+             "value": "Blue",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Style": {
+             "value": "Subtle",
+             "type": "VARIANT",
+             "boundVariables": {}
+            },
+            "Size": {
+             "value": "Small",
+             "type": "VARIANT",
+             "boundVariables": {}
+            }
+           },
+           "texts": {
+            "Label": "آزمایشی"
+           }
+          }
+         },
+         {
+          "name": "Title",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 680,
+          "y": 20,
+          "width": 72,
+          "height": 22,
+          "layout": {
+           "layoutSizingHorizontal": "HUG",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#171717",
+            "token": "text/primary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "fa/font-family/sans"
+          },
+          "propertyReferences": {
+           "characters": "Title (FA)#18:115"
+          },
+          "text": {
+           "characters": "عنوان تنظیم",
+           "textStyle": "FA/Label/14 Strong",
+           "fontFamily": "IRANYekanX",
+           "fontStyle": "Medium",
+           "fontSize": 14,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 22
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "LEFT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "WIDTH_AND_HEIGHT",
+           "fillToken": "text/primary"
+          }
+         }
+        ]
+       },
+       {
+        "name": "Description",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 46,
+        "width": 752,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show description#18:130",
+         "characters": "Description (FA)#18:125"
+        },
+        "text": {
+         "characters": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Control",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 432,
+      "y": 80,
+      "width": 320,
+      "height": 40,
+      "layout": {
+       "layoutMode": "VERTICAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MAX",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Input",
+       "variant": "Locale=FA, Size=Medium, State=Filled",
+       "componentProperties": {
+        "Suffix icon swap#8:1402": {
+         "type": "INSTANCE_SWAP",
+         "value": "8:32092",
+         "preferredValues": [
+          {
+           "type": "COMPONENT_SET",
+           "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "24628d2b3522273813448485482c2adacdd066b3"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "74c161408f9883a9646c02590ee482517238b215"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "65f94204598c890c12898a924c5acb00f3259632"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+          }
+         ],
+         "valueName": "close-circle / Property 1=linear"
+        },
+        "Prefix icon swap#8:1365": {
+         "type": "INSTANCE_SWAP",
+         "value": "8:24298",
+         "preferredValues": [
+          {
+           "type": "COMPONENT_SET",
+           "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6a162db46aa62798e5a93673d68f2308a904786c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "24628d2b3522273813448485482c2adacdd066b3"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "74c161408f9883a9646c02590ee482517238b215"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "65f94204598c890c12898a924c5acb00f3259632"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
+          },
+          {
+           "type": "COMPONENT_SET",
+           "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
+          }
+         ],
+         "valueName": "search-normal / Property 1=linear"
+        },
+        "Helper text#8:1069": {
+         "type": "TEXT",
+         "value": "Shown in the browser tab and search results."
+        },
+        "Placeholder (FA)#8:958": {
+         "type": "TEXT",
+         "value": "سایت وردپرسی من"
+        },
+        "Placeholder#8:921": {
+         "type": "TEXT",
+         "value": "My WordPress site"
+        },
+        "Value#8:995": {
+         "type": "TEXT",
+         "value": "Fyldo"
+        },
+        "Value (FA)#8:1032": {
+         "type": "TEXT",
+         "value": "فیلدو"
+        },
+        "Prefix icon#8:1291": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Error message (FA)#8:1180": {
+         "type": "TEXT",
+         "value": "این عنوان قبلاً استفاده شده است."
+        },
+        "Show helper#8:1254": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Suffix icon#8:1328": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Error message#8:1143": {
+         "type": "TEXT",
+         "value": "This title is already in use."
+        },
+        "Label (FA)#8:884": {
+         "type": "TEXT",
+         "value": "عنوان سایت"
+        },
+        "Show label#8:1217": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:847": {
+         "type": "TEXT",
+         "value": "Site title"
+        },
+        "Helper text (FA)#8:1106": {
+         "type": "TEXT",
+         "value": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Size": {
+         "value": "Medium",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Filled",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Value": "فیلدو",
+        "Helper text": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+       }
+      }
+     },
+     {
+      "name": "Divider",
+      "type": "RECTANGLE",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 139,
+      "width": 752,
+      "height": 1,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "layoutPositioning": "ABSOLUTE"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ebebeb",
+        "token": "border/default"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Divider#18:140"
+      }
+     }
+    ]
+   }
+  }
+ ]
+}

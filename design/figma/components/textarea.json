@@ -1,0 +1,4476 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "8:3307"
+ },
+ "set": {
+  "id": "8:3307",
+  "name": "Textarea",
+  "kebab": "textarea",
+  "description": "Multi-line text field with label, helper, character counter and error message. Resize the instance vertically to show more rows — the control stretches.",
+  "width": 2432,
+  "height": 440,
+  "variantCount": 12,
+  "componentPropertyDefinitions": {
+   "Label#8:1439": {
+    "type": "TEXT",
+    "defaultValue": "Site description"
+   },
+   "Label (FA)#8:1452": {
+    "type": "TEXT",
+    "defaultValue": "توضیحات سایت"
+   },
+   "Placeholder#8:1465": {
+    "type": "TEXT",
+    "defaultValue": "Describe your site in a sentence or two…"
+   },
+   "Placeholder (FA)#8:1478": {
+    "type": "TEXT",
+    "defaultValue": "سایت خود را در یکی دو جمله توصیف کنید…"
+   },
+   "Value#8:1491": {
+    "type": "TEXT",
+    "defaultValue": "Fyldo is a lightweight settings framework for WordPress plugins and themes, with a clean Vercel-style UI."
+   },
+   "Value (FA)#8:1504": {
+    "type": "TEXT",
+    "defaultValue": "فیلدو یک فریم‌ورک سبک برای ساخت پنل تنظیمات افزونه‌ها و قالب‌های وردپرس است، با رابط کاربری ساده و تمیز."
+   },
+   "Helper text#8:1517": {
+    "type": "TEXT",
+    "defaultValue": "Used as the default meta description."
+   },
+   "Helper text (FA)#8:1530": {
+    "type": "TEXT",
+    "defaultValue": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود."
+   },
+   "Error message#8:1543": {
+    "type": "TEXT",
+    "defaultValue": "Keep it under 160 characters."
+   },
+   "Error message (FA)#8:1556": {
+    "type": "TEXT",
+    "defaultValue": "حداکثر ۱۶۰ کاراکتر مجاز است."
+   },
+   "Show label#8:1569": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Show helper#8:1582": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Show counter#8:1595": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Resize handle#8:1608": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   },
+   "State": {
+    "type": "VARIANT",
+    "defaultValue": "Default",
+    "variantOptions": [
+     "Default",
+     "Hover",
+     "Focus",
+     "Filled",
+     "Error",
+     "Disabled"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "8:3168",
+   "name": "Locale=EN, State=Default",
+   "file": "locale-en--state-default",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=EN, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#8f8f8f",
+         "token": "border/input"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 334,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder#8:1465"
+        },
+        "text": {
+         "characters": "Describe your site in a sentence or two…",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 140,
+        "width": 318,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text#8:1517"
+        },
+        "text": {
+         "characters": "Used as the default meta description.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 324,
+        "y": 141,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "0/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3179",
+   "name": "Locale=EN, State=Hover",
+   "file": "locale-en--state-hover",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=EN, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#666666",
+         "token": "border/input-hover"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 334,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder#8:1465"
+        },
+        "text": {
+         "characters": "Describe your site in a sentence or two…",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 140,
+        "width": 318,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text#8:1517"
+        },
+        "text": {
+         "characters": "Used as the default meta description.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 324,
+        "y": 141,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "0/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3190",
+   "name": "Locale=EN, State=Focus",
+   "file": "locale-en--state-focus",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Focus"
+   },
+   "node": {
+    "name": "Locale=EN, State=Focus",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#171717",
+         "token": "focus/border"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "effects": {
+       "style": "Focus/Input",
+       "values": [
+        {
+         "type": "DROP_SHADOW",
+         "visible": true,
+         "hex": "#000000",
+         "opacity": 0.1,
+         "offset": {
+          "x": 0,
+          "y": 0
+         },
+         "radius": 0,
+         "spread": 3
+        }
+       ]
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Caret",
+        "type": "RECTANGLE",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 1,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ]
+       },
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 16,
+        "y": 37,
+        "width": 331,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder#8:1465"
+        },
+        "text": {
+         "characters": "Describe your site in a sentence or two…",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 140,
+        "width": 318,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text#8:1517"
+        },
+        "text": {
+         "characters": "Used as the default meta description.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 324,
+        "y": 141,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "0/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3202",
+   "name": "Locale=EN, State=Filled",
+   "file": "locale-en--state-filled",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Filled"
+   },
+   "node": {
+    "name": "Locale=EN, State=Filled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#8f8f8f",
+         "token": "border/input"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Value",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 334,
+        "height": 60,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Value#8:1491"
+        },
+        "text": {
+         "characters": "Fyldo is a lightweight settings framework for WordPress plugins and themes, with a clean Vercel-style UI.",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/primary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 140,
+        "width": 303,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text#8:1517"
+        },
+        "text": {
+         "characters": "Used as the default meta description.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 309,
+        "y": 141,
+        "width": 51,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "104/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3213",
+   "name": "Locale=EN, State=Error",
+   "file": "locale-en--state-error",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Error"
+   },
+   "node": {
+    "name": "Locale=EN, State=Error",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#da2f35",
+         "token": "status/error/solid"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "effects": {
+       "style": "Focus/Input Error",
+       "values": [
+        {
+         "type": "DROP_SHADOW",
+         "visible": true,
+         "hex": "#da2f35",
+         "opacity": 0.16,
+         "offset": {
+          "x": 0,
+          "y": 0
+         },
+         "radius": 0,
+         "spread": 3
+        }
+       ]
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Value",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 334,
+        "height": 60,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Value#8:1491"
+        },
+        "text": {
+         "characters": "Fyldo is a lightweight settings framework for WordPress plugins and themes, with a clean Vercel-style UI.",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/primary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Error",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Error icon",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 141,
+        "width": 16,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "visible": false,
+          "hex": "#ffffff"
+         }
+        ],
+        "icon": {
+         "name": "info-circle",
+         "size": 16,
+         "variant": "Property 1=linear",
+         "colour": "status/error/text"
+        }
+       },
+       {
+        "name": "Error message",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 22,
+        "y": 140,
+        "width": 281,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#cb2a2f",
+          "token": "status/error/text"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Error message#8:1543"
+        },
+        "text": {
+         "characters": "Keep it under 160 characters.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "status/error/text"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 309,
+        "y": 141,
+        "width": 51,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#cb2a2f",
+          "token": "status/error/text"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "172/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "status/error/text"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3226",
+   "name": "Locale=EN, State=Disabled",
+   "file": "locale-en--state-disabled",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=EN, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 158,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label#8:1439"
+      },
+      "text": {
+       "characters": "Site description",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 28,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#f2f2f2",
+        "token": "surface/disabled"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#ebebeb",
+         "token": "border/default"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 37,
+        "width": 334,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#8f8f8f",
+          "token": "text/disabled"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder#8:1465"
+        },
+        "text": {
+         "characters": "Describe your site in a sentence or two…",
+         "textStyle": "EN/Copy/14",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/disabled"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 348,
+        "y": 120,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#ebebeb",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 140,
+      "width": 360,
+      "height": 18,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 140,
+        "width": 318,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#8f8f8f",
+          "token": "text/disabled"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text#8:1517"
+        },
+        "text": {
+         "characters": "Used as the default meta description.",
+         "textStyle": "EN/Copy/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/disabled"
+        }
+       },
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 324,
+        "y": 141,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "0/160",
+         "textStyle": "EN/Mono/12",
+         "fontFamily": "Geist Mono",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3237",
+   "name": "Locale=FA, State=Default",
+   "file": "locale-fa--state-default",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=FA, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#8f8f8f",
+         "token": "border/input"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 334,
+        "height": 24,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder (FA)#8:1478"
+        },
+        "text": {
+         "characters": "سایت خود را در یکی دو جمله توصیف کنید…",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 26,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۰/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 32,
+        "y": 142,
+        "width": 328,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text (FA)#8:1530"
+        },
+        "text": {
+         "characters": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3248",
+   "name": "Locale=FA, State=Hover",
+   "file": "locale-fa--state-hover",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=FA, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#666666",
+         "token": "border/input-hover"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 334,
+        "height": 24,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder (FA)#8:1478"
+        },
+        "text": {
+         "characters": "سایت خود را در یکی دو جمله توصیف کنید…",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 26,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۰/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 32,
+        "y": 142,
+        "width": 328,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text (FA)#8:1530"
+        },
+        "text": {
+         "characters": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3259",
+   "name": "Locale=FA, State=Focus",
+   "file": "locale-fa--state-focus",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Focus"
+   },
+   "node": {
+    "name": "Locale=FA, State=Focus",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#171717",
+         "token": "focus/border"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "effects": {
+       "style": "Focus/Input",
+       "values": [
+        {
+         "type": "DROP_SHADOW",
+         "visible": true,
+         "hex": "#000000",
+         "opacity": 0.1,
+         "offset": {
+          "x": 0,
+          "y": 0
+         },
+         "radius": 0,
+         "spread": 3
+        }
+       ]
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 331,
+        "height": 24,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder (FA)#8:1478"
+        },
+        "text": {
+         "characters": "سایت خود را در یکی دو جمله توصیف کنید…",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Caret",
+        "type": "RECTANGLE",
+        "visible": true,
+        "opacity": 1,
+        "x": 346,
+        "y": 39,
+        "width": 1,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ]
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 26,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۰/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 32,
+        "y": 142,
+        "width": 328,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text (FA)#8:1530"
+        },
+        "text": {
+         "characters": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3271",
+   "name": "Locale=FA, State=Filled",
+   "file": "locale-fa--state-filled",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Filled"
+   },
+   "node": {
+    "name": "Locale=FA, State=Filled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#8f8f8f",
+         "token": "border/input"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Value",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 334,
+        "height": 48,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Value (FA)#8:1504"
+        },
+        "text": {
+         "characters": "فیلدو یک فریم‌ورک سبک برای ساخت پنل تنظیمات افزونه‌ها و قالب‌های وردپرس است، با رابط کاربری ساده و تمیز.",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/primary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 36,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۱۰۴/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 42,
+        "y": 142,
+        "width": 318,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#666666",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text (FA)#8:1530"
+        },
+        "text": {
+         "characters": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3282",
+   "name": "Locale=FA, State=Error",
+   "file": "locale-fa--state-error",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Error"
+   },
+   "node": {
+    "name": "Locale=FA, State=Error",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#da2f35",
+         "token": "status/error/solid"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "effects": {
+       "style": "Focus/Input Error",
+       "values": [
+        {
+         "type": "DROP_SHADOW",
+         "visible": true,
+         "hex": "#da2f35",
+         "opacity": 0.16,
+         "offset": {
+          "x": 0,
+          "y": 0
+         },
+         "radius": 0,
+         "spread": 3
+        }
+       ]
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Value",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 334,
+        "height": 48,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#171717",
+          "token": "text/primary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Value (FA)#8:1504"
+        },
+        "text": {
+         "characters": "فیلدو یک فریم‌ورک سبک برای ساخت پنل تنظیمات افزونه‌ها و قالب‌های وردپرس است، با رابط کاربری ساده و تمیز.",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/primary"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#a8a8a8",
+           "token": "border/strong"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Error",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 36,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#cb2a2f",
+          "token": "status/error/text"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۱۷۲/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "status/error/text"
+        }
+       },
+       {
+        "name": "Error message",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 42,
+        "y": 142,
+        "width": 296,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#cb2a2f",
+          "token": "status/error/text"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Error message (FA)#8:1556"
+        },
+        "text": {
+         "characters": "حداکثر ۱۶۰ کاراکتر مجاز است.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "status/error/text"
+        }
+       },
+       {
+        "name": "Error icon",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 344,
+        "y": 145,
+        "width": 16,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "visible": false,
+          "hex": "#ffffff"
+         }
+        ],
+        "icon": {
+         "name": "info-circle",
+         "size": 16,
+         "variant": "Property 1=linear",
+         "colour": "status/error/text"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:3295",
+   "name": "Locale=FA, State=Disabled",
+   "file": "locale-fa--state-disabled",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=FA, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 360,
+    "height": 164,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "bound": {
+     "itemSpacing": "space/8"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show label#8:1569",
+       "characters": "Label (FA)#8:1452"
+      },
+      "text": {
+       "characters": "توضیحات سایت",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Control",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 30,
+      "width": 360,
+      "height": 104,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 8,
+       "paddingRight": 12,
+       "paddingBottom": 8,
+       "paddingLeft": 12,
+       "itemSpacing": 2,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "FIXED",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "FILL",
+       "layoutGrow": 1,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "cornerRadius": 6,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#f2f2f2",
+        "token": "surface/disabled"
+       }
+      ],
+      "strokes": {
+       "paints": [
+        {
+         "type": "SOLID",
+         "hex": "#ebebeb",
+         "token": "border/default"
+        }
+       ],
+       "weight": 1,
+       "align": "INSIDE"
+      },
+      "bound": {
+       "itemSpacing": "space/2",
+       "paddingLeft": "space/12",
+       "paddingTop": "space/8",
+       "paddingRight": "space/12",
+       "paddingBottom": "space/8",
+       "topLeftRadius": "radius/sm",
+       "topRightRadius": "radius/sm",
+       "bottomLeftRadius": "radius/sm",
+       "bottomRightRadius": "radius/sm"
+      },
+      "children": [
+       {
+        "name": "Placeholder",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 13,
+        "y": 39,
+        "width": 334,
+        "height": 24,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#8f8f8f",
+          "token": "text/disabled"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Placeholder (FA)#8:1478"
+        },
+        "text": {
+         "characters": "سایت خود را در یکی دو جمله توصیف کنید…",
+         "textStyle": "FA/Copy/14",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 14,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 24
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/disabled"
+        }
+       },
+       {
+        "name": "Resize handle",
+        "type": "VECTOR",
+        "visible": true,
+        "opacity": 1,
+        "x": 4,
+        "y": 122,
+        "width": 6,
+        "height": 6,
+        "layout": {
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "layoutPositioning": "ABSOLUTE"
+        },
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#ebebeb",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "CENTER"
+        },
+        "propertyReferences": {
+         "visible": "Resize handle#8:1608"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Helper",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 142,
+      "width": 360,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": true
+      },
+      "propertyReferences": {
+       "visible": "Show helper#8:1582"
+      },
+      "children": [
+       {
+        "name": "Counter",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 144,
+        "width": 26,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#737373",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show counter#8:1595"
+        },
+        "text": {
+         "characters": "۰/۱۶۰",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Helper text",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 32,
+        "y": 142,
+        "width": 328,
+        "height": 22,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#8f8f8f",
+          "token": "text/disabled"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Helper text (FA)#8:1530"
+        },
+        "text": {
+         "characters": "به‌عنوان توضیحات متای پیش‌فرض استفاده می‌شود.",
+         "textStyle": "FA/Copy/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 22
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/disabled"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

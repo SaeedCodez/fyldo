@@ -1,0 +1,3260 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "8:4601"
+ },
+ "set": {
+  "id": "8:4601",
+  "name": "Menu Item",
+  "kebab": "menu-item",
+  "description": "Option row inside Select Menu (and future dropdown menus). Hover = pointer/keyboard highlight; Selected shows a check at the end.",
+  "width": 1440,
+  "height": 336,
+  "variantCount": 16,
+  "componentPropertyDefinitions": {
+   "Label#8:2221": {
+    "type": "TEXT",
+    "defaultValue": "Subscriber"
+   },
+   "Label (FA)#8:2230": {
+    "type": "TEXT",
+    "defaultValue": "مشترک"
+   },
+   "Leading icon#8:2239": {
+    "type": "BOOLEAN",
+    "defaultValue": false
+   },
+   "Leading icon swap#8:2248": {
+    "type": "INSTANCE_SWAP",
+    "defaultValue": "8:21546",
+    "defaultValueName": "global / Property 1=linear",
+    "preferredValueCount": 48
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   },
+   "Type": {
+    "type": "VARIANT",
+    "defaultValue": "Single",
+    "variantOptions": [
+     "Single",
+     "Multi"
+    ]
+   },
+   "State": {
+    "type": "VARIANT",
+    "defaultValue": "Default",
+    "variantOptions": [
+     "Default",
+     "Hover",
+     "Selected",
+     "Disabled"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "8:4553",
+   "name": "Locale=EN, Type=Single, State=Default",
+   "file": "locale-en--type-single--state-default",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Single",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Single, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 296,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4559",
+   "name": "Locale=EN, Type=Single, State=Hover",
+   "file": "locale-en--type-single--state-hover",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Single",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Single, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 296,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4565",
+   "name": "Locale=EN, Type=Single, State=Selected",
+   "file": "locale-en--type-single--state-selected",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Single",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Single, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 272,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 288,
+      "y": 10,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4571",
+   "name": "Locale=EN, Type=Single, State=Disabled",
+   "file": "locale-en--type-single--state-disabled",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Single",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Single, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "text/disabled"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 296,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4577",
+   "name": "Locale=FA, Type=Single, State=Default",
+   "file": "locale-fa--type-single--state-default",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Single",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Single, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 296,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4583",
+   "name": "Locale=FA, Type=Single, State=Hover",
+   "file": "locale-fa--type-single--state-hover",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Single",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Single, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 296,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4589",
+   "name": "Locale=FA, Type=Single, State=Selected",
+   "file": "locale-fa--type-single--state-selected",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Single",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Single, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 10,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 32,
+      "y": 7,
+      "width": 272,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "8:4595",
+   "name": "Locale=FA, Type=Single, State=Disabled",
+   "file": "locale-fa--type-single--state-disabled",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Single",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Single, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 296,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "text/disabled"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4229",
+   "name": "Locale=EN, Type=Multi, State=Default",
+   "file": "locale-en--type-multi--state-default",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Multi",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Multi, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 16,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=EN, Checked=False, State=Default",
+       "componentProperties": {
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Send email notifications"
+       }
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 32,
+      "y": 8,
+      "width": 272,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4241",
+   "name": "Locale=EN, Type=Multi, State=Hover",
+   "file": "locale-en--type-multi--state-hover",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Multi",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Multi, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 16,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=EN, Checked=False, State=Hover",
+       "componentProperties": {
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Hover",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Send email notifications"
+       }
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 32,
+      "y": 8,
+      "width": 272,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4253",
+   "name": "Locale=EN, Type=Multi, State=Selected",
+   "file": "locale-en--type-multi--state-selected",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Multi",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Multi, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 16,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=EN, Checked=True, State=Default",
+       "componentProperties": {
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "True",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Send email notifications"
+       }
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 32,
+      "y": 8,
+      "width": 272,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4266",
+   "name": "Locale=EN, Type=Multi, State=Disabled",
+   "file": "locale-en--type-multi--state-disabled",
+   "variantProperties": {
+    "Locale": "EN",
+    "Type": "Multi",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=EN, Type=Multi, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 8,
+      "width": 16,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=EN, Checked=False, State=Disabled",
+       "componentProperties": {
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Disabled",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Send email notifications"
+       }
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "text/disabled"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 32,
+      "y": 8,
+      "width": 272,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#8:2221"
+      },
+      "text": {
+       "characters": "Subscriber",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4278",
+   "name": "Locale=FA, Type=Multi, State=Default",
+   "file": "locale-fa--type-multi--state-default",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Multi",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Multi, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 272,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 288,
+      "y": 7,
+      "width": 16,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=FA, Checked=False, State=Default",
+       "componentProperties": {
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "ارسال اعلان ایمیلی"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4290",
+   "name": "Locale=FA, Type=Multi, State=Hover",
+   "file": "locale-fa--type-multi--state-hover",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Multi",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Multi, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 272,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 288,
+      "y": 7,
+      "width": 16,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=FA, Checked=False, State=Hover",
+       "componentProperties": {
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Hover",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "ارسال اعلان ایمیلی"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4302",
+   "name": "Locale=FA, Type=Multi, State=Selected",
+   "file": "locale-fa--type-multi--state-selected",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Multi",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Multi, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 272,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/secondary"
+      }
+     },
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 288,
+      "y": 7,
+      "width": 16,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=FA, Checked=True, State=Default",
+       "componentProperties": {
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "True",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "ارسال اعلان ایمیلی"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "9:4315",
+   "name": "Locale=FA, Type=Multi, State=Disabled",
+   "file": "locale-fa--type-multi--state-disabled",
+   "variantProperties": {
+    "Locale": "FA",
+    "Type": "Multi",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=FA, Type=Multi, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 312,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 8,
+     "paddingRight": 8,
+     "paddingBottom": 8,
+     "paddingLeft": 8,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 6,
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/8",
+     "paddingTop": "space/8",
+     "paddingRight": "space/8",
+     "paddingBottom": "space/8",
+     "topLeftRadius": "radius/sm",
+     "topRightRadius": "radius/sm",
+     "bottomLeftRadius": "radius/sm",
+     "bottomRightRadius": "radius/sm"
+    },
+    "children": [
+     {
+      "name": "Check",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "icon": {
+       "name": "tick-circle",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "icon/primary"
+      }
+     },
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 8,
+      "y": 7,
+      "width": 272,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 1,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#8:2230"
+      },
+      "text": {
+       "characters": "مشترک",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     },
+     {
+      "name": "Leading icon",
+      "type": "INSTANCE",
+      "visible": false,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 16,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "FIXED",
+       "layoutSizingVertical": "FIXED",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "visible": false,
+        "hex": "#ffffff"
+       }
+      ],
+      "propertyReferences": {
+       "visible": "Leading icon#8:2239",
+       "mainComponent": "Leading icon swap#8:2248"
+      },
+      "icon": {
+       "name": "global",
+       "size": 16,
+       "variant": "Property 1=linear",
+       "colour": "text/disabled"
+      }
+     },
+     {
+      "name": "Checkbox",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 288,
+      "y": 7,
+      "width": 16,
+      "height": 22,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "MIN",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "instance": {
+       "component": "Checkbox",
+       "variant": "Locale=FA, Checked=False, State=Disabled",
+       "componentProperties": {
+        "Description#8:2121": {
+         "type": "TEXT",
+         "value": "Notify admins when a form is submitted."
+        },
+        "Show description#8:2196": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Label#8:2071": {
+         "type": "TEXT",
+         "value": "Send email notifications"
+        },
+        "Show label#8:2171": {
+         "type": "BOOLEAN",
+         "value": false
+        },
+        "Description (FA)#8:2146": {
+         "type": "TEXT",
+         "value": "هنگام ارسال فرم به مدیران اطلاع داده می‌شود."
+        },
+        "Label (FA)#8:2096": {
+         "type": "TEXT",
+         "value": "ارسال اعلان ایمیلی"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "Checked": {
+         "value": "False",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Disabled",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "ارسال اعلان ایمیلی"
+       }
+      }
+     }
+    ]
+   }
+  }
+ ]
+}
