@@ -389,7 +389,7 @@ Example: slug `acme-seo`, running Fyldo `1.4.2`, page `general`.
 
 | What | Derived value | Source |
 |---|---|---|
-| Option name | `fyldo_acme_seo__general` (override per page) | `Naming::option( $slug, $page )` |
+| Option name | `acme-seo_general` (`{slug}_{page}`, literal; override per page) | `Naming::option( $slug, $page )` |
 | REST namespace | `fyldo-acme-seo/v1` (routes `/pages/(?P<page>…)`, `/pages/…/actions/(?P<action>…)`) | `Naming::rest_ns` |
 | Script handle | `fyldo-acme-seo-1.4.2` (classic `boot.js`) | `Naming::handle( $slug, $ver )` |
 | Style handles | `fyldo-acme-seo-1.4.2` (app.css), `fyldo-acme-seo-fonts-1.4.2` | same |
