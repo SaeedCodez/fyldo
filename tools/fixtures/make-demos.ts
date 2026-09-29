@@ -159,7 +159,7 @@ add_action(
 					'title'  => '${demo.title}',
 				),
 				'links'      => array(
-					array( 'label' => 'Documentation', 'url' => 'https://example.com/docs', 'icon' => 'book', 'external' => true ),
+					array( 'label' => 'Documentation', 'url' => 'https://example.com/docs', 'icon' => 'book-1', 'external' => true ),
 					array( 'label' => 'Help & support', 'url' => 'https://example.com/help', 'icon' => 'message-question', 'external' => true ),
 				),
 			)

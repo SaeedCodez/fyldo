@@ -9,7 +9,7 @@
 return array(
 	'title'       => 'Advanced',
 	'description' => 'Caching and troubleshooting options for developers.',
-	'icon'        => 'code',
+	'icon'        => 'code-1',
 	'group'       => 'tools',
 	'save'        => 'global',
 	'tabs'        => array(

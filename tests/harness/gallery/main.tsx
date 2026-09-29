@@ -10,12 +10,32 @@
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
  *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
+ *   ?c=badge&tone=gray&appearance=subtle&size=sm&label=Badge
+ *   ?c=nav-item&state=default|hover|active|focus|disabled&label=General&icon=setting-2&badge=3   (224 wide, as in the pack)
+ *   ?c=tab&state=default|active|disabled&label=General&icon=&count=
+ *   ?c=tabs&tabs=Site identity|Reading|Permalinks|Privacy   (800 wide, the first tab active)
+ *   ?c=sidebar&spec=<json>  /  ?c=top-navigation&spec=<json>   (spec: {brand, version, groups:[{label, items:[{label, icon, badge, active}]}], links:[{label, icon}]})
+ *   ?c=page-header&title=…&description=…&action=Documentation   (800 wide; the action is an external link)
+ *   ?c=section-card&tone=default|danger&spec=<json>   (spec: {title, description, rows:[{title, description, layout, value, checked}], footerText, action})
+ *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Field } from '@base-ui/react/field';
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { NavItem } from '../../../app/components/fyldo/NavItem';
+import { PageHeader } from '../../../app/components/fyldo/PageHeader';
+import { SectionCard } from '../../../app/components/fyldo/SectionCard';
+import { SettingRow } from '../../../app/components/fyldo/SettingRow';
+import { Sidebar } from '../../../app/components/fyldo/Sidebar';
+import { TAB_OUTER, TabLook } from '../../../app/components/fyldo/Tab';
+import { Tabs } from '../../../app/components/fyldo/Tabs';
+import { TopNavigation } from '../../../app/components/fyldo/TopNavigation';
+import type { NavGroup } from '../../../app/components/fyldo/nav-model';
+import { Badge, type BadgeSize, type BadgeTone } from '../../../app/components/ui/badge';
+import { Input } from '../../../app/components/ui/input';
+import { Icon } from '../../../app/icons/Icon';
 import { Button, type ButtonSize, type ButtonVariant } from '../../../app/components/ui/button';
 import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
@@ -123,8 +143,135 @@ function MultiSelectDemo() {
   );
 }
 
+interface NavSpec {
+  brand: string;
+  version?: string;
+  groups: Array<{ label?: string; items: Array<{ label: string; icon?: string; badge?: string; active?: boolean }> }>;
+  links?: Array<{ label: string; icon?: string }>;
+}
+
+const locale = rtl ? 'fa-IR' : 'en';
+
+function navFromSpec(spec: NavSpec): { groups: NavGroup[]; links: Array<{ label: string; href: string; icon?: string; external: boolean }> } {
+  return {
+    groups: spec.groups.map((g, gi) => ({
+      id: `g${gi}`,
+      label: g.label,
+      items: g.items.map((item, ii) => ({ id: `p${gi}-${ii}`, label: item.label, href: `#/p${gi}-${ii}`, icon: item.icon || undefined, badge: item.badge || undefined, active: Boolean(item.active) })),
+    })),
+    links: (spec.links ?? []).map((l, i) => ({ label: l.label, href: `#/link-${i}`, icon: l.icon || undefined, external: false })),
+  };
+}
+
+interface CardSpec {
+  title: string;
+  description?: string;
+  rows?: Array<{ title: string; description?: string; layout: 'inline' | 'stacked'; value?: string; checked?: boolean }>;
+  footerText?: string;
+  action?: string;
+}
+
+function SectionCardDemo({ spec, tone }: { spec: CardSpec; tone: 'default' | 'danger' }) {
+  const rows = spec.rows ?? [];
+  return (
+    <div style={{ width: 800 }}>
+      <SectionCard
+        title={spec.title}
+        description={spec.description}
+        tone={tone}
+        footerText={spec.footerText}
+        footer={spec.action ? <Button variant={tone === 'danger' ? 'error' : 'primary'} size="sm">{spec.action}</Button> : undefined}
+      >
+        {rows.length > 0
+          ? rows.map((row, index) => (
+              <SettingRow key={row.title} title={row.title} description={row.description} layout={row.layout} divider={index < rows.length - 1}>
+                {row.layout === 'inline' ? <Toggle size="md" defaultChecked={Boolean(row.checked)} /> : <Input size="md" defaultValue={row.value ?? ''} />}
+              </SettingRow>
+            ))
+          : undefined}
+      </SectionCard>
+    </div>
+  );
+}
+
 function Variant() {
   switch (q.get('c')) {
+    case 'icons':
+      return (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(40, 20px)', gridAutoRows: '20px' }}>
+          {param('names')
+            .split(',')
+            .filter(Boolean)
+            .map((name) => (
+              <span key={name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon name={name} size={16} />
+              </span>
+            ))}
+        </div>
+      );
+    case 'badge':
+      return (
+        <Badge tone={param('tone', 'gray') as BadgeTone} appearance={param('appearance', 'subtle') as 'subtle' | 'solid'} size={param('size', 'sm') as BadgeSize}>
+          {param('label', 'Badge')}
+        </Badge>
+      );
+    case 'nav-item':
+      return (
+        <div style={{ width: 224 }}>
+          <NavItem
+            label={param('label', 'General')}
+            href="#/general"
+            icon={q.get('icon') ?? 'setting-2'}
+            badge={param('badge') || undefined}
+            active={state === 'active'}
+            disabled={state === 'disabled'}
+            locale={locale}
+          />
+        </div>
+      );
+    case 'tab':
+      return (
+        <button type="button" className={TAB_OUTER}>
+          <TabLook label={param('label', 'General')} icon={param('icon') || undefined} badge={param('count') || undefined} active={state === 'active'} disabled={state === 'disabled'} locale={locale} />
+        </button>
+      );
+    case 'tabs': {
+      const labels = param('tabs').split('|').filter(Boolean);
+      return (
+        <div style={{ width: 800 }}>
+          <Tabs label="Tabs" value="t0" onValueChange={() => undefined} tabs={labels.map((label, i) => ({ id: `t${i}`, label }))} locale={locale}>
+            {() => null}
+          </Tabs>
+        </div>
+      );
+    }
+    case 'sidebar':
+    case 'top-navigation': {
+      const spec = JSON.parse(param('spec', '{}')) as NavSpec;
+      const { groups, links } = navFromSpec(spec);
+      const brand = { name: spec.brand, version: spec.version };
+      return q.get('c') === 'sidebar' ? (
+        <div style={{ height: 800 }}>
+          <Sidebar brand={brand} groups={groups} links={links} locale={locale} />
+        </div>
+      ) : (
+        <div style={{ width: Number(param('width', '1280')) }}>
+          <TopNavigation brand={brand} groups={groups} links={links} locale={locale} />
+        </div>
+      );
+    }
+    case 'page-header':
+      return (
+        <div style={{ width: 800 }}>
+          <PageHeader
+            title={param('title')}
+            description={param('description') || undefined}
+            links={param('action') ? [{ label: param('action'), href: '#docs', external: true }] : []}
+          />
+        </div>
+      );
+    case 'section-card':
+      return <SectionCardDemo spec={JSON.parse(param('spec', '{}')) as CardSpec} tone={param('tone', 'default') as 'default' | 'danger'} />;
     case 'textarea':
       return <TextareaDemo />;
     case 'tag':
@@ -223,7 +370,7 @@ function Variant() {
         </div>
       );
     default:
-      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice</p>;
+      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card</p>;
   }
 }
 
@@ -232,7 +379,7 @@ function Variant() {
     const jed = await (await fetch('./fyldo-fa_IR.json')).json();
     setLocaleData(jed);
   }
-  await preloadIcons(['global']);
+  await preloadIcons(['global', ...param('names').split(',').filter(Boolean), ...(param('spec').match(/"icon":"[^"]+"/g) ?? []).map((m) => m.slice(8, -1)), param('icon')].filter(Boolean));
   createRoot(stage).render(
     <PortalContainerContext.Provider value={root}>
       <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>

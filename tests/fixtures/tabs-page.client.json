@@ -2,7 +2,7 @@
     "id": "advanced",
     "title": "Advanced",
     "description": "Caching and troubleshooting options for developers.",
-    "icon": "code",
+    "icon": "code-1",
     "group": "tools",
     "badge": "",
     "save": "global",

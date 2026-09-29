@@ -49,6 +49,37 @@ const DISABLED: Record<ButtonVariant, string> = {
   error: `${DISABLED_BASE} ${DISABLED_FILLED}`,
 };
 
+/** The classes of an enabled button of a type and size (shared with ButtonLink). */
+const look = (variant: ButtonVariant, size: ButtonSize): string =>
+  cn(
+    'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out',
+    'fy:focus-ring',
+    SIZE[size],
+    VARIANT[variant],
+  );
+
+export interface ButtonLinkProps extends Omit<ComponentPropsWithoutRef<'a'>, 'children'> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  leadingIcon?: string;
+  trailingIcon?: string;
+  children?: ReactNode;
+}
+
+/**
+ * A link that looks like a Button (Page Header actions, Top Navigation utilities): a real `<a href>`, announced as a
+ * link. A Base UI Button rendered as an anchor would be given `role="button"`.
+ */
+export function ButtonLink({ variant = 'primary', size = 'sm', leadingIcon, trailingIcon, className, children, ...props }: ButtonLinkProps): ReactElement {
+  return (
+    <a {...props} data-slot="fy-button" data-variant={variant} data-size={size} className={cn(look(variant, size), 'fy:no-underline', className)}>
+      {leadingIcon ? <Icon name={leadingIcon} size={16} /> : null}
+      {children !== undefined && children !== null ? <span>{children}</span> : null}
+      {trailingIcon ? <Icon name={trailingIcon} size={16} /> : null}
+    </a>
+  );
+}
+
 export function Button({
   variant = 'primary',
   size = 'sm',
@@ -73,14 +104,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       data-loading={loading ? '' : undefined}
-      className={cn(
-        'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out',
-        'fy:focus-ring',
-        SIZE[size],
-        VARIANT[variant],
-        DISABLED[variant],
-        className as string | undefined,
-      )}
+      className={cn(look(variant, size), DISABLED[variant], className as string | undefined)}
     >
       {loading ? <Spinner /> : leadingIcon ? <Icon name={leadingIcon} size={16} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}
