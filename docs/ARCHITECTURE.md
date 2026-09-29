@@ -408,7 +408,7 @@ Slug rules: `^[a-z][a-z0-9-]{2,39}$`, unique per site. A second `create()` with 
 
 ## 7. Strauss (optional full isolation) — exact configuration
 
-Purpose: a consumer that wants **zero interaction** with any other Fyldo (no negotiation, its own version pinned) re-prefixes the package into its own namespace. Everything below was run against Strauss **0.30.0** on a fixture package that declares only `files` autoload.
+Purpose: a consumer that wants **zero interaction** with any other Fyldo (no negotiation, its own version pinned) re-prefixes the package into its own namespace. The `extra.strauss` block below was run **verbatim** with Strauss **0.30.0** (PHAR) on a fixture package that declares only `files` autoload. The `scripts` and consumer `autoload` lines are standard Composer wiring that I could **not** exercise in phase 0 (Packagist was unreachable from the sandbox, so the fixture's `vendor/` was laid out by hand); the Composer smoke job in M6 covers them.
 
 **Consumer's `composer.json`:**
 
