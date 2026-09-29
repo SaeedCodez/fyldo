@@ -100,6 +100,8 @@ type TextFieldProps = {
 | Error | `error` prop → border `status/error/solid` + `Focus/Input Error` halo (always on) |
 | Disabled | `disabled` → `surface/disabled`, `text/disabled` |
 
+*Implemented in M2 part 3:* the `password`, `number`, `url` and `email` field types render `Input` (the pack draws one text Input; nothing else was added). `Input` gained `digits` (Persian/Arabic-Indic digits read as ASCII as they are typed and pasted; the caret stays where it was) and `NumberInput` (text input with `inputmode="decimal"` and `dir="ltr"`: a real `type="number"` refuses Persian digits; it shows what was typed but reports a number, `''`, or the unreadable text so the `number` rule can name it). `url`, `email` and `number` inputs are `dir="ltr"` — the text only, the label keeps the page direction; the text is left-aligned (`text-left`), not mirrored to the right as the Input usage frame's FA sample draws its sample email. `password` keeps the page direction, has `type="password"`, `spellcheck=false`, `autocapitalize=off` and `autocomplete="new-password"` (developer-selectable: `current-password`, `off`); a stored secret is never in the DOM: the field is empty with the "•••• set" placeholder and a screen-reader-only description. **No show/hide toggle: the pack has no design for it** (only a generic optional suffix icon slot), so none was built.
+
 **Gaps:** 🔧 shadcn Input is 36 px with ring focus — replace with 32/40/48, Copy/14 (Copy/16 at `lg`), halo tokens. ➕ Error row layout (16 px `info-circle` + Copy/13). ➕ Validation timing: show error only after blur or submit (rule 7) — implemented in the form layer (`touched` state), not the component. ➕ LTR-in-RTL rule for `url|email`/`code`. ➕ **Neutralise wp-admin `input:focus` blue ring** (ARCHITECTURE §8.2). Input border contrast was fixed in Figma before M1 (design-spec D4).
 
 ### 2.4 Textarea — Figma `Textarea` (8:3307)
@@ -210,6 +212,8 @@ Base: shadcn `alert` (`Alert, AlertTitle, AlertDescription, AlertAction`).
 ```ts
 type NoticeProps = { tone?: 'gray'|'blue'|'green'|'amber'|'red'; title?: string; children: ReactNode; action?: {label:string; onClick|href}; onDismiss?: () => void; role?: 'status'|'alert' };
 ```
+*Implemented in M2 part 3 (the static part only — it did not exist yet, and the `notice` field needs it):* `Notice` = tone icon · optional title · message, five tones (Gray `information` · Blue `information` · Green `tick-circle` · Amber `danger` · Red `info-circle`, tokens `status/neutral|info|success|warning|error`), 16/12 padding, gap 12, radius md, full width. It is a labelled `region` (never a live region: it is on the page from the start) whose name starts with the tone word ("Warning: …", translated) because colour alone must not carry the meaning. Action button and Dismiss (drawn in the pack) stay M4, as do the live-region roles (`status` / `alert`) for notices injected after load.
+
 **Gaps:** 🔧 shadcn Alert has no tones or icon by default. ➕ Tone → icon map; ➕ semantics: `role="status"` for gray/blue/green, `role="alert"` for red/amber (assertive only when injected after load; initial-render notices use `role="region"` + `aria-label`, to avoid screen-reader spam on page load). ➕ Dismiss = `IconButton` with label “Dismiss”. ➕ **No `notice` CSS class on React notices** (design-spec D8). ➕ PHP-rendered admin-notice helper (`$fyldo->admin_notice()`) uses WP classes.
 
 ### 3.3 Toast — Figma `Toast` (72:6694)
@@ -299,6 +303,8 @@ Base: ➕ custom composition over `Field` (`Field.Root/Label/Description`). `Con
 type SettingRowProps = { title: string; description?: string; badge?: BadgeProps; layout?: 'inline'|'stacked'; divider?: boolean /*true; false on last row*/; control: ReactNode; error?: string };
 ```
 **Layout rule from the PHP schema:** `toggle`, `checkbox` ⇒ `inline`; `text|textarea|select|multi_select|number` ⇒ `stacked`; `radio`/`checkbox_group` ⇒ `stacked` (with `Fieldset`). Overridable per field (`'layout' => 'inline'`).
+*Disabled with a reason (M2 part 3):* `disabled` is `true` or a string. A string is rendered under the description (kept `text/secondary`, not the faded disabled colour: it is the one thing that must stay readable) as a Base UI `Field.Description` — or, for a checkbox/radio group, an id in the group's `aria-describedby` — so it is part of the control's accessible description for every control type (tested for toggle, checkbox, text, textarea, number, password, select, multi select, checkbox group, radio group). A disabled field is never validated, never sent and ignored by the server.
+
 **Gaps:** ➕ Label association (inline Toggle: title is the switch label via `aria-labelledby`; description via `aria-describedby`). ➕ Divider auto-off on last row (CSS `:last-child`, prop override). ➕ Disabled propagation + “why disabled” text (rule 14). ➕ Conditional visibility hook (`show_if`) — later milestone.
 
 ### 4.5 Section Card — Figma `Section Card` (18:2913)
@@ -333,10 +339,10 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | PHP `type` | Component | Row layout | Sanitize (server) | Client validation (mirrored) |
 |---|---|---|---|---|
 | `text` | `TextField` (`type=text`) | stacked | `sanitize_text_field` | required, min/max length, pattern |
-| `url` | `TextField type=url` (LTR) | stacked | `esc_url_raw` + scheme allowlist | url |
-| `email` | `TextField type=email` (LTR) | stacked | `sanitize_email` + `is_email` | email |
-| `password` | `TextField type=password` | stacked | raw string (no trimming), never echoed back (write-only) | required |
-| `number` | `TextField type=number` (inputmode) | stacked | int/float cast, min/max/step clamp | min, max, step |
+| `url` | `Input type=url` (text `dir="ltr"`) | stacked | Persian digits → ASCII, `esc_url_raw` + scheme allowlist | schemes (default http/https), digits |
+| `email` | `Input type=email` (text `dir="ltr"`) | stacked | Persian digits → ASCII, `sanitize_email` + `is_email` | email, digits |
+| `password` | `Input type=password` | stacked | raw string (no trimming), never echoed back (write-only: `null` keeps, `""` clears) | required, min/max length, pattern |
+| `number` | `NumberInput` (`inputmode=decimal`, `dir="ltr"`) | stacked | Persian digits → ASCII, int/float, `''` when empty; unreadable text stays text so `number` fails (no clamping: out of range is an error) | number, min, max, step |
 | `textarea` | `TextareaField` | stacked | `sanitize_textarea_field` | required, max length |
 | `code` | `TextareaField code` | stacked | raw string capped by length; `kses`-none — dev opts in | max length |
 | `toggle` | `Toggle` | inline | `rest_sanitize_boolean` | — |
@@ -345,7 +351,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `radio` | `RadioGroupField` | stacked | one of allowed keys (else default) | required, allowed |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
-| `notice` (static) | `Notice` | full width | — | — |
+| `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
 | *later* `repeater`, `color`, `media`, `code editor`, `date` | out of scope until designed | | | |
 
 ## 6. Shared gaps summary (design silent — proposals in ARCHITECTURE §15)
@@ -354,6 +360,6 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 2. Contrast failures: placeholder/counter text, field borders, off-switch track, some Solid badges (design-spec §9).
 3. Responsive behaviour (sidebar collapse, top nav overflow, modal on small screens, Save Bar on mobile).
 4. Motion spec.
-5. Password / number / other input types; group legends styling.
+5. ~~Password / number / other input types~~ (M2 part 3: they reuse the one Input; no show/hide password toggle is drawn); group legends styling.
 6. Saved-state lifetime on Save Bar; loading skeleton; global error state.
 7. WP integration realities the design ignores: `#wpcontent` padding offsets, admin-bar height, `.notice` relocation, `input:focus` ring, screen-options/help tabs, RTL admin CSS (`rtl.css`) auto-loaded by WP.
