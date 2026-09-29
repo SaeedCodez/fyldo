@@ -1,5 +1,6 @@
 /**
- * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select.
+ * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
+ * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason.
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -129,11 +130,88 @@ test.describe('English', () => {
     await page.keyboard.press('Escape');
     await expect(page.getByText('Select at least 1 option.')).toBeVisible();
   });
+
+  test('input fields: Persian digits are read, the password is write-only, the notice and the disabled field are never sent', async ({ page }) => {
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto(EN);
+
+    // static rendering: a notice, LTR URL/email, a password input, a number, a disabled field with its reason
+    await expect(page.getByRole('region', { name: 'Information: Before you connect' })).toContainText('Keys are stored in the database');
+    await expect(page.getByRole('textbox', { name: 'Canonical URL' })).toHaveAttribute('dir', 'ltr');
+    await expect(page.getByRole('textbox', { name: 'Contact email' })).toHaveAttribute('dir', 'ltr');
+    const key = page.getByLabel('API key');
+    await expect(key).toHaveAttribute('type', 'password');
+    await expect(key).toHaveAttribute('autocomplete', 'new-password');
+    await expect(page.getByRole('textbox', { name: 'Items per page' })).toHaveValue('10');
+    const license = page.getByRole('textbox', { name: 'License key' });
+    await expect(license).toBeDisabled();
+    await expect(license).toHaveAccessibleDescription('Managed by your hosting provider.');
+
+    // Persian and Arabic-Indic digits are read as ASCII as they are typed
+    const perPage = page.getByRole('textbox', { name: 'Items per page' });
+    await perPage.fill('');
+    await perPage.pressSequentially('۴٥');
+    await expect(perPage).toHaveValue('45');
+    await page.getByRole('textbox', { name: 'Canonical URL' }).pressSequentially('https://example.com/۱۲');
+    await expect(page.getByRole('textbox', { name: 'Canonical URL' })).toHaveValue('https://example.com/12');
+    await page.getByRole('textbox', { name: 'Contact email' }).pressSequentially('mo۱@example.com');
+    await key.fill('sk_live_secret_value');
+    await page.screenshot({ path: 'test-results/wp-input-fields-en.png' });
+
+    const sent = page.waitForRequest((r) => r.url().includes('fyldo-acme-beta') && r.method() === 'POST');
+    await save(page);
+    const payload = (await sent).postDataJSON() as { values: Record<string, unknown> };
+    expect(payload.values).toEqual({ per_page: 45, canonical_base: 'https://example.com/12', contact_email: 'mo1@example.com', api_key: 'sk_live_secret_value' });
+    await expect(page.getByText('All changes saved')).toBeVisible();
+
+    // the secret never comes back: not in the response, not in the page, not in the field
+    await page.reload();
+    expect(await page.content()).not.toContain('sk_live_secret_value');
+    await expect(page.getByLabel('API key')).toHaveValue('');
+    await expect(page.getByLabel('API key')).toHaveAttribute('placeholder', '•••• set');
+    await expect(page.getByRole('textbox', { name: 'Items per page' })).toHaveValue('45');
+    await expect(page.getByRole('textbox', { name: 'Canonical URL' })).toHaveValue('https://example.com/12');
+
+    // leaving it alone keeps it; emptying it clears it
+    await page.getByRole('checkbox', { name: 'I agree to the terms' }).click();
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+    await page.reload();
+    await expect(page.getByLabel('API key')).toHaveAttribute('placeholder', '•••• set');
+
+    await page.getByLabel('API key').pressSequentially('x');
+    await page.getByLabel('API key').fill('');
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+    await page.reload();
+    await expect(page.getByLabel('API key')).toHaveAttribute('placeholder', '');
+    expect(errors).toEqual([]);
+  });
+
+  test('number: min, max, step and unreadable text are caught in the browser with the same wording PHP uses', async ({ page }) => {
+    await page.goto(EN);
+    const perPage = page.getByRole('textbox', { name: 'Items per page' });
+    for (const [typed, message] of [
+      ['۴۲', 'Enter a value in steps of 5.'],
+      ['200', 'Enter a value of at most 100.'],
+      ['0', 'Enter a value of at least 5.'],
+      ['abc', 'Enter a number.'],
+    ] as const) {
+      await perPage.fill(typed);
+      await page.getByRole('textbox', { name: 'Contact email' }).focus(); // leaves the field: validation on blur
+      await expect(page.getByText(message)).toBeVisible();
+    }
+    await save(page);
+    await expect(page.getByText('All changes saved')).toHaveCount(0);
+    await expect(perPage).toBeFocused();
+  });
 });
 
 test.describe('REST (server is authoritative)', () => {
   let headers: Record<string, string> = {};
   let revision = '';
+  let initialRevision = '';
   const patch = (request: APIRequestContext, values: unknown) =>
     request.post('/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields', { headers: { 'X-HTTP-Method-Override': 'PATCH', ...headers }, data: { values, revision } });
 
@@ -144,8 +222,13 @@ test.describe('REST (server is authoritative)', () => {
     await page.goto(EN);
     const config = await readConfig(page, 'acme-beta');
     headers = { 'X-WP-Nonce': config.rest.nonce, 'X-Fyldo-Nonce': config.rest.instanceNonce };
-    revision = config.pages.find((p: { id: string }) => p.id === 'fields').revision;
+    initialRevision = config.pages.find((p: { id: string }) => p.id === 'fields').revision;
     await context.close();
+  });
+
+  // every test starts from freshly reset data, so from the revision of an empty option
+  test.beforeEach(() => {
+    revision = initialRevision;
   });
 
   test('every rule is enforced, per field, in one 422', async ({ request }) => {
@@ -183,6 +266,65 @@ test.describe('REST (server is authoritative)', () => {
     response = await patch(request, { sitemap_types: ['tag', 'post', 'tag'] });
     expect(response.status()).toBe(200);
     expect((await response.json()).values.sitemap_types).toEqual(['post', 'tag']);
+  });
+
+  test('number: Persian digits are read, min / max / step / text are enforced, stored as a number', async ({ request }) => {
+    let response = await patch(request, { per_page: '۴۲' });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors.per_page).toBe('Enter a value in steps of 5.');
+
+    response = await patch(request, { per_page: '٢٠٠' });
+    expect((await response.json()).data.errors.per_page).toBe('Enter a value of at most 100.');
+    response = await patch(request, { per_page: 0 });
+    expect((await response.json()).data.errors.per_page).toBe('Enter a value of at least 5.');
+    response = await patch(request, { per_page: 'ten' });
+    expect((await response.json()).data.errors.per_page).toBe('Enter a number.');
+
+    response = await patch(request, { per_page: '۵۵' });
+    expect(response.status()).toBe(200);
+    expect((await response.json()).values.per_page).toBe(55);
+  });
+
+  test('url and email: digits are read as ASCII; the https-only rule and email format are enforced', async ({ request }) => {
+    let response = await patch(request, { canonical_base: 'http://example.com', contact_email: 'nope' });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors).toEqual({ canonical_base: 'Enter a valid URL.', contact_email: 'Enter a valid email address.' });
+
+    response = await patch(request, { canonical_base: 'https://۱۲۳.example.com/۴', contact_email: 'mo۱@example.com' });
+    expect(response.status()).toBe(200);
+    expect((await response.json()).values).toMatchObject({ canonical_base: 'https://123.example.com/4', contact_email: 'mo1@example.com' });
+  });
+
+  test('password is write-only: never returned, null keeps it, "" clears it, rules apply to a new value', async ({ request }) => {
+    let response = await patch(request, { api_key: 'short' });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors.api_key).toBe('Use at least 8 characters.');
+
+    response = await patch(request, { api_key: ' spaces stay ' });
+    expect(response.status()).toBe(200);
+    let body = await response.json();
+    expect(body.values.api_key).toBeNull(); // "a value is set" — never the value
+    expect(JSON.stringify(body)).not.toContain('spaces stay');
+
+    revision = body.revision;
+    response = await patch(request, { api_key: null, per_page: 15 });
+    expect(response.status()).toBe(200);
+    body = await response.json();
+    expect(body.values.api_key).toBeNull(); // kept
+
+    revision = body.revision;
+    response = await patch(request, { api_key: '' });
+    expect(response.status()).toBe(200);
+    expect((await response.json()).values.api_key).toBe(''); // cleared
+  });
+
+  test('a notice and a disabled field are not writable and not stored, even when a request names them', async ({ request }) => {
+    const response = await patch(request, { connection_note: 'x', license_key: 'HACKED', per_page: 20 });
+    expect(response.status()).toBe(200);
+    const values = (await response.json()).values;
+    expect(values.license_key).toBe('FYLDO-FREE');
+    expect(values.per_page).toBe(20);
+    expect(Object.keys(values)).not.toContain('connection_note');
   });
 });
 
@@ -246,5 +388,31 @@ test.describe('Persian (RTL)', () => {
     await save(page);
     await expect(page.getByText('حداکثر 5 گزینه را می‌توانید انتخاب کنید.')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-multi-select-fa.png' });
+  });
+
+  test('input fields: URL and email text is LTR while the label stays RTL, Persian messages, Persian "set" placeholder', async ({ page }) => {
+    await page.goto(FA);
+    const url = page.getByRole('textbox', { name: 'Canonical URL' });
+    await expect(url).toHaveAttribute('dir', 'ltr');
+    expect(await url.evaluate((el) => getComputedStyle(el).direction)).toBe('ltr');
+    expect(await page.getByText('Canonical URL', { exact: true }).evaluate((el) => getComputedStyle(el).direction)).toBe('rtl'); // the label keeps the page direction
+    await expect(page.getByRole('textbox', { name: 'Contact email' })).toHaveAttribute('dir', 'ltr');
+    await expect(page.getByRole('textbox', { name: 'Items per page' })).toHaveAttribute('dir', 'ltr');
+
+    // a Notice in Persian: the tone word is translated
+    await expect(page.getByRole('region', { name: 'اطلاعات: Before you connect' })).toBeVisible();
+
+    // digits
+    const perPage = page.getByRole('textbox', { name: 'Items per page' });
+    await perPage.fill('');
+    await perPage.pressSequentially('۴۲');
+    await expect(perPage).toHaveValue('42');
+    await page.getByRole('textbox', { name: 'Contact email' }).focus();
+    await expect(page.getByText('مقدار را با گام 5 وارد کنید.')).toBeVisible();
+
+    await perPage.fill('abc');
+    await page.getByRole('textbox', { name: 'Contact email' }).focus();
+    await expect(page.getByText('یک عدد وارد کنید.')).toBeVisible();
+    await page.screenshot({ path: 'test-results/wp-input-fields-fa.png' });
   });
 });

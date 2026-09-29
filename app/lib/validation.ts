@@ -2,7 +2,7 @@
  * Client mirror of src/Validation/Rules.php. The server is authoritative; this exists for instant feedback.
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
- * Rule order: required, min_length, max_length, pattern, schemes, email, allowed, min, max.
+ * Rule order: required, min_length, max_length, pattern, schemes, email, number, allowed, min, max, step.
  */
 import { __, _n, sprintf } from '../i18n';
 import type { RuleSet } from '../types';
@@ -46,6 +46,12 @@ function isEmail(value: string): boolean {
   );
 }
 
+/** On the grid `base + n × step`? The tolerance absorbs binary floating point (0.3 on a 0.1 grid); PHP evaluates the same expression. */
+function onStep(value: number, step: number, base: number): boolean {
+  const steps = (value - base) / step;
+  return Math.abs(steps - Math.round(steps)) <= 1e-9 * Math.max(1, Math.abs(steps));
+}
+
 export function check(rules: RuleSet, value: unknown): Failure | null {
   if (rules.required && isEmpty(value)) return fail('required');
   if (isEmpty(value) && !Array.isArray(value)) return null; // (an empty list still counts against `min`)
@@ -57,6 +63,8 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
     if (rules.pattern !== undefined && !matches(rules.pattern, value)) return fail('pattern');
     if (rules.schemes !== undefined && !hasScheme(value, rules.schemes)) return fail('schemes', { schemes: rules.schemes });
     if (rules.email && !isEmail(value)) return fail('email');
+    // A number field's value is a number; text that could not be read as one stays a string and lands here.
+    if (rules.number) return fail('number');
   }
 
   if (rules.allowed !== undefined) {
@@ -68,6 +76,7 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
   if (typeof value === 'number') {
     if (rules.min !== undefined && value < rules.min) return fail('min', { min: rules.min });
     if (rules.max !== undefined && value > rules.max) return fail('max', { max: rules.max });
+    if (rules.step !== undefined && rules.step > 0 && !onStep(value, rules.step, rules.min ?? 0)) return fail('step', { step: rules.step });
   }
 
   // For a list (checkbox group, multi select) `min` / `max` count the selected items.
@@ -98,8 +107,12 @@ export function messageFor(failure: Failure): string {
       return __('Enter a valid URL.', 'fyldo');
     case 'email':
       return __('Enter a valid email address.', 'fyldo');
+    case 'number':
+      return __('Enter a number.', 'fyldo');
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
+    case 'step':
+      return sprintf(__('Enter a value in steps of %s.', 'fyldo'), String(failure.params.step ?? ''));
     case 'min':
       if (failure.params.items) {
         const min = Number(failure.params.min ?? 0);

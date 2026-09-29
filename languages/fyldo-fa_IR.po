@@ -89,6 +89,12 @@ msgstr "یک نشانی اینترنتی معتبر وارد کنید."
 msgid "Enter a valid email address."
 msgstr "یک نشانی ایمیل معتبر وارد کنید."
 
+msgid "Enter a number."
+msgstr "یک عدد وارد کنید."
+
+msgid "Enter a value in steps of %s."
+msgstr "مقدار را با گام %s وارد کنید."
+
 msgid "Choose one of the available options."
 msgstr "یکی از گزینه‌های موجود را انتخاب کنید."
 
@@ -151,3 +157,24 @@ msgid "%s more selected"
 msgid_plural "%s more selected"
 msgstr[0] "%s مورد دیگر انتخاب شده"
 msgstr[1] "%s مورد دیگر انتخاب شده"
+
+msgid "Note"
+msgstr "یادداشت"
+
+msgid "Information"
+msgstr "اطلاعات"
+
+msgid "Success"
+msgstr "موفقیت"
+
+msgid "Warning"
+msgstr "هشدار"
+
+msgid "Error"
+msgstr "خطا"
+
+msgid "•••• set"
+msgstr "•••• تنظیم شده"
+
+msgid "A value is already saved. Leave this empty to keep it, or type a new one to replace it."
+msgstr "مقداری از قبل ذخیره شده است. برای نگه داشتن آن این فیلد را خالی بگذارید، یا برای جایگزینی مقدار جدیدی وارد کنید."

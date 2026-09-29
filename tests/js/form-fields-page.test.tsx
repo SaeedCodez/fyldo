@@ -11,17 +11,19 @@ import type { PageDef } from '../../app/types';
 // The exact JSON PHP produces for the M2 page (kept fresh by tests/php/Unit/ClientContractTest.php).
 const page = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/form-fields-page.client.json'), 'utf8')) as PageDef;
 
-function setup(api: Partial<Api> = {}) {
-  const savePage = vi.fn(api.savePage ?? (async (_id, values) => ({ values: { ...page.values, ...values }, revision: 'rev-2' })));
+function setup(api: Partial<Api> = {}, current: PageDef = page) {
+  const savePage = vi.fn(api.savePage ?? (async (_id, values) => ({ values: { ...current.values, ...values }, revision: 'rev-2' })));
   const root = document.createElement('div');
   document.body.append(root);
   render(
     <PortalContainerContext.Provider value={root}>
-      <SettingsPage page={page} api={{ savePage }} />
+      <SettingsPage page={current} api={{ savePage }} />
     </PortalContainerContext.Provider>,
   );
   return { savePage };
 }
+
+const saveChanges = () => within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' });
 
 describe('Form fields page (Textarea, Checkbox, Checkbox group, Radio group, Multi Select) — the whole save flow', () => {
   it('renders every field from the PHP description with its default', () => {
@@ -119,5 +121,158 @@ describe('Form fields page (Textarea, Checkbox, Checkbox group, Radio group, Mul
     await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
     expect(savePage).not.toHaveBeenCalled();
     expect(await screen.findByText('Select no more than 5 options.')).toBeVisible();
+  });
+});
+
+describe('Input fields (URL, email, password, number, notice, disabled) — the whole save flow', () => {
+  it('renders the input fields from the PHP description', () => {
+    setup();
+    expect(screen.getByRole('region', { name: 'Information: Before you connect' })).toHaveTextContent('Keys are stored in the database and are never shown again.');
+    expect(screen.getByRole('textbox', { name: 'Canonical URL' })).toHaveAttribute('dir', 'ltr');
+    expect(screen.getByRole('textbox', { name: 'Contact email' })).toHaveAttribute('dir', 'ltr');
+    expect(screen.getByLabelText('API key')).toHaveAttribute('type', 'password');
+    expect(screen.getByLabelText('API key')).toHaveAttribute('autocomplete', 'new-password');
+    expect(screen.getByRole('textbox', { name: 'Items per page' })).toHaveValue('10');
+    const license = screen.getByRole('textbox', { name: 'License key' });
+    expect(license).toBeDisabled();
+    expect(license).toHaveAccessibleDescription('Managed by your hosting provider.');
+  });
+
+  it('number: Persian digits are read as ASCII, min / max / step are enforced with the PHP wording, and only the number is sent', async () => {
+    const { savePage } = setup();
+    const box = screen.getByRole('textbox', { name: 'Items per page' });
+    await userEvent.clear(box);
+    await userEvent.type(box, '۴۲');
+    expect(box).toHaveValue('42');
+
+    await userEvent.click(saveChanges());
+    expect(savePage).not.toHaveBeenCalled();
+    expect(await screen.findByText('Enter a value in steps of 5.')).toBeVisible();
+    expect(box).toHaveAttribute('aria-invalid', 'true');
+
+    await userEvent.clear(box);
+    await userEvent.type(box, '٤٥');
+    await userEvent.click(saveChanges());
+    expect(savePage).toHaveBeenCalledWith('fields', { per_page: 45 }, 'rev-1');
+  });
+
+  it.each([
+    ['200', 'Enter a value of at most 100.'],
+    ['0', 'Enter a value of at least 5.'],
+    ['abc', 'Enter a number.'],
+    ['', null],
+  ])('number: %j → %s (shown on blur)', async (typed, message) => {
+    const { savePage } = setup();
+    const box = screen.getByRole('textbox', { name: 'Items per page' });
+    await userEvent.clear(box);
+    if (typed) await userEvent.type(box, typed);
+    await userEvent.click(screen.getByRole('textbox', { name: 'Contact email' })); // moves focus out
+    if (message) expect(await screen.findByText(message)).toBeVisible();
+    else expect(document.querySelector('[data-field-id=per_page] [data-slot=fy-field-error]')).toBeNull();
+    expect(savePage).not.toHaveBeenCalled();
+  });
+
+  it('URL: the https-only rule is enforced, digits are read as ASCII, and the value is sent as typed otherwise', async () => {
+    const { savePage } = setup();
+    const url = screen.getByRole('textbox', { name: 'Canonical URL' });
+    await userEvent.type(url, 'http://example.com');
+    await userEvent.click(saveChanges());
+    expect(await screen.findByText('Enter a valid URL.')).toBeVisible();
+    expect(savePage).not.toHaveBeenCalled();
+
+    await userEvent.clear(url);
+    await userEvent.type(url, 'https://example.com/۱۲');
+    expect(url).toHaveValue('https://example.com/12');
+    await userEvent.click(saveChanges());
+    expect(savePage).toHaveBeenCalledWith('fields', { canonical_base: 'https://example.com/12' }, 'rev-1');
+  });
+
+  it('email: an invalid address is reported on blur with the PHP wording', async () => {
+    setup();
+    await userEvent.type(screen.getByRole('textbox', { name: 'Contact email' }), 'nope');
+    await userEvent.click(screen.getByRole('textbox', { name: 'Canonical URL' }));
+    expect(await screen.findByText('Enter a valid email address.')).toBeVisible();
+  });
+
+  it('password: an untouched field sends nothing; typing sends the new value; rules apply to it', async () => {
+    const { savePage } = setup();
+    const key = screen.getByLabelText('API key');
+    await userEvent.type(key, 'short');
+    await userEvent.click(saveChanges());
+    expect(await screen.findByText('Use at least 8 characters.')).toBeVisible();
+    expect(savePage).not.toHaveBeenCalled();
+
+    await userEvent.type(key, '-and-long');
+    await userEvent.click(saveChanges());
+    expect(savePage).toHaveBeenCalledWith('fields', { api_key: 'short-and-long' }, 'rev-1');
+  });
+
+  describe('with a secret already stored (the browser holds null)', () => {
+    const stored: PageDef = { ...page, values: { ...page.values, api_key: null } };
+
+    it('says "•••• set", is clean, and a save of other fields does not send the password', async () => {
+      const { savePage } = setup({}, stored);
+      expect(screen.getByLabelText('API key')).toHaveAttribute('placeholder', '•••• set');
+      expect(screen.queryByRole('region', { name: 'Unsaved changes' })).toBeNull();
+
+      await userEvent.click(screen.getByRole('checkbox', { name: 'I agree to the terms' }));
+      await userEvent.click(saveChanges());
+      expect(savePage).toHaveBeenCalledWith('fields', { agree: true }, 'rev-1');
+    });
+
+    it('typing a new value replaces it; the password required-length rule does not block an untouched field', async () => {
+      const { savePage } = setup({}, stored);
+      await userEvent.type(screen.getByLabelText('API key'), 'a-new-secret');
+      await userEvent.click(saveChanges());
+      expect(savePage).toHaveBeenCalledWith('fields', { api_key: 'a-new-secret' }, 'rev-1');
+    });
+
+    it('emptying it after typing clears the secret (""), Discard brings back "set"', async () => {
+      const { savePage } = setup({}, stored);
+      const key = screen.getByLabelText('API key');
+      await userEvent.type(key, 'x');
+      await userEvent.clear(key);
+      expect(screen.getByRole('region', { name: 'Unsaved changes' })).toBeVisible();
+      expect(key).toHaveAttribute('placeholder', ''); // nothing is "set" any more
+
+      await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
+      expect(screen.getByLabelText('API key')).toHaveAttribute('placeholder', '•••• set');
+      expect(savePage).not.toHaveBeenCalled();
+
+      await userEvent.type(screen.getByLabelText('API key'), 'x');
+      await userEvent.clear(screen.getByLabelText('API key'));
+      await userEvent.click(saveChanges());
+      expect(savePage).toHaveBeenCalledWith('fields', { api_key: '' }, 'rev-1');
+    });
+
+    it('after a save the server says whether one is set: still "set" after a new value, empty after a clear', async () => {
+      setup(
+        {
+          savePage: async () => ({ values: { ...stored.values, api_key: null }, revision: 'rev-2' }),
+        },
+        stored,
+      );
+      await userEvent.type(screen.getByLabelText('API key'), 'a-new-secret');
+      await userEvent.click(saveChanges());
+      expect(await screen.findByText('All changes saved')).toBeVisible();
+      expect(screen.getByLabelText('API key')).toHaveValue('');
+      expect(screen.getByLabelText('API key')).toHaveAttribute('placeholder', '•••• set');
+    });
+  });
+
+  it('the notice and the disabled field never reach the REST payload, whatever else is saved', async () => {
+    const { savePage } = setup();
+    const box = screen.getByRole('textbox', { name: 'Items per page' });
+    await userEvent.clear(box);
+    await userEvent.type(box, '50');
+    await userEvent.click(screen.getByRole('checkbox', { name: 'I agree to the terms' }));
+    await userEvent.click(saveChanges());
+
+    expect(savePage).toHaveBeenCalledTimes(1);
+    const payload = savePage.mock.calls[0]?.[1] as Record<string, unknown>;
+    expect(Object.keys(payload).sort()).toEqual(['agree', 'per_page']);
+    expect(payload).not.toHaveProperty('connection_note');
+    expect(payload).not.toHaveProperty('license_key');
+    expect(Object.keys(page.values)).not.toContain('connection_note'); // and it is not a value at all
   });
 });

@@ -1,10 +1,14 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
+import { __ } from '../../i18n';
 import type { FieldDef, FieldValue } from '../../types';
+import { cn } from '../../lib/cn';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { Input } from '../ui/input';
 import { MultiSelect } from '../ui/multi-select';
+import { Notice } from '../ui/notice';
+import { NumberInput } from '../ui/number-input';
 import { RadioGroup } from '../ui/radio';
 import { Select } from '../ui/select';
 import { Textarea, TextareaFooter } from '../ui/textarea';
@@ -29,6 +33,17 @@ const list = (value: FieldValue): string[] => (Array.isArray(value) ? value : []
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
 export function FieldRenderer({ field, value, error, divider, onChange, onBlur }: FieldRendererProps): ReactElement {
+  // Display only: no value, no label association, nothing to change, nothing to send.
+  if (field.type === 'notice') {
+    return (
+      <div data-slot="fy-notice-row" data-field-id={field.id} className={cn('fy:py-5', divider && 'fy:border-b fy:border-border-default')}>
+        <Notice tone={field.tone} title={field.label || undefined}>
+          {field.description}
+        </Notice>
+      </div>
+    );
+  }
+
   const disabled = field.disabled !== false;
   const reason = typeof field.disabled === 'string' ? field.disabled : undefined;
   const common = {
@@ -135,8 +150,41 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur }
         </SettingRow>
       );
 
+    case 'number':
+      return (
+        <SettingRow {...common}>
+          <NumberInput
+            value={typeof value === 'number' || typeof value === 'string' ? value : ''}
+            placeholder={field.placeholder}
+            prefixIcon={field.icon}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+
+    case 'password': {
+      // Write-only: `null` = a value is stored and stays unless the user types (the browser never had it).
+      const stored = value === null;
+      return (
+        <SettingRow {...common} srNote={stored ? __('A value is already saved. Leave this empty to keep it, or type a new one to replace it.', 'fyldo') : undefined}>
+          <Input
+            type="password"
+            value={typeof value === 'string' ? value : ''}
+            placeholder={stored ? __('•••• set', 'fyldo') : field.placeholder}
+            prefixIcon={field.icon}
+            autoComplete={field.autocomplete}
+            spellCheck={false}
+            autoCapitalize="off"
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+    }
+
     default: {
-      // text | url | email — URLs and emails stay LTR even inside an RTL layout.
+      // text | url | email — URLs and emails stay LTR (the text; the label keeps the page direction) and read Persian digits as ASCII.
       const ltr = field.type === 'url' || field.type === 'email';
       return (
         <SettingRow {...common}>
@@ -147,7 +195,10 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur }
             type={field.type === 'text' ? 'text' : field.type}
             inputMode={field.type === 'email' ? 'email' : field.type === 'url' ? 'url' : undefined}
             autoComplete="off"
+            spellCheck={ltr ? false : undefined}
+            autoCapitalize={ltr ? 'off' : undefined}
             ltr={ltr}
+            digits={ltr}
             onValueChange={(next) => onChange(field.id, next)}
             onBlur={() => onBlur(field.id)}
           />

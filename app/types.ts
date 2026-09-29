@@ -7,13 +7,17 @@ export interface RuleSet {
   pattern?: string;
   schemes?: string[];
   email?: boolean;
+  /** Implied by the `number` field: the value must be a number. */
+  number?: boolean;
   allowed?: string[];
   min?: number;
   max?: number;
+  step?: number;
 }
 
 export type FieldValue = string | boolean | string[] | number | null;
 
+/** Fields that own a value. A `notice` does not: it is display only. */
 interface FieldBase {
   id: string;
   label: string;
@@ -30,6 +34,29 @@ interface FieldBase {
 export interface TextFieldDef extends FieldBase {
   type: 'text' | 'url' | 'email';
   placeholder: string;
+}
+
+export interface NumberFieldDef extends FieldBase {
+  type: 'number';
+  placeholder: string;
+}
+
+/** Write-only: the value the browser holds is `null` (one is set, leave it), `''` (none / cleared) or the new text. */
+export interface PasswordFieldDef extends FieldBase {
+  type: 'password';
+  placeholder: string;
+  autocomplete: 'new-password' | 'current-password' | 'off';
+}
+
+export type NoticeTone = 'gray' | 'blue' | 'green' | 'amber' | 'red';
+
+/** Display only: no value, never in the REST payload, cannot be disabled or validated. `label` is the optional title, `description` the message. */
+export interface NoticeFieldDef {
+  id: string;
+  type: 'notice';
+  label: string;
+  description: string;
+  tone: NoticeTone;
 }
 
 export interface ToggleFieldDef extends FieldBase {
@@ -90,8 +117,10 @@ export interface RadioFieldDef extends FieldBase {
   options: ChoiceOptionDef[];
 }
 
-export type FieldDef =
+export type ValueFieldDef =
   | TextFieldDef
+  | NumberFieldDef
+  | PasswordFieldDef
   | TextareaFieldDef
   | ToggleFieldDef
   | CheckboxFieldDef
@@ -99,6 +128,11 @@ export type FieldDef =
   | RadioFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef;
+
+export type FieldDef = ValueFieldDef | NoticeFieldDef;
+
+/** Type guard: fields that hold a value (everything except a `notice`). */
+export const isValueField = (field: FieldDef): field is ValueFieldDef => field.type !== 'notice';
 
 export interface SectionDef {
   id: string;
