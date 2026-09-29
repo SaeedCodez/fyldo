@@ -1,0 +1,925 @@
+{
+  "source": {
+    "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+    "fileName": "Fyldo"
+  },
+  "tokens": [
+    {
+      "name": "color.action.danger",
+      "type": "color",
+      "value": "{primitives.color.red.800}",
+      "description": "Destructive button",
+      "css": "--fyldo-action-danger"
+    },
+    {
+      "name": "color.action.danger-hover",
+      "type": "color",
+      "value": "{primitives.color.red.900}",
+      "description": "Destructive button hover",
+      "css": "--fyldo-action-danger-hover"
+    },
+    {
+      "name": "color.action.disabled",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Disabled / loading button background",
+      "css": "--fyldo-action-disabled"
+    },
+    {
+      "name": "color.action.primary",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "description": "Primary button",
+      "css": "--fyldo-action-primary"
+    },
+    {
+      "name": "color.action.primary-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.1000-hover}",
+      "description": "Primary button hover",
+      "css": "--fyldo-action-primary-hover"
+    },
+    {
+      "name": "color.action.secondary",
+      "type": "color",
+      "value": "{primitives.color.background.100}",
+      "description": "Secondary button",
+      "css": "--fyldo-action-secondary"
+    },
+    {
+      "name": "color.action.secondary-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Secondary button hover",
+      "css": "--fyldo-action-secondary-hover"
+    },
+    {
+      "name": "color.action.tertiary-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Ghost button hover",
+      "css": "--fyldo-action-tertiary-hover"
+    },
+    {
+      "name": "color.background.default",
+      "type": "color",
+      "value": "{primitives.color.background.100}",
+      "description": "Page & card background",
+      "css": "--fyldo-background-default"
+    },
+    {
+      "name": "color.background.inverse",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "description": "Inverted surface — tooltips."
+    },
+    {
+      "name": "color.background.overlay",
+      "type": "color",
+      "value": "#00000066",
+      "description": "Scrim behind modals"
+    },
+    {
+      "name": "color.background.subtle",
+      "type": "color",
+      "value": "{primitives.color.background.200}",
+      "description": "Secondary background (settings canvas)",
+      "css": "--fyldo-background-subtle"
+    },
+    {
+      "name": "color.border.default",
+      "type": "color",
+      "value": "{primitives.color.gray.400}",
+      "description": "Default border & divider",
+      "css": "--fyldo-border-default"
+    },
+    {
+      "name": "color.border.hover",
+      "type": "color",
+      "value": "{primitives.color.gray.500}",
+      "description": "Border on hover",
+      "css": "--fyldo-border-hover"
+    },
+    {
+      "name": "color.border.strong",
+      "type": "color",
+      "value": "{primitives.color.gray.600}",
+      "description": "Emphasized border",
+      "css": "--fyldo-border-strong"
+    },
+    {
+      "name": "color.control.border",
+      "type": "color",
+      "value": "{primitives.color.gray.700}",
+      "description": "Checkbox / radio border (unchecked)",
+      "css": "--fyldo-control-border"
+    },
+    {
+      "name": "color.control.border-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.900}",
+      "description": "Checkbox / radio border hover",
+      "css": "--fyldo-control-border-hover"
+    },
+    {
+      "name": "color.control.off",
+      "type": "color",
+      "value": "{primitives.color.gray.500}",
+      "description": "Toggle track (off)",
+      "css": "--fyldo-control-off"
+    },
+    {
+      "name": "color.control.off-disabled",
+      "type": "color",
+      "value": "{primitives.color.gray.200}",
+      "description": "Disabled control (off)",
+      "css": "--fyldo-control-off-disabled"
+    },
+    {
+      "name": "color.control.off-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.600}",
+      "description": "Toggle track (off, hover)",
+      "css": "--fyldo-control-off-hover"
+    },
+    {
+      "name": "color.control.on",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "description": "Toggle track / checked control (on)",
+      "css": "--fyldo-control-on"
+    },
+    {
+      "name": "color.control.on-disabled",
+      "type": "color",
+      "value": "{primitives.color.gray.500}",
+      "description": "Disabled control (on)",
+      "css": "--fyldo-control-on-disabled"
+    },
+    {
+      "name": "color.control.on-hover",
+      "type": "color",
+      "value": "{primitives.color.gray.1000-hover}",
+      "description": "Checked control hover",
+      "css": "--fyldo-control-on-hover"
+    },
+    {
+      "name": "color.control.thumb",
+      "type": "color",
+      "value": "{primitives.color.white}",
+      "description": "Toggle thumb / check mark",
+      "css": "--fyldo-control-thumb"
+    },
+    {
+      "name": "color.focus.ring",
+      "type": "color",
+      "value": "{primitives.color.blue.700}",
+      "description": "Focus ring",
+      "css": "--fyldo-focus-ring"
+    },
+    {
+      "name": "color.icon.primary",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "description": "Primary icon",
+      "css": "--fyldo-icon-primary"
+    },
+    {
+      "name": "color.icon.secondary",
+      "type": "color",
+      "value": "{primitives.color.gray.900}",
+      "description": "Secondary icon",
+      "css": "--fyldo-icon-secondary"
+    },
+    {
+      "name": "color.icon.tertiary",
+      "type": "color",
+      "value": "{primitives.color.gray.700}",
+      "description": "Muted icon (input prefix/suffix)",
+      "css": "--fyldo-icon-tertiary"
+    },
+    {
+      "name": "color.link.default",
+      "type": "color",
+      "value": "{primitives.color.blue.900}",
+      "description": "Inline links",
+      "css": "--fyldo-link-default"
+    },
+    {
+      "name": "color.status.error.bg",
+      "type": "color",
+      "value": "{primitives.color.red.100}",
+      "css": "--fyldo-status-error-bg"
+    },
+    {
+      "name": "color.status.error.border",
+      "type": "color",
+      "value": "{primitives.color.red.400}",
+      "css": "--fyldo-status-error-border"
+    },
+    {
+      "name": "color.status.error.solid",
+      "type": "color",
+      "value": "{primitives.color.red.800}",
+      "css": "--fyldo-status-error-solid"
+    },
+    {
+      "name": "color.status.error.subtle",
+      "type": "color",
+      "value": "{primitives.color.red.300}",
+      "description": "Subtle badge background",
+      "css": "--fyldo-status-error-subtle"
+    },
+    {
+      "name": "color.status.error.text",
+      "type": "color",
+      "value": "{primitives.color.red.900}",
+      "css": "--fyldo-status-error-text"
+    },
+    {
+      "name": "color.status.info.bg",
+      "type": "color",
+      "value": "{primitives.color.blue.100}",
+      "css": "--fyldo-status-info-bg"
+    },
+    {
+      "name": "color.status.info.border",
+      "type": "color",
+      "value": "{primitives.color.blue.400}",
+      "css": "--fyldo-status-info-border"
+    },
+    {
+      "name": "color.status.info.solid",
+      "type": "color",
+      "value": "{primitives.color.blue.700}",
+      "css": "--fyldo-status-info-solid"
+    },
+    {
+      "name": "color.status.info.subtle",
+      "type": "color",
+      "value": "{primitives.color.blue.300}",
+      "description": "Subtle badge background",
+      "css": "--fyldo-status-info-subtle"
+    },
+    {
+      "name": "color.status.info.text",
+      "type": "color",
+      "value": "{primitives.color.blue.900}",
+      "css": "--fyldo-status-info-text"
+    },
+    {
+      "name": "color.status.neutral.bg",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Neutral notice background",
+      "css": "--fyldo-status-neutral-bg"
+    },
+    {
+      "name": "color.status.neutral.border",
+      "type": "color",
+      "value": "{primitives.color.gray.400}",
+      "css": "--fyldo-status-neutral-border"
+    },
+    {
+      "name": "color.status.neutral.solid",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "css": "--fyldo-status-neutral-solid"
+    },
+    {
+      "name": "color.status.neutral.subtle",
+      "type": "color",
+      "value": "{primitives.color.gray.200}",
+      "description": "Subtle badge background",
+      "css": "--fyldo-status-neutral-subtle"
+    },
+    {
+      "name": "color.status.neutral.text",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "css": "--fyldo-status-neutral-text"
+    },
+    {
+      "name": "color.status.success.bg",
+      "type": "color",
+      "value": "{primitives.color.green.100}",
+      "css": "--fyldo-status-success-bg"
+    },
+    {
+      "name": "color.status.success.border",
+      "type": "color",
+      "value": "{primitives.color.green.400}",
+      "css": "--fyldo-status-success-border"
+    },
+    {
+      "name": "color.status.success.solid",
+      "type": "color",
+      "value": "{primitives.color.green.700}",
+      "css": "--fyldo-status-success-solid"
+    },
+    {
+      "name": "color.status.success.subtle",
+      "type": "color",
+      "value": "{primitives.color.green.300}",
+      "description": "Subtle badge background",
+      "css": "--fyldo-status-success-subtle"
+    },
+    {
+      "name": "color.status.success.text",
+      "type": "color",
+      "value": "{primitives.color.green.900}",
+      "css": "--fyldo-status-success-text"
+    },
+    {
+      "name": "color.status.warning.bg",
+      "type": "color",
+      "value": "{primitives.color.amber.100}",
+      "css": "--fyldo-status-warning-bg"
+    },
+    {
+      "name": "color.status.warning.border",
+      "type": "color",
+      "value": "{primitives.color.amber.400}",
+      "css": "--fyldo-status-warning-border"
+    },
+    {
+      "name": "color.status.warning.solid",
+      "type": "color",
+      "value": "{primitives.color.amber.700}",
+      "css": "--fyldo-status-warning-solid"
+    },
+    {
+      "name": "color.status.warning.subtle",
+      "type": "color",
+      "value": "{primitives.color.amber.300}",
+      "description": "Subtle badge background",
+      "css": "--fyldo-status-warning-subtle"
+    },
+    {
+      "name": "color.status.warning.text",
+      "type": "color",
+      "value": "{primitives.color.amber.900}",
+      "css": "--fyldo-status-warning-text"
+    },
+    {
+      "name": "color.surface.active",
+      "type": "color",
+      "value": "{primitives.color.gray.300}",
+      "description": "Component pressed / selected",
+      "css": "--fyldo-surface-active"
+    },
+    {
+      "name": "color.surface.default",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Component background",
+      "css": "--fyldo-surface-default"
+    },
+    {
+      "name": "color.surface.disabled",
+      "type": "color",
+      "value": "{primitives.color.gray.100}",
+      "description": "Disabled field background",
+      "css": "--fyldo-surface-disabled"
+    },
+    {
+      "name": "color.surface.hover",
+      "type": "color",
+      "value": "{primitives.color.gray.200}",
+      "description": "Component hover",
+      "css": "--fyldo-surface-hover"
+    },
+    {
+      "name": "color.text.disabled",
+      "type": "color",
+      "value": "{primitives.color.gray.700}",
+      "description": "Disabled text",
+      "css": "--fyldo-text-disabled"
+    },
+    {
+      "name": "color.text.inverse",
+      "type": "color",
+      "value": "{primitives.color.background.100}",
+      "description": "Text on dark surfaces",
+      "css": "--fyldo-text-inverse"
+    },
+    {
+      "name": "color.text.primary",
+      "type": "color",
+      "value": "{primitives.color.gray.1000}",
+      "description": "Headings & primary text",
+      "css": "--fyldo-text-primary"
+    },
+    {
+      "name": "color.text.secondary",
+      "type": "color",
+      "value": "{primitives.color.gray.900}",
+      "description": "Descriptions & secondary text",
+      "css": "--fyldo-text-secondary"
+    },
+    {
+      "name": "color.text.tertiary",
+      "type": "color",
+      "value": "{primitives.color.gray.700}",
+      "description": "Placeholders & hints",
+      "css": "--fyldo-text-tertiary"
+    },
+    {
+      "name": "primitives.color.amber.100",
+      "type": "color",
+      "value": "#fff6e5",
+      "css": "--fyldo-amber-100"
+    },
+    {
+      "name": "primitives.color.amber.1000",
+      "type": "color",
+      "value": "#4e2009",
+      "css": "--fyldo-amber-1000"
+    },
+    {
+      "name": "primitives.color.amber.200",
+      "type": "color",
+      "value": "#fff4d6",
+      "css": "--fyldo-amber-200"
+    },
+    {
+      "name": "primitives.color.amber.300",
+      "type": "color",
+      "value": "#fef0cd",
+      "css": "--fyldo-amber-300"
+    },
+    {
+      "name": "primitives.color.amber.400",
+      "type": "color",
+      "value": "#ffdd8f",
+      "css": "--fyldo-amber-400"
+    },
+    {
+      "name": "primitives.color.amber.500",
+      "type": "color",
+      "value": "#ffc96b",
+      "css": "--fyldo-amber-500"
+    },
+    {
+      "name": "primitives.color.amber.600",
+      "type": "color",
+      "value": "#f5b047",
+      "css": "--fyldo-amber-600"
+    },
+    {
+      "name": "primitives.color.amber.700",
+      "type": "color",
+      "value": "#ffb224",
+      "css": "--fyldo-amber-700"
+    },
+    {
+      "name": "primitives.color.amber.800",
+      "type": "color",
+      "value": "#ff990a",
+      "css": "--fyldo-amber-800"
+    },
+    {
+      "name": "primitives.color.amber.900",
+      "type": "color",
+      "value": "#a35200",
+      "css": "--fyldo-amber-900"
+    },
+    {
+      "name": "primitives.color.background.100",
+      "type": "color",
+      "value": "#ffffff",
+      "css": "--fyldo-background-100"
+    },
+    {
+      "name": "primitives.color.background.200",
+      "type": "color",
+      "value": "#fafafa",
+      "css": "--fyldo-background-200"
+    },
+    {
+      "name": "primitives.color.black",
+      "type": "color",
+      "value": "#000000",
+      "css": "--fyldo-black"
+    },
+    {
+      "name": "primitives.color.blue.100",
+      "type": "color",
+      "value": "#f0f7ff",
+      "css": "--fyldo-blue-100"
+    },
+    {
+      "name": "primitives.color.blue.1000",
+      "type": "color",
+      "value": "#00254d",
+      "css": "--fyldo-blue-1000"
+    },
+    {
+      "name": "primitives.color.blue.200",
+      "type": "color",
+      "value": "#ebf5ff",
+      "css": "--fyldo-blue-200"
+    },
+    {
+      "name": "primitives.color.blue.300",
+      "type": "color",
+      "value": "#e0f0ff",
+      "css": "--fyldo-blue-300"
+    },
+    {
+      "name": "primitives.color.blue.400",
+      "type": "color",
+      "value": "#cce6ff",
+      "css": "--fyldo-blue-400"
+    },
+    {
+      "name": "primitives.color.blue.500",
+      "type": "color",
+      "value": "#99ceff",
+      "css": "--fyldo-blue-500"
+    },
+    {
+      "name": "primitives.color.blue.600",
+      "type": "color",
+      "value": "#52aeff",
+      "css": "--fyldo-blue-600"
+    },
+    {
+      "name": "primitives.color.blue.700",
+      "type": "color",
+      "value": "#0072f5",
+      "css": "--fyldo-blue-700"
+    },
+    {
+      "name": "primitives.color.blue.800",
+      "type": "color",
+      "value": "#0062d1",
+      "css": "--fyldo-blue-800"
+    },
+    {
+      "name": "primitives.color.blue.900",
+      "type": "color",
+      "value": "#0068d6",
+      "css": "--fyldo-blue-900"
+    },
+    {
+      "name": "primitives.color.gray.100",
+      "type": "color",
+      "value": "#f2f2f2",
+      "css": "--fyldo-gray-100"
+    },
+    {
+      "name": "primitives.color.gray.1000",
+      "type": "color",
+      "value": "#171717",
+      "css": "--fyldo-gray-1000"
+    },
+    {
+      "name": "primitives.color.gray.1000-hover",
+      "type": "color",
+      "value": "#383838",
+      "css": "--fyldo-gray-1000-hover"
+    },
+    {
+      "name": "primitives.color.gray.200",
+      "type": "color",
+      "value": "#ebebeb",
+      "css": "--fyldo-gray-200"
+    },
+    {
+      "name": "primitives.color.gray.300",
+      "type": "color",
+      "value": "#e5e5e5",
+      "css": "--fyldo-gray-300"
+    },
+    {
+      "name": "primitives.color.gray.400",
+      "type": "color",
+      "value": "#ebebeb",
+      "css": "--fyldo-gray-400"
+    },
+    {
+      "name": "primitives.color.gray.500",
+      "type": "color",
+      "value": "#c9c9c9",
+      "css": "--fyldo-gray-500"
+    },
+    {
+      "name": "primitives.color.gray.600",
+      "type": "color",
+      "value": "#a8a8a8",
+      "css": "--fyldo-gray-600"
+    },
+    {
+      "name": "primitives.color.gray.700",
+      "type": "color",
+      "value": "#8f8f8f",
+      "css": "--fyldo-gray-700"
+    },
+    {
+      "name": "primitives.color.gray.800",
+      "type": "color",
+      "value": "#7d7d7d",
+      "css": "--fyldo-gray-800"
+    },
+    {
+      "name": "primitives.color.gray.900",
+      "type": "color",
+      "value": "#666666",
+      "css": "--fyldo-gray-900"
+    },
+    {
+      "name": "primitives.color.green.100",
+      "type": "color",
+      "value": "#effbef",
+      "css": "--fyldo-green-100"
+    },
+    {
+      "name": "primitives.color.green.1000",
+      "type": "color",
+      "value": "#1b311e",
+      "css": "--fyldo-green-1000"
+    },
+    {
+      "name": "primitives.color.green.200",
+      "type": "color",
+      "value": "#ebfaeb",
+      "css": "--fyldo-green-200"
+    },
+    {
+      "name": "primitives.color.green.300",
+      "type": "color",
+      "value": "#daf6da",
+      "css": "--fyldo-green-300"
+    },
+    {
+      "name": "primitives.color.green.400",
+      "type": "color",
+      "value": "#c6f1c7",
+      "css": "--fyldo-green-400"
+    },
+    {
+      "name": "primitives.color.green.500",
+      "type": "color",
+      "value": "#99e59e",
+      "css": "--fyldo-green-500"
+    },
+    {
+      "name": "primitives.color.green.600",
+      "type": "color",
+      "value": "#6cda75",
+      "css": "--fyldo-green-600"
+    },
+    {
+      "name": "primitives.color.green.700",
+      "type": "color",
+      "value": "#45a557",
+      "css": "--fyldo-green-700"
+    },
+    {
+      "name": "primitives.color.green.800",
+      "type": "color",
+      "value": "#398e4a",
+      "css": "--fyldo-green-800"
+    },
+    {
+      "name": "primitives.color.green.900",
+      "type": "color",
+      "value": "#297a3a",
+      "css": "--fyldo-green-900"
+    },
+    {
+      "name": "primitives.color.red.100",
+      "type": "color",
+      "value": "#fff0f0",
+      "css": "--fyldo-red-100"
+    },
+    {
+      "name": "primitives.color.red.1000",
+      "type": "color",
+      "value": "#391417",
+      "css": "--fyldo-red-1000"
+    },
+    {
+      "name": "primitives.color.red.200",
+      "type": "color",
+      "value": "#ffebeb",
+      "css": "--fyldo-red-200"
+    },
+    {
+      "name": "primitives.color.red.300",
+      "type": "color",
+      "value": "#ffe5e5",
+      "css": "--fyldo-red-300"
+    },
+    {
+      "name": "primitives.color.red.400",
+      "type": "color",
+      "value": "#fdd8d8",
+      "css": "--fyldo-red-400"
+    },
+    {
+      "name": "primitives.color.red.500",
+      "type": "color",
+      "value": "#f8b9b9",
+      "css": "--fyldo-red-500"
+    },
+    {
+      "name": "primitives.color.red.600",
+      "type": "color",
+      "value": "#f87275",
+      "css": "--fyldo-red-600"
+    },
+    {
+      "name": "primitives.color.red.700",
+      "type": "color",
+      "value": "#e5484d",
+      "css": "--fyldo-red-700"
+    },
+    {
+      "name": "primitives.color.red.800",
+      "type": "color",
+      "value": "#da2f35",
+      "css": "--fyldo-red-800"
+    },
+    {
+      "name": "primitives.color.red.900",
+      "type": "color",
+      "value": "#cb2a2f",
+      "css": "--fyldo-red-900"
+    },
+    {
+      "name": "primitives.color.white",
+      "type": "color",
+      "value": "#ffffff",
+      "css": "--fyldo-white"
+    },
+    {
+      "name": "spacing.border-width.default",
+      "type": "dimension",
+      "value": 1,
+      "css": "--fyldo-border-width"
+    },
+    {
+      "name": "spacing.radius.full",
+      "type": "dimension",
+      "value": 9999,
+      "css": "--fyldo-radius-full"
+    },
+    {
+      "name": "spacing.radius.lg",
+      "type": "dimension",
+      "value": 12,
+      "css": "--fyldo-radius-lg"
+    },
+    {
+      "name": "spacing.radius.md",
+      "type": "dimension",
+      "value": 8,
+      "css": "--fyldo-radius-md"
+    },
+    {
+      "name": "spacing.radius.none",
+      "type": "dimension",
+      "value": 0,
+      "css": "--fyldo-radius-none"
+    },
+    {
+      "name": "spacing.radius.sm",
+      "type": "dimension",
+      "value": 6,
+      "css": "--fyldo-radius-sm"
+    },
+    {
+      "name": "spacing.radius.xs",
+      "type": "dimension",
+      "value": 4,
+      "css": "--fyldo-radius-xs"
+    },
+    {
+      "name": "spacing.space.0",
+      "type": "dimension",
+      "value": 0,
+      "css": "--fyldo-space-0"
+    },
+    {
+      "name": "spacing.space.12",
+      "type": "dimension",
+      "value": 12,
+      "css": "--fyldo-space-12"
+    },
+    {
+      "name": "spacing.space.16",
+      "type": "dimension",
+      "value": 16,
+      "css": "--fyldo-space-16"
+    },
+    {
+      "name": "spacing.space.2",
+      "type": "dimension",
+      "value": 2,
+      "css": "--fyldo-space-2"
+    },
+    {
+      "name": "spacing.space.20",
+      "type": "dimension",
+      "value": 20,
+      "css": "--fyldo-space-20"
+    },
+    {
+      "name": "spacing.space.24",
+      "type": "dimension",
+      "value": 24,
+      "css": "--fyldo-space-24"
+    },
+    {
+      "name": "spacing.space.32",
+      "type": "dimension",
+      "value": 32,
+      "css": "--fyldo-space-32"
+    },
+    {
+      "name": "spacing.space.4",
+      "type": "dimension",
+      "value": 4,
+      "css": "--fyldo-space-4"
+    },
+    {
+      "name": "spacing.space.40",
+      "type": "dimension",
+      "value": 40,
+      "css": "--fyldo-space-40"
+    },
+    {
+      "name": "spacing.space.48",
+      "type": "dimension",
+      "value": 48,
+      "css": "--fyldo-space-48"
+    },
+    {
+      "name": "spacing.space.6",
+      "type": "dimension",
+      "value": 6,
+      "css": "--fyldo-space-6"
+    },
+    {
+      "name": "spacing.space.64",
+      "type": "dimension",
+      "value": 64,
+      "css": "--fyldo-space-64"
+    },
+    {
+      "name": "spacing.space.8",
+      "type": "dimension",
+      "value": 8,
+      "css": "--fyldo-space-8"
+    },
+    {
+      "name": "spacing.space.80",
+      "type": "dimension",
+      "value": 80,
+      "css": "--fyldo-space-80"
+    },
+    {
+      "name": "typography.en.font-family.mono",
+      "type": "fontFamily",
+      "value": "Geist Mono",
+      "description": "Code, keys, IDs",
+      "css": "--fyldo-font-mono"
+    },
+    {
+      "name": "typography.en.font-family.sans",
+      "type": "fontFamily",
+      "value": "Geist",
+      "description": "English UI font (LTR)",
+      "css": "--fyldo-font-sans"
+    },
+    {
+      "name": "typography.en.font-style.semibold",
+      "type": "string",
+      "value": "SemiBold",
+      "css": "--fyldo-font-weight-semibold"
+    },
+    {
+      "name": "typography.fa.font-family.mono",
+      "type": "fontFamily",
+      "value": "Geist Mono",
+      "description": "Code stays LTR in Geist Mono",
+      "css": "--fyldo-font-mono-fa"
+    },
+    {
+      "name": "typography.fa.font-family.sans",
+      "type": "fontFamily",
+      "value": "IRANYekanX",
+      "description": "Persian UI font (RTL)",
+      "css": "--fyldo-font-sans-fa"
+    },
+    {
+      "name": "typography.fa.font-style.semibold",
+      "type": "string",
+      "value": "DemiBold",
+      "description": "IRANYekanX names 600 “DemiBold”",
+      "css": "--fyldo-font-weight-semibold-fa"
+    }
+  ]
+}

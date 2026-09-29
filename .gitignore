@@ -14,3 +14,4 @@ composer.lock
 .phpunit.result.cache
 .idea/
 .vscode/
+tokens/.raw/

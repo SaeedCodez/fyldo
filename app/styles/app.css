@@ -1,0 +1,46 @@
+/*
+ * Entry stylesheet. Deliberately NOT `@import "tailwindcss"`: no Preflight, no global reset, no default palette.
+ * Utilities are prefixed (`fy:`), tokens are custom properties on the Fyldo root, and the build flattens layers and
+ * scopes every selector to the root (tools/vite/css-scope.ts).
+ */
+@import 'tailwindcss/theme.css' layer(theme) prefix(fy);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(fy) source(none);
+@source '../';
+
+@import './tokens.generated.css';
+@import './scoped-reset.css' layer(base);
+
+/* Geometry (not just direction) changes in RTL: switch travel, icon flips, tab indicator. */
+@custom-variant rtl (&:where([dir='rtl'], [dir='rtl'] *));
+
+/* Neutral, never-blue keyboard focus (docs/ARCHITECTURE.md §11): 2px white gap + 2px ring. :focus-visible only. */
+@utility focus-ring {
+  &:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--fyldo-white),
+      0 0 0 4px var(--fyldo-focus-ring-color);
+    outline: 2px solid transparent;
+  }
+}
+
+/* Text fields draw their own halo on the bordered wrapper; the control inside must show nothing. */
+@utility focus-none {
+  &:focus,
+  &:focus-visible {
+    outline: 2px solid transparent;
+    box-shadow: none;
+  }
+}
+
+/* Screens that host Fyldo: full-bleed content area (the design's sidebar sits flush against the WP menu). */
+body.fyldo-screen #wpcontent {
+  padding-inline-start: 0;
+}
+
+body.fyldo-screen #wpbody-content {
+  padding-bottom: 0;
+}
+
+body.fyldo-screen #wpfooter {
+  display: none;
+}

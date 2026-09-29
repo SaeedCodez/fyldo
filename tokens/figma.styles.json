@@ -1,0 +1,461 @@
+{
+  "textStyles": [
+    {
+      "name": "EN/Heading/32",
+      "family": "Geist",
+      "style": "SemiBold",
+      "size": 32,
+      "lineHeight": 40,
+      "letterSpacing": -1.28
+    },
+    {
+      "name": "EN/Heading/24",
+      "family": "Geist",
+      "style": "SemiBold",
+      "size": 24,
+      "lineHeight": 32,
+      "letterSpacing": -0.96
+    },
+    {
+      "name": "EN/Heading/20",
+      "family": "Geist",
+      "style": "SemiBold",
+      "size": 20,
+      "lineHeight": 26,
+      "letterSpacing": -0.4
+    },
+    {
+      "name": "EN/Heading/16",
+      "family": "Geist",
+      "style": "SemiBold",
+      "size": 16,
+      "lineHeight": 24,
+      "letterSpacing": -0.32
+    },
+    {
+      "name": "EN/Heading/14",
+      "family": "Geist",
+      "style": "SemiBold",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": -0.28
+    },
+    {
+      "name": "EN/Label/16",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/14",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/14 Strong",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/13",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/12",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 12,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/12 Strong",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 12,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Label/13 Strong",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 13,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Copy/16",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 16,
+      "lineHeight": 24,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Copy/14",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Copy/13",
+      "family": "Geist",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 18,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Button/16",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 16,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Button/14",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Button/12",
+      "family": "Geist",
+      "style": "Medium",
+      "size": 12,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Mono/14",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Mono/13",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "EN/Mono/12",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 12,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Heading/32",
+      "family": "IRANYekanX",
+      "style": "DemiBold",
+      "size": 32,
+      "lineHeight": 48,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Heading/24",
+      "family": "IRANYekanX",
+      "style": "DemiBold",
+      "size": 24,
+      "lineHeight": 36,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Heading/20",
+      "family": "IRANYekanX",
+      "style": "DemiBold",
+      "size": 20,
+      "lineHeight": 32,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Heading/16",
+      "family": "IRANYekanX",
+      "style": "DemiBold",
+      "size": 16,
+      "lineHeight": 26,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Heading/14",
+      "family": "IRANYekanX",
+      "style": "DemiBold",
+      "size": 14,
+      "lineHeight": 22,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/16",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 16,
+      "lineHeight": 26,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/14",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 22,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/14 Strong",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 14,
+      "lineHeight": 22,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/13",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/12",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 12,
+      "lineHeight": 18,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/12 Strong",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 12,
+      "lineHeight": 18,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Label/13 Strong",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 13,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Copy/16",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 16,
+      "lineHeight": 28,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Copy/14",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 24,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Copy/13",
+      "family": "IRANYekanX",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 22,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Button/16",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 16,
+      "lineHeight": 24,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Button/14",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 14,
+      "lineHeight": 22,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Button/12",
+      "family": "IRANYekanX",
+      "style": "Medium",
+      "size": 12,
+      "lineHeight": 18,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Mono/14",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 14,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Mono/13",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 13,
+      "lineHeight": 20,
+      "letterSpacing": 0
+    },
+    {
+      "name": "FA/Mono/12",
+      "family": "Geist Mono",
+      "style": "Regular",
+      "size": 12,
+      "lineHeight": 16,
+      "letterSpacing": 0
+    }
+  ],
+  "effectStyles": [
+    {
+      "name": "Shadow/Small",
+      "layers": [
+        {
+          "x": 0,
+          "y": 2,
+          "blur": 2,
+          "spread": 0,
+          "color": "#0000000a"
+        }
+      ]
+    },
+    {
+      "name": "Shadow/Medium",
+      "layers": [
+        {
+          "x": 0,
+          "y": 4,
+          "blur": 8,
+          "spread": -4,
+          "color": "#0000000a"
+        },
+        {
+          "x": 0,
+          "y": 16,
+          "blur": 24,
+          "spread": -8,
+          "color": "#0000000f"
+        }
+      ]
+    },
+    {
+      "name": "Shadow/Large",
+      "layers": [
+        {
+          "x": 0,
+          "y": 1,
+          "blur": 1,
+          "spread": 0,
+          "color": "#00000005"
+        },
+        {
+          "x": 0,
+          "y": 8,
+          "blur": 16,
+          "spread": -4,
+          "color": "#0000000a"
+        },
+        {
+          "x": 0,
+          "y": 24,
+          "blur": 32,
+          "spread": -8,
+          "color": "#0000000f"
+        }
+      ]
+    },
+    {
+      "name": "Shadow/Thumb",
+      "layers": [
+        {
+          "x": 0,
+          "y": 1,
+          "blur": 2,
+          "spread": 0,
+          "color": "#00000029"
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "blur": 0,
+          "spread": 0.5,
+          "color": "#00000014"
+        }
+      ]
+    },
+    {
+      "name": "Focus/Ring",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "blur": 0,
+          "spread": 2,
+          "color": "#ffffff"
+        },
+        {
+          "x": 0,
+          "y": 0,
+          "blur": 0,
+          "spread": 4,
+          "color": "#006bf5"
+        }
+      ]
+    },
+    {
+      "name": "Focus/Input",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "blur": 0,
+          "spread": 3,
+          "color": "#0000001a"
+        }
+      ]
+    },
+    {
+      "name": "Focus/Input Error",
+      "layers": [
+        {
+          "x": 0,
+          "y": 0,
+          "blur": 0,
+          "spread": 3,
+          "color": "#da2f3529"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fyldo harness</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="/assets/dist/fonts.css" />
+    <link rel="stylesheet" href="/assets/dist/app.css" />
+    <!-- Stand-in for wp-admin's page chrome (NOT part of Fyldo). Query flags: ?dir=rtl  ?hostile=1  -->
+    <style>
+      html { background: #f0f0f1; }
+      body { margin: 0; font: 13px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; color: #3c434a; }
+      #wpcontent { padding-left: 20px; }
+      body.fyldo-screen #wpcontent { padding-inline-start: 0; }
+    </style>
+    <link id="hostile" rel="stylesheet" href="" disabled />
+  </head>
+  <body class="wp-admin fyldo-screen">
+    <div id="wpcontent">
+      <div id="wpbody-content">
+        <div id="fyldo-harness-root" data-fyldo-v1="harness" class="fyldo-root"></div>
+      </div>
+    </div>
+    <script type="module" src="./harness.js"></script>
+  </body>
+</html>

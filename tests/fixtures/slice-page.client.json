@@ -1,0 +1,220 @@
+{
+    "id": "general",
+    "title": "General",
+    "description": "Manage your site’s identity, reading and privacy options.",
+    "icon": "setting-2",
+    "group": "",
+    "save": "global",
+    "tabs": [],
+    "sections": [
+        {
+            "id": "identity",
+            "tab": "",
+            "title": "Site identity",
+            "description": "How your site appears to visitors and search engines.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "site_title",
+                    "type": "text",
+                    "label": "Site title",
+                    "description": "Shown in the browser tab and in search results.",
+                    "default": "Fyldo",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "required": true,
+                        "max_length": 60
+                    },
+                    "placeholder": "My WordPress site"
+                },
+                {
+                    "id": "tagline",
+                    "type": "text",
+                    "label": "Tagline",
+                    "description": "A short sentence that explains what the site is about.",
+                    "default": "Settings panels for WordPress",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {},
+                    "placeholder": ""
+                },
+                {
+                    "id": "maintenance",
+                    "type": "toggle",
+                    "label": "Maintenance mode",
+                    "description": "Show a coming-soon page to visitors. Logged-in admins still see the site.",
+                    "default": false,
+                    "disabled": false,
+                    "layout": "inline",
+                    "validate": {}
+                }
+            ]
+        },
+        {
+            "id": "language",
+            "tab": "",
+            "title": "Language & region",
+            "description": "Interface language, timezone and time format.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "language",
+                    "type": "select",
+                    "label": "Site language",
+                    "description": "Default language for the interface and emails.",
+                    "default": "en_US",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "allowed": [
+                            "en_US",
+                            "fa_IR",
+                            "de_DE",
+                            "fr_FR",
+                            "es_ES",
+                            "tr_TR",
+                            "ar"
+                        ]
+                    },
+                    "icon": "global",
+                    "placeholder": "",
+                    "searchable": false,
+                    "options": [
+                        {
+                            "value": "en_US",
+                            "label": "English (United States)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "fa_IR",
+                            "label": "فارسی",
+                            "disabled": false
+                        },
+                        {
+                            "value": "de_DE",
+                            "label": "Deutsch",
+                            "disabled": false
+                        },
+                        {
+                            "value": "fr_FR",
+                            "label": "Français",
+                            "disabled": false
+                        },
+                        {
+                            "value": "es_ES",
+                            "label": "Español",
+                            "disabled": false
+                        },
+                        {
+                            "value": "tr_TR",
+                            "label": "Türkçe",
+                            "disabled": false
+                        },
+                        {
+                            "value": "ar",
+                            "label": "العربية",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": "timezone",
+                    "type": "select",
+                    "label": "Timezone",
+                    "description": "Used to schedule posts and reports.",
+                    "default": "Asia/Tehran",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "allowed": [
+                            "UTC",
+                            "Europe/London",
+                            "Europe/Berlin",
+                            "Asia/Tehran",
+                            "Asia/Dubai",
+                            "Asia/Tokyo",
+                            "America/New_York",
+                            "America/Los_Angeles",
+                            "Australia/Sydney",
+                            "Pacific/Auckland"
+                        ]
+                    },
+                    "placeholder": "",
+                    "searchable": false,
+                    "options": [
+                        {
+                            "value": "UTC",
+                            "label": "UTC",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Europe/London",
+                            "label": "London (UTC+00:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Europe/Berlin",
+                            "label": "Berlin (UTC+01:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Asia/Tehran",
+                            "label": "Tehran (UTC+03:30)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Asia/Dubai",
+                            "label": "Dubai (UTC+04:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Asia/Tokyo",
+                            "label": "Tokyo (UTC+09:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "America/New_York",
+                            "label": "New York (UTC−05:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "America/Los_Angeles",
+                            "label": "Los Angeles (UTC−08:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Australia/Sydney",
+                            "label": "Sydney (UTC+11:00)",
+                            "disabled": false
+                        },
+                        {
+                            "value": "Pacific/Auckland",
+                            "label": "Auckland (UTC+13:00)",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": "time24",
+                    "type": "toggle",
+                    "label": "24-hour time",
+                    "description": "Show times as 14:30 instead of 2:30 PM.",
+                    "default": true,
+                    "disabled": false,
+                    "layout": "inline",
+                    "validate": {}
+                }
+            ]
+        }
+    ],
+    "values": {
+        "site_title": "Fyldo",
+        "tagline": "Settings panels for WordPress",
+        "maintenance": false,
+        "language": "en_US",
+        "timezone": "Asia/Tehran",
+        "time24": true
+    },
+    "revision": "rev-1"
+}

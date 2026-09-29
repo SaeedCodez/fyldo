@@ -1,0 +1,134 @@
+/*
+ * Scoped reset — NOT Tailwind's Preflight. Every rule lives inside the Fyldo root, uses :where() so component
+ * utilities always win, and restates every property wp-admin's global CSS (forms.css, common.css) would otherwise
+ * inject into form controls, links and headings — including its BLUE :focus ring, which must never show.
+ * (The build prefixes/flattens this file; see tools/vite/css-scope.ts.)
+ */
+
+[data-fyldo-v1] {
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  font-family: var(--fyldo-font-family);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: start;
+  text-transform: none;
+  text-decoration: none;
+  color: var(--fyldo-text-primary);
+  background: var(--fyldo-background-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  tab-size: 4;
+  min-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+}
+
+[data-fyldo-v1] :where(*, ::before, ::after) {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid var(--fyldo-border-default);
+}
+
+[data-fyldo-v1] :where(h1, h2, h3, h4, h5, h6) {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+[data-fyldo-v1] :where(ul, ol, menu) {
+  list-style: none;
+}
+
+[data-fyldo-v1] :where(a) {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+[data-fyldo-v1] :where(img, svg, video, canvas) {
+  display: block;
+  vertical-align: middle;
+}
+
+[data-fyldo-v1] :where(button, input, select, textarea, optgroup) {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-transform: none;
+  background: transparent;
+  border-radius: 0;
+  opacity: 1;
+}
+
+[data-fyldo-v1] :where(button, [type='button'], [type='reset'], [type='submit'], input, select, textarea) {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+[data-fyldo-v1] :where(input, select, textarea) {
+  min-height: 0;
+  height: auto;
+  line-height: inherit;
+  box-shadow: none;
+}
+
+[data-fyldo-v1] :where(button, [role='button'], [role='switch'], label) {
+  cursor: pointer;
+}
+
+[data-fyldo-v1] :where(:disabled, [aria-disabled='true'], [data-disabled]) {
+  cursor: not-allowed;
+}
+
+/* wp-admin decorates native checkboxes/radios with ::before glyphs and blue :focus rings. */
+[data-fyldo-v1] :where(input[type='checkbox'], input[type='radio'])::before {
+  content: none;
+}
+
+/* Neutralise EVERY inherited :focus decoration; components draw their own :focus-visible indicator. */
+[data-fyldo-v1] :where(a, button, input, select, textarea, summary, [tabindex], [role='switch'], [role='button']):focus {
+  outline: 2px solid transparent;
+  box-shadow: none;
+}
+
+[data-fyldo-v1] :where(input, textarea)::placeholder {
+  color: inherit;
+  opacity: 1;
+}
+
+[data-fyldo-v1] :where([hidden]:not([hidden='until-found'])) {
+  display: none !important;
+}
+
+[data-fyldo-v1] :where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+@keyframes fyldo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-fyldo-v1] :where(*, ::before, ::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* A loading indicator must keep turning under reduced motion — just gently. */
+  [data-fyldo-v1] [data-fyldo-spinner] {
+    animation: fyldo-spin 2.4s linear infinite !important;
+  }
+}

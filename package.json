@@ -2,10 +2,12 @@
   "name": "fyldo",
   "version": "0.0.0-dev",
   "private": true,
-  "description": "Fyldo — settings-page framework for WordPress plugin developers (development workspace; consumers never need Node).",
+  "description": "Fyldo \u2014 settings-page framework for WordPress plugin developers (development workspace; consumers never need Node).",
   "license": "GPL-2.0-or-later",
   "type": "module",
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "vite build --watch",
     "build": "npm run tokens && npm run icons && vite build",
@@ -21,7 +23,11 @@
     "env:start": "wp-env start",
     "env:stop": "wp-env stop",
     "env:clean": "wp-env clean all",
-    "size": "size-limit"
+    "size": "size-limit",
+    "tokens:snapshot": "tsx tools/tokens/snapshot.ts",
+    "i18n:pot": "tsx tools/i18n/pot.ts",
+    "i18n:compile": "tsx tools/i18n/compile.ts",
+    "i18n": "npm run i18n:pot && npm run i18n:compile"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -46,6 +52,7 @@
     "eslint": "^9.39.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "gettext-parser": "^1.4.0",
     "globals": "^17.12.0",
     "iconsax-reactjs": "0.0.8",
     "jsdom": "^30.1.1",

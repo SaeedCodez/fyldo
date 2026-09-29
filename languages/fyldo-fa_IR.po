@@ -1,0 +1,102 @@
+# Persian (Iran) translation of Fyldo.
+# Tone: neutral-formal ("شما" is implicit; imperatives use the polite plural form). Reviewed by the project owner.
+msgid ""
+msgstr ""
+"Project-Id-Version: Fyldo 1.0.0-dev\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fyldo\n"
+"Last-Translator: \n"
+"Language-Team: Persian\n"
+"Language: fa_IR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: fyldo\n"
+
+msgid "Fyldo"
+msgstr "فیلدو"
+
+msgid "Settings-page framework for WordPress plugin developers. Declare pages, sections and fields in PHP; get a modern admin UI with REST-backed validation and saving."
+msgstr "چارچوب صفحهٔ تنظیمات برای توسعه‌دهندگان افزونهٔ وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
+
+msgid "You have unsaved changes"
+msgstr "تغییرات ذخیره‌نشده دارید"
+
+msgid "Saving changes…"
+msgstr "در حال ذخیرهٔ تغییرات…"
+
+msgid "All changes saved"
+msgstr "همهٔ تغییرات ذخیره شد"
+
+msgid "Couldn't save. Check your connection and try again."
+msgstr "ذخیره نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+msgid "Unsaved changes"
+msgstr "تغییرات ذخیره‌نشده"
+
+msgid "Discard"
+msgstr "نادیده گرفتن"
+
+msgid "Save changes"
+msgstr "ذخیرهٔ تغییرات"
+
+msgid "This settings screen needs JavaScript. Please enable it and reload the page."
+msgstr "این صفحهٔ تنظیمات به جاوااسکریپت نیاز دارد. آن را فعال کنید و صفحه را دوباره بارگذاری کنید."
+
+msgid "The values must be an object."
+msgstr "مقادیر باید یک شیء باشند."
+
+msgid "Some values are not valid."
+msgstr "برخی مقادیر معتبر نیستند."
+
+msgid "These settings were changed somewhere else. Reload to see the latest values."
+msgstr "این تنظیمات در جای دیگری تغییر کرده‌اند. برای دیدن آخرین مقادیر، صفحه را دوباره بارگذاری کنید."
+
+msgid "You must be logged in."
+msgstr "باید وارد حساب کاربری خود شوید."
+
+msgid "This settings page does not exist."
+msgstr "این صفحهٔ تنظیمات وجود ندارد."
+
+msgid "Your session has expired. Reload the page and try again."
+msgstr "نشست شما منقضی شده است. صفحه را دوباره بارگذاری کنید و دوباره تلاش کنید."
+
+msgid "You are not allowed to change these settings."
+msgstr "اجازهٔ تغییر این تنظیمات را ندارید."
+
+msgid "The request is too large."
+msgstr "درخواست بیش از حد بزرگ است."
+
+msgid "This field is required."
+msgstr "این فیلد الزامی است."
+
+msgid "Use at least %d character."
+msgid_plural "Use at least %d characters."
+msgstr[0] "دست‌کم %d نویسه وارد کنید."
+msgstr[1] "دست‌کم %d نویسه وارد کنید."
+
+msgid "Use no more than %d character."
+msgid_plural "Use no more than %d characters."
+msgstr[0] "حداکثر %d نویسه مجاز است."
+msgstr[1] "حداکثر %d نویسه مجاز است."
+
+msgid "This value is not in the expected format."
+msgstr "قالب این مقدار درست نیست."
+
+msgid "Enter a valid URL."
+msgstr "یک نشانی اینترنتی معتبر وارد کنید."
+
+msgid "Enter a valid email address."
+msgstr "یک نشانی ایمیل معتبر وارد کنید."
+
+msgid "Choose one of the available options."
+msgstr "یکی از گزینه‌های موجود را انتخاب کنید."
+
+msgid "Enter a value of at least %s."
+msgstr "مقداری دست‌کم برابر با %s وارد کنید."
+
+msgid "Enter a value of at most %s."
+msgstr "مقداری حداکثر برابر با %s وارد کنید."
+
+msgid "This value is not valid."
+msgstr "این مقدار معتبر نیست."
