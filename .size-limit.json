@@ -1,0 +1,6 @@
+[
+  { "name": "app.js (React 19 + Base UI + app)", "path": "assets/dist/app.js", "limit": "200 kB", "gzip": true },
+  { "name": "app.css", "path": "assets/dist/app.css", "limit": "30 kB", "gzip": true },
+  { "name": "boot.js", "path": "assets/dist/boot.js", "limit": "1 kB", "gzip": true },
+  { "name": "largest icon module", "path": "assets/dist/icons/*.js", "limit": "2 kB", "gzip": true }
+]

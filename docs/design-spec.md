@@ -357,7 +357,7 @@ Figma has **no motion spec** (no durations, no easing, no prototype reactions re
 | Figma | Code |
 |---|---|
 | `Locale=EN\|FA` variant | one component; direction from `dir` (root attribute + Base UI `DirectionProvider`), logical CSS (`ps-*`, `me-*`, `start/end`) |
-| `en/…`, `fa/…` typography tokens | one token set; `--fy-font-sans` switches by `:lang`/`[dir=rtl]` (Geist ↔ Vazirmatn) |
+| `en/…`, `fa/…` typography tokens | one token set; `--fyldo-font-sans` switches by `:lang`/`[dir=rtl]` (Geist ↔ Vazirmatn) |
 | `Label (FA)`, `Placeholder (FA)`… text props | i18n keys; PHP `__()` in config + `@wordpress/i18n` in the UI |
 | Mirrored icon order (Button, Input) | flex row + `dir` (no manual reordering) |
 | Arrows point left in FA | `Icon` flips a named list of directional icons under `[dir=rtl]` |

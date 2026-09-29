@@ -58,6 +58,8 @@ type ButtonProps = {
 | State=Hover/Focus | CSS |
 | Label / icons | `children`, `leadingIcon`, `trailingIcon` (icons `aria-hidden`) |
 
+**Geometry (measured in Figma, enforced by `e2e/harness/figma-parity.spec.ts`):** Figma auto-layout counts the 1 px stroke IN the layout, so padding is always 12/16/20 and the border exists only where Figma has a stroke — Secondary always, every other type only when disabled/loading. Consequently widths differ exactly as in Figma: Primary 68, Secondary 70, Primary Disabled 70, Loading +22 (spinner 16 + gap 6).
+
 **Gaps to fill:** 🔧 shadcn sizes are 36/32/28 — replace with 32/40/48 and radius sm/sm/md; Large uses `Button/16`. 🔧 Variants renamed/remapped; shadcn `link`/`outline` removed. ➕ Loading state (shadcn has none). ➕ Disabled/Loading share colours (`action/disabled`, inside 1 px `border/default` except Tertiary which has no stroke). ➕ Focus indicator (design has none — ARCHITECTURE §11). ➕ Guard: dev-mode warning if two `primary` buttons render in the same Section Card (rule 11).
 
 ### 2.2 Icon Button — Figma `Icon Button` (43:5456)
@@ -74,6 +76,8 @@ type IconButtonProps = Omit<ButtonProps,'leadingIcon'|'trailingIcon'|'children'>
 **Gaps:** ➕ Tooltip is built in and cannot be disabled (type-level: `label` required). Icon 16, **20 at `lg`**. Loading replaces the icon with the spinner. Square sizes 32/40/48.
 
 ### 2.3 Input — Figma `Input` (8:2924)
+
+*Implemented in M1:* `Input` (the bordered control, used inside a Setting Row), `FieldShell` (label/helper/error stack) and the composites `TextField` = the full Figma "Input" and `SelectField` = the full Figma "Select".
 
 Base: shadcn `input` + `input-group` (for prefix/suffix) → Base UI `Input`, wrapped in `FieldShell`.
 

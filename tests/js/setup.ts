@@ -11,4 +11,4 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 (globalThis as unknown as { ResizeObserver: typeof ResizeObserverStub }).ResizeObserver ??= ResizeObserverStub;
-if (!('scrollIntoView' in Element.prototype)) Element.prototype.scrollIntoView = () => undefined;
+(Element.prototype as { scrollIntoView?: () => void }).scrollIntoView ??= () => undefined;

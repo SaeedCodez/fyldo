@@ -135,7 +135,7 @@ final class Instance {
 				throw new ConfigException( sprintf( 'Page "%s" is already registered.', $id ) );
 			}
 
-			$page                = new Page( $this->slug, $id, $config );
+			$page               = new Page( $this->slug, $id, $config );
 			$this->pages[ $id ] = array(
 				'page'  => $page,
 				'group' => isset( $config['group'] ) ? (string) $config['group'] : '',
@@ -231,12 +231,12 @@ final class Instance {
 	/**
 	 * Reports a developer mistake without taking the site down.
 	 */
-	public static function doing_it_wrong( string $function, string $message ): void {
+	public static function doing_it_wrong( string $function_name, string $message ): void {
 		if ( function_exists( '_doing_it_wrong' ) ) {
-			_doing_it_wrong( esc_html( $function ), esc_html( $message ), '1.0.0' );
+			_doing_it_wrong( esc_html( $function_name ), esc_html( $message ), '1.0.0' );
 			return;
 		}
 
-		trigger_error( $message, E_USER_NOTICE ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error -- no WordPress loaded (unit tests).
+		trigger_error( $message, E_USER_NOTICE ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error, WordPress.Security.EscapeOutput.OutputNotEscaped -- only without WordPress (unit tests); not HTML output.
 	}
 }

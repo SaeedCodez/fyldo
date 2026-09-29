@@ -20,7 +20,12 @@
 
 namespace Fyldo\V1;
 
-defined( 'ABSPATH' ) || exit;
+// Direct access / non-WordPress CLI (e.g. a consumer's PHPUnit or PHPStan loading Composer's autoloader): do nothing.
+// A top-level `return` is as safe as `exit` here (nothing has run yet) and does not kill unrelated tools that
+// include this file through Composer's `files` autoload.
+if ( ! defined( 'ABSPATH' ) ) {
+	return;
+}
 
 // The first copy loaded defines the Loader; later copies only call register().
 // `Loader::class` is a compile-time constant (no autoload, no string): Strauss-safe.

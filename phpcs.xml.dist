@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<ruleset name="Fyldo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+	<description>Fyldo: PHP 7.4 syntax ceiling, WordPress coding standards, no globals (Strauss-safe).</description>
+
+	<file>fyldo.php</file>
+	<file>src</file>
+
+	<arg name="extensions" value="php"/>
+	<arg name="basepath" value="."/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+	<arg name="parallel" value="8"/>
+
+	<!-- The syntax ceiling (docs/ARCHITECTURE.md §1): no constructor promotion, match, enums, union types, named args… -->
+	<config name="testVersion" value="7.4-"/>
+	<config name="minimum_wp_version" value="6.5"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Extra">
+		<!--
+			Exception messages are developer-facing configuration errors, never user output; when they are reported
+			they go through Instance::doing_it_wrong(), which escapes them.
+		-->
+		<exclude name="WordPress.Security.EscapeOutput.ExceptionNotEscaped"/>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array"><element value="fyldo"/></property>
+		</properties>
+	</rule>
+
+	<!-- Everything is namespaced (Fyldo\V1\…): prefixes are the namespace, not function/constant names. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array"><element value="Fyldo"/><element value="fyldo"/></property>
+		</properties>
+		<!-- Hook names are DERIVED from the instance slug on purpose (fyldo/{slug}/saved …): see Support\Naming. -->
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound"/>
+	</rule>
+
+	<!-- PSR-4 file names (src/Bootstrap/Loader.php), not class-loader.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+	</rule>
+
+	<!-- Strauss-safety (docs/ARCHITECTURE.md §7): no global functions, no constants via define(), no $GLOBALS. -->
+	<rule ref="Generic.PHP.ForbiddenFunctions">
+		<properties>
+			<property name="forbiddenFunctions" type="array">
+				<element key="define" value="null"/>
+				<element key="class_alias" value="null"/>
+				<element key="create_function" value="null"/>
+				<element key="eval" value="null"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

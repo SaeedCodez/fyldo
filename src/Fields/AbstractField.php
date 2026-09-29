@@ -83,7 +83,7 @@ abstract class AbstractField {
 	 * @param mixed $value Sanitized value.
 	 * @return array{rule:string,params:array<string,mixed>}|null
 	 */
-	protected function implicit_check( $value ): ?array {
+	protected function implicit_check( $value ): ?array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- overridden by the types that need it.
 		return null;
 	}
 

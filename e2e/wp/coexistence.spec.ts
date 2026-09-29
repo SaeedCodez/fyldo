@@ -68,7 +68,7 @@ test.describe('every instance works, independently', () => {
   }
 
   test('saving one instance never touches another instance’s data', async ({ page }) => {
-    for (const [slug, title] of [['acme-alpha', 'Only alpha'], ['acme-delta', 'Only delta']]) {
+    for (const [slug, title] of [['acme-alpha', 'Only alpha'], ['acme-delta', 'Only delta']] as const) {
       await page.goto(settingsUrl(slug));
       await page.getByRole('textbox', { name: 'Site title' }).fill(title);
       await page.getByRole('button', { name: 'Save changes' }).click();

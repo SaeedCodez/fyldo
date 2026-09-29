@@ -68,11 +68,13 @@ final class Loader {
 			if ( function_exists( '_doing_it_wrong' ) ) {
 				_doing_it_wrong(
 					__METHOD__,
-					sprintf(
-						'Fyldo %1$s (%2$s) registered too late; %3$s is already active. Register before the plugins_loaded action.',
-						$version,
-						$key,
-						(string) self::loaded_version()
+					esc_html(
+						sprintf(
+							'Fyldo %1$s (%2$s) registered too late; %3$s is already active. Register before the plugins_loaded action.',
+							$version,
+							$key,
+							(string) self::loaded_version()
+						)
 					),
 					'1.0.0'
 				);
@@ -192,12 +194,12 @@ final class Loader {
 		$base   = $path . '/src/';
 
 		spl_autoload_register(
-			static function ( string $class ) use ( $prefix, $length, $base ): void {
-				if ( 0 !== strncmp( $class, $prefix, $length ) ) {
+			static function ( string $class_name ) use ( $prefix, $length, $base ): void {
+				if ( 0 !== strncmp( $class_name, $prefix, $length ) ) {
 					return;
 				}
 
-				$file = $base . str_replace( '\\', '/', substr( $class, $length ) ) . '.php';
+				$file = $base . str_replace( '\\', '/', substr( $class_name, $length ) ) . '.php';
 				if ( is_file( $file ) ) {
 					require_once $file;
 				}

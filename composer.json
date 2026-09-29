@@ -3,17 +3,29 @@
   "description": "Settings-page framework for WordPress plugin developers: declare pages, sections and fields in PHP; get a modern React admin UI with REST-backed validation and saving.",
   "type": "library",
   "license": "GPL-2.0-or-later",
-  "keywords": ["wordpress", "settings", "options", "admin", "react"],
+  "keywords": [
+    "wordpress",
+    "settings",
+    "options",
+    "admin",
+    "react"
+  ],
   "homepage": "https://github.com/fyldo/fyldo",
   "require": {
     "php": ">=7.4"
   },
   "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
     "phpunit/phpunit": "^9.6",
+    "squizlabs/php_codesniffer": "^3.10",
+    "wp-coding-standards/wpcs": "^3.1",
     "yoast/phpunit-polyfills": "^2.0 || ^3.0 || ^4.0"
   },
   "autoload": {
-    "files": [ "fyldo.php" ]
+    "files": [
+      "fyldo.php"
+    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -23,10 +35,13 @@
   },
   "config": {
     "sort-packages": true,
-    "allow-plugins": {}
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   },
   "scripts": {
-    "test": "@php -d auto_prepend_file=tests/php/prepend.php vendor/bin/phpunit --testsuite unit"
+    "test": "phpunit --testsuite unit",
+    "lint": "phpcs --standard=phpcs.xml.dist"
   },
   "minimum-stability": "stable"
 }

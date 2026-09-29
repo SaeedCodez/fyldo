@@ -1,7 +1,7 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type APIRequestContext } from '@playwright/test';
 import { readConfig, resetData, settingsUrl } from './helpers';
 
-const post = (request: import('@playwright/test').APIRequestContext, ns: string, headers: Record<string, string>, data: unknown) =>
+const post = (request: APIRequestContext, ns: string, headers: Record<string, string>, data: unknown) =>
   request.post(`/index.php?rest_route=/${ns}/pages/general`, { headers: { 'X-HTTP-Method-Override': 'PATCH', ...headers }, data });
 
 test.describe('REST security and validation', () => {
