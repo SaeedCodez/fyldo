@@ -1,5 +1,6 @@
 # Persian (Iran) translation of Fyldo.
 # Tone: neutral-formal ("شما" is implicit; imperatives use the polite plural form). Reviewed by the project owner.
+# Style (the pack's): the ezafe after a final «ه» is «‌ی» with a ZWNJ (صفحه‌ی), never the hamza-above form; "password" is «رمز عبور».
 msgid ""
 msgstr ""
 "Project-Id-Version: Fyldo 1.0.0-dev\n"
@@ -17,16 +18,16 @@ msgid "Fyldo"
 msgstr "فیلدو"
 
 msgid "Settings-page framework for WordPress plugin developers. Declare pages, sections and fields in PHP; get a modern admin UI with REST-backed validation and saving."
-msgstr "چارچوب صفحهٔ تنظیمات برای توسعه‌دهندگان افزونهٔ وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
+msgstr "چارچوب صفحه‌ی تنظیمات برای توسعه‌دهندگان افزونه‌ی وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
 
 msgid "You have unsaved changes"
 msgstr "تغییرات ذخیره‌نشده دارید"
 
 msgid "Saving changes…"
-msgstr "در حال ذخیرهٔ تغییرات…"
+msgstr "در حال ذخیره‌ی تغییرات…"
 
 msgid "All changes saved"
-msgstr "همهٔ تغییرات ذخیره شد"
+msgstr "همه‌ی تغییرات ذخیره شد"
 
 msgid "Couldn't save. Check your connection and try again."
 msgstr "ذخیره نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
@@ -35,13 +36,13 @@ msgid "Unsaved changes"
 msgstr "تغییرات ذخیره‌نشده"
 
 msgid "Discard"
-msgstr "نادیده گرفتن"
+msgstr "لغو تغییرات"
 
 msgid "Save changes"
-msgstr "ذخیرهٔ تغییرات"
+msgstr "ذخیره‌ی تغییرات"
 
 msgid "This settings screen needs JavaScript. Please enable it and reload the page."
-msgstr "این صفحهٔ تنظیمات به جاوااسکریپت نیاز دارد. آن را فعال کنید و صفحه را دوباره بارگذاری کنید."
+msgstr "این صفحه‌ی تنظیمات به جاوااسکریپت نیاز دارد. آن را فعال کنید و صفحه را دوباره بارگذاری کنید."
 
 msgid "The values must be an object."
 msgstr "مقادیر باید یک شیء باشند."
@@ -56,13 +57,13 @@ msgid "You must be logged in."
 msgstr "باید وارد حساب کاربری خود شوید."
 
 msgid "This settings page does not exist."
-msgstr "این صفحهٔ تنظیمات وجود ندارد."
+msgstr "این صفحه‌ی تنظیمات وجود ندارد."
 
 msgid "Your session has expired. Reload the page and try again."
 msgstr "نشست شما منقضی شده است. صفحه را دوباره بارگذاری کنید و دوباره تلاش کنید."
 
 msgid "You are not allowed to change these settings."
-msgstr "اجازهٔ تغییر این تنظیمات را ندارید."
+msgstr "اجازه‌ی تغییر این تنظیمات را ندارید."
 
 msgid "The request is too large."
 msgstr "درخواست بیش از حد بزرگ است."
@@ -192,3 +193,49 @@ msgstr "منابع"
 
 msgid "Menu"
 msgstr "منو"
+
+# M3 part 2: save patterns, the unsaved-changes dialog, conflicts. Texts drawn in the pack follow the pack
+# (design/figma/components/save-bar.json, modal.json, section-card.json).
+msgid "Couldn’t save. Check the highlighted fields."
+msgstr "ذخیره نشد. فیلدهای مشخص‌شده را بررسی کنید."
+
+msgid "Save"
+msgstr "ذخیره"
+
+msgid "Changes take effect after you save."
+msgstr "تغییرات پس از ذخیره اعمال می‌شوند."
+
+msgid "Discard unsaved changes?"
+msgstr "تغییرات ذخیره‌نشده حذف شوند؟"
+
+msgid "Your edits on this page haven’t been saved and will be lost."
+msgstr "ویرایش‌های این صفحه ذخیره نشده‌اند و از بین می‌روند."
+
+msgid "Keep editing"
+msgstr "ادامه‌ی ویرایش"
+
+msgctxt "unsaved changes dialog"
+msgid "Discard"
+msgstr "حذف تغییرات"
+
+msgid "Close"
+msgstr "بستن"
+
+msgid "These settings were changed somewhere else"
+msgstr "این تنظیمات در جای دیگری تغییر کرده‌اند"
+
+msgid "They were saved in another tab or by another person after this page was opened, so your changes were not saved. Reload the latest values to continue; your unsaved changes on this page will be lost."
+msgstr "این تنظیمات پس از باز شدن این صفحه در زبانه‌ی دیگری یا توسط شخص دیگری ذخیره شده‌اند، بنابراین تغییرات شما ذخیره نشد. برای ادامه، آخرین مقادیر را بارگذاری کنید؛ تغییرات ذخیره‌نشده‌ی شما در این صفحه از بین می‌روند."
+
+msgid "Reload latest values"
+msgstr "بارگذاری آخرین مقادیر"
+
+msgid "Couldn’t save: these settings were changed somewhere else."
+msgstr "ذخیره نشد: این تنظیمات در جای دیگری تغییر کرده‌اند."
+
+msgid "Couldn’t load the latest values. Check your connection and try again."
+msgstr "بارگذاری آخرین مقادیر انجام نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+# Code-only design (docs/design-spec.md): the password show/hide toggle.
+msgid "Show password"
+msgstr "نمایش رمز عبور"

@@ -6,9 +6,8 @@
  * (docs/design-spec.md D11), so FA compares text-free parts — icon boxes, the tab indicator, the toggle — and checks the
  * geometry that the FA line heights drive (a Nav Item is 34px tall in FA, a Tab 50).
  *
- * Every text, icon and position comes from design/figma/components/*.json (support/shell.ts). Known difference, by
- * decision: the pack's 24px brand logo is the Fyldo mark, whose vector geometry is not in the pack and which the PHP
- * API has no counterpart for, so no logo is drawn — brand regions are compared at the brand's own position.
+ * Every text, icon and position comes from design/figma/components/*.json (support/shell.ts). The brand (logo · name ·
+ * version) has its own test below (M3 part 2: the default logo is the Fyldo mark, design/figma/brand).
  */
 import { readFileSync } from 'node:fs';
 import {
@@ -291,25 +290,6 @@ for (const locale of ['EN', 'FA'] as const) {
         height: root.height - header.height,
       };
       await compare({ page, testInfo, stage, set: 'sidebar', props, region: below });
-      // the brand: name + version badge, where our (logo-less) brand starts
-      const name = layer(header, 'Fyldo');
-      const version = layer(header, 'Version');
-      const brandRef: Rect = {
-        x: name.x - 2,
-        y: header.y + 14,
-        width: version.x + version.width - name.x + 4,
-        height: 30,
-      };
-      const ourBrand = await box(stage.locator('[data-slot=fy-brand]'));
-      await compare({
-        page,
-        testInfo,
-        stage,
-        set: 'sidebar',
-        props,
-        region: brandRef,
-        actual: { ...brandRef, x: ourBrand.x - s.x - 2 },
-      });
     } else {
       for (let i = 0; i < packItems.length; i++) {
         const n = packItems[i] as Node;
@@ -331,6 +311,49 @@ for (const locale of ['EN', 'FA'] as const) {
           max: 0.05,
         });
       }
+    }
+    await close();
+  });
+}
+
+// ── Brand (the default: the Fyldo mark · "Fyldo" · version badge), in the Sidebar header ─────────────────────
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Brand ${locale} · default`, async ({ browser }, testInfo) => {
+    const props = { Locale: locale };
+    const root = variant('sidebar', props).node;
+    const header = layer(root, 'Header');
+    const logo = layer(header, 'Logo');
+    const spec = navSpec(root, locale, 'Nav Item');
+    const { page, close } = await newPage(browser);
+    const stage = await open(page, { c: 'sidebar', dir: dir(locale), spec: JSON.stringify(spec) });
+    await still(page);
+    const s = await box(stage);
+    const mark = stage.locator('[data-slot=fy-brand] [data-slot=fy-fyldo-mark]');
+    const ourLogo = await box(mark);
+    // the logo where the pack puts it: 20px in from the inline start of the header, 24×24
+    expect([Math.round(ourLogo.x - s.x), Math.round(ourLogo.y - s.y), ourLogo.width, ourLogo.height]).toEqual([
+      Math.round(logo.x),
+      Math.round(logo.y),
+      logo.width,
+      logo.height,
+    ]);
+    const name = (await stage.locator('[data-slot=fy-brand-name]').boundingBox())!;
+    const gapToName = locale === 'EN' ? name.x - (ourLogo.x + ourLogo.width) : ourLogo.x - (name.x + name.width);
+    expect(Math.round(gapToName), 'gap 10 between the logo and the name').toBe(header.layout?.itemSpacing);
+
+    if (locale === 'EN') {
+      // the whole header: logo, name and badge (Geist in both)
+      await compare({
+        page,
+        testInfo,
+        stage,
+        set: 'sidebar',
+        props,
+        region: { x: header.x, y: header.y, width: header.width, height: header.height },
+      });
+    } else {
+      // the mark only: the name is IRANYekanX in Figma and Vazirmatn in code
+      await compare({ page, testInfo, stage, set: 'sidebar', props, region: around(logo), max: 0.03 });
     }
     await close();
   });

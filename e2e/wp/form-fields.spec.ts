@@ -13,7 +13,7 @@ test.beforeEach(async ({ request }) => {
   await resetData(request);
 });
 
-const save = (page: Page) => page.getByRole('button', { name: /Save changes|ذخیرهٔ تغییرات/ }).click();
+const save = (page: Page) => page.getByRole('button', { name: /Save changes|ذخیره‌ی تغییرات/ }).click();
 
 test.describe('English', () => {
   test('renders the defaults, edits every control, saves through REST and persists', async ({ page }) => {

@@ -51,7 +51,7 @@ export interface ShellProps {
  */
 export function Shell({ config, route, onNavigate, children }: ShellProps): ReactElement {
   const mobile = useMediaQuery(WP_MOBILE);
-  const brand: Brand = { name: config.title, version: config.version || undefined };
+  const brand: Brand = { name: config.title, logo: config.logo ?? undefined, version: config.version || undefined };
   const groups = navGroups(config, route);
   const go = (page: string, event: MouseEvent<HTMLAnchorElement>): void => {
     event.preventDefault();

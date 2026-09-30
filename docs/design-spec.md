@@ -391,3 +391,16 @@ Contrast is computed from the Figma token values (WCAG 2.x formula, against `bac
 | D10 | `Textarea` has one Size only, but Input/Select/Multi Select have three; usage doc says Input/Select sizes "match the Button size in the same row". | Variant axes | Confirm Textarea stays single-size. |
 | D11 | FA typography uses **IRANYekanX** (Medium/DemiBold) while code uses Vazirmatn (per brief). Metrics differ slightly (line-height 22/24 was tuned for IRANYekanX). | Text styles | Line-heights must be re-verified in FA screenshots at Milestone 1; keep them as tokens. |
 | D12 | Primitives `gray/200` = `gray/400`; `text/tertiary` = `text/disabled`; `control/on` = `action/primary`. Harmless duplicates, but disabled vs placeholder text are indistinguishable. | Variables | Kept 1-to-1; noted for the designer. |
+
+---
+
+## 10. Code-only design (not in Figma yet)
+
+Built in code with the owner's approval (2026-09-30), as an explicit exception to "not in the pack → stop and ask". Each
+item is made only from existing tokens and component geometry; the owner will move them into Figma later, and the pack
+then becomes their source of truth (and gets a pixel test).
+
+| Item | Where | What was built | Tokens and sizes | Why |
+|---|---|---|---|---|
+| **Multi Select "No results found."** (M2 part 2; approved as is) | `app/components/ui/multi-select.tsx` (`Combobox.Empty`) | When the popup's search matches no option, the list is replaced by one text row "No results found." (translated). | The Menu Item geometry: row 36 high (`fy:h-9`), padding 8 (`space/8`), inside the Select Menu's 4px padding; Copy/14, `text/tertiary`. No icon, not interactive. | The pack draws the popup search but no empty result; an empty popup would read as broken. |
+| **Password show/hide toggle** (M3 part 2) | `app/components/ui/password-input.tsx`, used by the `password` field | A real `<button type="button">` at the inline end of the Input control that switches the input between `password` and `text`. One fixed `aria-label` "Show password" (translated: «نمایش رمز عبور»); `aria-pressed` carries the state. It reveals only what the user typed: a stored secret is never sent to the browser (the field stays empty with "•••• set"). It goes back to hidden after a successful save and on a page change; it is disabled with the field. | The Input's optional **suffix icon slot**: 16×16, 8 (`space/8`) after the text, inside the 12 (`space/12`) end padding, vertically centred; icons Iconsax Linear `eye` (hidden) / `eye-slash` (shown), 16px, `icon/secondary`, `icon/primary` on hover, `text/disabled` when disabled; radius `radius/xs`; the neutral focus ring of every non-field control (2px white gap + 2px `focus/ring-neutral`, `:focus-visible` only); the pointer target is grown to 24×24 by an invisible pseudo-element (WCAG 2.5.8) without changing the drawn size. | The pack has only a generic optional suffix icon on Input; checking a long key before saving is otherwise impossible. |

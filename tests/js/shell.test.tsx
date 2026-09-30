@@ -21,13 +21,15 @@ const fixture = (name: string) =>
   ) as PageDef;
 const general = { ...fixture('slice-page'), group: 'settings' };
 const fields = { ...fixture('form-fields-page'), group: 'settings', badge: '3' };
-const advanced = fixture('tabs-page');
+const advanced = fixture('tabs-page'); // saves per section
+const advancedGlobal: PageDef = { ...advanced, save: 'global' };
 const pages = [general, fields, advanced];
 
 function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
   return {
     slug: 'acme-seo',
     title: 'Acme SEO',
+    logo: null,
     version: '1.0',
     fyldoVersion: '1.0.0',
     navigation: 'sidebar',
@@ -273,7 +275,7 @@ describe('tabs (sub-pages)', () => {
     const savePage = vi.fn(async () => ({ values: advanced.values, revision: 'rev-2' }));
     function Harness() {
       const [tab, setTab] = useState('debug');
-      return <SettingsPage page={advanced} api={{ savePage }} tab={tab} onTabChange={setTab} />;
+      return <SettingsPage page={advancedGlobal} api={{ savePage, readPage: vi.fn() }} tab={tab} onTabChange={setTab} />;
     }
     render(
       <PortalContainerContext.Provider value={root}>
@@ -374,5 +376,35 @@ describe('Persian', () => {
       /^۱٫۰$/,
     );
     expect(screen.getByRole('navigation', { name: 'منابع' })).toBeInTheDocument();
+  });
+});
+
+describe('brand', () => {
+  const brand = () => document.querySelector('[data-slot=fy-sidebar] [data-slot=fy-brand], [data-slot=fy-brand]') as HTMLElement;
+
+  it('without a logo draws the Fyldo mark (decorative, currentColor) before the name', () => {
+    mount({ logo: null });
+    const mark = brand().querySelector('[data-slot=fy-fyldo-mark]') as SVGElement;
+    expect(mark).toHaveAttribute('aria-hidden', 'true');
+    expect(mark.querySelector('path')).toHaveAttribute('fill', 'currentColor');
+    expect(brand().firstElementChild).toBe(mark);
+  });
+
+  it('an icon logo is the Iconsax icon at 24px', () => {
+    mount({ logo: { icon: 'setting-2' } });
+    const icon = brand().querySelector('svg') as SVGElement;
+    expect(icon).toHaveAttribute('data-fyldo-icon', 'setting2');
+    expect(icon).toHaveAttribute('width', '24');
+    expect(brand().querySelector('[data-slot=fy-fyldo-mark]')).toBeNull();
+  });
+
+  it('an image logo is a 24×24 image with an empty alt (the name beside it names the brand)', () => {
+    mount({ logo: { url: 'https://acme.test/logo.svg' } });
+    const img = brand().querySelector('img') as HTMLImageElement;
+    expect(img).toHaveAttribute('src', 'https://acme.test/logo.svg');
+    expect(img).toHaveAttribute('alt', '');
+    expect(img).toHaveAttribute('width', '24');
+    expect(img).toHaveAttribute('height', '24');
+    expect(within(brand()).getByText('Acme SEO')).toBeInTheDocument();
   });
 });

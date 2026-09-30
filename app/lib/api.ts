@@ -20,6 +20,8 @@ export interface SaveResult {
 
 export interface Api {
   savePage(pageId: string, values: Record<string, FieldValue>, revision: string): Promise<SaveResult>;
+  /** The stored values and revision right now (conflict recovery: "Reload latest values"). */
+  readPage(pageId: string): Promise<SaveResult>;
 }
 
 /**
@@ -29,37 +31,39 @@ export interface Api {
 export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof fetch = (...a) => fetch(...a)): Api {
   const { root, nonce, instanceNonce, nonceHeader } = config.rest;
 
+  const request = async (pageId: string, init: RequestInit): Promise<SaveResult> => {
+    let response: Response;
+    try {
+      response = await fetchImpl(`${root}pages/${encodeURIComponent(pageId)}`, {
+        credentials: 'same-origin',
+        ...init,
+        headers: { 'X-WP-Nonce': nonce, [nonceHeader]: instanceNonce, ...(init.headers as Record<string, string>) },
+      });
+    } catch {
+      throw new ApiError('network', 0, 'fyldo_network');
+    }
+
+    const body = (await response.json().catch(() => ({}))) as Record<string, unknown> & {
+      data?: { errors?: Record<string, string>; values?: Record<string, FieldValue>; revision?: string };
+    };
+
+    if (!response.ok) {
+      throw new ApiError(String(body.message ?? response.statusText), response.status, String(body.code ?? 'error'), body.data?.errors ?? {}, {
+        values: body.data?.values,
+        revision: body.data?.revision,
+      });
+    }
+
+    return { values: body.values as Record<string, FieldValue>, revision: String(body.revision) };
+  };
+
   return {
-    async savePage(pageId, values, revision) {
-      let response: Response;
-      try {
-        response = await fetchImpl(`${root}pages/${encodeURIComponent(pageId)}`, {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-HTTP-Method-Override': 'PATCH',
-            'X-WP-Nonce': nonce,
-            [nonceHeader]: instanceNonce,
-          },
-          body: JSON.stringify({ values, revision }),
-        });
-      } catch {
-        throw new ApiError('network', 0, 'fyldo_network');
-      }
-
-      const body = (await response.json().catch(() => ({}))) as Record<string, unknown> & {
-        data?: { errors?: Record<string, string>; values?: Record<string, FieldValue>; revision?: string };
-      };
-
-      if (!response.ok) {
-        throw new ApiError(String(body.message ?? response.statusText), response.status, String(body.code ?? 'error'), body.data?.errors ?? {}, {
-          values: body.data?.values,
-          revision: body.data?.revision,
-        });
-      }
-
-      return { values: body.values as Record<string, FieldValue>, revision: String(body.revision) };
-    },
+    savePage: (pageId, values, revision) =>
+      request(pageId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-HTTP-Method-Override': 'PATCH' },
+        body: JSON.stringify({ values, revision }),
+      }),
+    readPage: (pageId) => request(pageId, { method: 'GET', cache: 'no-store' }),
   };
 }

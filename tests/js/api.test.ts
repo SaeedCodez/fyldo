@@ -41,3 +41,18 @@ describe('REST client', () => {
     await expect(html.savePage('g', {}, 'r')).rejects.toMatchObject({ status: 502 });
   });
 });
+
+describe('REST client: reading a page', () => {
+  it('GETs the page with both nonces and returns its values and revision', async () => {
+    const fetchMock = respond(200, { values: { title: 'theirs' }, revision: 'r9' });
+    const result = await createApi(config, fetchMock as never).readPage('general');
+
+    expect(result).toEqual({ values: { title: 'theirs' }, revision: 'r9' });
+    const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(url).toBe('https://site.test/wp-json/fyldo-acme/v1/pages/general');
+    expect(init.method).toBe('GET');
+    expect(init.cache).toBe('no-store');
+    expect(init.headers).toMatchObject({ 'X-WP-Nonce': 'WP', 'X-Fyldo-Nonce': 'INST' });
+    expect(init.body).toBeUndefined();
+  });
+});

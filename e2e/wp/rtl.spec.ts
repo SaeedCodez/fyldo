@@ -31,12 +31,12 @@ test.describe('Persian (RTL)', () => {
 
     await title.fill('عنوان');
     await expect(page.getByText('تغییرات ذخیره‌نشده دارید')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'ذخیرهٔ تغییرات' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'نادیده گرفتن' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'ذخیره‌ی تغییرات' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'لغو تغییرات' })).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fa.png' });
 
-    await page.getByRole('button', { name: 'ذخیرهٔ تغییرات' }).click();
-    await expect(page.getByText('همهٔ تغییرات ذخیره شد')).toBeVisible();
+    await page.getByRole('button', { name: 'ذخیره‌ی تغییرات' }).click();
+    await expect(page.getByText('همه‌ی تغییرات ذخیره شد')).toBeVisible();
   });
 
   test('geometry mirrors: switch thumb travels toward the start (left), the select icon sits at the right', async ({ page }) => {

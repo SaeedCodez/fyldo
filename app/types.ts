@@ -184,7 +184,10 @@ export interface JedLocaleData {
 
 export interface FyldoConfig {
   slug: string;
+  /** The brand name (PHP fills in "Fyldo", translated, when the developer gives none). */
   title: string;
+  /** The brand logo: an Iconsax icon or an image URL; null = the Fyldo mark. */
+  logo: { icon: string } | { url: string } | null;
   version: string;
   fyldoVersion: string;
   navigation: 'sidebar' | 'top';

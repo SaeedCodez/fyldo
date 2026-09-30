@@ -17,6 +17,8 @@
  *   ?c=sidebar&spec=<json>  /  ?c=top-navigation&spec=<json>   (spec: {brand, version, groups:[{label, items:[{label, icon, badge, active}]}], links:[{label, icon}]})
  *   ?c=page-header&title=…&description=…&action=Documentation   (800 wide; the action is an external link)
  *   ?c=section-card&tone=default|danger&spec=<json>   (spec: {title, description, rows:[{title, description, layout, value, checked}], footerText, action})
+ *   ?c=save-bar&state=dirty|saving|saved|error   (800 wide, as in the pack; the texts are Fyldo's own strings)
+ *   ?c=modal&title=…&description=…&cancel=…&confirm=…   (the Default modal, open)
  *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
@@ -26,6 +28,7 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { NavItem } from '../../../app/components/fyldo/NavItem';
 import { PageHeader } from '../../../app/components/fyldo/PageHeader';
+import { SaveBar, type SaveBarState } from '../../../app/components/fyldo/SaveBar';
 import { SectionCard } from '../../../app/components/fyldo/SectionCard';
 import { SettingRow } from '../../../app/components/fyldo/SettingRow';
 import { Sidebar } from '../../../app/components/fyldo/Sidebar';
@@ -43,6 +46,7 @@ import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
+import { Modal } from '../../../app/components/ui/modal';
 import { Notice, type NoticeTone } from '../../../app/components/ui/notice';
 import { SelectField } from '../../../app/components/ui/select-field';
 import { Tag, type TagSize } from '../../../app/components/ui/tag';
@@ -65,8 +69,28 @@ document.documentElement.dir = rtl ? 'rtl' : 'ltr';
 const state = q.get('state') ?? 'default';
 const size = (q.get('size') ?? 'sm') as ButtonSize;
 const text = rtl
-  ? { label: 'عنوان سایت', helper: 'در تب مرورگر و نتایج جستجو نمایش داده می‌شود.', placeholder: 'سایت وردپرسی من', value: 'فیلدو', error: 'این عنوان قبلاً استفاده شده است.', button: 'دکمه', role: 'نقش پیش‌فرض کاربر جدید', pick: 'یک نقش انتخاب کنید…', subscriber: 'مشترک' }
-  : { label: 'Site title', helper: 'Shown in the browser tab and search results.', placeholder: 'My WordPress site', value: 'Fyldo', error: 'This title is already in use.', button: 'Button', role: 'New user default role', pick: 'Select a role…', subscriber: 'Subscriber' };
+  ? {
+      label: 'عنوان سایت',
+      helper: 'در تب مرورگر و نتایج جستجو نمایش داده می‌شود.',
+      placeholder: 'سایت وردپرسی من',
+      value: 'فیلدو',
+      error: 'این عنوان قبلاً استفاده شده است.',
+      button: 'دکمه',
+      role: 'نقش پیش‌فرض کاربر جدید',
+      pick: 'یک نقش انتخاب کنید…',
+      subscriber: 'مشترک',
+    }
+  : {
+      label: 'Site title',
+      helper: 'Shown in the browser tab and search results.',
+      placeholder: 'My WordPress site',
+      value: 'Fyldo',
+      error: 'This title is already in use.',
+      button: 'Button',
+      role: 'New user default role',
+      pick: 'Select a role…',
+      subscriber: 'Subscriber',
+    };
 
 const roles = [
   { value: 'subscriber', label: text.subscriber },
@@ -78,13 +102,25 @@ const roles = [
 const param = (name: string, fallback = ''): string => q.get(name) ?? fallback;
 
 /** `options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled` → option list. */
-function optionsParam(): Array<{ value: string; label: string; description?: string; disabled?: boolean; icon?: string }> {
+function optionsParam(): Array<{
+  value: string;
+  label: string;
+  description?: string;
+  disabled?: boolean;
+  icon?: string;
+}> {
   return param('options')
     .split('|')
     .filter(Boolean)
     .map((raw) => {
       const [value = '', label = '', description = '', flag = '', icon = ''] = raw.split(':');
-      return { value, label, ...(description ? { description } : {}), ...(flag === 'disabled' ? { disabled: true } : {}), ...(icon ? { icon } : {}) };
+      return {
+        value,
+        label,
+        ...(description ? { description } : {}),
+        ...(flag === 'disabled' ? { disabled: true } : {}),
+        ...(icon ? { icon } : {}),
+      };
     });
 }
 
@@ -95,7 +131,14 @@ function TextareaDemo() {
   const error = state === 'error' ? param('error') : undefined;
   return (
     <div style={{ width: 360 }}>
-      <FieldShell label={param('label')} disabled={state === 'disabled'} error={error} footer={<TextareaFooter description={param('helper')} error={error} count={count} limit={limit} />}>
+      <FieldShell
+        label={param('label')}
+        disabled={state === 'disabled'}
+        error={error}
+        footer={
+          <TextareaFooter description={param('helper')} error={error} count={count} limit={limit} />
+        }
+      >
         <Textarea
           value={value}
           onValueChange={setValue}
@@ -111,7 +154,14 @@ function TextareaDemo() {
 
 function CheckboxGroupDemo() {
   const [value, setValue] = useState<string[]>(param('value').split(',').filter(Boolean));
-  return <CheckboxGroup options={optionsParam()} value={value} onValueChange={setValue} parent={param('parent') || undefined} />;
+  return (
+    <CheckboxGroup
+      options={optionsParam()}
+      value={value}
+      onValueChange={setValue}
+      parent={param('parent') || undefined}
+    />
+  );
 }
 
 function RadioGroupDemo() {
@@ -146,27 +196,51 @@ function MultiSelectDemo() {
 interface NavSpec {
   brand: string;
   version?: string;
-  groups: Array<{ label?: string; items: Array<{ label: string; icon?: string; badge?: string; active?: boolean }> }>;
+  groups: Array<{
+    label?: string;
+    items: Array<{ label: string; icon?: string; badge?: string; active?: boolean }>;
+  }>;
   links?: Array<{ label: string; icon?: string }>;
 }
 
 const locale = rtl ? 'fa-IR' : 'en';
 
-function navFromSpec(spec: NavSpec): { groups: NavGroup[]; links: Array<{ label: string; href: string; icon?: string; external: boolean }> } {
+function navFromSpec(spec: NavSpec): {
+  groups: NavGroup[];
+  links: Array<{ label: string; href: string; icon?: string; external: boolean }>;
+} {
   return {
     groups: spec.groups.map((g, gi) => ({
       id: `g${gi}`,
       label: g.label,
-      items: g.items.map((item, ii) => ({ id: `p${gi}-${ii}`, label: item.label, href: `#/p${gi}-${ii}`, icon: item.icon || undefined, badge: item.badge || undefined, active: Boolean(item.active) })),
+      items: g.items.map((item, ii) => ({
+        id: `p${gi}-${ii}`,
+        label: item.label,
+        href: `#/p${gi}-${ii}`,
+        icon: item.icon || undefined,
+        badge: item.badge || undefined,
+        active: Boolean(item.active),
+      })),
     })),
-    links: (spec.links ?? []).map((l, i) => ({ label: l.label, href: `#/link-${i}`, icon: l.icon || undefined, external: false })),
+    links: (spec.links ?? []).map((l, i) => ({
+      label: l.label,
+      href: `#/link-${i}`,
+      icon: l.icon || undefined,
+      external: false,
+    })),
   };
 }
 
 interface CardSpec {
   title: string;
   description?: string;
-  rows?: Array<{ title: string; description?: string; layout: 'inline' | 'stacked'; value?: string; checked?: boolean }>;
+  rows?: Array<{
+    title: string;
+    description?: string;
+    layout: 'inline' | 'stacked';
+    value?: string;
+    checked?: boolean;
+  }>;
   footerText?: string;
   action?: string;
 }
@@ -180,12 +254,28 @@ function SectionCardDemo({ spec, tone }: { spec: CardSpec; tone: 'default' | 'da
         description={spec.description}
         tone={tone}
         footerText={spec.footerText}
-        footer={spec.action ? <Button variant={tone === 'danger' ? 'error' : 'primary'} size="sm">{spec.action}</Button> : undefined}
+        footer={
+          spec.action ? (
+            <Button variant={tone === 'danger' ? 'error' : 'primary'} size="sm">
+              {spec.action}
+            </Button>
+          ) : undefined
+        }
       >
         {rows.length > 0
           ? rows.map((row, index) => (
-              <SettingRow key={row.title} title={row.title} description={row.description} layout={row.layout} divider={index < rows.length - 1}>
-                {row.layout === 'inline' ? <Toggle size="md" defaultChecked={Boolean(row.checked)} /> : <Input size="md" defaultValue={row.value ?? ''} />}
+              <SettingRow
+                key={row.title}
+                title={row.title}
+                description={row.description}
+                layout={row.layout}
+                divider={index < rows.length - 1}
+              >
+                {row.layout === 'inline' ? (
+                  <Toggle size="md" defaultChecked={Boolean(row.checked)} />
+                ) : (
+                  <Input size="md" defaultValue={row.value ?? ''} />
+                )}
               </SettingRow>
             ))
           : undefined}
@@ -198,12 +288,17 @@ function Variant() {
   switch (q.get('c')) {
     case 'icons':
       return (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(40, 20px)', gridAutoRows: '20px' }}>
+        <div
+          style={{ display: 'grid', gridTemplateColumns: 'repeat(40, 20px)', gridAutoRows: '20px' }}
+        >
           {param('names')
             .split(',')
             .filter(Boolean)
             .map((name) => (
-              <span key={name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span
+                key={name}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
                 <Icon name={name} size={16} />
               </span>
             ))}
@@ -211,7 +306,11 @@ function Variant() {
       );
     case 'badge':
       return (
-        <Badge tone={param('tone', 'gray') as BadgeTone} appearance={param('appearance', 'subtle') as 'subtle' | 'solid'} size={param('size', 'sm') as BadgeSize}>
+        <Badge
+          tone={param('tone', 'gray') as BadgeTone}
+          appearance={param('appearance', 'subtle') as 'subtle' | 'solid'}
+          size={param('size', 'sm') as BadgeSize}
+        >
           {param('label', 'Badge')}
         </Badge>
       );
@@ -232,14 +331,27 @@ function Variant() {
     case 'tab':
       return (
         <button type="button" className={TAB_OUTER}>
-          <TabLook label={param('label', 'General')} icon={param('icon') || undefined} badge={param('count') || undefined} active={state === 'active'} disabled={state === 'disabled'} locale={locale} />
+          <TabLook
+            label={param('label', 'General')}
+            icon={param('icon') || undefined}
+            badge={param('count') || undefined}
+            active={state === 'active'}
+            disabled={state === 'disabled'}
+            locale={locale}
+          />
         </button>
       );
     case 'tabs': {
       const labels = param('tabs').split('|').filter(Boolean);
       return (
         <div style={{ width: 800 }}>
-          <Tabs label="Tabs" value="t0" onValueChange={() => undefined} tabs={labels.map((label, i) => ({ id: `t${i}`, label }))} locale={locale}>
+          <Tabs
+            label="Tabs"
+            value="t0"
+            onValueChange={() => undefined}
+            tabs={labels.map((label, i) => ({ id: `t${i}`, label }))}
+            locale={locale}
+          >
             {() => null}
           </Tabs>
         </div>
@@ -266,16 +378,55 @@ function Variant() {
           <PageHeader
             title={param('title')}
             description={param('description') || undefined}
-            links={param('action') ? [{ label: param('action'), href: '#docs', external: true }] : []}
+            links={
+              param('action') ? [{ label: param('action'), href: '#docs', external: true }] : []
+            }
+          />
+        </div>
+      );
+    case 'save-bar':
+      return (
+        <div style={{ width: 800 }}>
+          <SaveBar
+            state={state as SaveBarState}
+            onSave={() => undefined}
+            onDiscard={() => undefined}
+          />
+        </div>
+      );
+    case 'modal':
+      // the modal portals into the root, centred in the viewport; the stage keeps a box so the test can find it
+      return (
+        <div style={{ width: 1, height: 1 }}>
+          <Modal
+            open
+            onOpenChange={() => undefined}
+            title={param('title')}
+            description={param('description') || undefined}
+            cancelLabel={param('cancel')}
+            confirmLabel={param('confirm')}
+            onConfirm={() => undefined}
           />
         </div>
       );
     case 'section-card':
-      return <SectionCardDemo spec={JSON.parse(param('spec', '{}')) as CardSpec} tone={param('tone', 'default') as 'default' | 'danger'} />;
+      return (
+        <SectionCardDemo
+          spec={JSON.parse(param('spec', '{}')) as CardSpec}
+          tone={param('tone', 'default') as 'default' | 'danger'}
+        />
+      );
     case 'textarea':
       return <TextareaDemo />;
     case 'tag':
-      return <Tag label={param('label', 'Posts')} size={(q.get('size') === 'md' ? 'md' : 'sm') as TagSize} disabled={state === 'disabled'} onRemove={q.get('removable') === '0' ? undefined : () => undefined} />;
+      return (
+        <Tag
+          label={param('label', 'Posts')}
+          size={(q.get('size') === 'md' ? 'md' : 'sm') as TagSize}
+          disabled={state === 'disabled'}
+          onRemove={q.get('removable') === '0' ? undefined : () => undefined}
+        />
+      );
     case 'multi-select':
       return <MultiSelectDemo />;
     case 'notice':
@@ -301,7 +452,13 @@ function Variant() {
         <Field.Root disabled={state === 'disabled'}>
           <RadioGroup
             aria-label={param('label', 'Full width')}
-            options={[{ value: 'a', label: param('label', 'Full width'), description: q.get('description') ?? undefined }]}
+            options={[
+              {
+                value: 'a',
+                label: param('label', 'Full width'),
+                description: q.get('description') ?? undefined,
+              },
+            ]}
             value={q.get('checked') === '1' ? 'a' : ''}
             onValueChange={() => undefined}
             disabled={state === 'disabled'}
@@ -312,7 +469,11 @@ function Variant() {
     case 'radio-group':
       return (
         <div style={{ width: 354 }}>
-          <GroupField label={param('title')} description={param('description')} disabled={state === 'disabled'}>
+          <GroupField
+            label={param('title')}
+            description={param('description')}
+            disabled={state === 'disabled'}
+          >
             {q.get('c') === 'radio-group' ? <RadioGroupDemo /> : <CheckboxGroupDemo />}
           </GroupField>
         </div>
@@ -370,7 +531,12 @@ function Variant() {
         </div>
       );
     default:
-      return <p>Pick a component: ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card</p>;
+      return (
+        <p>
+          Pick a component:
+          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
+        </p>
+      );
   }
 }
 
@@ -379,7 +545,14 @@ function Variant() {
     const jed = await (await fetch('./fyldo-fa_IR.json')).json();
     setLocaleData(jed);
   }
-  await preloadIcons(['global', ...param('names').split(',').filter(Boolean), ...(param('spec').match(/"icon":"[^"]+"/g) ?? []).map((m) => m.slice(8, -1)), param('icon')].filter(Boolean));
+  await preloadIcons(
+    [
+      'global',
+      ...param('names').split(',').filter(Boolean),
+      ...(param('spec').match(/"icon":"[^"]+"/g) ?? []).map((m) => m.slice(8, -1)),
+      param('icon'),
+    ].filter(Boolean),
+  );
   createRoot(stage).render(
     <PortalContainerContext.Provider value={root}>
       <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>

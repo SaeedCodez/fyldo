@@ -10,11 +10,15 @@ export interface SectionCardProps {
   /** Only rendered when the page saves per section (or for a Danger card). */
   footer?: ReactNode;
   footerText?: string;
+  /** `error`: the footer text is an error (`status/error/text`), e.g. a failed per-section save. */
+  footerStatus?: 'default' | 'error';
+  /** The footer text is a live status (a per-section save): announced politely when it changes. */
+  footerLive?: boolean;
   children?: ReactNode;
 }
 
 /** Figma "Section Card": 800px column, radius lg, 1px border, header / rows / optional footer. */
-export function SectionCard({ title, description, tone = 'default', footer, footerText, children }: SectionCardProps): ReactElement {
+export function SectionCard({ title, description, tone = 'default', footer, footerText, footerStatus = 'default', footerLive = false, children }: SectionCardProps): ReactElement {
   const titleId = useId();
   const danger = tone === 'danger';
 
@@ -42,7 +46,13 @@ export function SectionCard({ title, description, tone = 'default', footer, foot
             danger ? 'fy:border-status-error-border fy:bg-status-error-bg' : 'fy:border-border-default fy:bg-background-subtle',
           )}
         >
-          <p className={cn('fy:flex-1 fy:text-copy-13', danger ? 'fy:text-status-error-text' : 'fy:text-text-secondary')}>{footerText}</p>
+          <p
+            aria-live={footerLive ? 'polite' : undefined}
+            data-slot="fy-section-card-footer-text"
+            className={cn('fy:flex-1 fy:text-copy-13', danger || footerStatus === 'error' ? 'fy:text-status-error-text' : 'fy:text-text-secondary')}
+          >
+            {footerText}
+          </p>
           {footer}
         </footer>
       ) : null}

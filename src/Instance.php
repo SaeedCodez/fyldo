@@ -18,7 +18,7 @@ use Fyldo\V1\Storage\Saver;
  */
 final class Instance {
 
-	const KEYS = array( 'title', 'version', 'capability', 'navigation', 'menu', 'links' );
+	const KEYS = array( 'title', 'logo', 'version', 'capability', 'navigation', 'menu', 'links' );
 
 	/** @var string */
 	private $slug;
@@ -35,6 +35,9 @@ final class Instance {
 	/** @var OptionStore */
 	private $store;
 
+	/** @var array{icon:string}|array{url:string}|null The brand logo; null = the Fyldo mark. */
+	private $logo;
+
 	/** @var string Screen hook suffix returned by add_menu_page()/add_submenu_page(). */
 	private $hook_suffix = '';
 
@@ -49,9 +52,11 @@ final class Instance {
 			throw new ConfigException( sprintf( 'Fyldo "%1$s": unknown config key(s): %2$s.', $slug, implode( ', ', $unknown ) ) );
 		}
 
-		if ( ! isset( $config['title'] ) || '' === trim( (string) $config['title'] ) ) {
-			throw new ConfigException( sprintf( 'Fyldo "%s" needs a title.', $slug ) );
+		// The brand: `title` (default "Fyldo", translated when shown) and `logo` (default: the Fyldo mark).
+		if ( isset( $config['title'] ) && ( ! is_string( $config['title'] ) || '' === trim( $config['title'] ) ) ) {
+			throw new ConfigException( sprintf( 'Fyldo "%s": title must be a non-empty string (omit it for "Fyldo").', $slug ) );
 		}
+		$logo = self::normalize_logo( $slug, $config['logo'] ?? null );
 
 		$navigation = isset( $config['navigation'] ) ? (string) $config['navigation'] : 'sidebar';
 		if ( ! in_array( $navigation, array( 'sidebar', 'top' ), true ) ) {
@@ -62,7 +67,7 @@ final class Instance {
 			array(
 				'type'     => 'submenu',
 				'parent'   => 'options-general.php',
-				'title'    => (string) $config['title'],
+				'title'    => '', // '' = the instance title.
 				'icon'     => 'dashicons-admin-generic', // WordPress menu icon (top-level only), not an Iconsax name.
 				'position' => null,
 			),
@@ -93,9 +98,10 @@ final class Instance {
 		}
 
 		$this->slug   = $slug;
+		$this->logo   = $logo;
 		$this->store  = new OptionStore();
 		$this->config = array(
-			'title'      => (string) $config['title'],
+			'title'      => isset( $config['title'] ) ? trim( (string) $config['title'] ) : '',
 			'version'    => isset( $config['version'] ) ? (string) $config['version'] : '',
 			'capability' => isset( $config['capability'] ) ? (string) $config['capability'] : 'manage_options',
 			'navigation' => $navigation,
@@ -108,8 +114,25 @@ final class Instance {
 		return $this->slug;
 	}
 
+	/** The brand name: the configured title, or "Fyldo" (translated, so it is read when shown, not at `init`). */
 	public function title(): string {
-		return (string) $this->config['title'];
+		return '' !== $this->config['title'] ? (string) $this->config['title'] : __( 'Fyldo', 'fyldo' );
+	}
+
+	/**
+	 * The brand logo as the browser draws it: an Iconsax icon, an image URL, or null for the Fyldo mark.
+	 *
+	 * @return array{icon:string}|array{url:string}|null
+	 */
+	public function logo(): ?array {
+		return $this->logo;
+	}
+
+	/** The admin menu label: `menu.title`, else the brand name. */
+	public function menu_title(): string {
+		$title = (string) $this->config['menu']['title'];
+
+		return '' !== $title ? $title : $this->title();
 	}
 
 	/**
@@ -231,6 +254,37 @@ final class Instance {
 
 	public function set_hook_suffix( string $hook_suffix ): void {
 		$this->hook_suffix = $hook_suffix;
+	}
+
+	/**
+	 * `logo`: an Iconsax icon name (drawn at 24px) or an image URL (drawn 24×24; only what `esc_url_raw()` accepts).
+	 * Omitted or null: the Fyldo mark.
+	 *
+	 * @param string $slug Instance slug (for messages).
+	 * @param mixed  $logo Raw value.
+	 * @return array{icon:string}|array{url:string}|null
+	 * @throws ConfigException On an invalid logo.
+	 */
+	private static function normalize_logo( string $slug, $logo ): ?array {
+		if ( null === $logo ) {
+			return null;
+		}
+		if ( ! is_string( $logo ) || '' === trim( $logo ) ) {
+			throw new ConfigException( sprintf( 'Fyldo "%s": logo must be an Iconsax icon name or an image URL.', $slug ) );
+		}
+
+		$logo = trim( $logo );
+		// Icon names are kebab-case words; anything with a slash or a colon is a URL.
+		if ( 1 !== preg_match( '#[/:]#', $logo ) ) {
+			return array( 'icon' => $logo );
+		}
+
+		$url = esc_url_raw( $logo );
+		if ( '' === $url ) {
+			throw new ConfigException( sprintf( 'Fyldo "%1$s": the logo URL "%2$s" is not valid.', $slug, $logo ) );
+		}
+
+		return array( 'url' => $url );
 	}
 
 	/**
