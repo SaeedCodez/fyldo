@@ -214,7 +214,10 @@ test.describe('Multi Select (pack: multi-select.json)', () => {
           } else if (state !== 'Open') {
             const helper = layer(root, 'Helper text');
             const ht = textCss(helper);
-            expect(await style(stage.getByText(helper.text?.characters ?? ''), ['font-size', 'line-height', 'color'])).toEqual({ 'font-size': ht.fontSize, 'line-height': ht.lineHeight, color: token(ht.color as string) });
+            // The pack draws a Disabled helper in text/disabled (3.23:1 on white); it carries the reason a field is
+            // disabled, so it keeps text/secondary (design-spec §10.2, an M5 accessibility fix).
+            const color = state === 'Disabled' ? token('text/secondary') : token(ht.color as string);
+            expect(await style(stage.getByText(helper.text?.characters ?? ''), ['font-size', 'line-height', 'color'])).toEqual({ 'font-size': ht.fontSize, 'line-height': ht.lineHeight, color });
           }
           if (state === 'Disabled') await expect(field).toHaveAttribute('aria-disabled', 'true');
         });
