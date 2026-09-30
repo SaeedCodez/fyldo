@@ -157,7 +157,7 @@ These cut across components; the implementation must enforce them where possible
 
 **Modal**
 8. Title is a question naming the action ("Reset all settings?"); the confirm button repeats the verb (never OK/Yes). **Cancel at the start, confirm at the end** of the footer (mirrored in RTL). Width 480.
-9. Default modal closes on Esc / close button / backdrop. **Danger modal closes only via Cancel or the close button**, and never while the action is running; the confirm button is disabled until the user types the keyword (only for high-impact actions). Focus moves in on open, is trapped, returns to the trigger on close. Page behind is dimmed (`background/overlay`) and inert.
+9. Default modal closes on Esc / close button / backdrop. **Danger modal closes via Cancel, the close button or Esc (Esc is Cancel: it never confirms), but not on a backdrop click**, and never while the action is running; the confirm button is disabled until the user types the keyword (only for high-impact actions). Focus moves in on open, is trapped, returns to the trigger on close. Page behind is dimmed (`background/overlay`) and inert.
 
 **Icon-only controls / tooltips**
 10. **Every Icon Button has a Tooltip whose text equals its `aria-label`.** Tooltip opens on hover after **300 ms**, immediately on keyboard focus; closes on leave, blur, Esc. No links/buttons inside; sentence case, no final period; default placement Top, flip only to avoid clipping; Start/End follow reading direction. Never hide essential info in a tooltip (touch).
@@ -412,8 +412,19 @@ Nothing below is new visual design: each item reuses pack components, tokens and
 | Item | What was built | From |
 |---|---|---|
 | **Danger modal without a typed keyword** | When an action declares no `keyword`, the Body and the Input are left out and the header keeps the Default padding (24 all round). Confirm is the Error button, enabled at once. | The pack draws Danger only with the typed confirmation (header 24/24/16/24 + Body); the no-keyword case is the Default geometry with the Error button. The usage frame: "add the typed confirmation only for high-impact ones". |
-| **Danger modal ignores Esc** | A Danger modal closes only through Cancel or the close button (not Esc, not the scrim), never while running. | Rule 9 and the Modal usage frame list Esc for the Default modal and "only via Cancel or the close button" for Danger. This departs from the usual dialog pattern (Esc closes); M5's a11y audit should confirm it. |
+| **Danger modal closes on Esc, not on the backdrop** (owner decision, M5) | A Danger modal closes through Cancel, the close button or Esc; Esc is Cancel and never confirms. A click on the backdrop does not close it. Nothing closes it while the action is running. | Rule 9 and the Modal usage frame say "only via Cancel or the close button" for Danger. M5's a11y audit found that ignoring Esc breaks the standard dialog keyboard pattern (WCAG 2.1.2/ARIA APG), so Esc is Cancel; the backdrop stays inert so a stray click cannot dismiss a destructive prompt. |
 | **Tooltip on the Notice's Dismiss** | The Dismiss control (16px `close-circle`, 24×24 target) has the "Dismiss" tooltip. | Rule 10 (every icon-only button has one); the pack draws the control without a tooltip. |
 | **Failed reset feedback** | A failed request closes the modal and shows an Error toast, with **Retry** for a network/5xx failure, or the server's message otherwise. | Toast usage frame (Error + a single verb action such as Retry). The pack has no error slot inside the Modal. |
 | **Stack and gap values measured from usage frames** | Toasts 12px apart (Toast usage frame), page-level notices 12px apart (Badge & Notice usage frame), Tooltip arrow tip 6px from the trigger (Tooltip usage frame). | Measured from the frames' pixels; the component JSON has no stack/offset values. |
 | **Slide-in 200 ms / fade 150 ms** | Toast slide + fade, Tooltip fade; none under `prefers-reduced-motion`. | The motion proposal (ARCHITECTURE §11); Figma has no motion spec. |
+
+### 10.2 Derived in M5, not drawn in the pack — for the owner to confirm (or draw)
+
+Made from existing tokens; the pack is silent on each.
+
+| Item | What was built | Why |
+|---|---|---|
+| **Skip link** | The first Tab stop of the shell: "Skip to page content" («پرش به محتوای صفحه»), invisible until focused, then drawn at the start of the shell: `background/default`, 1px `border/default`, `radius/sm`, padding 16/8, Label/14 `text/primary`, the neutral focus ring. Enter focuses the page heading and leaves the URL alone. | WCAG 2.4.1 (bypass blocks) for the nav (Sidebar or Top Navigation). |
+| **Description of a disabled field stays `text/secondary`** | Only the label and the control take `text/disabled`; the helper/description under a disabled Input, Textarea, Toggle, Checkbox/Radio option or group keeps `text/secondary`. | The description is where the reason for "disabled" is written (rule 14), so it is content, not an inactive control; `text/disabled` on white is 3.23:1 (axe `color-contrast`). |
+| **Top Navigation at ≤782px: edge fade** | The navigation row scrolls sideways; an edge that has more to show fades out over 32px (`space/32`), the start edge only once scrolled, mirrored in RTL. The scrollbar is hidden. | Signals that the row scrolls. |
+| **Reduced motion: everything off** | Under `prefers-reduced-motion: reduce` every animation and transition is off, including the spinner (it is shown static; the loading state is also in the button's label, `aria-busy` and disabled state). | Owner decision (M5): no exceptions. |
