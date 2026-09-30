@@ -1,0 +1,1 @@
+export default [["path",{"clipRule":"evenodd","d":"M4.5 2h17v12l-5 5h-5l-2 3h-3v-3h-4V5l2-3Z","stroke":"currentColor","strokeWidth":"1.5","strokeMiterlimit":"10","strokeLinecap":"round","strokeLinejoin":"round"}],["path",{"d":"M11 7H9v6h2V7ZM16 7h-2v6h2V7Z","stroke":"currentColor","strokeWidth":"1.5","strokeMiterlimit":"10","strokeLinecap":"round","strokeLinejoin":"round"}]];
