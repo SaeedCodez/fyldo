@@ -45,7 +45,7 @@ export function GroupField({ label, description, error, disabled, name, classNam
         {label}
       </div>
       {description ? (
-        <p id={descriptionId} className="fy:mt-1 fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
+        <p id={descriptionId} className="fy:mt-1 fy:text-copy-13 fy:text-text-secondary">
           {description}
         </p>
       ) : null}

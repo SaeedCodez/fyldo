@@ -1,4 +1,4 @@
-import { useId, useState, type MouseEvent, type ReactElement, type ReactNode } from 'react';
+import { useId, useRef, useState, type MouseEvent, type ReactElement, type ReactNode, type RefObject } from 'react';
 import { __ } from '../../i18n';
 import { WP_MOBILE, useMediaQuery } from '../../lib/media';
 import { routeHref, type Route } from '../../lib/router';
@@ -34,6 +34,27 @@ export const utilityLinks = (config: FyldoConfig, placement: 'footer' | 'header'
     .filter((l) => l.placement === placement)
     .map((l) => ({ label: l.label, href: l.url, icon: l.icon || undefined, external: l.external }));
 
+/**
+ * The first stop of the Tab order: skips the brand and the navigation and lands on the page's heading (WCAG 2.4.1).
+ * Hidden until it has keyboard focus, then drawn at the start of the shell with the neutral focus ring. It is a link
+ * pointing at the current route, whose click is handled here, so the URL is left alone.
+ */
+function SkipLink({ shell, href }: { shell: RefObject<HTMLDivElement | null>; href: string }): ReactElement {
+  return (
+    <a
+      href={href}
+      data-slot="fy-skip-link"
+      className="fy:sr-only fy:focus:not-sr-only fy:focus:absolute fy:focus:start-4 fy:focus:top-4 fy:focus:z-50 fy:focus:rounded-sm fy:focus:border fy:focus:border-border-default fy:focus:bg-background-default fy:focus:px-4 fy:focus:py-2 fy:focus:text-label-14 fy:focus:text-text-primary fy:focus-ring"
+      onClick={(event) => {
+        event.preventDefault();
+        shell.current?.querySelector<HTMLElement>('h1')?.focus();
+      }}
+    >
+      {__('Skip to page content', 'fyldo')}
+    </a>
+  );
+}
+
 export interface ShellProps {
   config: FyldoConfig;
   route: Route;
@@ -51,6 +72,7 @@ export interface ShellProps {
  */
 export function Shell({ config, route, onNavigate, children }: ShellProps): ReactElement {
   const mobile = useMediaQuery(WP_MOBILE);
+  const shell = useRef<HTMLDivElement>(null);
   const brand: Brand = { name: config.title, logo: config.logo ?? undefined, version: config.version || undefined };
   const groups = navGroups(config, route);
   const go = (page: string, event: MouseEvent<HTMLAnchorElement>): void => {
@@ -61,10 +83,12 @@ export function Shell({ config, route, onNavigate, children }: ShellProps): Reac
   if (config.navigation === 'top') {
     return (
       <div
+        ref={shell}
         data-slot="fy-shell"
         data-layout="top"
-        className="fy:flex fy:flex-col fy:bg-background-default"
+        className="fy:relative fy:flex fy:flex-col fy:bg-background-default"
       >
+        <SkipLink shell={shell} href={routeHref(config.pages, route)} />
         {/* Utility links live top-right here, and the Page Header shows no actions (design rule 16). */}
         <TopNavigation
           brand={brand}
@@ -81,7 +105,8 @@ export function Shell({ config, route, onNavigate, children }: ShellProps): Reac
   }
 
   return (
-    <div data-slot="fy-shell" data-layout="sidebar" className="fy:flex fy:bg-background-default">
+    <div ref={shell} data-slot="fy-shell" data-layout="sidebar" className="fy:relative fy:flex fy:bg-background-default">
+      <SkipLink shell={shell} href={routeHref(config.pages, route)} />
       {mobile ? null : (
         <div data-slot="fy-sidebar-column" className="fy:shrink-0 fy:bg-background-subtle">
           <div data-slot="fy-sidebar-sticky">

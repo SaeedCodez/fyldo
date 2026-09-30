@@ -1,4 +1,4 @@
-import { Fragment, type MouseEvent, type ReactElement } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState, type MouseEvent, type ReactElement } from 'react';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { ButtonLink } from '../ui/button';
@@ -16,12 +16,38 @@ export interface TopNavigationProps {
   onNavigate?: (pageId: string, event: MouseEvent<HTMLAnchorElement>) => void;
 }
 
+/** Which edges of a horizontally scrolling element have more to show (logical: the same in LTR and RTL, where `scrollLeft` counts down). */
+function useScrollEdges() {
+  const ref = useRef<HTMLElement>(null);
+  const [edges, setEdges] = useState({ start: false, end: false });
+  const measure = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const position = Math.abs(el.scrollLeft);
+    const max = el.scrollWidth - el.clientWidth;
+    setEdges((before) => {
+      const next = { start: position > 1, end: position < max - 1 };
+      return before.start === next.start && before.end === next.end ? before : next;
+    });
+  }, []);
+  useEffect(() => {
+    measure();
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [measure]);
+  return { ref, edges, measure };
+}
+
 /*
  * Figma Top Navigation: full width, background/default, 1px bottom divider (border/default), two 48px rows.
  *   Header      padding 12/24/4/24, gap 16: brand · spacer · utilities (Tertiary Small buttons, leading icon, gap 4)
  *   Navigation  padding 0/12, gap 4: the Tab look with icons, as LINKS (aria-current), not a tablist; groups are
  *               separated by a 1×16 divider centred in a 17px slot instead of labels.
- * At ≤782px (design silent) the utilities wrap under the brand and the navigation row scrolls sideways.
+ * At ≤782px (design silent) the utilities wrap under the brand and the navigation row scrolls sideways, fading out at
+ * an edge that has more to show (app.css).
  */
 export function TopNavigation({
   brand,
@@ -30,6 +56,7 @@ export function TopNavigation({
   locale = 'en',
   onNavigate,
 }: TopNavigationProps): ReactElement {
+  const { ref: navRef, edges, measure } = useScrollEdges();
   return (
     <div data-slot="fy-top-nav" className="fy:relative fy:w-full fy:bg-background-default">
       <span
@@ -73,8 +100,12 @@ export function TopNavigation({
       </div>
 
       <nav
+        ref={navRef}
         aria-label={brand.name}
         data-slot="fy-top-nav-nav"
+        data-fade-start={edges.start ? '' : undefined}
+        data-fade-end={edges.end ? '' : undefined}
+        onScroll={measure}
         className="fy:flex fy:gap-1 fy:px-3 fy:wp-mobile:overflow-x-auto"
       >
         {groups.map((group, index) => (

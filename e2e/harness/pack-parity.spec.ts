@@ -127,7 +127,10 @@ test.describe('Textarea (pack: textarea.json)', () => {
           const helper = layer(root, 'Helper text');
           const h = await style(stage.getByText(helper.text?.characters ?? ''), ['font-size', 'line-height', 'color']);
           const ht = textCss(helper);
-          expect(h).toEqual({ 'font-size': ht.fontSize, 'line-height': ht.lineHeight, color: token(ht.color as string) });
+          // The pack draws a Disabled helper in text/disabled (3.23:1 on white, an axe failure). The helper carries the
+          // reason a field is disabled, so it keeps text/secondary (design-spec §10.2, an M5 accessibility fix).
+          const color = state === 'Disabled' ? token('text/secondary') : token(ht.color as string);
+          expect(h).toEqual({ 'font-size': ht.fontSize, 'line-height': ht.lineHeight, color });
         }
 
         // ── the counter: text, style, colour, and it sits at the END of the helper row ──

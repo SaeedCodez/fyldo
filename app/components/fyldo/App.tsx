@@ -80,7 +80,7 @@ export function App({ config, root }: AppProps): ReactElement {
   useEffect(() => {
     if (focusedPage.current === route.page) return;
     focusedPage.current = route.page;
-    if (cause === 'navigate') window.scrollTo({ top: 0 });
+    if (cause === 'navigate') window.scrollTo({ top: 0, behavior: 'instant' });
     heading.current?.focus({ preventScroll: true });
   }, [route.page, cause]);
 

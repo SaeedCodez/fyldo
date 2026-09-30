@@ -11,7 +11,7 @@ import { TextField } from './text-field';
 
 export interface ModalProps {
   open: boolean;
-  /** Called with `false` when the modal asks to close: Esc (Default only), the close button, a click on the backdrop (Default only), or Cancel. */
+  /** Called with `false` when the modal asks to close: Esc, the close button, a click on the backdrop (Default only), or Cancel. Esc is Cancel: it never confirms. */
   onOpenChange: (open: boolean) => void;
   /** Figma `Type`. Default: a confirmation that discards work. Danger: an irreversible action, with an Error button. */
   type?: 'default' | 'danger';
@@ -44,9 +44,9 @@ export interface ModalProps {
  * `background/subtle` with a top border, 16/24: Cancel (Secondary Small) at the start, Confirm at the end (mirrored in RTL).
  *
  * Type=Danger adds the typed confirmation (a labelled Medium Input in a Body, header padding 24/24/16/24) and an Error
- * Small Confirm that stays disabled until the keyword matches. A Danger modal closes only through Cancel or the close
- * button — not Esc, not a click on the scrim — and never while its action is running (design rule 9). A Default one
- * also closes on Esc and the scrim.
+ * Small Confirm that stays disabled until the keyword matches. A Danger modal closes through Cancel, the close button
+ * or Esc (Esc is Cancel: it never confirms) — not a click on the scrim — and never while its action is running (design
+ * rule 9). A Default one also closes on the scrim.
  *
  * Focus moves in on open — to Cancel, the safe choice, or to the keyword field — is trapped, the page behind is inert,
  * and focus returns to the trigger on close, except after Confirm, whose action decides where focus goes next (e.g.
@@ -102,8 +102,8 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
       open={open}
       onOpenChange={(next, details) => {
         if (busy) return; // never while the action is running
-        // A Danger modal ignores Esc and the scrim: Cancel or the close button, on purpose.
-        if (danger && !next && (details.reason === 'escape-key' || details.reason === 'outside-press')) return;
+        // A Danger modal ignores a click on the scrim (a stray click must not dismiss it); Esc is Cancel.
+        if (danger && !next && details.reason === 'outside-press') return;
         onOpenChange(next);
       }}
     >

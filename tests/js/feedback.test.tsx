@@ -320,15 +320,22 @@ describe('Modal: Danger type', () => {
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
 
-  it('closes only through Cancel or the close button: not Esc, not the scrim', async () => {
+  it('closes through Cancel, the close button or Esc (Esc is Cancel: it never confirms), not the scrim', async () => {
     mount(<Harness onConfirm={() => undefined} />);
-    await userEvent.keyboard('{Escape}');
-    expect(dialog()).toBeInTheDocument();
     await userEvent.click(document.querySelector('[data-slot=fy-modal-backdrop]') as HTMLElement);
     expect(dialog()).toBeInTheDocument();
 
     await userEvent.click(within(dialog()).getByRole('button', { name: 'Close' }));
     await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull());
+  });
+
+  it('Esc closes it without confirming, even with the keyword typed', async () => {
+    const onConfirm = vi.fn();
+    mount(<Harness onConfirm={onConfirm} />);
+    await userEvent.type(within(dialog()).getByRole('textbox'), 'RESET');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(screen.queryByRole('alertdialog')).toBeNull());
+    expect(onConfirm).not.toHaveBeenCalled();
   });
 
   it('Cancel closes it and returns focus to the trigger', async () => {

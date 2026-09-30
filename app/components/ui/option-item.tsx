@@ -32,7 +32,7 @@ export function OptionItem({ label, description, disabled, control, className }:
         <span className="fy:text-label-14 fy:text-text-primary fy:group-data-[disabled]/option:text-text-disabled">{label}</span>
       </Field.Label>
       {description ? (
-        <Field.Description className="fy:ps-6 fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/option:text-text-disabled">{description}</Field.Description>
+        <Field.Description className="fy:ps-6 fy:text-copy-13 fy:text-text-secondary">{description}</Field.Description>
       ) : null}
     </Field.Item>
   );

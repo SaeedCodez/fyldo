@@ -334,6 +334,24 @@ describe('top navigation layout', () => {
   });
 });
 
+describe('skip link', () => {
+  it.each(['sidebar', 'top'] as const)('%s layout: the first Tab stop; Enter focuses the page heading and leaves the route alone', async (navigation) => {
+    mount({ navigation });
+    await userEvent.tab();
+    const skip = screen.getByRole('link', { name: 'Skip to page content' });
+    expect(skip).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    expect(screen.getByRole('heading', { level: 1, name: 'General' })).toHaveFocus();
+    expect(window.location.hash).toBe('');
+  });
+
+  it('is translated', () => {
+    setLocaleData({ locale_data: { messages: { '': { domain: 'fyldo', lang: 'fa_IR' }, 'Skip to page content': ['پرش به محتوای صفحه'] } } });
+    mount();
+    expect(screen.getByRole('link', { name: 'پرش به محتوای صفحه' })).toBeInTheDocument();
+  });
+});
+
 describe('at 782px and below', () => {
   beforeEach(() => {
     vi.stubGlobal('matchMedia', (query: string) => ({

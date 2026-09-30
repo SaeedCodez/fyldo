@@ -154,7 +154,7 @@ describe('reset to defaults', () => {
     await waitFor(() => expect(toasts()).toHaveLength(1));
     expect(toasts()[0]).toHaveAttribute('data-tone', 'error');
     expect(toasts()[0]).toHaveTextContent("Couldn't reset settings. Check your connection and try again.");
-    expect(screen.queryByRole('alertdialog')).toBeNull();
+    expect(screen.queryByRole('alertdialog', { name: 'Reset all settings?' })).toBeNull();
     expect(screen.getByRole('textbox', { name: 'Default meta description' })).toHaveValue('Saved earlier'); // nothing changed
 
     // Retry: one verb, the same confirmed action
