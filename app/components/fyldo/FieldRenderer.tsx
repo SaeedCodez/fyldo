@@ -9,6 +9,7 @@ import { Input } from '../ui/input';
 import { MultiSelect } from '../ui/multi-select';
 import { Notice } from '../ui/notice';
 import { NumberInput } from '../ui/number-input';
+import { PasswordInput } from '../ui/password-input';
 import { RadioGroup } from '../ui/radio';
 import { Select } from '../ui/select';
 import { Textarea, TextareaFooter } from '../ui/textarea';
@@ -22,6 +23,8 @@ export interface FieldRendererProps {
   divider: boolean;
   onChange: (id: string, value: FieldValue) => void;
   onBlur: (id: string) => void;
+  /** The page's stored revision: a password shown in clear is hidden again when it changes (a successful save). */
+  revision?: string;
 }
 
 /** `onBlur` for a group: only when focus leaves the group, not when it moves between its options. */
@@ -32,7 +35,7 @@ const leavesGroup = (done: () => void) => (event: FocusEvent<HTMLElement>) => {
 const list = (value: FieldValue): string[] => (Array.isArray(value) ? value : []);
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
-export function FieldRenderer({ field, value, error, divider, onChange, onBlur }: FieldRendererProps): ReactElement {
+export function FieldRenderer({ field, value, error, divider, onChange, onBlur, revision }: FieldRendererProps): ReactElement {
   // Display only: no value, no label association, nothing to change, nothing to send.
   if (field.type === 'notice') {
     return (
@@ -168,8 +171,9 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur }
       const stored = value === null;
       return (
         <SettingRow {...common} srNote={stored ? __('A value is already saved. Leave this empty to keep it, or type a new one to replace it.', 'fyldo') : undefined}>
-          <Input
-            type="password"
+          <PasswordInput
+            hideOn={revision}
+            disabled={disabled}
             value={typeof value === 'string' ? value : ''}
             placeholder={stored ? __('•••• set', 'fyldo') : field.placeholder}
             prefixIcon={field.icon}

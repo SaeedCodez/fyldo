@@ -143,6 +143,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
                 divider={index < section.fields.length - 1}
                 onChange={setValue}
                 onBlur={validateField}
+                revision={state.revision}
               />
             ))}
           </SectionCard>

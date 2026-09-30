@@ -234,3 +234,10 @@ msgstr "ذخیره نشد: این تنظیمات در جای دیگری تغیی
 
 msgid "Couldn’t load the latest values. Check your connection and try again."
 msgstr "بارگذاری آخرین مقادیر انجام نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+# Code-only design (docs/design-spec.md): the password show/hide toggle.
+msgid "Show password"
+msgstr "نمایش گذرواژه"
+
+msgid "Hide password"
+msgstr "پنهان کردن گذرواژه"

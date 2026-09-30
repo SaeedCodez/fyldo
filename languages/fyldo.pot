@@ -26,13 +26,13 @@ msgstr ""
 msgid "Keep editing"
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:170
+#: app/components/fyldo/FieldRenderer.tsx:173
 msgid ""
 "A value is already saved. Leave this empty to keep it, or type a new one to "
 "replace it."
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:174
+#: app/components/fyldo/FieldRenderer.tsx:178
 msgid "•••• set"
 msgstr ""
 
@@ -75,19 +75,19 @@ msgstr ""
 msgid "Changes take effect after you save."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:110
+#: app/components/fyldo/SettingsPage.tsx:119
 msgid "Save"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:158
+#: app/components/fyldo/SettingsPage.tsx:168
 msgid "These settings were changed somewhere else"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:161
+#: app/components/fyldo/SettingsPage.tsx:171
 msgid "Reload latest values"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:165
+#: app/components/fyldo/SettingsPage.tsx:175
 msgid ""
 "They were saved in another tab or by another person after this page was "
 "opened, so your changes were not saved. Reload the latest values to "
@@ -164,6 +164,14 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
+#: app/components/ui/password-input.tsx:32
+msgid "Hide password"
+msgstr ""
+
+#: app/components/ui/password-input.tsx:32
+msgid "Show password"
+msgstr ""
+
 #: app/components/ui/tag.tsx:62
 msgid "Remove %s"
 msgstr ""
@@ -201,7 +209,7 @@ msgid ""
 msgstr ""
 
 #: fyldo.php
-#: src/Instance.php:116
+#: src/Instance.php:119
 #. Plugin Name of the plugin
 #. Author of the plugin
 msgid "Fyldo"
