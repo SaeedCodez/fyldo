@@ -60,7 +60,13 @@ export interface Router {
   cause: 'initial' | 'navigate' | 'history';
 }
 
-export function useRouter(pages: PageDef[]): Router {
+/**
+ * Asked before Back/Forward or an edited hash shows another route: `false` keeps the current one (the URL is put back
+ * in place) — e.g. while the unsaved-changes dialog decides.
+ */
+export type HistoryGuard = (next: Route) => boolean;
+
+export function useRouter(pages: PageDef[], guard?: HistoryGuard): Router {
   const [state, setState] = useState<{ route: Route; cause: Router['cause'] }>(() => ({
     route: resolveRoute(pages, parseHash(window.location.hash)),
     cause: 'initial',
@@ -68,6 +74,8 @@ export function useRouter(pages: PageDef[]): Router {
 
   const shown = useRef(state.route);
   shown.current = state.route;
+  const guardRef = useRef(guard);
+  guardRef.current = guard;
 
   useEffect(() => {
     // Read the URL: show its route, and correct IN PLACE (no history entry) a hash that names something that does not
@@ -76,6 +84,11 @@ export function useRouter(pages: PageDef[]): Router {
       const hash = window.location.hash;
       const wanted = parseHash(hash);
       const next = resolveRoute(pages, wanted);
+      if (cause === 'history' && !sameRoute(shown.current, next) && guardRef.current && !guardRef.current(next)) {
+        // Refused: the URL goes back to what is shown, in place (the entry the user moved to now names this route).
+        window.history.replaceState(window.history.state, '', routeHash(pages, shown.current));
+        return;
+      }
       if (
         hash !== '' &&
         hash !== '#' &&

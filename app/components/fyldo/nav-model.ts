@@ -25,9 +25,13 @@ export interface UtilityLink {
   external: boolean;
 }
 
+/** The instance `logo`: an Iconsax icon (24px) or an image URL (24×24). None: the Fyldo mark. */
+export type BrandLogo = { icon: string } | { url: string };
+
 export interface Brand {
-  /** The instance title. */
+  /** The instance title ("Fyldo" when the developer gives none). */
   name: string;
+  logo?: BrandLogo;
   /** Shown in a Badge ("v1.0"); none when empty. */
   version?: string;
 }

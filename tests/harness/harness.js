@@ -21,7 +21,8 @@ if (params.get('hostile')) {
 
 window.__fyldo_harness__ = {
   slug: 'harness',
-  title: 'Fyldo',
+  title: rtl ? 'فیلدو' : 'Fyldo',
+  logo: null,
   version: '1.0.0',
   fyldoVersion: '1.0.0-dev',
   navigation: params.get('nav') === 'top' ? 'top' : 'sidebar',

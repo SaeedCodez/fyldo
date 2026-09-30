@@ -14,6 +14,18 @@ msgstr ""
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
 
+#: app/components/fyldo/App.tsx:110
+msgid "Discard unsaved changes?"
+msgstr ""
+
+#: app/components/fyldo/App.tsx:111
+msgid "Your edits on this page haven’t been saved and will be lost."
+msgstr ""
+
+#: app/components/fyldo/App.tsx:112
+msgid "Keep editing"
+msgstr ""
+
 #: app/components/fyldo/FieldRenderer.tsx:170
 msgid ""
 "A value is already saved. Leave this empty to keep it, or type a new one to "
@@ -24,33 +36,75 @@ msgstr ""
 msgid "•••• set"
 msgstr ""
 
+#: app/components/fyldo/NavItem.tsx:82
+#: app/components/fyldo/PageHeader.tsx:59
+#: app/components/fyldo/TopNavigation.tsx:65
+msgid "(opens in a new tab)"
+msgstr ""
+
 #: app/components/fyldo/SaveBar.tsx:25
 msgid "You have unsaved changes"
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:27
+#: app/components/fyldo/SaveBar.tsx:26
 msgid "Saving changes…"
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:29
+#: app/components/fyldo/SaveBar.tsx:27
 msgid "All changes saved"
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:30
-#: app/lib/page-form.ts:129
-msgid "Couldn't save. Check your connection and try again."
+#: app/components/fyldo/SaveBar.tsx:28
+#: app/lib/page-form.ts:68
+msgid "Couldn’t save. Check the highlighted fields."
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:36
+#: app/components/fyldo/SaveBar.tsx:59
 msgid "Unsaved changes"
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:57
+#: app/components/fyldo/SaveBar.tsx:84
 msgid "Discard"
 msgstr ""
 
-#: app/components/fyldo/SaveBar.tsx:60
+#: app/components/fyldo/SaveBar.tsx:87
 msgid "Save changes"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:103
+msgid "Changes take effect after you save."
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:110
+msgid "Save"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:158
+msgid "These settings were changed somewhere else"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:161
+msgid "Reload latest values"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:165
+msgid ""
+"They were saved in another tab or by another person after this page was "
+"opened, so your changes were not saved. Reload the latest values to "
+"continue; your unsaved changes on this page will be lost."
+msgstr ""
+
+#: app/components/fyldo/Shell.tsx:151
+msgid "Menu"
+msgstr ""
+
+#: app/components/fyldo/Sidebar.tsx:109
+#: app/components/fyldo/TopNavigation.tsx:47
+msgid "Resources"
+msgstr ""
+
+#: app/components/ui/modal.tsx:68
+msgid "Close"
 msgstr ""
 
 #: app/components/ui/multi-select.tsx:111
@@ -126,10 +180,16 @@ msgid_plural "%d characters over the limit."
 msgstr[0] ""
 msgstr[1] ""
 
-#: fyldo.php
-#. Plugin Name of the plugin
-#. Author of the plugin
-msgid "Fyldo"
+#: app/lib/page-form.ts:280
+msgid "Couldn’t load the latest values. Check your connection and try again."
+msgstr ""
+
+#: app/lib/page-form.ts:69
+msgid "Couldn't save. Check your connection and try again."
+msgstr ""
+
+#: app/lib/page-form.ts:70
+msgid "Couldn’t save: these settings were changed somewhere else."
 msgstr ""
 
 #: fyldo.php
@@ -138,6 +198,13 @@ msgid ""
 "Settings-page framework for WordPress plugin developers. Declare pages, "
 "sections and fields in PHP; get a modern admin UI with REST-backed "
 "validation and saving."
+msgstr ""
+
+#: fyldo.php
+#: src/Instance.php:116
+#. Plugin Name of the plugin
+#. Author of the plugin
+msgid "Fyldo"
 msgstr ""
 
 #: src/Admin/Screen.php:66
@@ -268,19 +335,12 @@ msgstr ""
 msgid "This value is not valid."
 msgstr ""
 
-#: app/components/fyldo/NavItem.tsx:53
-msgid "(opens in a new tab)"
+#: app/components/fyldo/App.tsx:113
+msgctxt "unsaved changes dialog"
+msgid "Discard"
 msgstr ""
 
-#: app/components/fyldo/Shell.tsx:108
-msgid "Menu"
-msgstr ""
-
-#: app/components/fyldo/Sidebar.tsx:79
-msgid "Resources"
-msgstr ""
-
-#: app/components/fyldo/BrandMark.tsx:17
+#: app/components/fyldo/BrandMark.tsx:54
 msgctxt "version badge"
 msgid "v%s"
 msgstr ""

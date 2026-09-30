@@ -22,15 +22,16 @@ export interface NoticeProps {
   title?: string;
   /** The message: what happened and what to do next. */
   children: ReactNode;
+  /** Figma `Show action`: one Secondary Small Button at the end, centred on the notice's height. */
+  action?: ReactNode;
   className?: string;
 }
 
 /**
- * Figma "Notice", the static part: tone icon · title (optional) · message, full width. Actions and dismissing are
- * Milestone 4. A notice that is on the page from the start is a labelled region, not a live region (it must not
+ * Figma "Notice": tone icon · title (optional) · message · action (optional), full width. Dismissing is Milestone 4. A notice that is on the page from the start is a labelled region, not a live region (it must not
  * interrupt a screen reader when the page loads); the label starts with the tone word: "Warning: Renew soon".
  */
-export function Notice({ tone = 'gray', title, children, className }: NoticeProps): ReactElement {
+export function Notice({ tone = 'gray', title, children, action, className }: NoticeProps): ReactElement {
   const { look, icon, label } = TONES[tone];
 
   return (
@@ -49,6 +50,7 @@ export function Notice({ tone = 'gray', title, children, className }: NoticeProp
         {title ? <p className="fy:text-label-14-strong">{title}</p> : null}
         <p className="fy:text-copy-14">{children}</p>
       </div>
+      {action ? <div className="fy:flex fy:shrink-0 fy:items-center fy:self-stretch">{action}</div> : null}
     </div>
   );
 }
