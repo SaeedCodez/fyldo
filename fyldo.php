@@ -52,4 +52,14 @@ if ( ! class_exists( Bootstrap\Loader::class, false ) ) {
 			Fyldo::init();
 		}
 	);
+
+	// Installed as a plugin (this folder sits directly in the plugins folder): add the demo dashboard. A drop-in
+	// copy (plugins/acme/fyldo) or a Composer package (plugins/acme/vendor/fyldo/fyldo) has another parent folder,
+	// so it never loads it (and only one copy can be the plugin, so the demo class is defined once).
+	$plugins = \defined( 'WP_PLUGIN_DIR' ) ? \realpath( WP_PLUGIN_DIR ) : false;
+	$demo    = __DIR__ . '/demo/demo.php';
+	if ( false !== $plugins && \wp_normalize_path( \dirname( __DIR__ ) ) === \wp_normalize_path( $plugins ) && \is_readable( $demo ) ) {
+		require_once $demo;
+		Demo\Demo::boot( __FILE__ );
+	}
 } )();

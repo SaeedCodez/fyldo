@@ -20,10 +20,12 @@ final class StraussSafeTest extends TestCase {
 	private function sources(): array {
 		$root  = dirname( __DIR__, 3 );
 		$files = array( $root . '/fyldo.php' );
-		$it    = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $root . '/src', \FilesystemIterator::SKIP_DOTS ) );
-		foreach ( $it as $file ) {
-			if ( 'php' === $file->getExtension() ) {
-				$files[] = $file->getPathname();
+		foreach ( array( '/src', '/demo' ) as $dir ) {
+			$it = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $root . $dir, \FilesystemIterator::SKIP_DOTS ) );
+			foreach ( $it as $file ) {
+				if ( 'php' === $file->getExtension() ) {
+					$files[] = $file->getPathname();
+				}
 			}
 		}
 		sort( $files );

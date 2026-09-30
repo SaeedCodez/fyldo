@@ -5,6 +5,7 @@ parameters:
 	level: 8
 	paths:
 		- src
+		- demo
 		- fyldo.php
 	treatPhpDocTypesAsCertain: false
 	ignoreErrors:

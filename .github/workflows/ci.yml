@@ -55,6 +55,29 @@ jobs:
           sudo apt-get install -y gettext
           npm run i18n
 
+  # A pull request carries its own installable build: download the `fyldo-plugin-zip` artifact from the run.
+  # (Releases build the same ZIP in release.yml, so this job is skipped there.)
+  package:
+    name: Plugin ZIP (PR build)
+    if: github.event_name == 'pull_request'
+    needs: [php, js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.2', tools: wp-cli, coverage: none }
+      - run: sudo apt-get install -y gettext zip
+      - run: npm ci
+      - name: Build build/fyldo.zip (the same command as a release)
+        run: npm run release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fyldo-plugin-zip
+          path: build/fyldo.zip
+          if-no-files-found: error
+
   e2e:
     name: Playwright on wp-env
     runs-on: ubuntu-latest

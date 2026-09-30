@@ -65,7 +65,7 @@ function main(): void {
   const phpPot = resolve(root, 'build/php.pot');
   execFileSync(
     'wp',
-    ['i18n', 'make-pot', root, phpPot, `--domain=${DOMAIN}`, '--slug=fyldo', '--include=src,fyldo.php', '--skip-js', '--skip-audit'],
+    ['i18n', 'make-pot', root, phpPot, `--domain=${DOMAIN}`, '--slug=fyldo', '--include=src,demo,fyldo.php', '--skip-js', '--skip-audit'],
     { stdio: 'inherit' },
   );
 

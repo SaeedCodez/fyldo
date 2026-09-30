@@ -283,3 +283,243 @@ msgstr "این اقدام وجود ندارد."
 
 msgid "The confirmation text does not match."
 msgstr "متن تأیید مطابقت ندارد."
+
+msgid "A live tour of what a settings screen built with Fyldo looks like."
+msgstr "یک گشت زنده برای دیدن ظاهر صفحه‌ی تنظیمات ساخته‌شده با فیلدو."
+
+msgid "A short sentence, up to 160 characters."
+msgstr "یک جمله‌ی کوتاه، حداکثر ۱۶۰ نویسه."
+
+msgid "API key"
+msgstr "کلید API"
+
+msgid "Access"
+msgstr "دسترسی"
+
+msgid "Account name"
+msgstr "نام حساب"
+
+msgid "All post types"
+msgstr "همه‌ی نوع‌های نوشته"
+
+msgid "Amounts"
+msgstr "مقدارها"
+
+msgid "Ask search engines to skip this site."
+msgstr "از موتورهای جستجو بخواهید این سایت را نادیده بگیرند."
+
+msgid "Authors"
+msgstr "نویسندگان"
+
+msgid "Between 5 and 100, in steps of 5."
+msgstr "بین ۵ و ۱۰۰، با گام‌های ۵ تایی."
+
+msgid "Boxed"
+msgstr "جعبه‌ای"
+
+msgid "Categories"
+msgstr "دسته‌ها"
+
+msgid "Checked by a rule that only runs on the server. Try “admin”."
+msgstr "با قاعده‌ای بررسی می‌شود که فقط روی سرور اجرا می‌شود. «admin» را امتحان کنید."
+
+msgid "Contact email"
+msgstr "ایمیل تماس"
+
+msgid "Content"
+msgstr "محتوا"
+
+msgid "Discourage indexing"
+msgstr "جلوگیری از نمایه‌سازی"
+
+msgid "Display"
+msgstr "نمایش"
+
+msgid "Documentation"
+msgstr "مستندات"
+
+msgid "Each card saves on its own."
+msgstr "هر کارت جداگانه ذخیره می‌شود."
+
+msgid "Each page shows different building blocks."
+msgstr "هر صفحه بخش‌های سازنده‌ی متفاوتی را نشان می‌دهد."
+
+msgid "English and فارسی"
+msgstr "انگلیسی و فارسی"
+
+msgid "Everything here is declared in PHP"
+msgstr "همه‌ی این‌ها در PHP تعریف شده‌اند"
+
+msgid "Excerpt length"
+msgstr "طول چکیده"
+
+msgid "Full width"
+msgstr "تمام‌عرض"
+
+msgid "Fyldo demo"
+msgstr "دموی فیلدو"
+
+msgid "General"
+msgstr "عمومی"
+
+msgid "Home address"
+msgstr "نشانی صفحه‌ی اصلی"
+
+msgid "How your site introduces itself."
+msgstr "سایت شما چگونه خودش را معرفی می‌کند."
+
+msgid "In words, between 10 and 200."
+msgstr "بر حسب کلمه، بین ۱۰ و ۲۰۰."
+
+msgid "Include in the sitemap"
+msgstr "گنجاندن در نقشه‌ی سایت"
+
+msgid "Index"
+msgstr "نمایه شود"
+
+msgid "Items per page"
+msgstr "تعداد مورد در هر صفحه"
+
+msgid "Keys, accounts and a way back to the defaults."
+msgstr "کلیدها، حساب‌ها و راهی برای بازگشت به پیش‌فرض‌ها."
+
+msgid "Language and indexing"
+msgstr "زبان و نمایه‌سازی"
+
+msgid "Layout"
+msgstr "چیدمان"
+
+msgid "Let search engines list this site."
+msgstr "به موتورهای جستجو اجازه دهید این سایت را فهرست کنند."
+
+msgid "License key"
+msgstr "کلید مجوز"
+
+msgid "Limits"
+msgstr "محدودیت‌ها"
+
+msgid "Maintenance mode"
+msgstr "حالت تعمیر و نگهداری"
+
+msgid "Managed by your hosting provider."
+msgstr "توسط ارائه‌دهنده‌ی هاست شما مدیریت می‌شود."
+
+msgid "My WordPress site"
+msgstr "سایت وردپرسی من"
+
+msgid "Not available in the demo."
+msgstr "در نسخه‌ی دمو در دسترس نیست."
+
+msgid "Nothing you type here leaves this site."
+msgstr "هیچ‌چیزی که اینجا تایپ می‌کنید از این سایت خارج نمی‌شود."
+
+msgid "Numbers are checked in the browser and again on the server."
+msgstr "عددها هم در مرورگر و هم دوباره روی سرور بررسی می‌شوند."
+
+msgid "Only https addresses are accepted."
+msgstr "فقط نشانی‌های https پذیرفته می‌شوند."
+
+msgid "Open demo"
+msgstr "باز کردن دمو"
+
+msgid "Overview"
+msgstr "نمای کلی"
+
+msgid "Page layout"
+msgstr "چیدمان صفحه"
+
+msgid "Pages"
+msgstr "برگه‌ها"
+
+msgid "Posts"
+msgstr "نوشته‌ها"
+
+msgid "Products"
+msgstr "محصولات"
+
+msgid "Report an issue"
+msgstr "گزارش مشکل"
+
+msgid "Restore every option on this page to its default value."
+msgstr "همه‌ی گزینه‌های این صفحه را به مقدار پیش‌فرض بازمی‌گرداند."
+
+msgid "Search engine visibility"
+msgstr "نمایان‌بودن برای موتورهای جستجو"
+
+msgid "Security"
+msgstr "امنیت"
+
+msgid "Select content types…"
+msgstr "نوع‌های محتوا را انتخاب کنید…"
+
+msgid "Settings"
+msgstr "تنظیمات"
+
+msgid "Show a coming-soon page to visitors. Administrators still see the site."
+msgstr "یک صفحه‌ی «به‌زودی» به بازدیدکنندگان نشان داده می‌شود. مدیران همچنان سایت را می‌بینند."
+
+msgid "Show on"
+msgstr "نمایش در"
+
+msgid "Show publish dates"
+msgstr "نمایش تاریخ انتشار"
+
+msgid "Shown in the browser tab and in search results."
+msgstr "در زبانه‌ی مرورگر و نتایج جستجو نمایش داده می‌شود."
+
+msgid "Site identity"
+msgstr "هویت سایت"
+
+msgid "Site language"
+msgstr "زبان سایت"
+
+msgid "Site title"
+msgstr "عنوان سایت"
+
+msgid "Tabs, checkbox groups, multi select and number fields, saved card by card."
+msgstr "زبانه‌ها، گروه‌های چک‌باکس، چندانتخابی و فیلدهای عددی که کارت‌به‌کارت ذخیره می‌شوند."
+
+msgid "Tagline"
+msgstr "شعار"
+
+msgid "Tags"
+msgstr "برچسب‌ها"
+
+msgid "Take the tour"
+msgstr "گشتی بزنید"
+
+msgid "Tools"
+msgstr "ابزارها"
+
+msgid "Welcome"
+msgstr "خوش آمدید"
+
+msgid "What is shown, where, and how much of it."
+msgstr "چه چیزی، کجا و به چه اندازه نمایش داده شود."
+
+msgid "Where to show it"
+msgstr "کجا نمایش داده شود"
+
+msgid "Write-only: once saved, the key is never sent back to the browser."
+msgstr "فقط نوشتنی: پس از ذخیره، کلید دیگر به مرورگر فرستاده نمی‌شود."
+
+msgid "Your site’s identity and how search engines see it."
+msgstr "هویت سایت شما و نحوه‌ی دیده‌شدنش در موتورهای جستجو."
+
+msgid "“admin” is reserved. Choose another name."
+msgstr "«admin» رزرو شده است. نام دیگری انتخاب کنید."
+
+msgid "This demo is only added when Fyldo is installed as a plugin. Return false from the fyldo/fyldo-demo/enabled filter to hide it."
+msgstr "این دمو فقط وقتی اضافه می‌شود که فیلدو به‌صورت افزونه نصب شده باشد. برای پنهان کردن آن، فیلتر fyldo/fyldo-demo/enabled را false برگردانید."
+
+msgid "Pages, sections and fields come from one array. Change a value, save it and reload: it is stored in a normal WordPress option."
+msgstr "صفحه‌ها، بخش‌ها و فیلدها از یک آرایه می‌آیند. مقداری را تغییر دهید، ذخیره کنید و صفحه را دوباره باز کنید: در یک گزینه‌ی معمولی وردپرس ذخیره می‌شود."
+
+msgid "The screen follows your language. Set your profile language to فارسی to see the right-to-left layout."
+msgstr "این صفحه از زبان شما پیروی می‌کند. زبان نمایه‌ی خود را روی فارسی بگذارید تا چیدمان راست‌به‌چپ را ببینید."
+
+msgid "Text, URL, email, textarea, toggle, select and radio fields with one Save Bar for the whole page."
+msgstr "فیلدهای متن، نشانی، ایمیل، متن چندخطی، کلید، انتخاب و رادیو با یک نوار ذخیره برای کل صفحه."
+
+msgid "A write-only password, a disabled field, a server-side rule and a Danger card that resets the page."
+msgstr "یک رمز عبور فقط‌نوشتنی، یک فیلد غیرفعال، یک قاعده‌ی سمت سرور و یک کارت خطر که صفحه را بازنشانی می‌کند."
