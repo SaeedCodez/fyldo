@@ -1,0 +1,115 @@
+{
+    "id": "advanced",
+    "title": "Advanced",
+    "description": "Caching and troubleshooting options for developers.",
+    "icon": "code-1",
+    "group": "tools",
+    "badge": "",
+    "save": "global",
+    "tabs": [
+        {
+            "id": "cache",
+            "label": "Cache",
+            "icon": "",
+            "badge": ""
+        },
+        {
+            "id": "debug",
+            "label": "Debugging",
+            "icon": "",
+            "badge": "2"
+        }
+    ],
+    "sections": [
+        {
+            "id": "cache",
+            "tab": "cache",
+            "title": "Page cache",
+            "description": "Serve stored copies of pages to visitors.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "page_cache",
+                    "type": "toggle",
+                    "label": "Enable page cache",
+                    "description": "Logged-in users always see fresh pages.",
+                    "default": true,
+                    "disabled": false,
+                    "layout": "inline",
+                    "validate": {}
+                },
+                {
+                    "id": "cache_ttl",
+                    "type": "number",
+                    "label": "Cache lifetime",
+                    "description": "In minutes, between 5 and 1440.",
+                    "default": 60,
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "min": 5,
+                        "max": 1440,
+                        "number": true
+                    },
+                    "placeholder": ""
+                }
+            ]
+        },
+        {
+            "id": "debug",
+            "tab": "debug",
+            "title": "Debugging",
+            "description": "Extra information for troubleshooting.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "debug_log",
+                    "type": "toggle",
+                    "label": "Write a debug log",
+                    "description": "Stored in the uploads folder; remove it when you are done.",
+                    "default": false,
+                    "disabled": false,
+                    "layout": "inline",
+                    "validate": {}
+                },
+                {
+                    "id": "log_prefix",
+                    "type": "text",
+                    "label": "Log file prefix",
+                    "description": "Letters, digits and dashes only.",
+                    "default": "acme",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "required": true,
+                        "pattern": "^[a-z0-9-]+$"
+                    },
+                    "placeholder": ""
+                }
+            ]
+        },
+        {
+            "id": "about",
+            "tab": "",
+            "title": "About these settings",
+            "description": "Shown on every tab: a section without a tab belongs to the whole page.",
+            "tone": "default",
+            "fields": [
+                {
+                    "id": "advanced_notice",
+                    "type": "notice",
+                    "label": "",
+                    "description": "These options are meant for developers.",
+                    "tone": "blue"
+                }
+            ]
+        }
+    ],
+    "values": {
+        "page_cache": true,
+        "cache_ttl": 60,
+        "debug_log": false,
+        "log_prefix": "acme"
+    },
+    "revision": "rev-1"
+}

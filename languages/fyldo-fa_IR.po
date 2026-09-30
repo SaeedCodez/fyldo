@@ -178,3 +178,17 @@ msgstr "•••• تنظیم شده"
 
 msgid "A value is already saved. Leave this empty to keep it, or type a new one to replace it."
 msgstr "مقداری از قبل ذخیره شده است. برای نگه داشتن آن این فیلد را خالی بگذارید، یا برای جایگزینی مقدار جدیدی وارد کنید."
+
+#. translators: %s: version number of the plugin, e.g. 1.0
+msgctxt "version badge"
+msgid "v%s"
+msgstr "%s"
+
+msgid "(opens in a new tab)"
+msgstr "(در زبانه‌ی تازه باز می‌شود)"
+
+msgid "Resources"
+msgstr "منابع"
+
+msgid "Menu"
+msgstr "منو"

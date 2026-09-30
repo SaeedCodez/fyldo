@@ -1,15 +1,21 @@
 /**
- * Persian and Arabic-Indic digits → ASCII, and what a number field makes of what was typed. Mirror of
+ * Persian and Arabic-Indic digits → ASCII (with the Arabic decimal separator ٫ → "." and the thousands separator ٬
+ * dropped), and what a number field makes of what was typed. Mirror of
  * src/Validation/Digits.php and NumberField::read(); both run the `digits` and `numbers` cases of
  * tests/fixtures/validation-cases.json.
  */
 
-/** Extended Arabic-Indic (Persian, U+06F0–U+06F9) and Arabic-Indic (U+0660–U+0669) digits. */
-const NON_ASCII_DIGITS = /[۰-۹٠-٩]/g;
+/**
+ * Extended Arabic-Indic (Persian, U+06F0–U+06F9) and Arabic-Indic (U+0660–U+0669) digits, the Arabic decimal separator
+ * (U+066B, what a Persian keyboard types for a decimal point) and the Arabic thousands separator (U+066C).
+ */
+const NON_ASCII_DIGITS = /[۰-۹٠-٩\u066B\u066C]/g;
 
 export const toAsciiDigits = (text: string): string =>
   text.replace(NON_ASCII_DIGITS, (digit) => {
     const code = digit.codePointAt(0) as number;
+    if (code === 0x066b) return '.';
+    if (code === 0x066c) return '';
     return String(code >= 0x06f0 ? code - 0x06f0 : code - 0x0660);
   });
 

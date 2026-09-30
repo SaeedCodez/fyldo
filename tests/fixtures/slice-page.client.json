@@ -4,6 +4,7 @@
     "description": "Manage your site’s identity, reading and privacy options.",
     "icon": "setting-2",
     "group": "",
+    "badge": "",
     "save": "global",
     "tabs": [],
     "sections": [

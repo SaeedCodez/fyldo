@@ -78,12 +78,17 @@ final class Instance {
 			if ( ! isset( $link['label'], $link['url'] ) ) {
 				throw new ConfigException( sprintf( 'Fyldo "%s": every link needs `label` and `url`.', $slug ) );
 			}
+			// `footer`: the sidebar footer (top navigation: its utility buttons). `header`: the Page Header actions.
+			$placement = isset( $link['placement'] ) ? (string) $link['placement'] : 'footer';
+			if ( ! in_array( $placement, array( 'footer', 'header' ), true ) ) {
+				throw new ConfigException( sprintf( 'Fyldo "%s": link placement must be "footer" or "header".', $slug ) );
+			}
 			$links[] = array(
 				'label'     => (string) $link['label'],
 				'url'       => (string) $link['url'],
 				'icon'      => isset( $link['icon'] ) ? (string) $link['icon'] : '',
 				'external'  => ! empty( $link['external'] ),
-				'placement' => isset( $link['placement'] ) ? (string) $link['placement'] : 'footer',
+				'placement' => $placement,
 			);
 		}
 

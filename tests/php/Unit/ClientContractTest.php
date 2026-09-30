@@ -48,4 +48,20 @@ final class ClientContractTest extends TestCase {
 			'tests/fixtures/form-fields-page.client.json is stale: run `php tools/dev/dump-slice.php form-fields > tests/fixtures/form-fields-page.client.json`.'
 		);
 	}
+
+	public function test_committed_tabs_fixture_matches_what_php_builds(): void {
+		$instance = new Instance( 'acme-slice', array( 'title' => 'Acme Slice' ) );
+		$instance->add_page( 'advanced', require dirname( __DIR__, 2 ) . '/fixtures/tabs-page.php' );
+
+		$page   = $instance->page( 'advanced' );
+		$actual = json_decode( (string) wp_json_encode( $page->to_client( $instance->store()->client_values( $page ), 'rev-1' ) ), true );
+
+		$expected = json_decode( (string) file_get_contents( dirname( __DIR__, 2 ) . '/fixtures/tabs-page.client.json' ), true );
+
+		$this->assertSame(
+			$expected,
+			$actual,
+			'tests/fixtures/tabs-page.client.json is stale: run `php tools/dev/dump-slice.php tabs > tests/fixtures/tabs-page.client.json`.'
+		);
+	}
 }

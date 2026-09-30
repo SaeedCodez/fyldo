@@ -9,11 +9,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-29T21:44:12+00:00\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 
 #: app/components/fyldo/FieldRenderer.tsx:170
 msgid ""
@@ -267,4 +266,21 @@ msgstr ""
 #: src/Validation/Messages.php:73
 #: app/lib/validation.ts:129
 msgid "This value is not valid."
+msgstr ""
+
+#: app/components/fyldo/NavItem.tsx:53
+msgid "(opens in a new tab)"
+msgstr ""
+
+#: app/components/fyldo/Shell.tsx:108
+msgid "Menu"
+msgstr ""
+
+#: app/components/fyldo/Sidebar.tsx:79
+msgid "Resources"
+msgstr ""
+
+#: app/components/fyldo/BrandMark.tsx:17
+msgctxt "version badge"
+msgid "v%s"
 msgstr ""

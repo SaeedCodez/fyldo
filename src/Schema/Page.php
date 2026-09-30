@@ -15,7 +15,7 @@ use Fyldo\V1\Support\Naming;
  */
 final class Page {
 
-	const KEYS = array( 'title', 'description', 'icon', 'group', 'save', 'tabs', 'sections', 'capability', 'option_name' );
+	const KEYS = array( 'title', 'description', 'icon', 'group', 'badge', 'save', 'tabs', 'sections', 'capability', 'option_name' );
 
 	/** @var string */
 	private $id;
@@ -58,8 +58,13 @@ final class Page {
 		}
 
 		$tabs = array();
-		foreach ( (array) ( $config['tabs'] ?? array() ) as $tab_id => $label ) {
-			$tabs[ (string) $tab_id ] = (string) $label;
+		foreach ( (array) ( $config['tabs'] ?? array() ) as $tab_id => $tab ) {
+			$tabs[ (string) $tab_id ] = self::tab( $id, (string) $tab_id, $tab );
+		}
+
+		$badge = $config['badge'] ?? '';
+		if ( ! is_string( $badge ) && ! is_int( $badge ) ) {
+			throw new ConfigException( sprintf( 'Page "%s": badge must be a short string or a number.', $id ) );
 		}
 
 		$this->id          = $id;
@@ -76,6 +81,7 @@ final class Page {
 			'description' => isset( $config['description'] ) ? (string) $config['description'] : '',
 			'icon'        => isset( $config['icon'] ) ? (string) $config['icon'] : '',
 			'group'       => isset( $config['group'] ) ? (string) $config['group'] : '',
+			'badge'       => (string) $badge,
 			'save'        => $save,
 			'tabs'        => $tabs,
 			'capability'  => isset( $config['capability'] ) ? (string) $config['capability'] : '',
@@ -157,13 +163,7 @@ final class Page {
 	 * @return array<string,mixed>
 	 */
 	public function to_client( array $values, string $revision ): array {
-		$tabs = array();
-		foreach ( (array) $this->config['tabs'] as $tab_id => $label ) {
-			$tabs[] = array(
-				'id'    => (string) $tab_id,
-				'label' => (string) $label,
-			);
-		}
+		$tabs = array_values( (array) $this->config['tabs'] );
 
 		return array(
 			'id'          => $this->id,
@@ -171,6 +171,7 @@ final class Page {
 			'description' => (string) $this->config['description'],
 			'icon'        => (string) $this->config['icon'],
 			'group'       => (string) $this->config['group'],
+			'badge'       => (string) $this->config['badge'],
 			'save'        => (string) $this->config['save'],
 			'tabs'        => $tabs,
 			'sections'    => array_map(
@@ -181,6 +182,44 @@ final class Page {
 			),
 			'values'      => (object) $values,
 			'revision'    => $revision,
+		);
+	}
+
+	/**
+	 * One tab (a sub-page, reached at `#/<page>/<tab>`): `'id' => 'Label'` or `'id' => [ 'label', 'icon', 'badge' ]`.
+	 *
+	 * @param string $page_id Page id (for messages).
+	 * @param string $tab_id  Tab id.
+	 * @param mixed  $tab     Label or tab config.
+	 * @return array{id:string,label:string,icon:string,badge:string}
+	 * @throws ConfigException On invalid configuration.
+	 */
+	private static function tab( string $page_id, string $tab_id, $tab ): array {
+		if ( ! Naming::is_valid_page_id( $tab_id ) ) {
+			throw new ConfigException( sprintf( 'Page "%1$s": tab id "%2$s" is invalid: use lower-case letters, digits, "_" or "-" (it is part of the URL).', $page_id, $tab_id ) );
+		}
+
+		$tab     = is_array( $tab ) ? $tab : array( 'label' => $tab );
+		$unknown = array_diff( array_keys( $tab ), array( 'label', 'icon', 'badge' ) );
+		if ( array() !== $unknown ) {
+			throw new ConfigException( sprintf( 'Page "%1$s": tab "%2$s" has unknown key(s): %3$s.', $page_id, $tab_id, implode( ', ', $unknown ) ) );
+		}
+
+		$label = isset( $tab['label'] ) && is_scalar( $tab['label'] ) ? trim( (string) $tab['label'] ) : '';
+		if ( '' === $label ) {
+			throw new ConfigException( sprintf( 'Page "%1$s": tab "%2$s" needs a label.', $page_id, $tab_id ) );
+		}
+
+		$badge = $tab['badge'] ?? '';
+		if ( ! is_string( $badge ) && ! is_int( $badge ) ) {
+			throw new ConfigException( sprintf( 'Page "%1$s": the badge of tab "%2$s" must be a short string or a number.', $page_id, $tab_id ) );
+		}
+
+		return array(
+			'id'    => $tab_id,
+			'label' => $label,
+			'icon'  => isset( $tab['icon'] ) ? (string) $tab['icon'] : '',
+			'badge' => (string) $badge,
 		);
 	}
 

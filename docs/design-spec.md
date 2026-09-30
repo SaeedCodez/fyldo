@@ -166,7 +166,7 @@ These cut across components; the implementation must enforce them where possible
 11. One Primary per card/view. Sentence case with a verb ("Save changes", not "OK"). Loading keeps label **and width**; the button is disabled while the request runs. Error buttons open a confirmation for irreversible actions. Icons are 16 px (20 in Large Icon Button); leading icons describe the action, trailing icons show direction / external link. In a card footer the actions sit at the end; RTL mirrors the row.
 
 **Forms**
-12. Always a visible label except search fields with a clear prefix icon. Labels are short nouns. Placeholders show an example, never the label. Fields stack with **20 px** gaps inside a card. LTR values (URLs, emails, keys, code) stay LTR inside FA fields (`dir="ltr"`, left-aligned). Input/Select/Multi Select heights match the Button size used in the same row (32/40/48).
+12. Always a visible label except search fields with a clear prefix icon. Labels are short nouns. Placeholders show an example, never the label. Fields stack with **20 px** gaps inside a card. LTR values (URLs, emails, keys, code) stay LTR inside FA fields (`dir="ltr"`), aligned to the right in FA as the Input usage frame draws them. Input/Select/Multi Select heights match the Button size used in the same row (32/40/48).
 13. Textarea: default ~4 rows (104 px); counter only when there is a real limit; code fields use Geist Mono and force LTR.
 14. Control choice: Toggle = one independent on/off; Checkbox = any number of options or agreeing to one statement (**not** a single-checkbox instant setting); Radio = exactly one of 2–5 visible options (always with a default selection); Select = exactly one of 6+; searchable combobox for very long lists (countries, time zones). The whole row (control + label) is the click target. Label on/off with the feature ("Enable caching"), not the state. Explain why a toggle is disabled in its description.
 15. Select: menu same width as the field, **4 px** below it, height capped at ~8 items then scroll; disabled options stay visible; selected option shows a check at the end.
@@ -300,15 +300,15 @@ Multi Select control: **min height 34 / 42 / 50** (Small / Medium / Large; paddi
 
 ### 4.9 Nav Item (18:2155), Sidebar (18:2391)
 
-Nav Item: 32 high, padding 8/6, gap 8, radius md, 16 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `surface/hover` + label `text/primary`; **Active** fill `surface/active` + label **Label/14 Strong** `text/primary`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
+Nav Item: 32 high (34 in FA, whose Label/14 line height is 22), padding 8/6, gap 8, radius md, 16 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `surface/hover` + label `text/primary`; **Active** fill `surface/active` + label **Label/14 Strong** `text/primary`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
 
 Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 60 (padding 20/20/16, gap 10): 24 px logo + "Fyldo" Heading/16 + version Badge. Navigation (padding 16/16/8/0, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support).
 
 ### 4.10 Tab (18:2506), Tabs (18:2614), Top Navigation (37:4189)
 
-Tab: vertical, 48 high; inner content 32 high, padding 12/6, gap 6, radius md; label Label/14 `text/secondary`; optional 16 icon, optional count Badge; 2 px **Indicator** under the tab. Hover fill `surface/hover`; Active label `text/primary` + Indicator fill `action/primary`; Focus fill `background/default`; Disabled `text/disabled`. Tabs: 800 wide row, gap 4, 1 px bottom divider `border/default`.
+Tab: vertical, 48 high (50 in FA); inner content 32 high, padding 12/6, gap 6, radius md; label Label/14 `text/secondary`; optional 16 icon, optional count Badge; 2 px **Indicator** under the tab. Hover fill `surface/hover`; Active label `text/primary` + Indicator fill `action/primary`; Focus fill `background/default`; Disabled `text/disabled`. Tabs: 800 wide row, gap 4, 1 px bottom divider `border/default`.
 
-Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (height 48; padding-x 24, **top 12 / bottom 4**, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with trailing icon). Row 2 (48, padding 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels.
+Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (height 48; padding-x 24, **top 12 / bottom 4**, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with a leading icon). Row 2 (48, padding 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels.
 
 ### 4.11 Setting Row (18:2719), Section Card (18:2913)
 

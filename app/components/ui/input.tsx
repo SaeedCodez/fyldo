@@ -11,9 +11,12 @@ export interface InputProps extends Omit<ComponentPropsWithoutRef<typeof Field.C
   prefixIcon?: string;
   /** Trailing content, usually an icon-only action (clear). */
   suffix?: ReactNode;
-  /** URLs, emails, keys and code stay LTR — left-aligned — even inside an RTL layout. */
+  /**
+   * URLs, emails, keys and code: the text stays LTR even inside an RTL layout, and sits at the inline end of the
+   * field there (right-aligned, as the pack's Input usage frame draws its FA email) — left-aligned in an LTR layout.
+   */
   ltr?: boolean;
-  /** Read Persian and Arabic-Indic digits as ASCII while typing or pasting (URL, email, number). The caret stays where it was. */
+  /** Read Persian and Arabic-Indic digits (and the Persian separators ٫ ٬) as ASCII while typing or pasting (URL, email, number). The caret stays where it was. */
   digits?: boolean;
 }
 
@@ -25,9 +28,12 @@ export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = f
   const control = useRef<HTMLInputElement>(null);
   const caret = useRef<number | null>(null);
 
-  // Replacing the text moves the caret to the end; each digit maps to one UTF-16 unit, so the old position is still right.
-  useLayoutEffect(() => {
+  // Replacing the text moves the caret to the end; put it back after what was before it (a dropped ٬ shortens that).
+  const restoreCaret = (): void => {
     if (caret.current !== null && control.current && document.activeElement === control.current) control.current.setSelectionRange(caret.current, caret.current);
+  };
+  useLayoutEffect(() => {
+    restoreCaret();
     caret.current = null;
   });
 
@@ -39,14 +45,24 @@ export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = f
         ref={control}
         onValueChange={(next, details) => {
           const fixed = digits ? toAsciiDigits(next) : next;
-          if (fixed !== next) caret.current = (details.event.target as HTMLInputElement).selectionStart;
+          if (fixed !== next) {
+            const at = (details.event.target as HTMLInputElement).selectionStart;
+            caret.current = at === null ? null : toAsciiDigits(next.slice(0, at)).length;
+            // When the corrected text equals what the field already held (a dropped ٬), nothing re-renders and React
+            // just restores the old value, caret at the end: put the caret back once that has happened.
+            const pending = caret.current;
+            queueMicrotask(() => {
+              if (pending === null || !control.current || document.activeElement !== control.current) return;
+              control.current.setSelectionRange(pending, pending);
+            });
+          }
           onValueChange?.(fixed, details);
         }}
         dir={ltr ? 'ltr' : props.dir}
         className={cn(
           'fy:focus-none fy:min-w-0 fy:flex-1 fy:appearance-none fy:border-0 fy:bg-transparent fy:p-0 fy:text-inherit fy:outline-none',
           'fy:placeholder:text-text-tertiary fy:disabled:cursor-not-allowed fy:disabled:placeholder:text-text-disabled',
-          ltr && 'fy:text-left',
+          ltr && 'fy:text-left fy:rtl:text-right',
         )}
       />
       {suffix}

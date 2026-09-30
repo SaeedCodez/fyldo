@@ -84,6 +84,11 @@ final class PageTest extends TestCase {
 			'unknown tab'        => array( array( 'tabs' => array( 'reading' => 'Reading' ), 'sections' => array( array( 'id' => 'a', 'tab' => 'nope', 'title' => 'A', 'fields' => array() ) ) ), 'unknown tab' ),
 			'danger not last'    => array( array( 'sections' => $danger_first ), 'danger sections must come last' ),
 			'option too long'    => array( array( 'option_name' => str_repeat( 'x', 192 ) ), '191' ),
+			'bad tab id'         => array( array( 'tabs' => array( 'Site identity' => 'Site identity' ) ), 'tab id' ),
+			'tab without label'  => array( array( 'tabs' => array( 'identity' => '' ) ), 'needs a label' ),
+			'tab unknown key'    => array( array( 'tabs' => array( 'identity' => array( 'label' => 'Identity', 'colour' => 'red' ) ) ), 'unknown key' ),
+			'tab badge array'    => array( array( 'tabs' => array( 'identity' => array( 'label' => 'Identity', 'badge' => array( 3 ) ) ) ), 'badge' ),
+			'page badge bool'    => array( array( 'badge' => true ), 'badge' ),
 		);
 	}
 
@@ -100,8 +105,39 @@ final class PageTest extends TestCase {
 		);
 
 		$this->assertSame(
-			array( array( 'id' => 'identity', 'label' => 'Site identity' ), array( 'id' => 'reading', 'label' => 'Reading' ) ),
+			array(
+				array( 'id' => 'identity', 'label' => 'Site identity', 'icon' => '', 'badge' => '' ),
+				array( 'id' => 'reading', 'label' => 'Reading', 'icon' => '', 'badge' => '' ),
+			),
 			$page->to_client( array(), '' )['tabs']
 		);
+	}
+
+	public function test_a_tab_can_carry_an_icon_and_a_count_badge(): void {
+		$page = new Page(
+			'acme-seo',
+			'general',
+			$this->config(
+				array(
+					'tabs' => array(
+						'identity' => 'Site identity',
+						'alerts'   => array( 'label' => 'Alerts', 'icon' => 'notification', 'badge' => 3 ),
+					),
+				)
+			)
+		);
+
+		$this->assertSame(
+			array( 'id' => 'alerts', 'label' => 'Alerts', 'icon' => 'notification', 'badge' => '3' ),
+			$page->to_client( array(), '' )['tabs'][1]
+		);
+	}
+
+	public function test_the_nav_badge_is_exported_as_text(): void {
+		$client = ( new Page( 'acme-seo', 'general', $this->config( array( 'badge' => 3 ) ) ) )->to_client( array(), '' );
+		$this->assertSame( '3', $client['badge'] );
+
+		$client = ( new Page( 'acme-seo', 'general', $this->config() ) )->to_client( array(), '' );
+		$this->assertSame( '', $client['badge'], 'No badge by default.' );
 	}
 }

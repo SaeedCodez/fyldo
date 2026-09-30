@@ -100,7 +100,7 @@ type TextFieldProps = {
 | Error | `error` prop → border `status/error/solid` + `Focus/Input Error` halo (always on) |
 | Disabled | `disabled` → `surface/disabled`, `text/disabled` |
 
-*Implemented in M2 part 3:* the `password`, `number`, `url` and `email` field types render `Input` (the pack draws one text Input; nothing else was added). `Input` gained `digits` (Persian/Arabic-Indic digits read as ASCII as they are typed and pasted; the caret stays where it was) and `NumberInput` (text input with `inputmode="decimal"` and `dir="ltr"`: a real `type="number"` refuses Persian digits; it shows what was typed but reports a number, `''`, or the unreadable text so the `number` rule can name it). `url`, `email` and `number` inputs are `dir="ltr"` — the text only, the label keeps the page direction; the text is left-aligned (`text-left`), not mirrored to the right as the Input usage frame's FA sample draws its sample email. `password` keeps the page direction, has `type="password"`, `spellcheck=false`, `autocapitalize=off` and `autocomplete="new-password"` (developer-selectable: `current-password`, `off`); a stored secret is never in the DOM: the field is empty with the "•••• set" placeholder and a screen-reader-only description. **No show/hide toggle: the pack has no design for it** (only a generic optional suffix icon slot), so none was built.
+*Implemented in M2 part 3:* the `password`, `number`, `url` and `email` field types render `Input` (the pack draws one text Input; nothing else was added). `Input` gained `digits` (Persian/Arabic-Indic digits read as ASCII as they are typed and pasted — since M3 part 1 also the Persian decimal separator `٫` as `.` and the thousands separator `٬` dropped; the caret stays after the text that preceded it) and `NumberInput` (text input with `inputmode="decimal"` and `dir="ltr"`: a real `type="number"` refuses Persian digits; it shows what was typed but reports a number, `''`, or the unreadable text so the `number` rule can name it). `url`, `email` and `number` inputs are `dir="ltr"` — the text only, the label keeps the page direction; the text is left-aligned in LTR and sits at the inline end (right) in RTL, as the Input usage frame's FA sample draws its email (changed in M3 part 1; it was left-aligned in both). `password` keeps the page direction, has `type="password"`, `spellcheck=false`, `autocapitalize=off` and `autocomplete="new-password"` (developer-selectable: `current-password`, `off`); a stored secret is never in the DOM: the field is empty with the "•••• set" placeholder and a screen-reader-only description. **No show/hide toggle: the pack has no design for it** (only a generic optional suffix icon slot), so none was built.
 
 **Gaps:** 🔧 shadcn Input is 36 px with ring focus — replace with 32/40/48, Copy/14 (Copy/16 at `lg`), halo tokens. ➕ Error row layout (16 px `info-circle` + Copy/13). ➕ Validation timing: show error only after blur or submit (rule 7) — implemented in the form layer (`touched` state), not the component. ➕ LTR-in-RTL rule for `url|email`/`code`. ➕ **Neutralise wp-admin `input:focus` blue ring** (ARCHITECTURE §8.2). Input border contrast was fixed in Figma before M1 (design-spec D4).
 
@@ -283,12 +283,18 @@ type SidebarProps = { brand: {name; version?; logo?}; groups: {label?: string; i
 
 **Gaps:** ➕ Responsive collapse (design silent): at ≤ 960 px (WP auto-fold) the sidebar becomes a top drawer/“Menu” disclosure — proposal in ARCHITECTURE §8.3. ➕ Sticky positioning inside wp-admin (`top: var(--wp-admin--admin-bar--height, 32px)`). ➕ Client-side routing (hash) with `href` fallbacks so links work without JS interception. ➕ Keyboard: normal tab order (a list of links, not a roving-tabindex widget).
 
+*Implemented in M3 part 1:* `NavItem` (`app/components/fyldo/NavItem.tsx`: an `<a href>` with `aria-current="page"`; padding 6/8, gap 8, radius md; its height follows the line height — 32 in EN, **34 in FA** as the pack draws it; Focus = the pack's `background/default` fill + the neutral ring (O5); Disabled = not a link at all; external links add a screen-reader "(opens in a new tab)"), `Sidebar` (256, `background/subtle`, end border; header 20/20/16/20 with the brand; navigation 8/16/0/16 with groups 20 apart — a visible group label names its `<ul>` through `aria-labelledby`; footer 12/16 with a top border, a second `<nav>` named "Resources"; one `<nav>` named after the instance title) and the `drawer` variant used by the ≤ 782 px **Menu disclosure** (WordPress's own mobile breakpoint, as requested; the brand and a Secondary Small "Menu" button with `aria-expanded` above the content). `Badge` (`app/components/ui/badge.tsx`) was built here because the Nav Item badge, the Tab count and the brand's version are Badges: Gray Subtle Small in all three; counts and the version use the page's numerals (`localizeDigits`: ۳, ۱٫۰), and the version reads "v1.0" in EN and "۱٫۰" in FA (the pack's FA badge has no "v"; it is the translation of `v%s`).
+**Not built — missing from the pack:** the brand **logo**. The pack's 24 px logo is the Fyldo mark, a VECTOR whose path is not exported in the pack, and the PHP API has no logo for the consuming plugin (whose brand this is). The brand is the instance title + version badge; the pixel tests compare the brand where it starts. *Decision needed from the owner:* ship the Fyldo mark, add a developer `logo`, or keep none.
+**Icons in the pack:** nested icon instances carry only a swap id; the names behind the Sidebar/Top Navigation ones were found by geometry matching (every Iconsax Linear icon at 16 px vs the pack PNGs): `setting-2`, `brush-2`, `notification-bing`, `shield-tick`, `flashy`, `element-3`, `data`, `code-1`, `book-1`, `message-question`, and the Page Header's external-link icon `export-square` (`e2e/harness/support/shell.ts`).
+
 ### 4.2 Top Navigation — Figma `Top Navigation` (37:4189)
 Base: ⛔ custom (`<header>` + `<nav>`); items are the **Tab visual** but **link semantics** (`aria-current`), not `role="tab"`.
 ```ts
 type TopNavigationProps = { brand; utilities?: ButtonProps[]; groups: {items: NavItemProps[]}[] /* group divider between */ };
 ```
-**Gaps:** ➕ Overflow: 8 sections max by rule; beyond that horizontal scroll with fade + “More” menu (design silent). ➕ Utility links: Tertiary sm Buttons with trailing icon.
+**Gaps:** ➕ Overflow: 8 sections max by rule; beyond that horizontal scroll with fade + “More” menu (design silent). ➕ Utility links: Tertiary sm Buttons with a **leading** icon (as the pack draws them).
+
+*Implemented in M3 part 1:* `TopNavigation` — row 1 (padding 12/24/4/24, gap 16): brand · spacer · utilities; row 2 (padding 0/12, gap 4): the Tab look as links (`aria-current`) with the page icons, one `<ul>` per group named by the group's label, groups split by the 1×16 divider in a 17 px slot; 96 px tall in EN, 98 in FA. Utilities are `ButtonLink`s (a real `<a>` with the Button look — a Base UI Button rendered as an anchor would get `role="button"`). With `navigation: 'top'` the `header` links join the utilities and the Page Header shows no actions (rule 16). ≤ 782 px (design silent): the utilities wrap under the brand and row 2 scrolls sideways; no "More" menu and no edge fade (not designed).
 
 ### 4.3 Tab + Tabs — Figma `Tab` (18:2506), `Tabs` (18:2614)
 Base: **shadcn `tabs` → Base UI `Tabs`** (`Root, List, Tab, Indicator, Panel`) — used for **sub-pages of a nav item** (real tablist with panels).
@@ -296,6 +302,8 @@ Base: **shadcn `tabs` → Base UI `Tabs`** (`Root, List, Tab, Indicator, Panel`)
 type TabsProps = { value; onValueChange; tabs: {id;label;icon?;count?;disabled?}[]; children: panels };
 ```
 **Gaps:** 🔧 Underline style: 2 px indicator `action/primary`, 1 px divider `border/default`, tab content height 32, hover fill `surface/hover` on the inner rounded box. 🔧 `Tabs.Indicator` is animated by Base UI CSS vars (`--active-tab-*`) → RTL-safe when `DirectionProvider` set; ➕ count Badge; ➕ URL sync (`#/page/tab`); ➕ keyboard per WAI-ARIA (arrows/Home/End, RTL-aware) from Base UI; activation on focus vs Enter: **manual activation** (each tab may load/validate).
+
+*Implemented in M3 part 1:* `Tab.tsx` (`TabLook` + `TAB_OUTER`: 8 px top padding, the Content box 6/12 with gap 6 and radius md, a 6 px gap, the 2 px indicator; 48 px in EN, 50 in FA because the height follows the line height; the neutral focus ring hugs the Content box through the `focus-ring-inner` utility) and `Tabs.tsx` over Base UI Tabs with `activateOnFocus={false}` (arrows move focus, mirrored in RTL; Enter/Space open the tab, which pushes `#/<page>/<tab>`). Each tab draws its own indicator (the pack's per-tab Indicator layer; no sliding animation — none is designed). The tablist is named by the page title; a section without a `tab` shows on every tab.
 
 ### 4.4 Setting Row — Figma `Setting Row` (18:2719)
 Base: ➕ custom composition over `Field` (`Field.Root/Label/Description`). `ControlSlot` receives the field renderer.
@@ -312,6 +320,8 @@ Base: shadcn `card` (Card, CardHeader, CardTitle, CardDescription, CardContent, 
 ```ts
 type SectionCardProps = { title: string; description?: string; tone?: 'default'|'danger'; footer?: ReactNode /* only in save:'section' mode, or danger */; children: SettingRow[] };
 ```
+*M3 part 1:* the existing `SectionCard` already matched the pack (pixel test `Section Card EN · default`: 1.2 % of pixels differ, text anti-aliasing); unchanged. In the app a Danger section shows its header; its footer action (confirmation Modal, `POST …/actions/{id}`) is M4.
+
 **Gaps:** 🔧 Card radius `lg`, header padding 24/24/24/4, content padding 24/24/0/4, footer on `background/subtle` with top border. ➕ Danger tone (no content, footer tinted). ➕ Landmark: `<section aria-labelledby=title-id>`; heading level `h2` (page header is `h1`). ➕ Footer rendered **only** when the page's `save` mode is `section` (rule 1) or the card is Danger — enforced by the layout, not by the caller.
 
 ### 4.6 Save Bar — Figma `Save Bar` (18:3079)
@@ -330,6 +340,8 @@ type SaveBarProps = { status: 'dirty'|'saving'|'saved'|'error'; message?: string
 
 ### 4.7 Page Header — Figma `Page Header` (20:3127)
 Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secondary`), actions slot at the end.
+*Implemented in M3 part 1:* actions are the instance's `header` links as Secondary Small `ButtonLink`s; an external one ends with the `export-square` icon (identified in the pack PNG; it does not mirror in RTL, as the pack's FA variant shows) and says "(opens in a new tab)" to screen readers. The `h1` has `tabindex=-1` and receives focus after a page change.
+
 **Gaps:** ➕ Real `<h1>` (Heading/32). WordPress core JS moves any `.notice`/`.updated`/`.error` element to just after the first `h1` inside `.wrap`. Our root is therefore **not** placed inside `.wrap`, and PHP-side admin notices for the screen are rendered by Fyldo into its own notice slot (ARCHITECTURE §8.3), so WP's relocation never touches the React tree. ➕ Actions slot is hidden when the Top Navigation already shows the utility links (rule 16).
 
 ---

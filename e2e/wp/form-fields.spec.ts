@@ -398,6 +398,10 @@ test.describe('Persian (RTL)', () => {
     expect(await page.getByText('Canonical URL', { exact: true }).evaluate((el) => getComputedStyle(el).direction)).toBe('rtl'); // the label keeps the page direction
     await expect(page.getByRole('textbox', { name: 'Contact email' })).toHaveAttribute('dir', 'ltr');
     await expect(page.getByRole('textbox', { name: 'Items per page' })).toHaveAttribute('dir', 'ltr');
+    // the LTR text sits at the inline END of the field in RTL (right), as the pack's Input usage frame draws it
+    for (const name of ['Canonical URL', 'Contact email', 'Items per page']) {
+      expect(await page.getByRole('textbox', { name }).evaluate((el) => getComputedStyle(el).textAlign), name).toBe('right');
+    }
 
     // a Notice in Persian: the tone word is translated
     await expect(page.getByRole('region', { name: 'اطلاعات: Before you connect' })).toBeVisible();
@@ -407,6 +411,12 @@ test.describe('Persian (RTL)', () => {
     await perPage.fill('');
     await perPage.pressSequentially('۴۲');
     await expect(perPage).toHaveValue('42');
+    // the Persian separators: ٬ (thousands) is dropped, ٫ (decimal) reads as a dot
+    await perPage.fill('');
+    await perPage.pressSequentially('۱٬۰۰۰٫۵');
+    await expect(perPage).toHaveValue('1000.5');
+    await perPage.fill('');
+    await perPage.pressSequentially('۴۲');
     await page.getByRole('textbox', { name: 'Contact email' }).focus();
     await expect(page.getByText('مقدار را با گام 5 وارد کنید.')).toBeVisible();
 

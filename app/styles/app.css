@@ -10,12 +10,25 @@
 @import './tokens.generated.css';
 @import './scoped-reset.css' layer(base);
 
+/* wp-admin's own breakpoint: at 782px and below the admin goes mobile (46px admin bar, no side menu). */
+@custom-variant wp-mobile (@media (max-width: 782px));
+
 /* Geometry (not just direction) changes in RTL: switch travel, icon flips, tab indicator. */
 @custom-variant rtl (&:where([dir='rtl'], [dir='rtl'] *));
 
 /* Neutral, never-blue keyboard focus (docs/ARCHITECTURE.md §11): 2px white gap + 2px ring. :focus-visible only. */
 @utility focus-ring {
   &:focus-visible {
+    box-shadow:
+      0 0 0 2px var(--fyldo-white),
+      0 0 0 4px var(--fyldo-focus-ring-color);
+    outline: 2px solid transparent;
+  }
+}
+
+/* The same ring on an inner box when its focusable parent has keyboard focus (Tab: the ring hugs the 32px content box). */
+@utility focus-ring-inner {
+  :focus-visible > & {
     box-shadow:
       0 0 0 2px var(--fyldo-white),
       0 0 0 4px var(--fyldo-focus-ring-color);
@@ -43,6 +56,20 @@ body.fyldo-screen #wpbody-content {
 
 body.fyldo-screen #wpfooter {
   display: none;
+}
+
+/*
+ * The shell fills the screen below the admin bar (wp-admin's own variable: 32px, 46px at ≤782px), and the Sidebar
+ * column stays in view while the content scrolls.
+ */
+[data-slot='fy-shell'] {
+  min-height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
+}
+
+[data-slot='fy-sidebar-sticky'] {
+  position: sticky;
+  top: var(--wp-admin--admin-bar--height, 32px);
+  height: calc(100vh - var(--wp-admin--admin-bar--height, 32px));
 }
 
 /*

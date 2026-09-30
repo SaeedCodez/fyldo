@@ -23,3 +23,13 @@ export const sprintf: (format: string, ...args: unknown[]) => string = wpSprintf
 
 /** Numbers the UI formats itself (counters, "n selected") follow the locale: Persian gets ۰–۹ without a special font. */
 export const formatNumber = (n: number, locale: string): string => new Intl.NumberFormat(locale).format(n);
+
+/**
+ * Digits of a short label (a version "1.0", a count "3") in the page's numerals: Persian gets ۱٫۰ and ۳, as the pack's
+ * FA brand badge and nav badges show. Letters are kept; only ASCII digits and a decimal point between digits change.
+ */
+export function localizeDigits(text: string, locale: string): string {
+  const format = new Intl.NumberFormat(locale, { useGrouping: false });
+  const decimal = format.formatToParts(1.5).find((part) => part.type === 'decimal')?.value ?? '.';
+  return text.replace(/(?<=\d)\.(?=\d)/g, decimal).replace(/\d/g, (digit) => format.format(Number(digit)));
+}

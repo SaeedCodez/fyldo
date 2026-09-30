@@ -1,6 +1,7 @@
 <?php
 /**
- * Persian and Arabic-Indic digits → ASCII. Pure PHP; mirrored by `toAsciiDigits()` in app/lib/digits.ts and tested
+ * Persian and Arabic-Indic digits → ASCII, the Arabic decimal separator (٫) → "." and the Arabic thousands separator
+ * (٬) removed. Pure PHP; mirrored by `toAsciiDigits()` in app/lib/digits.ts and tested
  * against the same cases (tests/fixtures/validation-cases.json, `digits`).
  *
  * @package Fyldo
@@ -14,7 +15,8 @@ namespace Fyldo\V1\Validation;
 final class Digits {
 
 	/**
-	 * Extended Arabic-Indic (Persian, U+06F0–U+06F9) and Arabic-Indic (U+0660–U+0669) digits.
+	 * Extended Arabic-Indic (Persian, U+06F0–U+06F9) and Arabic-Indic (U+0660–U+0669) digits, the Arabic decimal
+	 * separator (U+066B, what a Persian keyboard types for a decimal point) and the Arabic thousands separator (U+066C).
 	 */
 	const MAP = array(
 		"\u{06F0}" => '0',
@@ -37,10 +39,12 @@ final class Digits {
 		"\u{0667}" => '7',
 		"\u{0668}" => '8',
 		"\u{0669}" => '9',
+		"\u{066B}" => '.',
+		"\u{066C}" => '',
 	);
 
 	/**
-	 * Replace every Persian / Arabic-Indic digit with its ASCII digit; everything else is untouched.
+	 * Replace every Persian / Arabic-Indic digit with its ASCII digit, ٫ with "." and drop ٬; everything else is untouched.
 	 *
 	 * @param string $text Text.
 	 */
