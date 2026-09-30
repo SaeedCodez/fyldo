@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-30T11:14:38+00:00\n"
+"POT-Creation-Date: 2026-09-30T11:51:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -40,7 +40,7 @@ msgstr ""
 #: app/components/fyldo/NavItem.tsx:82
 #: app/components/fyldo/Notices.tsx:44
 #: app/components/fyldo/PageHeader.tsx:59
-#: app/components/fyldo/TopNavigation.tsx:65
+#: app/components/fyldo/TopNavigation.tsx:92
 msgid "(opens in a new tab)"
 msgstr ""
 
@@ -131,17 +131,21 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: app/components/fyldo/Shell.tsx:151
+#: app/components/fyldo/Shell.tsx:176
 msgid "Menu"
 msgstr ""
 
+#: app/components/fyldo/Shell.tsx:53
+msgid "Skip to page content"
+msgstr ""
+
 #: app/components/fyldo/Sidebar.tsx:109
-#: app/components/fyldo/TopNavigation.tsx:47
+#: app/components/fyldo/TopNavigation.tsx:74
 msgid "Resources"
 msgstr ""
 
 #: app/components/ui/modal.tsx:133
-#: app/components/ui/toast.tsx:89
+#: app/components/ui/toast.tsx:93
 msgid "Close"
 msgstr ""
 
@@ -232,7 +236,7 @@ msgid_plural "%d characters over the limit."
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/components/ui/toast.tsx:117
+#: app/components/ui/toast.tsx:121
 msgid "Notifications"
 msgstr ""
 

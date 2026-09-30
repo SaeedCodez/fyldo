@@ -194,6 +194,10 @@ msgstr "منابع"
 msgid "Menu"
 msgstr "منو"
 
+# M5: the skip link, the first stop of the Tab order
+msgid "Skip to page content"
+msgstr "پرش به محتوای صفحه"
+
 # M3 part 2: save patterns, the unsaved-changes dialog, conflicts. Texts drawn in the pack follow the pack
 # (design/figma/components/save-bar.json, modal.json, section-card.json).
 msgid "Couldn’t save. Check the highlighted fields."
