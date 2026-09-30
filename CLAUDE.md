@@ -4,12 +4,14 @@ Settings-page framework for WordPress plugin developers: declare pages → secti
 get a React 19 + Base UI + Tailwind v4 admin UI with REST-backed sanitize/validate/save. EN (LTR) + FA (RTL).
 
 ## Read first
+- `docs/MAINTAINING.md`: how the project fits together and the playbooks (add a component, change a token, release)
 - `docs/ARCHITECTURE.md` (§13 milestones, §15 decisions) · `docs/component-map.md` · `docs/design-spec.md`
 - Design pack: `design/figma/README.md`, `design/figma/components/<name>.json` (geometry, token bindings, text styles),
   `design/figma/png/` (2x component PNGs, 1x usage frames), `tokens/figma.tokens.json` (do not regenerate).
 
 ## Design rule: no Figma, use `design/figma`
-Never call Figma or any Figma MCP. Figma is the source of truth, and its export is the pack above. Parity tests read
+Never call Figma or any Figma MCP, unless the task is explicitly a Figma export or edit in a local session (see
+`docs/MAINTAINING.md` §2 and §4). Figma is the source of truth, and its export is the pack above. Parity tests read
 expected values from the JSON (`e2e/harness/support/pack.ts`), never hand-copied numbers. If a value you need is not in
 the pack, stop and ask; do not guess. `node tools/figma/spot-check.mjs` must report 0 differences.
 
