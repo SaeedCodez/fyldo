@@ -34,6 +34,7 @@ window.__fyldo_harness__ = {
     { label: 'Documentation', url: 'https://example.com/docs', icon: 'book-1', external: true, placement: 'footer' },
     { label: 'Help & support', url: 'https://example.com/help', icon: 'message-question', external: true, placement: 'footer' },
   ],
+  notices: [],
   pages: [
     { ...general, group: 'settings' },
     { ...fields, group: 'settings', badge: '3' },

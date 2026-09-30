@@ -206,6 +206,105 @@ test.describe('English', () => {
     await expect(page.getByText('All changes saved')).toHaveCount(0);
     await expect(perPage).toBeFocused();
   });
+
+  test('danger zone: "Reset settings" is confirmed with the Danger modal (typed keyword), sent through REST and resets the page to its defaults', async ({ page }) => {
+    await page.goto(EN);
+    const meta = page.getByRole('textbox', { name: 'Default meta description' });
+    await meta.fill('Saved earlier');
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+    await page.reload();
+    await expect(meta).toHaveValue('Saved earlier');
+
+    // an unsaved edit is dropped by the reset, as the confirmation says
+    await meta.fill('Unsaved edit');
+    const card = page.getByRole('region', { name: 'Reset settings' });
+    await expect(card.getByText('This action can’t be undone.')).toBeVisible();
+    await card.getByRole('button', { name: 'Reset settings' }).click();
+
+    const dialog = page.getByRole('alertdialog', { name: 'Reset all settings?' });
+    await expect(dialog).toBeVisible();
+    expect(await dialog.evaluate((el) => Boolean(el.closest('[data-fyldo-v1]')))).toBe(true); // portalled into the Fyldo root
+    const confirm = dialog.getByRole('button', { name: 'Reset settings' });
+    await expect(confirm).toBeDisabled();
+    const keyword = dialog.getByRole('textbox', { name: 'Type RESET to confirm' });
+    await expect(keyword).toBeFocused();
+
+    // the modal's close button has a tooltip (design rule 10); Esc and the scrim do not close a Danger modal
+    await keyword.press('Shift+Tab'); // keyboard focus opens a tooltip at once
+    await expect(dialog.getByRole('button', { name: 'Close' })).toBeFocused();
+    await expect(page.locator('[data-fyldo-v1] [data-slot=fy-tooltip]', { hasText: 'Close' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(dialog).toBeVisible();
+    await page.mouse.click(4, 400);
+    await expect(dialog).toBeVisible();
+
+    await keyword.fill('reset');
+    await expect(confirm).toBeDisabled(); // case-sensitive
+    await keyword.fill('RESET');
+    await expect(confirm).toBeEnabled();
+
+    const request = page.waitForRequest((r) => r.url().includes('/pages/fields/actions/reset'));
+    const response = page.waitForResponse((r) => r.url().includes('/pages/fields/actions/reset'));
+    await confirm.click();
+    const sent = await request;
+    expect(sent.method()).toBe('POST');
+    expect(sent.headers()['x-wp-nonce']).toBeTruthy();
+    expect(sent.headers()['x-fyldo-nonce']).toBeTruthy();
+    expect(sent.postDataJSON()).toEqual({ keyword: 'RESET' });
+    expect((await response).status()).toBe(200);
+
+    await expect(dialog).toHaveCount(0);
+    await expect(meta).toHaveValue('Fyldo is a lightweight settings framework.'); // the default, and the unsaved edit is gone
+    await expect(page.getByText('You have unsaved changes')).toHaveCount(0);
+    const toast = page.locator('[data-fyldo-v1] [data-slot=fy-toast]');
+    await expect(toast).toContainText('Settings reset to defaults'); // drawn inside the root
+    await expect(page.getByRole('region', { name: 'Notifications' })).toBeAttached(); // the live-region landmark (zero-size: toasts are positioned inside it)
+
+    await page.reload();
+    await expect(meta).toHaveValue('Fyldo is a lightweight settings framework.'); // stored: the option is gone
+  });
+
+  test('danger zone: Cancel changes nothing', async ({ page }) => {
+    await page.goto(EN);
+    await page.getByRole('textbox', { name: 'Default meta description' }).fill('Kept');
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+
+    await page.getByRole('region', { name: 'Reset settings' }).getByRole('button', { name: 'Reset settings' }).click();
+    await page.getByRole('alertdialog').getByRole('button', { name: 'Cancel' }).click();
+    await expect(page.getByRole('alertdialog')).toHaveCount(0);
+    await page.reload();
+    await expect(page.getByRole('textbox', { name: 'Default meta description' })).toHaveValue('Kept');
+  });
+
+  test('notices queued with admin_notice() are drawn in Fyldo’s own slot, never as core `.notice`; a dismissible one goes away, a warning stays', async ({ page }) => {
+    await page.goto(EN);
+    const root = page.locator('[data-fyldo-v1="acme-beta"]');
+    const slot = root.locator('[data-slot=fy-notices]');
+    await expect(slot).toBeVisible();
+
+    // most severe first: the warning, then the blue update notice with its action
+    const regions = slot.getByRole('region');
+    await expect(regions).toHaveCount(2);
+    await expect(regions.nth(0)).toHaveAccessibleName('Warning');
+    await expect(regions.nth(0)).toContainText('Your license expires in 7 days.');
+    await expect(regions.nth(1)).toHaveAccessibleName('Information: Update available');
+    await expect(regions.nth(1).getByRole('link', { name: /View changelog/ })).toHaveAttribute('href', 'https://example.com/changes');
+
+    // WordPress core JS relocates every `.notice` under the first heading of `.wrap`: there is none of ours to move
+    await expect(page.locator('.notice, .updated, .error').locator('visible=true')).toHaveCount(0);
+    expect(await slot.evaluate((el) => el.querySelectorAll('.notice, [class*="notice-"]').length)).toBe(0);
+
+    await expect(regions.nth(0).getByRole('button', { name: 'Dismiss' })).toHaveCount(0); // warnings stay until resolved
+    await regions.nth(1).getByRole('button', { name: 'Dismiss' }).click();
+    await expect(regions).toHaveCount(1);
+    await expect(page.getByRole('heading', { level: 1, name: 'Content' })).toBeFocused();
+
+    // only on the `fields` page
+    await page.getByRole('navigation', { name: 'Acme Beta' }).getByRole('link', { name: 'General' }).click();
+    await expect(root.locator('[data-slot=fy-notices]')).toHaveCount(0);
+  });
 });
 
 test.describe('REST (server is authoritative)', () => {
@@ -326,6 +425,44 @@ test.describe('REST (server is authoritative)', () => {
     expect(values.per_page).toBe(20);
     expect(Object.keys(values)).not.toContain('connection_note');
   });
+
+  const action = (request: APIRequestContext, data: unknown, extra: Record<string, string> = headers, name = 'reset') =>
+    request.post(`/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields/actions/${name}`, { headers: extra, data });
+
+  test('the reset action: no nonce 401, no instance nonce 403, unknown action 404, keyword checked on the server (400)', async ({ request }) => {
+    await patch(request, { meta_description: 'Changed by REST' });
+
+    expect((await action(request, { keyword: 'RESET' }, {})).status()).toBe(401);
+    const noInstance = await action(request, { keyword: 'RESET' }, { 'X-WP-Nonce': headers['X-WP-Nonce'] as string });
+    expect(noInstance.status()).toBe(403);
+    expect((await noInstance.json()).code).toBe('fyldo_bad_nonce');
+    expect((await action(request, { keyword: 'RESET' }, headers, 'wipe')).status()).toBe(404);
+
+    for (const keyword of [undefined, '', 'reset', 'RESET now']) {
+      const refused = await action(request, keyword === undefined ? {} : { keyword });
+      expect(refused.status(), `keyword ${JSON.stringify(keyword)}`).toBe(400);
+      expect((await refused.json()).code).toBe('fyldo_confirmation');
+    }
+    const still = await request.get('/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields', { headers });
+    expect((await still.json()).values.meta_description).toBe('Changed by REST'); // nothing changed
+  });
+
+  test('the reset action with the keyword returns the defaults and a new revision, and forgets what was stored', async ({ request }) => {
+    const changed = await patch(request, { meta_description: 'Changed by REST', per_page: 20 });
+    const changedRevision = (await changed.json()).revision as string;
+
+    const response = await action(request, { keyword: '  RESET ' }); // surrounding spaces are ignored
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.values.meta_description).toBe('Fyldo is a lightweight settings framework.');
+    expect(body.values.per_page).toBe(10);
+    expect(body.values.license_key).toBe('FYLDO-FREE');
+    expect(body.revision).toBe(initialRevision); // the option is gone: the revision of an empty option
+    expect(body.revision).not.toBe(changedRevision);
+
+    const read = await request.get('/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields', { headers });
+    expect((await read.json()).values.per_page).toBe(10);
+  });
 });
 
 test.describe('Persian (RTL)', () => {
@@ -361,6 +498,36 @@ test.describe('Persian (RTL)', () => {
     await expect(page.getByText('دست‌کم 1 گزینه را انتخاب کنید.')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-fa.png' });
   });
+  test('danger zone and notices: Persian strings, the keyword in the label, the modal mirrored, the toast bottom-left', async ({ page }) => {
+    await page.goto(FA);
+    await expect(page.getByText('این کار قابل بازگشت نیست.')).toBeVisible();
+    await expect(page.locator('[data-slot=fy-notices]').getByRole('region').nth(1)).toHaveAccessibleName('اطلاعات: Update available');
+
+    // the card's title and the action's label are the developer's strings (English in the fixture); Fyldo's own are Persian
+    await page.getByRole('region', { name: 'Reset settings' }).getByRole('button', { name: 'Reset settings' }).click();
+    const dialog = page.getByRole('alertdialog', { name: 'همه‌ی تنظیمات بازنشانی شوند؟' });
+    await expect(dialog).toBeVisible();
+    const keyword = dialog.getByRole('textbox', { name: 'برای تأیید، «RESET» را تایپ کنید' });
+    await expect(keyword).toBeFocused();
+    await page.screenshot({ path: 'test-results/wp-danger-fa.png' });
+
+    // Cancel at the start (right), Confirm at the end (left)
+    const cancel = await dialog.getByRole('button', { name: 'انصراف' }).boundingBox();
+    const confirm = await dialog.getByRole('button', { name: 'Reset settings' }).boundingBox();
+    expect(cancel!.x).toBeGreaterThan(confirm!.x);
+
+    await keyword.fill('RESET');
+    await dialog.getByRole('button', { name: 'Reset settings' }).click();
+    await expect(dialog).toHaveCount(0);
+    const toast = page.locator('[data-fyldo-v1] [data-slot=fy-toast]');
+    await expect(toast).toContainText('تنظیمات به مقدار پیش‌فرض بازنشانی شد');
+    // bottom-end in RTL = bottom-left, 24px from the edges
+    const box = await toast.boundingBox();
+    const viewport = page.viewportSize()!;
+    expect(box!.x).toBeCloseTo(24, 0);
+    expect(viewport.height - (box!.y + box!.height)).toBeCloseTo(24, 0);
+  });
+
   test('Multi Select: tags flow from the right, the chevron and the popup mirror, Persian text and numerals', async ({ page }) => {
     await page.goto(FA);
     const field = page.getByRole('combobox', { name: 'Include in sitemap' });

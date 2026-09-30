@@ -169,6 +169,17 @@ add_action(
 		$fyldo->add_page( 'general', array_merge( require __DIR__ . '/page.php', array( 'group' => 'settings' ) ) );
 		$fyldo->add_page( 'fields', array_merge( require __DIR__ . '/fields.php', array( 'group' => 'settings', 'badge' => 3 ) ) ); // M2: #/fields
 		$fyldo->add_page( 'advanced', require __DIR__ . '/advanced.php' ); // M3: tabs, #/advanced/<tab>
+		// M4: notices for the Fyldo screen (drawn in Fyldo's own slot on the fields page, never with the core notice class).
+		$fyldo->admin_notice(
+			'A new version of ${demo.title} is available.',
+			array(
+				'tone'   => 'blue',
+				'title'  => 'Update available',
+				'page'   => 'fields',
+				'action' => array( 'label' => 'View changelog', 'url' => 'https://example.com/changes', 'external' => true ),
+			)
+		);
+		$fyldo->admin_notice( 'Your license expires in 7 days.', array( 'tone' => 'warning', 'page' => 'fields', 'id' => 'license' ) );
 	}
 );
 `;

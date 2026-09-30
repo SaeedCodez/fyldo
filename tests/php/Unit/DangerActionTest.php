@@ -21,6 +21,10 @@ final class DangerActionTest extends TestCase {
 		$GLOBALS['__fyldo_test_options'] = array();
 		$GLOBALS['__fyldo_test_fired']   = array();
 		$GLOBALS['__fyldo_test_wrong']   = array();
+		$GLOBALS['__fyldo_test_routes']  = array();
+		$GLOBALS['__fyldo_test_logged_in'] = true;
+		$GLOBALS['__fyldo_test_nonces']  = array( 'fyldo_acme-seo_rest' => 'good-nonce' );
+		$GLOBALS['__fyldo_test_caps']    = array( 'manage_options' );
 
 		$this->instance = new Instance( 'acme-seo', array( 'title' => 'Acme SEO' ) );
 		$this->instance->add_page(
@@ -93,5 +97,45 @@ final class DangerActionTest extends TestCase {
 		$this->instance->add_page( 'bare', array( 'title' => 'Bare', 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'fields' => array( array( 'id' => 'x', 'type' => 'toggle', 'label' => 'X' ) ) ) ) ) );
 
 		$this->assertSame( 'fyldo_not_found', $this->run_action( 'bare', 'reset' )->get_error_code() );
+	}
+
+	public function test_the_action_route_is_a_post_route_under_the_same_permission_callback_as_the_page_routes(): void {
+		$controller = new Controller( $this->instance );
+		$controller->register_routes();
+
+		$routes = array();
+		foreach ( $GLOBALS['__fyldo_test_routes'] as $route ) {
+			$routes[ $route[1] ] = $route;
+		}
+		$this->assertCount( 2, $routes );
+		$action = end( $routes );
+		$this->assertSame( 'fyldo-acme-seo/v1', $action[0] );
+		$this->assertStringEndsWith( '/actions/(?P<action>[a-z0-9_-]+)', $action[1] );
+		$this->assertSame( 'POST', $action[2][0]['methods'] );
+		$this->assertSame( array( $controller, 'authorize' ), $action[2][0]['permission_callback'] );
+	}
+
+	public function test_authorize_needs_a_session_the_instance_nonce_and_the_capability(): void {
+		$controller = new Controller( $this->instance );
+		$request    = function ( ?string $nonce ): \WP_REST_Request {
+			return new \WP_REST_Request( array( 'page' => 'general', 'action' => 'reset' ), null === $nonce ? array() : array( 'X-Fyldo-Nonce' => $nonce ), 'POST', '{"keyword":"RESET"}' );
+		};
+
+		$this->assertTrue( $controller->authorize( $request( 'good-nonce' ) ) );
+
+		$GLOBALS['__fyldo_test_logged_in'] = false;
+		$this->assertSame( 401, $controller->authorize( $request( 'good-nonce' ) )->get_error_data()['status'] );
+		$GLOBALS['__fyldo_test_logged_in'] = true;
+
+		foreach ( array( null, 'stale-nonce' ) as $bad ) {
+			$refused = $controller->authorize( $request( $bad ) );
+			$this->assertSame( 'fyldo_bad_nonce', $refused->get_error_code() );
+			$this->assertSame( 403, $refused->get_error_data()['status'] );
+		}
+
+		$GLOBALS['__fyldo_test_caps'] = array();
+		$refused                      = $controller->authorize( $request( 'good-nonce' ) );
+		$this->assertSame( 'fyldo_forbidden', $refused->get_error_code() );
+		$this->assertSame( 403, $refused->get_error_data()['status'] );
 	}
 }

@@ -185,8 +185,23 @@ if ( ! class_exists( 'WP_REST_Response' ) ) {
 if ( ! class_exists( 'WP_REST_Request' ) ) {
 	class WP_REST_Request implements ArrayAccess {
 		private $params;
-		public function __construct( array $params = array() ) {
-			$this->params = $params;
+		private $headers;
+		private $method;
+		private $body;
+		public function __construct( array $params = array(), array $headers = array(), string $method = 'POST', string $body = '' ) {
+			$this->params  = $params;
+			$this->headers = $headers;
+			$this->method  = $method;
+			$this->body    = $body;
+		}
+		public function get_header( $key ) {
+			return $this->headers[ $key ] ?? null;
+		}
+		public function get_method() {
+			return $this->method;
+		}
+		public function get_body() {
+			return $this->body;
 		}
 		#[\ReturnTypeWillChange]
 		public function offsetExists( $offset ) {
@@ -204,5 +219,28 @@ if ( ! class_exists( 'WP_REST_Request' ) ) {
 		public function offsetUnset( $offset ) {
 			unset( $this->params[ $offset ] );
 		}
+	}
+}
+
+// Route registration and the three permission checks, driven by globals so a test can play each outcome.
+if ( ! function_exists( 'register_rest_route' ) ) {
+	function register_rest_route( $namespace, $route, $args = array() ) {
+		$GLOBALS['__fyldo_test_routes'][] = array( $namespace, $route, $args );
+		return true;
+	}
+}
+if ( ! function_exists( 'is_user_logged_in' ) ) {
+	function is_user_logged_in() {
+		return $GLOBALS['__fyldo_test_logged_in'] ?? true;
+	}
+}
+if ( ! function_exists( 'wp_verify_nonce' ) ) {
+	function wp_verify_nonce( $nonce, $action ) {
+		return ( $GLOBALS['__fyldo_test_nonces'][ $action ] ?? null ) === $nonce ? 1 : false;
+	}
+}
+if ( ! function_exists( 'current_user_can' ) ) {
+	function current_user_can( $capability ) {
+		return in_array( $capability, $GLOBALS['__fyldo_test_caps'] ?? array( 'manage_options' ), true );
 	}
 }

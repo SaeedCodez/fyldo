@@ -120,7 +120,7 @@ export function App({ config, root }: AppProps): ReactElement {
                   headerLinks={config.navigation === 'top' ? [] : utilityLinks(config, 'header')}
                   headingRef={heading}
                   locale={config.locale}
-                  notices={config.notices.filter(
+                  notices={(config.notices ?? []).filter(
                     (n) => (n.page === '' || n.page === page.id) && !dismissed.has(n.id),
                   )}
                   onDismissNotice={dismissNotice}
