@@ -164,11 +164,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: app/components/ui/password-input.tsx:32
-msgid "Hide password"
-msgstr ""
-
-#: app/components/ui/password-input.tsx:32
+#: app/components/ui/password-input.tsx:33
 msgid "Show password"
 msgstr ""
 

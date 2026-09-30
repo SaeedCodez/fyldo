@@ -11,7 +11,7 @@ export interface PasswordInputProps extends Omit<InputProps, 'type' | 'suffix'> 
 /**
  * A password Input with a show/hide toggle — CODE-ONLY design, approved by the owner, not in Figma yet
  * (docs/design-spec.md "Code-only design"). The toggle sits in the Input's suffix icon slot (16px, 8px after the
- * text, inside the 12px end padding): a real button, `eye` while hidden / `eye-slash` while shown, `icon/secondary`
+ * text, inside the 12px end padding): a real button named "Show password" whose `aria-pressed` carries the state, `eye` while hidden / `eye-slash` while shown, `icon/secondary`
  * (`icon/primary` on hover), the neutral focus ring, a 24×24 target. It only reveals what the user typed — a stored
  * secret is never in the browser (the field is empty with the "•••• set" placeholder). Hidden again after a
  * successful save (`hideOn`) and on a page change (the page remounts); disabled with the field.
@@ -29,7 +29,8 @@ export function PasswordInput({ hideOn, disabled, ...props }: PasswordInputProps
         <button
           type="button"
           data-slot="fy-password-toggle"
-          aria-label={shown ? __('Hide password', 'fyldo') : __('Show password', 'fyldo')}
+          // One fixed name; `aria-pressed` says whether the text is shown ("Show password, pressed").
+          aria-label={__('Show password', 'fyldo')}
           aria-pressed={shown}
           disabled={disabled}
           onClick={() => setShown((s) => !s)}

@@ -94,7 +94,7 @@ describe('password field', () => {
     expect(input).toHaveAttribute('autocapitalize', 'off');
   });
 
-  it('show/hide toggle: a real button at the end of the field, labelled and pressed, that switches the type (code-only design)', async () => {
+  it('show/hide toggle: a real button at the end of the field, one fixed name + aria-pressed, that switches the type (code-only design)', async () => {
     function Controlled() {
       const [value, setValue] = useState<FieldValue>('');
       return <FieldRenderer field={field} value={value} divider={false} onChange={(_id, next) => setValue(next)} onBlur={() => undefined} />;
@@ -114,7 +114,7 @@ describe('password field', () => {
     await userEvent.click(toggle);
     expect(input).toHaveAttribute('type', 'text');
     expect(input).toHaveValue('s3cret!');
-    expect(toggle).toHaveAccessibleName('Hide password');
+    expect(toggle).toHaveAccessibleName('Show password'); // one fixed name: the state is aria-pressed
     expect(toggle).toHaveAttribute('aria-pressed', 'true');
     expect(toggle.querySelector('svg')).toHaveAttribute('data-fyldo-icon', 'eyeslash');
 

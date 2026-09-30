@@ -1,5 +1,6 @@
 # Persian (Iran) translation of Fyldo.
 # Tone: neutral-formal ("شما" is implicit; imperatives use the polite plural form). Reviewed by the project owner.
+# Style (the pack's): the ezafe after a final «ه» is «‌ی» with a ZWNJ (صفحه‌ی), never the hamza-above form; "password" is «رمز عبور».
 msgid ""
 msgstr ""
 "Project-Id-Version: Fyldo 1.0.0-dev\n"
@@ -17,7 +18,7 @@ msgid "Fyldo"
 msgstr "فیلدو"
 
 msgid "Settings-page framework for WordPress plugin developers. Declare pages, sections and fields in PHP; get a modern admin UI with REST-backed validation and saving."
-msgstr "چارچوب صفحهٔ تنظیمات برای توسعه‌دهندگان افزونهٔ وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
+msgstr "چارچوب صفحه‌ی تنظیمات برای توسعه‌دهندگان افزونه‌ی وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
 
 msgid "You have unsaved changes"
 msgstr "تغییرات ذخیره‌نشده دارید"
@@ -41,7 +42,7 @@ msgid "Save changes"
 msgstr "ذخیره‌ی تغییرات"
 
 msgid "This settings screen needs JavaScript. Please enable it and reload the page."
-msgstr "این صفحهٔ تنظیمات به جاوااسکریپت نیاز دارد. آن را فعال کنید و صفحه را دوباره بارگذاری کنید."
+msgstr "این صفحه‌ی تنظیمات به جاوااسکریپت نیاز دارد. آن را فعال کنید و صفحه را دوباره بارگذاری کنید."
 
 msgid "The values must be an object."
 msgstr "مقادیر باید یک شیء باشند."
@@ -56,13 +57,13 @@ msgid "You must be logged in."
 msgstr "باید وارد حساب کاربری خود شوید."
 
 msgid "This settings page does not exist."
-msgstr "این صفحهٔ تنظیمات وجود ندارد."
+msgstr "این صفحه‌ی تنظیمات وجود ندارد."
 
 msgid "Your session has expired. Reload the page and try again."
 msgstr "نشست شما منقضی شده است. صفحه را دوباره بارگذاری کنید و دوباره تلاش کنید."
 
 msgid "You are not allowed to change these settings."
-msgstr "اجازهٔ تغییر این تنظیمات را ندارید."
+msgstr "اجازه‌ی تغییر این تنظیمات را ندارید."
 
 msgid "The request is too large."
 msgstr "درخواست بیش از حد بزرگ است."
@@ -237,7 +238,4 @@ msgstr "بارگذاری آخرین مقادیر انجام نشد. اتصال �
 
 # Code-only design (docs/design-spec.md): the password show/hide toggle.
 msgid "Show password"
-msgstr "نمایش گذرواژه"
-
-msgid "Hide password"
-msgstr "پنهان کردن گذرواژه"
+msgstr "نمایش رمز عبور"
