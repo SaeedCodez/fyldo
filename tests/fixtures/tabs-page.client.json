@@ -5,7 +5,7 @@
     "icon": "code-1",
     "group": "tools",
     "badge": "",
-    "save": "global",
+    "save": "section",
     "tabs": [
         {
             "id": "cache",

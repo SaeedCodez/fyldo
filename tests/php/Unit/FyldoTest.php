@@ -62,13 +62,43 @@ final class FyldoTest extends TestCase {
 	}
 
 	public function test_instance_defaults(): void {
-		$config = ( new Instance( 'acme-seo', array( 'title' => 'Acme SEO' ) ) )->config();
+		$instance = new Instance( 'acme-seo', array( 'title' => 'Acme SEO' ) );
+		$config   = $instance->config();
 
 		$this->assertSame( 'manage_options', $config['capability'] );
 		$this->assertSame( 'sidebar', $config['navigation'] );
 		$this->assertSame( 'submenu', $config['menu']['type'] );
 		$this->assertSame( 'options-general.php', $config['menu']['parent'] );
-		$this->assertSame( 'Acme SEO', $config['menu']['title'] );
+		$this->assertSame( 'Acme SEO', $instance->menu_title() );
+		$this->assertNull( $instance->logo(), 'no logo: the Fyldo mark' );
+	}
+
+	public function test_the_brand_defaults_to_fyldo(): void {
+		$instance = new Instance( 'acme-seo', array() );
+
+		$this->assertSame( 'Fyldo', $instance->title() );
+		$this->assertSame( 'Fyldo', $instance->menu_title() );
+		$this->assertNull( $instance->logo() );
+
+		$named = new Instance( 'acme-seo', array( 'title' => 'Acme SEO', 'menu' => array( 'title' => 'SEO' ) ) );
+		$this->assertSame( 'Acme SEO', $named->title() );
+		$this->assertSame( 'SEO', $named->menu_title() );
+	}
+
+	/**
+	 * @dataProvider logos
+	 */
+	public function test_logo_is_an_icon_name_or_an_image_url( string $logo, array $expected ): void {
+		$this->assertSame( $expected, ( new Instance( 'acme-seo', array( 'logo' => $logo ) ) )->logo() );
+	}
+
+	public function logos(): array {
+		return array(
+			'icon'            => array( 'setting-2', array( 'icon' => 'setting-2' ) ),
+			'icon, trimmed'   => array( ' flash ', array( 'icon' => 'flash' ) ),
+			'https URL'       => array( 'https://acme.test/logo.svg', array( 'url' => 'https://acme.test/logo.svg' ) ),
+			'http URL'        => array( 'http://acme.test/logo.png', array( 'url' => 'http://acme.test/logo.png' ) ),
+		);
 	}
 
 	/**
@@ -83,7 +113,11 @@ final class FyldoTest extends TestCase {
 
 	public function invalid_instance_configs(): array {
 		return array(
-			'no title'        => array( array(), 'needs a title' ),
+			'empty title'     => array( array( 'title' => ' ' ), 'title must be a non-empty string' ),
+			'title not text'  => array( array( 'title' => array( 'x' ) ), 'title must be a non-empty string' ),
+			'empty logo'      => array( array( 'logo' => '' ), 'logo must be' ),
+			'logo not text'   => array( array( 'logo' => 42 ), 'logo must be' ),
+			'bad logo URL'    => array( array( 'logo' => 'javascript://alert(1)' ), 'is not valid' ),
 			'unknown key'     => array( array( 'title' => 'x', 'theme' => 'dark' ), 'unknown config key' ),
 			'bad navigation'  => array( array( 'title' => 'x', 'navigation' => 'left' ), 'navigation' ),
 			'bad menu type'   => array( array( 'title' => 'x', 'menu' => array( 'type' => 'floating' ) ), 'menu.type' ),

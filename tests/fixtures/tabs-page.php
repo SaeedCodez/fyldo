@@ -1,6 +1,7 @@
 <?php
 /**
- * The M3 page with tabs (sub-pages at `#/advanced/<tab>`), in the "Tools" group. Used by the PHPUnit contract test,
+ * The M3 page with tabs (sub-pages at `#/advanced/<tab>`), in the "Tools" group; it saves per section (each card
+ * footer has its own Save — M3 part 2). Used by the PHPUnit contract test,
  * tools/dev/dump-slice.php (→ tabs-page.client.json for the static harness) and every e2e demo plugin.
  *
  * @package Fyldo
@@ -11,7 +12,7 @@ return array(
 	'description' => 'Caching and troubleshooting options for developers.',
 	'icon'        => 'code-1',
 	'group'       => 'tools',
-	'save'        => 'global',
+	'save'        => 'section',
 	'tabs'        => array(
 		'cache' => 'Cache',
 		'debug' => array(

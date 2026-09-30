@@ -37,6 +37,7 @@ final class ClientConfig {
 		$client = array(
 			'slug'         => $slug,
 			'title'        => $instance->title(),
+			'logo'         => $instance->logo(),
 			'version'      => (string) $config['version'],
 			'fyldoVersion' => (string) Loader::loaded_version(),
 			'navigation'   => (string) $config['navigation'],

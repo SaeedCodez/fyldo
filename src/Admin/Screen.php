@@ -25,7 +25,7 @@ final class Screen {
 		if ( 'top' === $menu['type'] ) {
 			$hook = add_menu_page(
 				$instance->title(),
-				(string) $menu['title'],
+				$instance->menu_title(),
 				(string) $config['capability'],
 				$instance->slug(),
 				$callback,
@@ -36,7 +36,7 @@ final class Screen {
 			$hook = add_submenu_page(
 				(string) $menu['parent'],
 				$instance->title(),
-				(string) $menu['title'],
+				$instance->menu_title(),
 				(string) $config['capability'],
 				$instance->slug(),
 				$callback,
