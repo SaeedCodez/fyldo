@@ -41,7 +41,7 @@ Fyldo is a settings-page framework: a developer **declares** pages → sections 
 fyldo/                              ← repo root == the shipped tree (dev-only dirs are export-ignored)
 ├─ fyldo.php                        Entry point. Plugin header + tiny bootstrap (require Loader, register copy).
 │                                   The SAME file is the plugin main file, the drop-in include, and the Composer `files` autoload.
-├─ readme.md / LICENSE / CHANGELOG.md
+├─ README.md / LICENSE / CHANGELOG.md
 ├─ composer.json                    autoload = { "files": ["fyldo.php"] } — deliberately NO psr-4 (see §6.4)
 ├─ src/                             PHP, namespace Fyldo\V1\…, PSR-4 layout, PHP 7.4 syntax
 │  ├─ Bootstrap/Loader.php          Frozen contract: register(), boot(), on_ready(), loaded_version()   (§6.2)
@@ -321,16 +321,18 @@ All three modes ship **the same tree** (`fyldo.php`, `src/`, `assets/dist/`, `la
 3. npm run i18n              wp i18n make-pot → languages/fyldo.pot; compile fa_IR .po → .mo + JSON
 4. composer install --no-dev (only to validate autoload/lint; nothing from vendor/ ships)
 5. verify                    php -l on every file (7.4 … 8.4), phpcs, size budgets, bundle has no `window.` writes (§8.6)
-6. assemble  build/fyldo/    git-archive of runtime tree (export-ignore applied) + overlay assets/dist + languages
+6. assemble  build/fyldo/    copy of the runtime allow-list (`RUNTIME` in tools/release/build.ts, mirrored by `.gitattributes` export-ignore), then a check that nothing else is in it
 7. artifacts
-   ├─ fyldo-<ver>.zip            (plugin)  build/fyldo/  attached to the GitHub Release
-   ├─ fyldo-dropin-<ver>.zip     (drop-in) same folder; unzips to fyldo/
+   ├─ build/fyldo/               the drop-in folder: the runtime tree only (fyldo.php, composer.json, LICENSE, README.md, CHANGELOG.md, src/, assets/dist/, languages/)
+   ├─ build/fyldo.zip            (plugin) the same folder zipped; unzips to fyldo/, so it serves as the drop-in ZIP too. Attached to the GitHub Release
    └─ Composer package           see below
 ```
 
 **Composer with prebuilt assets.** Packagist serves `git archive` of a tag, which cannot contain untracked files. Chosen approach: the release workflow makes a **release commit** on top of the tagged source commit that force-adds `assets/dist` and `languages/*.mo|json`, and tags *that* commit (`v1.4.2`). `main` never contains build output. The tree of that tag is exactly what the ZIPs contain. (Alternative: a read-only mirror repo — see decision O9.) Verified by CI: `composer create-project` a fixture consumer from the tag, run the coexistence suite against it.
 
-**Version source of truth.** One string in `fyldo.php` header (`Version:`) and `composer.json`; `tools/release/build.ts` asserts they match the git tag and that `Loader::register( '<version>' )` reads the same header (no duplicated literal — the entry file parses its own header via `get_file_data` once, cached).
+**Version source of truth.** One string: the `Version:` header of `fyldo.php` (`package.json` mirrors it). `composer.json` carries **no** `version` (Composer and Packagist read the git tag; a literal there would fight it). `tools/release/build.ts` asserts that header, `package.json`, the tag (`--tag vX.Y.Z`) and a `CHANGELOG.md` entry agree; `Loader::register( '<version>' )` reads the same header (no duplicated literal — the entry file parses its own header via `get_file_data` once, cached).
+
+**Release workflow** (`.github/workflows/release.yml`, on a `v*` tag): run the full CI (`ci.yml` as a reusable workflow) → `npm run release` → the release commit, then the tag is **moved** to it (the workflow's token does not start another run; a re-run sees the assets already committed and skips this) → `diff -r` of `git archive <tag>` against `build/fyldo` (the tag's tree must equal the ZIP's) → GitHub Release with `fyldo.zip`, notes from the CHANGELOG entry, marked pre-release when the version has a `-` suffix.
 
 ---
 
@@ -720,7 +722,7 @@ Cut from the milestones above on 2026-09-30 (a solo project; each item is worth 
 - **Multisite**: network activation, per-site options, coexistence across sites.
 - **Forced-colors** (Windows High Contrast) styling and its tests.
 - **Screen-reader checklist**: a manual NVDA / VoiceOver pass with notes.
-- **Docs site for developers** (until then: `readme.md`, `docs/`).
+- **Docs site for developers** (until then: `README.md`, `docs/`).
 - A wordpress.org submission, if distribution needs it (O9).
 
 ---
