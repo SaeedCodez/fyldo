@@ -230,12 +230,10 @@ test.describe('English', () => {
     const keyword = dialog.getByRole('textbox', { name: 'Type RESET to confirm' });
     await expect(keyword).toBeFocused();
 
-    // the modal's close button has a tooltip (design rule 10); Esc and the scrim do not close a Danger modal
+    // the modal's close button has a tooltip (design rule 10); the scrim does not close a Danger modal, Esc is Cancel
     await keyword.press('Shift+Tab'); // keyboard focus opens a tooltip at once
     await expect(dialog.getByRole('button', { name: 'Close' })).toBeFocused();
     await expect(page.locator('[data-fyldo-v1] [data-slot=fy-tooltip]', { hasText: 'Close' })).toBeVisible();
-    await page.keyboard.press('Escape');
-    await expect(dialog).toBeVisible();
     await page.mouse.click(4, 400);
     await expect(dialog).toBeVisible();
 
@@ -273,6 +271,10 @@ test.describe('English', () => {
 
     await page.getByRole('region', { name: 'Reset settings' }).getByRole('button', { name: 'Reset settings' }).click();
     await page.getByRole('alertdialog').getByRole('button', { name: 'Cancel' }).click();
+    await expect(page.getByRole('alertdialog')).toHaveCount(0);
+    // Esc is Cancel too: it closes the dialog and confirms nothing
+    await page.getByRole('region', { name: 'Reset settings' }).getByRole('button', { name: 'Reset settings' }).click();
+    await page.keyboard.press('Escape');
     await expect(page.getByRole('alertdialog')).toHaveCount(0);
     await page.reload();
     await expect(page.getByRole('textbox', { name: 'Default meta description' })).toHaveValue('Kept');

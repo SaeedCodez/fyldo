@@ -147,3 +147,33 @@ body.fyldo-screen #wpfooter {
 [data-fyldo-v1][dir='rtl'] [data-slot='fy-tooltip-arrow'][data-side='inline-end'] {
   clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
+
+/*
+ * Top Navigation at ≤782px (design silent): the navigation row scrolls sideways and fades out at an edge that has more
+ * to show. TopNavigation sets `data-fade-start` / `data-fade-end` from its scroll position (logical edges, so the
+ * same in RTL); the mask is only physical, so it is mirrored for `dir='rtl'`.
+ */
+@media (max-width: 782px) {
+  [data-slot='fy-top-nav-nav'] {
+    --fyldo-nav-fade-start: 0px;
+    --fyldo-nav-fade-end: 0px;
+    mask-image: linear-gradient(to right, transparent 0, black var(--fyldo-nav-fade-start), black calc(100% - var(--fyldo-nav-fade-end)), transparent 100%);
+    scrollbar-width: none;
+  }
+
+  [data-slot='fy-top-nav-nav']::-webkit-scrollbar {
+    display: none;
+  }
+
+  [data-fyldo-v1][dir='rtl'] [data-slot='fy-top-nav-nav'] {
+    mask-image: linear-gradient(to left, transparent 0, black var(--fyldo-nav-fade-start), black calc(100% - var(--fyldo-nav-fade-end)), transparent 100%);
+  }
+
+  [data-slot='fy-top-nav-nav'][data-fade-start] {
+    --fyldo-nav-fade-start: var(--fyldo-space-32);
+  }
+
+  [data-slot='fy-top-nav-nav'][data-fade-end] {
+    --fyldo-nav-fade-end: var(--fyldo-space-32);
+  }
+}

@@ -114,7 +114,7 @@ export function TextareaFooter({ description, error, count, limit }: { descripti
       ) : (
         <div className="fy:min-w-0 fy:flex-1">
           {description ? (
-            <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">{description}</Field.Description>
+            <Field.Description className="fy:text-copy-13 fy:text-text-secondary">{description}</Field.Description>
           ) : null}
         </div>
       )}

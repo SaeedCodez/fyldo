@@ -50,7 +50,7 @@ export function FieldShell({ label, hideLabel, description, error, footer, disab
       ) : error ? (
         <FieldError>{error}</FieldError>
       ) : description ? (
-        <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
+        <Field.Description className="fy:text-copy-13 fy:text-text-secondary">
           {description}
         </Field.Description>
       ) : null}

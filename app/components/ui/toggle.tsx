@@ -66,7 +66,7 @@ export function Toggle({ size = 'sm', label, description, className, ...props }:
         <span className={cn(labelStyle, size === 'sm' && 'fy:pt-0', size === 'md' && 'fy:pt-0')}>{label}</span>
       </Field.Label>
       {description ? (
-        <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:ps-9 fy:group-data-[disabled]/field:text-text-disabled">
+        <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:ps-9">
           {description}
         </Field.Description>
       ) : null}

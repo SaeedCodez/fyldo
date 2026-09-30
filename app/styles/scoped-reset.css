@@ -135,16 +135,12 @@
   }
 }
 
+/* Reduced motion: every animation and transition is off — the spinner too (a loading state is also shown by its
+   label, `aria-busy` and the disabled control). Base UI waits for animations to finish, so states change at once. */
 @media (prefers-reduced-motion: reduce) {
   [data-fyldo-v1] :where(*, ::before, ::after) {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    animation: none !important;
+    transition: none !important;
     scroll-behavior: auto !important;
-  }
-
-  /* A loading indicator must keep turning under reduced motion — just gently. */
-  [data-fyldo-v1] [data-fyldo-spinner] {
-    animation: fyldo-spin 2.4s linear infinite !important;
   }
 }

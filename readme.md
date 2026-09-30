@@ -55,7 +55,7 @@ Tokens come from Figma (`tokens/figma.*.json`, refreshed through the figma-conso
 
 ## Distribution modes (one tree, three ways to load it)
 
-1. **Standalone plugin** — the release ZIP. *(The `Requires Plugins: fyldo` dependency mode is unavailable until the wordpress.org approval, M8.)*
+1. **Standalone plugin** — the release ZIP. Install the ZIP from the GitHub Releases page. *(`Requires Plugins: fyldo` only works as a dependency check for a plugin installed this way; Fyldo is not on wordpress.org for now.)*
 2. **Drop-in folder** — `require_once __DIR__ . '/fyldo/fyldo.php';`
 3. **Composer** — `composer require fyldo/fyldo` (prebuilt assets are in the release tags), optionally re-prefixed with [Strauss](docs/ARCHITECTURE.md#7-strauss-optional-full-isolation--exact-configuration).
 

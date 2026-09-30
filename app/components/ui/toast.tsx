@@ -56,6 +56,10 @@ function ToastList(): ReactElement {
             swipeDirection={['down', direction === 'rtl' ? 'left' : 'right']}
             data-slot="fy-toast"
             data-tone={tone}
+            // Base UI hides an Error toast from assistive technology until it is focused (its alert is announced through a
+            // separate live region) while leaving it, and its buttons, focusable — an ARIA violation (aria-hidden-focus).
+            // A toast stays in the accessibility tree: the announcement still comes from that live region.
+            aria-hidden={false}
             className="fy:absolute fy:bottom-0 fy:w-full fy:overflow-hidden fy:rounded-lg fy:border fy:border-border-default fy:bg-background-default fy:shadow-medium fy:select-none fy:transition fy:duration-200 fy:ease-out fy:motion-reduce:transition-none fy:data-starting-style:translate-y-6 fy:data-starting-style:opacity-0 fy:data-ending-style:opacity-0 fy:data-limited:pointer-events-none fy:data-limited:opacity-0"
             style={{
               height: 'var(--toast-height)',
