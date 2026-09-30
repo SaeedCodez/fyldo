@@ -1,6 +1,6 @@
 {
   "name": "fyldo",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "private": true,
   "description": "Fyldo — settings-page framework for WordPress plugin developers (development workspace; consumers never need Node).",
   "license": "GPL-2.0-or-later",

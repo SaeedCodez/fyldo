@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.2] - 2026-09-30
+
 ### Added
 
 - **Demo dashboard** (standalone plugin only): **Settings → Fyldo demo** shows four sample pages (Overview, General, Content, Security) that use every field type, both save modes, tabs and the danger zone, in English and فارسی. It is added only when Fyldo sits directly in `wp-content/plugins/`, never for a drop-in folder or a Composer package, and can be turned off with the `fyldo/fyldo-demo/enabled` filter. PHP only: no extra assets.
@@ -28,4 +30,5 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.2]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.1

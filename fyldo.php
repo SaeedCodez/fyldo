@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Fyldo
  * Description:       Settings-page framework for WordPress plugin developers. Declare pages, sections and fields in PHP; get a modern admin UI with REST-backed validation and saving.
- * Version:           1.0.0-beta.1
+ * Version:           1.0.0-beta.2
  * Requires at least: 6.5
  * Requires PHP:      7.4
  * Author:            Fyldo

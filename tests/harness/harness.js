@@ -24,7 +24,7 @@ window.__fyldo_harness__ = {
   title: rtl ? 'فیلدو' : 'Fyldo',
   logo: null,
   version: '1.0.0',
-  fyldoVersion: '1.0.0-beta.1',
+  fyldoVersion: '1.0.0-beta.2',
   navigation: params.get('nav') === 'top' ? 'top' : 'sidebar',
   groups: [
     { id: 'settings', label: rtl ? 'تنظیمات' : 'Settings' },
