@@ -93,6 +93,47 @@ final class Saver {
 	}
 
 	/**
+	 * Restore the defaults of a page (the built-in `reset` danger action): the stored value is forgotten, so every
+	 * field reads its default again. A disabled field keeps what is stored — it cannot be changed from the UI, and a
+	 * reset is a change. Fires `before_save` / `saved` with what is now stored (an empty array when nothing is kept),
+	 * like any other write, then `reset`.
+	 *
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 */
+	public function reset( Page $page ): array {
+		$store  = $this->instance->store();
+		$slug   = $this->instance->slug();
+		$stored = $store->raw( $page );
+		$kept   = array();
+
+		foreach ( $page->fields() as $id => $field ) {
+			if ( $field->is_disabled() && array_key_exists( $id, $stored ) ) {
+				$kept[ $id ] = $stored[ $id ];
+			}
+		}
+
+		do_action( Naming::hook( $slug, 'before_save' ), $page->id(), $kept, $stored );
+
+		if ( array() === $kept ) {
+			$store->delete( $page );
+		} else {
+			$store->save( $page, $kept );
+		}
+
+		do_action( Naming::hook( $slug, 'saved' ), $page->id(), $kept, $stored );
+
+		/**
+		 * Fires after a page was reset to its defaults.
+		 *
+		 * @param string              $page_id Page id.
+		 * @param array<string,mixed> $stored  What was stored before the reset.
+		 */
+		do_action( Naming::hook( $slug, 'reset' ), $page->id(), $stored );
+
+		return $this->result( 'ok', array(), $page );
+	}
+
+	/**
 	 * @param array<string,string> $errors Errors.
 	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
 	 */

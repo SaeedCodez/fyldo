@@ -19,12 +19,17 @@
  *   ?c=section-card&tone=default|danger&spec=<json>   (spec: {title, description, rows:[{title, description, layout, value, checked}], footerText, action})
  *   ?c=save-bar&state=dirty|saving|saved|error   (800 wide, as in the pack; the texts are Fyldo's own strings)
  *   ?c=modal&title=…&description=…&cancel=…&confirm=…   (the Default modal, open)
+ *   ?c=modal&type=danger&keyword=RESET&…   (the Danger modal with its typed confirmation; Confirm stays disabled)
+ *   ?c=toast&tone=neutral|success|error|loading&title=…&description=…&action=…   (one toast, queued without a timeout)
+ *   ?c=tooltip&placement=top|bottom|start|end&label=…   (an Icon Button whose tooltip is opened by keyboard focus)
+ *   ?c=icon-button&variant=tertiary&size=sm&icon=more&label=…
+ *   ?c=empty-state&size=lg|sm&icon=element-plus&title=…&description=…&primary=…&secondary=…   (480 / 360 wide, as in the pack)
  *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Field } from '@base-ui/react/field';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { NavItem } from '../../../app/components/fyldo/NavItem';
 import { PageHeader } from '../../../app/components/fyldo/PageHeader';
@@ -46,7 +51,12 @@ import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
+import { EmptyState } from '../../../app/components/ui/empty-state';
+import { IconButton } from '../../../app/components/ui/icon-button';
 import { Modal } from '../../../app/components/ui/modal';
+import { ToastProvider } from '../../../app/components/ui/toast';
+import { TooltipProvider, type TooltipSide } from '../../../app/components/ui/tooltip';
+import { createToaster, type ToastTone } from '../../../app/lib/toast';
 import { Notice, type NoticeTone } from '../../../app/components/ui/notice';
 import { SelectField } from '../../../app/components/ui/select-field';
 import { Tag, type TagSize } from '../../../app/components/ui/tag';
@@ -284,8 +294,77 @@ function SectionCardDemo({ spec, tone }: { spec: CardSpec; tone: 'default' | 'da
   );
 }
 
+/** One toast, queued without a timeout so it stays put for the screenshot (the stack is fixed at the bottom-end corner). */
+function ToastDemo() {
+  const [toaster] = useState(createToaster);
+  useEffect(() => {
+    // the provider subscribes to the manager in its own effect, which runs after this one: queue on the next tick
+    const id = window.setTimeout(
+      () =>
+        toaster.show({
+          tone: param('tone', 'neutral') as ToastTone,
+          title: param('title'),
+          description: param('description') || undefined,
+          action: param('action') ? { label: param('action'), onClick: () => undefined } : undefined,
+          timeout: 0,
+        }),
+      0,
+    );
+    return () => window.clearTimeout(id);
+  }, [toaster]);
+  return (
+    // the stack is fixed to the viewport corner; the stage keeps a box so the test can find its coordinates
+    <div style={{ width: 1, height: 1 }}>
+      <ToastProvider toaster={toaster}>
+        <span />
+      </ToastProvider>
+    </div>
+  );
+}
+
 function Variant() {
   switch (q.get('c')) {
+    case 'toast':
+      return <ToastDemo />;
+    case 'tooltip':
+      // Tab to the button: keyboard focus opens the tooltip at once (design rule 10)
+      return (
+        <div style={{ padding: '48px 200px' }}>
+          <IconButton
+            icon={param('icon', 'copy')}
+            label={param('label', 'Copy shortcode')}
+            tooltipSide={param('placement', 'top') as TooltipSide}
+          />
+        </div>
+      );
+    case 'icon-button':
+      return (
+        <IconButton
+          icon={param('icon', 'more')}
+          label={param('label', 'More')}
+          variant={(q.get('variant') ?? 'tertiary') as ButtonVariant}
+          size={size}
+          disabled={state === 'disabled'}
+          loading={state === 'loading'}
+        />
+      );
+    case 'empty-state': {
+      const large = q.get('size') !== 'sm';
+      return (
+        <div style={{ width: large ? 480 : 360 }}>
+          <EmptyState
+            size={large ? 'lg' : 'sm'}
+            icon={param('icon', 'element-plus')}
+            title={param('title')}
+            description={param('description') || undefined}
+            primaryAction={param('primary') ? <Button>{param('primary')}</Button> : undefined}
+            secondaryAction={
+              param('secondary') ? <Button>{param('secondary')}</Button> : undefined
+            }
+          />
+        </div>
+      );
+    }
     case 'icons':
       return (
         <div
@@ -406,6 +485,8 @@ function Variant() {
             cancelLabel={param('cancel')}
             confirmLabel={param('confirm')}
             onConfirm={() => undefined}
+            type={param('type', 'default') as 'default' | 'danger'}
+            confirmKeyword={param('keyword') || undefined}
           />
         </div>
       );
@@ -556,9 +637,11 @@ function Variant() {
   createRoot(stage).render(
     <PortalContainerContext.Provider value={root}>
       <DirectionProvider direction={rtl ? 'rtl' : 'ltr'}>
-        <div data-variant-root style={{ display: 'inline-block', margin: 24 }}>
-          <Variant />
-        </div>
+        <TooltipProvider>
+          <div data-variant-root style={{ display: 'inline-block', margin: 24 }}>
+            <Variant />
+          </div>
+        </TooltipProvider>
       </DirectionProvider>
     </PortalContainerContext.Provider>,
   );

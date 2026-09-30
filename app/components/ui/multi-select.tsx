@@ -203,6 +203,7 @@ export function MultiSelect({
         </span>
         <span data-slot="fy-multi-icons" className={cn('fy:flex fy:shrink-0 fy:items-center fy:gap-2 fy:self-start fy:text-icon-secondary', ICONS[size])}>
           {clearable && selected.length > 0 && !disabled ? (
+            // eslint-disable-next-line fyldo/icon-button-tooltip -- part of the field, not a Figma Icon Button: a pointer-only target (the keyboard has Clear all in the popup footer)
             <button
               type="button"
               tabIndex={-1}

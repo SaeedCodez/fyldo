@@ -264,6 +264,24 @@
                     "placeholder": ""
                 }
             ]
+        },
+        {
+            "id": "reset",
+            "tab": "",
+            "title": "Reset settings",
+            "description": "Restore every option on this page to its default value.",
+            "tone": "danger",
+            "fields": [],
+            "action": {
+                "id": "reset",
+                "label": "Reset settings",
+                "confirm": {
+                    "title": "",
+                    "description": "",
+                    "keyword": "RESET",
+                    "label": ""
+                }
+            }
         }
     ],
     "values": {

@@ -43,6 +43,7 @@ final class ClientConfig {
 			'navigation'   => (string) $config['navigation'],
 			'groups'       => $instance->groups(),
 			'links'        => $config['links'],
+			'notices'      => $instance->notices(),
 			'pages'        => $pages,
 			'dir'          => is_rtl() ? 'rtl' : 'ltr',
 			'locale'       => str_replace( '_', '-', determine_locale() ),

@@ -131,9 +131,116 @@ if ( ! function_exists( 'add_option' ) ) {
 		return true;
 	}
 }
+if ( ! function_exists( 'delete_option' ) ) {
+	function delete_option( $name ) {
+		unset( $GLOBALS['__fyldo_test_options'][ $name ] );
+		return true;
+	}
+}
 if ( ! function_exists( 'update_option' ) ) {
 	function update_option( $name, $value, $autoload = null ) {
 		$GLOBALS['__fyldo_test_options'][ $name ] = $value;
 		return true;
+	}
+}
+
+// REST classes, just enough to run Controller callbacks directly.
+if ( ! class_exists( 'WP_Error' ) ) {
+	class WP_Error {
+		private $code;
+		private $data;
+		public function __construct( $code = '', $message = '', $data = '' ) {
+			$this->code = $code;
+			$this->data = $data;
+		}
+		public function get_error_code() {
+			return $this->code;
+		}
+		public function get_error_data() {
+			return $this->data;
+		}
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Server' ) ) {
+	class WP_REST_Server {
+		const READABLE  = 'GET';
+		const CREATABLE = 'POST';
+		const EDITABLE  = 'POST, PUT, PATCH';
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Response' ) ) {
+	class WP_REST_Response {
+		public $data;
+		public function __construct( $data = null ) {
+			$this->data = $data;
+		}
+		public function get_data() {
+			return $this->data;
+		}
+	}
+}
+
+if ( ! class_exists( 'WP_REST_Request' ) ) {
+	class WP_REST_Request implements ArrayAccess {
+		private $params;
+		private $headers;
+		private $method;
+		private $body;
+		public function __construct( array $params = array(), array $headers = array(), string $method = 'POST', string $body = '' ) {
+			$this->params  = $params;
+			$this->headers = $headers;
+			$this->method  = $method;
+			$this->body    = $body;
+		}
+		public function get_header( $key ) {
+			return $this->headers[ $key ] ?? null;
+		}
+		public function get_method() {
+			return $this->method;
+		}
+		public function get_body() {
+			return $this->body;
+		}
+		#[\ReturnTypeWillChange]
+		public function offsetExists( $offset ) {
+			return isset( $this->params[ $offset ] );
+		}
+		#[\ReturnTypeWillChange]
+		public function offsetGet( $offset ) {
+			return $this->params[ $offset ] ?? null;
+		}
+		#[\ReturnTypeWillChange]
+		public function offsetSet( $offset, $value ) {
+			$this->params[ $offset ] = $value;
+		}
+		#[\ReturnTypeWillChange]
+		public function offsetUnset( $offset ) {
+			unset( $this->params[ $offset ] );
+		}
+	}
+}
+
+// Route registration and the three permission checks, driven by globals so a test can play each outcome.
+if ( ! function_exists( 'register_rest_route' ) ) {
+	function register_rest_route( $namespace, $route, $args = array() ) {
+		$GLOBALS['__fyldo_test_routes'][] = array( $namespace, $route, $args );
+		return true;
+	}
+}
+if ( ! function_exists( 'is_user_logged_in' ) ) {
+	function is_user_logged_in() {
+		return $GLOBALS['__fyldo_test_logged_in'] ?? true;
+	}
+}
+if ( ! function_exists( 'wp_verify_nonce' ) ) {
+	function wp_verify_nonce( $nonce, $action ) {
+		return ( $GLOBALS['__fyldo_test_nonces'][ $action ] ?? null ) === $nonce ? 1 : false;
+	}
+}
+if ( ! function_exists( 'current_user_can' ) ) {
+	function current_user_can( $capability ) {
+		return in_array( $capability, $GLOBALS['__fyldo_test_caps'] ?? array( 'manage_options' ), true );
 	}
 }

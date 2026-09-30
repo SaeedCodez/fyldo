@@ -145,6 +145,20 @@ final class Page {
 	}
 
 	/**
+	 * The Danger Section Card that owns action `$action_id` (built-in `reset`), or null.
+	 */
+	public function danger_action( string $action_id ): ?Section {
+		foreach ( $this->sections as $section ) {
+			$action = $section->action();
+			if ( null !== $action && $action['id'] === $action_id ) {
+				return $section;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * The fields that own a value: what is stored, sanitized and saved. A `notice` is in a section, not in here.
 	 *
 	 * @return array<string,AbstractField>

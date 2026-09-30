@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactElement } from 'react';
 import { __ } from '../../i18n';
 import { Icon } from '../../icons/Icon';
 import { Input, type InputProps } from './input';
+import { Tooltip } from './tooltip';
 
 export interface PasswordInputProps extends Omit<InputProps, 'type' | 'suffix'> {
   /** Hides the text again whenever this changes (the page's revision: after a successful save). */
@@ -26,18 +27,21 @@ export function PasswordInput({ hideOn, disabled, ...props }: PasswordInputProps
       disabled={disabled}
       type={shown ? 'text' : 'password'}
       suffix={
-        <button
-          type="button"
-          data-slot="fy-password-toggle"
-          // One fixed name; `aria-pressed` says whether the text is shown ("Show password, pressed").
-          aria-label={__('Show password', 'fyldo')}
-          aria-pressed={shown}
-          disabled={disabled}
-          onClick={() => setShown((s) => !s)}
-          className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:transition-colors fy:duration-100 fy:ease-out fy:hover:text-icon-primary fy:focus-ring fy:disabled:cursor-not-allowed fy:disabled:text-text-disabled fy:disabled:hover:text-text-disabled fy:before:absolute fy:before:-inset-1"
-        >
-          <Icon name={shown ? 'eye-slash' : 'eye'} size={16} />
-        </button>
+        // Design rule 10: an icon-only button says what it does — the tooltip repeats its (fixed) name.
+        <Tooltip label={__('Show password', 'fyldo')}>
+          <button
+            type="button"
+            data-slot="fy-password-toggle"
+            // One fixed name; `aria-pressed` says whether the text is shown ("Show password, pressed").
+            aria-label={__('Show password', 'fyldo')}
+            aria-pressed={shown}
+            disabled={disabled}
+            onClick={() => setShown((s) => !s)}
+            className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:transition-colors fy:duration-100 fy:ease-out fy:hover:text-icon-primary fy:focus-ring fy:disabled:cursor-not-allowed fy:disabled:text-text-disabled fy:disabled:hover:text-text-disabled fy:before:absolute fy:before:-inset-1"
+          >
+            <Icon name={shown ? 'eye-slash' : 'eye'} size={16} />
+          </button>
+        </Tooltip>
       }
     />
   );

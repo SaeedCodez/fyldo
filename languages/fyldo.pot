@@ -9,20 +9,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2026-09-30T11:14:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 
-#: app/components/fyldo/App.tsx:110
+#: app/components/fyldo/App.tsx:135
 msgid "Discard unsaved changes?"
 msgstr ""
 
-#: app/components/fyldo/App.tsx:111
+#: app/components/fyldo/App.tsx:136
 msgid "Your edits on this page haven’t been saved and will be lost."
 msgstr ""
 
-#: app/components/fyldo/App.tsx:112
+#: app/components/fyldo/App.tsx:140
 msgid "Keep editing"
 msgstr ""
 
@@ -37,6 +38,7 @@ msgid "•••• set"
 msgstr ""
 
 #: app/components/fyldo/NavItem.tsx:82
+#: app/components/fyldo/Notices.tsx:44
 #: app/components/fyldo/PageHeader.tsx:59
 #: app/components/fyldo/TopNavigation.tsx:65
 msgid "(opens in a new tab)"
@@ -71,27 +73,62 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:103
+#: app/components/fyldo/SettingsPage.tsx:115
 msgid "Changes take effect after you save."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:119
+#: app/components/fyldo/SettingsPage.tsx:131
 msgid "Save"
 msgstr ""
 
+#: app/components/fyldo/SettingsPage.tsx:147
+msgid "Settings reset to defaults"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:150
+msgid "Couldn't reset settings. Check your connection and try again."
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:151
+msgid "Retry"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:158
+msgid "This action can’t be undone."
+msgstr ""
+
 #: app/components/fyldo/SettingsPage.tsx:168
+#: app/components/fyldo/SettingsPage.tsx:260
+msgid "Reset settings"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:220
 msgid "These settings were changed somewhere else"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:171
+#: app/components/fyldo/SettingsPage.tsx:223
 msgid "Reload latest values"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:175
+#: app/components/fyldo/SettingsPage.tsx:227
 msgid ""
 "They were saved in another tab or by another person after this page was "
 "opened, so your changes were not saved. Reload the latest values to "
 "continue; your unsaved changes on this page will be lost."
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:257
+msgid "Reset all settings?"
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:258
+msgid ""
+"Every option on this page will return to its default value. This can’t be "
+"undone."
+msgstr ""
+
+#: app/components/fyldo/SettingsPage.tsx:259
+msgid "Cancel"
 msgstr ""
 
 #: app/components/fyldo/Shell.tsx:151
@@ -103,8 +140,13 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: app/components/ui/modal.tsx:68
+#: app/components/ui/modal.tsx:133
+#: app/components/ui/toast.tsx:89
 msgid "Close"
+msgstr ""
+
+#: app/components/ui/modal.tsx:139
+msgid "Type %s to confirm"
 msgstr ""
 
 #: app/components/ui/multi-select.tsx:111
@@ -121,54 +163,60 @@ msgid_plural "%s more selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/components/ui/multi-select.tsx:209
-#: app/components/ui/multi-select.tsx:284
+#: app/components/ui/multi-select.tsx:210
+#: app/components/ui/multi-select.tsx:285
 msgid "Clear all"
 msgstr ""
 
-#: app/components/ui/multi-select.tsx:249
+#: app/components/ui/multi-select.tsx:250
 msgid "Search…"
 msgstr ""
 
-#: app/components/ui/multi-select.tsx:250
+#: app/components/ui/multi-select.tsx:251
 msgid "Search options"
 msgstr ""
 
-#: app/components/ui/multi-select.tsx:256
+#: app/components/ui/multi-select.tsx:257
 msgid "No results found."
 msgstr ""
 
-#: app/components/ui/multi-select.tsx:281
+#: app/components/ui/multi-select.tsx:282
 msgid "%s selected"
 msgid_plural "%s selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/components/ui/notice.tsx:11
+#: app/components/ui/notice.tsx:12
 msgid "Note"
 msgstr ""
 
-#: app/components/ui/notice.tsx:12
+#: app/components/ui/notice.tsx:13
 msgid "Information"
 msgstr ""
 
-#: app/components/ui/notice.tsx:13
+#: app/components/ui/notice.tsx:14
 msgid "Success"
 msgstr ""
 
-#: app/components/ui/notice.tsx:14
+#: app/components/ui/notice.tsx:15
 msgid "Warning"
 msgstr ""
 
-#: app/components/ui/notice.tsx:15
+#: app/components/ui/notice.tsx:16
 msgid "Error"
 msgstr ""
 
-#: app/components/ui/password-input.tsx:33
+#: app/components/ui/notice.tsx:80
+#: app/components/ui/notice.tsx:84
+msgid "Dismiss"
+msgstr ""
+
+#: app/components/ui/password-input.tsx:31
+#: app/components/ui/password-input.tsx:36
 msgid "Show password"
 msgstr ""
 
-#: app/components/ui/tag.tsx:62
+#: app/components/ui/tag.tsx:63
 msgid "Remove %s"
 msgstr ""
 
@@ -183,6 +231,10 @@ msgid "%d character over the limit."
 msgid_plural "%d characters over the limit."
 msgstr[0] ""
 msgstr[1] ""
+
+#: app/components/ui/toast.tsx:117
+msgid "Notifications"
+msgstr ""
 
 #: app/lib/page-form.ts:280
 msgid "Couldn’t load the latest values. Check your connection and try again."
@@ -205,7 +257,7 @@ msgid ""
 msgstr ""
 
 #: fyldo.php
-#: src/Instance.php:119
+#: src/Instance.php:123
 #. Plugin Name of the plugin
 #. Author of the plugin
 msgid "Fyldo"
@@ -215,36 +267,44 @@ msgstr ""
 msgid "This settings screen needs JavaScript. Please enable it and reload the page."
 msgstr ""
 
-#: src/Rest/Controller.php:110
-msgid "The values must be an object."
-msgstr ""
-
-#: src/Rest/Controller.php:119
-msgid "Some values are not valid."
-msgstr ""
-
-#: src/Rest/Controller.php:130
-msgid "These settings were changed somewhere else. Reload to see the latest values."
-msgstr ""
-
-#: src/Rest/Controller.php:72
-msgid "You must be logged in."
-msgstr ""
-
-#: src/Rest/Controller.php:77
-msgid "This settings page does not exist."
-msgstr ""
-
-#: src/Rest/Controller.php:82
+#: src/Rest/Controller.php:100
 msgid "Your session has expired. Reload the page and try again."
 msgstr ""
 
-#: src/Rest/Controller.php:86
+#: src/Rest/Controller.php:104
 msgid "You are not allowed to change these settings."
 msgstr ""
 
-#: src/Rest/Controller.php:90
+#: src/Rest/Controller.php:108
 msgid "The request is too large."
+msgstr ""
+
+#: src/Rest/Controller.php:128
+msgid "The values must be an object."
+msgstr ""
+
+#: src/Rest/Controller.php:137
+msgid "Some values are not valid."
+msgstr ""
+
+#: src/Rest/Controller.php:148
+msgid "These settings were changed somewhere else. Reload to see the latest values."
+msgstr ""
+
+#: src/Rest/Controller.php:178
+msgid "This action does not exist."
+msgstr ""
+
+#: src/Rest/Controller.php:183
+msgid "The confirmation text does not match."
+msgstr ""
+
+#: src/Rest/Controller.php:90
+msgid "You must be logged in."
+msgstr ""
+
+#: src/Rest/Controller.php:95
+msgid "This settings page does not exist."
 msgstr ""
 
 #: src/Validation/Messages.php:22
@@ -339,7 +399,7 @@ msgstr ""
 msgid "This value is not valid."
 msgstr ""
 
-#: app/components/fyldo/App.tsx:113
+#: app/components/fyldo/App.tsx:141
 msgctxt "unsaved changes dialog"
 msgid "Discard"
 msgstr ""

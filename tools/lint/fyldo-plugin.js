@@ -3,6 +3,7 @@
  *  - fyldo/no-hex-colors        components use tokens, never literal colours
  *  - fyldo/no-arbitrary-values  Tailwind classes use the scale/tokens, not `w-[320px]`
  *  - fyldo/portal-container     every Base UI Portal renders INSIDE the Fyldo root (scoped tokens + reset)
+ *  - fyldo/icon-button-tooltip  an icon-only button is either an <IconButton> or sits inside a <Tooltip> (design rule 10)
  */
 const HEX = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})\b/i;
 
@@ -12,8 +13,43 @@ const stringsIn = (node) => {
   return [];
 };
 
+/** Elements that are buttons: `button`, `Button`, `BaseButton`, `Dialog.Close`, `Toast.Close`… */
+const isButtonName = (name) => {
+  if (name.type === 'JSXIdentifier') return name.name === 'button' || name.name === 'Button' || name.name === 'BaseButton';
+  if (name.type === 'JSXMemberExpression') return name.property.name === 'Close';
+  return false;
+};
+
+/** Children that draw a picture, not text: an Iconsax `<Icon>`, the `<Spinner>` or an inline `<svg>`. */
+const PICTURES = new Set(['Icon', 'Spinner', 'svg']);
+
+const isIconOnly = (element) => {
+  const meaningful = element.children.filter((child) => !(child.type === 'JSXText' && child.value.trim() === ''));
+  return (
+    meaningful.length > 0 &&
+    meaningful.every((child) => child.type === 'JSXElement' && child.openingElement.name.type === 'JSXIdentifier' && PICTURES.has(child.openingElement.name.name))
+  );
+};
+
 export default {
   rules: {
+    'icon-button-tooltip': {
+      meta: {
+        type: 'problem',
+        schema: [],
+        messages: { missing: 'An icon-only button needs a Tooltip whose text is its aria-label (design rule 10): use <IconButton>, or wrap it in <Tooltip>.' },
+      },
+      create: (context) => ({
+        JSXElement(node) {
+          if (!isButtonName(node.openingElement.name) || !isIconOnly(node)) return;
+          const inTooltip = context.sourceCode
+            .getAncestors(node)
+            .some((a) => a.type === 'JSXElement' && a.openingElement.name.type === 'JSXIdentifier' && a.openingElement.name.name === 'Tooltip');
+          if (!inTooltip) context.report({ node, messageId: 'missing' });
+        },
+      }),
+    },
+
     'no-hex-colors': {
       meta: { type: 'problem', schema: [], messages: { hex: 'Use a design token instead of the literal colour "{{value}}".' } },
       create: (context) => ({

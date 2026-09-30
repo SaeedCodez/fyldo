@@ -134,6 +134,20 @@ export type FieldDef = ValueFieldDef | NoticeFieldDef;
 /** Type guard: fields that hold a value (everything except a `notice`). */
 export const isValueField = (field: FieldDef): field is ValueFieldDef => field.type !== 'notice';
 
+/** A Danger Section Card's action: `reset` restores the page's defaults. Empty texts are filled in by the browser (translated). */
+export interface DangerActionDef {
+  id: 'reset';
+  label: string;
+  confirm: {
+    title: string;
+    description: string;
+    /** Typed confirmation for high-impact actions; '' = none. Checked again by the server. */
+    keyword: string;
+    /** The confirm button's label; '' = the action's label. */
+    label: string;
+  };
+}
+
 export interface SectionDef {
   id: string;
   tab: string;
@@ -141,7 +155,7 @@ export interface SectionDef {
   description: string;
   tone: 'default' | 'danger';
   fields: FieldDef[];
-  action?: Record<string, unknown>;
+  action?: DangerActionDef;
 }
 
 /** A sub-page of a page, reached at `#/<page>/<tab>`. */
@@ -178,6 +192,18 @@ export interface LinkDef {
   placement: 'footer' | 'header';
 }
 
+/** A notice PHP queued with `Instance::admin_notice()`, drawn under the Page Header in Fyldo's own slot. */
+export interface NoticeDef {
+  id: string;
+  tone: NoticeTone;
+  title: string;
+  message: string;
+  dismissible: boolean;
+  /** Page id it belongs to; '' = every page. */
+  page: string;
+  action: { label: string; url: string; external: boolean } | null;
+}
+
 export interface JedLocaleData {
   locale_data: { messages: Record<string, string[] | Record<string, string>> };
 }
@@ -193,6 +219,7 @@ export interface FyldoConfig {
   navigation: 'sidebar' | 'top';
   groups: { id: string; label: string }[];
   links: LinkDef[];
+  notices: NoticeDef[];
   pages: PageDef[];
   dir: 'ltr' | 'rtl';
   locale: string;
