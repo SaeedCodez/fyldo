@@ -21,3 +21,7 @@
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
 /tokens/         export-ignore
+/design/         export-ignore
+/CLAUDE.md       export-ignore
+/.size-limit.json export-ignore
+/vite.gallery.config.ts export-ignore

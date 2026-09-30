@@ -1,0 +1,67 @@
+name: Release
+
+# Push a tag `vX.Y.Z` (or `vX.Y.Z-beta.1`) on a merged commit of main. The workflow runs the full CI, builds the ZIP,
+# turns the tag into the Composer release commit and creates the GitHub Release. See docs/ARCHITECTURE.md §5.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    name: Build, Composer tag, GitHub Release
+    needs: ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # move the tag to the release commit, create the Release
+    env:
+      TAG: ${{ github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.2', tools: wp-cli, coverage: none }
+      - run: sudo apt-get install -y gettext zip
+      - run: npm ci
+
+      # Tag ↔ fyldo.php ↔ package.json ↔ CHANGELOG.md, then tokens, build, i18n, size budgets, `php -l`, the tree
+      # check (runtime files only) and build/fyldo.zip.
+      - name: Build the release artifacts
+        run: npm run release -- --tag "$TAG"
+
+      # Packagist serves `git archive` of a tag, which cannot hold untracked files. So the tag moves to a release commit
+      # on top of the source commit that force-adds the built assets; `main` never gets them. Pushes made with the
+      # workflow token do not start another workflow run. A re-run finds the assets already committed and skips this.
+      - name: Composer release commit and tag
+        run: |
+          if git cat-file -e "HEAD:assets/dist/app.js" 2>/dev/null; then
+            echo "The tag already points at a release commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -f assets/dist languages
+            git commit -m "Release ${TAG} (prebuilt assets)"
+            git tag -f "$TAG"
+            # The tag's tree must be exactly what the ZIP contains.
+            mkdir "$RUNNER_TEMP/archive"
+            git archive "$TAG" | tar -x -C "$RUNNER_TEMP/archive"
+            diff -r build/fyldo "$RUNNER_TEMP/archive"
+            git push --force origin "refs/tags/$TAG"
+          fi
+
+      - name: GitHub Release
+        run: |
+          VERSION="${TAG#v}"
+          awk -v v="$VERSION" '/^## \[/ { p = (index($0, "## [" v "]") == 1); next } p && !/^\[[^]]*\]:/' CHANGELOG.md > "$RUNNER_TEMP/notes.md"
+          test -s "$RUNNER_TEMP/notes.md"
+          PRERELEASE=""
+          case "$VERSION" in *-*) PRERELEASE="--prerelease" ;; esac
+          gh release create "$TAG" build/fyldo.zip --verify-tag --title "Fyldo $VERSION" --notes-file "$RUNNER_TEMP/notes.md" $PRERELEASE

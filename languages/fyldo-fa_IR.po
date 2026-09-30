@@ -3,7 +3,7 @@
 # Style (the pack's): the ezafe after a final «ه» is «‌ی» with a ZWNJ (صفحه‌ی), never the hamza-above form; "password" is «رمز عبور».
 msgid ""
 msgstr ""
-"Project-Id-Version: Fyldo 1.0.0-dev\n"
+"Project-Id-Version: Fyldo 1.0.0-beta.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fyldo\n"
 "Last-Translator: \n"
 "Language-Team: Persian\n"
