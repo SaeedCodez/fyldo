@@ -3,7 +3,8 @@
  * (`options-general.php?page=<slug>#/<page>/<tab>`), real hrefs, Back/Forward, deep links; the wp-admin integration of
  * ARCHITECTURE §8.3 (bleed layout, no footer, admin-bar offsets, the ≤782px Menu disclosure); both layouts (acme-beta:
  * sidebar, acme-gamma: top navigation); EN + FA. The demo plugins register pages `general`, `fields` (badge 3) and
- * `advanced` (tabs `cache`, `debug`; tests/fixtures/tabs-page.php) in the groups Settings and Tools.
+ * `advanced` (tabs `cache`, `debug`; tests/fixtures/tabs-page.php; it saves per section) in the groups Settings and
+ * Tools. M3 part 2: the per-section save round trip, and the unsaved-changes guard (in-app dialog, Back, beforeunload).
  */
 import { expect, test, type Page } from '@playwright/test';
 import { resetData, settingsUrl } from './helpers';
@@ -81,52 +82,113 @@ test.describe('routing', () => {
     expect(page.url()).toMatch(/#\/general$/);
   });
 
-  test('the tabbed page saves through REST; values survive switching tabs and persist', async ({
+  test('the tabbed page saves per section through REST: each card sends only its own fields; values survive tabs and persist', async ({
     page,
   }) => {
     await page.goto(`${SIDEBAR}#/advanced`);
-    const ttl = page.getByRole('textbox', { name: 'Cache lifetime' });
-    await ttl.fill('120');
+    await expect(page.getByRole('region', { name: 'Unsaved changes' })).toHaveCount(0); // no Save Bar on this page
+    const cache = page.getByRole('region', { name: 'Page cache' });
+    await expect(cache.getByRole('button', { name: 'Save' })).toBeDisabled();
+    await cache.getByRole('textbox', { name: 'Cache lifetime' }).fill('120');
+    await expect(cache.getByText('You have unsaved changes')).toBeVisible();
+
     await page.getByRole('tab', { name: /Debugging/ }).click();
-    await page.getByRole('switch', { name: 'Write a debug log' }).click();
+    const debug = page.getByRole('region', { name: 'Debugging' });
+    await debug.getByRole('switch', { name: 'Write a debug log' }).click();
+    await page.getByRole('tab', { name: 'Cache' }).click();
+    await expect(cache.getByRole('textbox', { name: 'Cache lifetime' })).toHaveValue('120'); // kept across tabs
+    expect(await page.evaluate(() => document.querySelectorAll('[role=dialog]').length)).toBe(0); // tabs never ask
+
+    const post = () =>
+      page.waitForResponse(
+        (r) => r.url().includes('/fyldo-acme-beta/v1/pages/advanced') && r.request().method() === 'POST',
+      );
+    let saved = post();
+    await cache.getByRole('button', { name: 'Save' }).click();
+    let response = await saved;
+    expect(response.status()).toBe(200);
+    expect(JSON.parse(response.request().postData() ?? '{}').values).toEqual({ cache_ttl: 120 }); // this card only
+    await expect(cache.getByText('All changes saved')).toBeVisible();
+
+    await page.getByRole('tab', { name: /Debugging/ }).click();
+    await expect(debug.getByText('You have unsaved changes')).toBeVisible(); // still waiting for its own Save
+    saved = post();
+    await debug.getByRole('button', { name: 'Save' }).click();
+    response = await saved;
+    expect(response.status()).toBe(200); // based on the revision the first save returned: no 409
+    expect(JSON.parse(response.request().postData() ?? '{}').values).toEqual({ debug_log: true });
+
+    await page.reload(); // still on the Debugging tab (#/advanced/debug)
     await expect(page.getByRole('switch', { name: 'Write a debug log' })).toHaveAttribute(
       'aria-checked',
       'true',
     );
     await page.getByRole('tab', { name: 'Cache' }).click();
-    await expect(page.getByRole('textbox', { name: 'Cache lifetime' })).toHaveValue('120'); // kept across tabs
-
-    const saved = page.waitForResponse(
-      (r) =>
-        r.url().includes('/fyldo-acme-beta/v1/pages/advanced') && r.request().method() === 'POST',
-    );
-    await page.getByRole('button', { name: 'Save changes' }).click();
-    const response = await saved;
-    expect(response.status()).toBe(200);
-    expect(JSON.parse(response.request().postData() ?? '{}').values).toEqual({
-      cache_ttl: 120,
-      debug_log: true,
-    }); // only what changed, from both tabs
-    await expect(page.getByText('All changes saved')).toBeVisible();
-
-    await page.reload();
     await expect(page.getByRole('textbox', { name: 'Cache lifetime' })).toHaveValue('120');
-    await page.getByRole('tab', { name: /Debugging/ }).click();
-    await expect(page.getByRole('switch', { name: 'Write a debug log' })).toHaveAttribute(
-      'aria-checked',
-      'true',
-    );
   });
 
-  test('an invalid field on another tab: the save is blocked, its tab opens and the field is focused', async ({
+  test('an invalid field blocks its card’s save: the field is focused and the footer says why', async ({
     page,
   }) => {
     await page.goto(`${SIDEBAR}#/advanced/debug`);
-    await page.getByRole('textbox', { name: 'Log file prefix' }).fill('Not valid');
-    await page.getByRole('tab', { name: 'Cache' }).click();
-    await page.getByRole('button', { name: 'Save changes' }).click();
-    await expect(page.getByRole('textbox', { name: 'Log file prefix' })).toBeFocused();
-    expect(page.url()).toMatch(/#\/advanced\/debug$/);
+    const debug = page.getByRole('region', { name: 'Debugging' });
+    await debug.getByRole('textbox', { name: 'Log file prefix' }).fill('Not valid');
+    await debug.getByRole('button', { name: 'Save' }).click();
+    await expect(debug.getByRole('textbox', { name: 'Log file prefix' })).toBeFocused();
+    await expect(debug.getByText('Couldn’t save. Check the highlighted fields.')).toBeVisible();
+  });
+});
+
+test.describe('unsaved changes', () => {
+  test('leaving a dirty page through the navigation asks first; Keep editing stays, Discard goes', async ({ page }) => {
+    await page.goto(SIDEBAR);
+    await page.getByRole('textbox', { name: 'Site title' }).fill('Unsaved');
+    await nav(page).getByRole('link', { name: 'Advanced' }).click();
+    const dialog = page.getByRole('dialog', { name: 'Discard unsaved changes?' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole('button', { name: 'Keep editing' })).toBeFocused();
+    expect(page.url()).not.toMatch(/#\/advanced/); // still on General
+    // portalled into the Fyldo root, over a scrim
+    expect(await dialog.evaluate((el) => Boolean(el.closest('[data-fyldo-v1]')))).toBe(true);
+
+    await dialog.getByRole('button', { name: 'Keep editing' }).click();
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByRole('textbox', { name: 'Site title' })).toHaveValue('Unsaved');
+
+    await nav(page).getByRole('link', { name: 'Advanced' }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Discard' }).click();
+    await expect(h1(page)).toHaveText('Advanced');
+    await expect(h1(page)).toBeFocused();
+    await nav(page).getByRole('link', { name: 'General' }).click(); // clean again: no question
+    await expect(page.getByRole('textbox', { name: 'Site title' })).toHaveValue('Fyldo');
+  });
+
+  test('Back from a dirty page asks too; the URL stays until the choice is made', async ({ page }) => {
+    await page.goto(SIDEBAR);
+    await nav(page).getByRole('link', { name: 'Advanced' }).click();
+    await expect(h1(page)).toHaveText('Advanced');
+    await page.getByRole('textbox', { name: 'Cache lifetime' }).fill('90');
+    await page.goBack();
+    const dialog = page.getByRole('dialog', { name: 'Discard unsaved changes?' });
+    await expect(dialog).toBeVisible();
+    expect(page.url()).toMatch(/#\/advanced$/);
+    await dialog.getByRole('button', { name: 'Discard' }).click();
+    await expect(h1(page)).toHaveText('General');
+    expect(page.url()).toMatch(/#\/general$/);
+  });
+
+  test('leaving the screen with unsaved edits asks the browser (beforeunload)', async ({ page }) => {
+    await page.goto(SIDEBAR);
+    const dialogs: string[] = [];
+    page.on('dialog', (d) => {
+      dialogs.push(d.type());
+      void d.accept();
+    });
+    await page.getByRole('textbox', { name: 'Site title' }).fill('Unsaved');
+    const closed = new Promise((done) => page.once('close', done));
+    await page.close({ runBeforeUnload: true });
+    await closed;
+    expect(dialogs).toEqual(['beforeunload']);
   });
 });
 
