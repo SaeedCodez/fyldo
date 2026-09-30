@@ -35,7 +35,7 @@ function renderPage(def: PageDef, api: Partial<Api> = {}) {
   const readPage = vi.fn(api.readPage ?? (async () => ({ values: def.values, revision: 'rev-1' })));
   render(
     <PortalContainerContext.Provider value={within_root()}>
-      <SettingsPage page={def} api={{ savePage, readPage }} tab="cache" />
+      <SettingsPage page={def} api={{ savePage, readPage, runAction: vi.fn() }} tab="cache" />
     </PortalContainerContext.Provider>,
   );
   return { savePage, readPage };
@@ -132,6 +132,7 @@ function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
     navigation: 'sidebar',
     groups: [],
     links: [],
+    notices: [],
     pages: [general, advanced, fields],
     dir: 'ltr',
     locale: 'en',

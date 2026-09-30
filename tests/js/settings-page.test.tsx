@@ -18,7 +18,7 @@ function setup(api: Partial<Api> = {}, def: PageDef = page) {
   document.body.append(root);
   render(
     <PortalContainerContext.Provider value={root}>
-      <SettingsPage page={def} api={{ savePage, readPage }} />
+      <SettingsPage page={def} api={{ savePage, readPage, runAction: vi.fn() }} />
     </PortalContainerContext.Provider>,
   );
   return { savePage, readPage };
@@ -140,13 +140,15 @@ describe('Settings page (global save pattern)', () => {
     const bar = screen.getByRole('region', { name: 'Unsaved changes' });
     expect(await within(bar).findByText('Couldn’t save: these settings were changed somewhere else.')).toBeVisible();
     expect(title).toHaveValue('Fyldo!'); // nothing is lost behind the user's back
-    const notice = screen.getByRole('region', { name: 'Warning: These settings were changed somewhere else' });
+    // it appeared after the page loaded: an assertive alert (amber), with the tone word in front for a screen reader
+    const notice = screen.getByRole('alert');
+    expect(notice).toHaveTextContent('Warning: These settings were changed somewhere else');
     expect(notice).toHaveTextContent('your unsaved changes on this page will be lost');
 
     await userEvent.click(within(notice).getByRole('button', { name: 'Reload latest values' }));
     expect(readPage).toHaveBeenCalledWith('general');
     await waitFor(() => expect(title).toHaveValue('Theirs'));
-    expect(screen.queryByRole('region', { name: /changed somewhere else/ })).toBeNull();
+    expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.queryByRole('region', { name: 'Unsaved changes' })).toBeNull();
 
     // the next save is based on the reloaded revision

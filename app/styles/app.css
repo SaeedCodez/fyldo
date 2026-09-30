@@ -101,3 +101,49 @@ body.fyldo-screen #wpfooter {
     linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 6px 6px no-repeat,
     linear-gradient(to bottom left, transparent calc(50% - 0.5px), var(--fyldo-border-default) calc(50% - 0.5px), var(--fyldo-border-default) calc(50% + 0.5px), transparent calc(50% + 0.5px)) left 3px bottom 5px / 3px 3px no-repeat;
 }
+
+/*
+ * Tooltip arrow: 10×5 (5×10 at the sides), drawn outside the bubble, pointing at the trigger. `data-side` is the
+ * logical side (Start/End follow the reading direction), so the sideways arrows swap under RTL.
+ */
+[data-slot='fy-tooltip-arrow'][data-side='top'] {
+  top: 100%;
+  inset-inline-start: calc(50% - 5px);
+  width: 10px;
+  height: 5px;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+[data-slot='fy-tooltip-arrow'][data-side='bottom'] {
+  bottom: 100%;
+  inset-inline-start: calc(50% - 5px);
+  width: 10px;
+  height: 5px;
+  clip-path: polygon(0 100%, 100% 100%, 50% 0);
+}
+
+[data-slot='fy-tooltip-arrow'][data-side='inline-start'],
+[data-slot='fy-tooltip-arrow'][data-side='inline-end'] {
+  top: calc(50% - 5px);
+  width: 5px;
+  height: 10px;
+}
+
+/* the popup is at the trigger's start: the arrow is on the popup's end edge, pointing to the end */
+[data-slot='fy-tooltip-arrow'][data-side='inline-start'] {
+  inset-inline-start: 100%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+[data-fyldo-v1][dir='rtl'] [data-slot='fy-tooltip-arrow'][data-side='inline-start'] {
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+[data-slot='fy-tooltip-arrow'][data-side='inline-end'] {
+  inset-inline-end: 100%;
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+[data-fyldo-v1][dir='rtl'] [data-slot='fy-tooltip-arrow'][data-side='inline-end'] {
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}

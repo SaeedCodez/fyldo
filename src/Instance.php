@@ -8,6 +8,7 @@
 
 namespace Fyldo\V1;
 
+use Fyldo\V1\Admin\Notice;
 use Fyldo\V1\Schema\ConfigException;
 use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Storage\OptionStore;
@@ -37,6 +38,9 @@ final class Instance {
 
 	/** @var array{icon:string}|array{url:string}|null The brand logo; null = the Fyldo mark. */
 	private $logo;
+
+	/** @var array<string,array<string,mixed>> Notices for the screen, by id (the same notice added twice is shown once). */
+	private $notices = array();
 
 	/** @var string Screen hook suffix returned by add_menu_page()/add_submenu_page(). */
 	private $hook_suffix = '';
@@ -246,6 +250,61 @@ final class Instance {
 		}
 
 		return ( new Saver( $this ) )->save( $page, $values, null );
+	}
+
+	/**
+	 * Restores the defaults of a page (what the Danger Section Card's `reset` action does), through the same path as REST.
+	 *
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 */
+	public function reset( string $page_id ): array {
+		$page = $this->page( $page_id );
+		if ( null === $page ) {
+			return array(
+				'status'   => 'invalid',
+				'errors'   => array( '_page' => 'Unknown page.' ),
+				'values'   => array(),
+				'revision' => '',
+			);
+		}
+
+		return ( new Saver( $this ) )->reset( $page );
+	}
+
+	/**
+	 * A notice for the Fyldo screen, shown under the Page Header. It is NOT a WordPress admin notice: it never gets the
+	 * core `.notice` class (core JS would move it out of the screen); Fyldo draws it in its own slot with its own
+	 * Notice component. Call it before the screen's assets are enqueued (e.g. on `load-{screen}` or `admin_init`).
+	 *
+	 * @param string              $message Plain text: what happened and what to do next.
+	 * @param array<string,mixed> $args    See Admin\Notice::normalize(): `tone`, `title`, `dismissible`, `page`, `id`, `action`.
+	 */
+	public function admin_notice( string $message, array $args = array() ): self {
+		try {
+			$notice = Notice::normalize( $message, $args );
+		} catch ( ConfigException $e ) {
+			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
+
+			return $this;
+		}
+
+		$this->notices[ $notice['id'] ] = $notice;
+
+		if ( count( $this->notices ) > 3 ) {
+			// Design rule 6: one notice per message, a stack of at most 2–3. Still shown, but it is a design smell.
+			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%s": more than 3 notices at once. Keep the stack to 2–3, most severe first.', $this->slug ) );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * The notices for the screen, most severe first.
+	 *
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function notices(): array {
+		return Notice::sort( array_values( $this->notices ) );
 	}
 
 	public function hook_suffix(): string {

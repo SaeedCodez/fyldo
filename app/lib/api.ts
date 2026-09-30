@@ -22,6 +22,11 @@ export interface Api {
   savePage(pageId: string, values: Record<string, FieldValue>, revision: string): Promise<SaveResult>;
   /** The stored values and revision right now (conflict recovery: "Reload latest values"). */
   readPage(pageId: string): Promise<SaveResult>;
+  /**
+   * A Danger Section Card's action (`POST …/pages/{page}/actions/{action}`): the typed keyword goes along, the server
+   * checks it again. Resolves with the page's new values and revision.
+   */
+  runAction(pageId: string, actionId: string, keyword: string): Promise<SaveResult>;
 }
 
 /**
@@ -31,10 +36,10 @@ export interface Api {
 export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof fetch = (...a) => fetch(...a)): Api {
   const { root, nonce, instanceNonce, nonceHeader } = config.rest;
 
-  const request = async (pageId: string, init: RequestInit): Promise<SaveResult> => {
+  const request = async (pageId: string, init: RequestInit, suffix = ''): Promise<SaveResult> => {
     let response: Response;
     try {
-      response = await fetchImpl(`${root}pages/${encodeURIComponent(pageId)}`, {
+      response = await fetchImpl(`${root}pages/${encodeURIComponent(pageId)}${suffix}`, {
         credentials: 'same-origin',
         ...init,
         headers: { 'X-WP-Nonce': nonce, [nonceHeader]: instanceNonce, ...(init.headers as Record<string, string>) },
@@ -65,5 +70,7 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
         body: JSON.stringify({ values, revision }),
       }),
     readPage: (pageId) => request(pageId, { method: 'GET', cache: 'no-store' }),
+    runAction: (pageId, actionId, keyword) =>
+      request(pageId, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword }) }, `/actions/${encodeURIComponent(actionId)}`),
   };
 }

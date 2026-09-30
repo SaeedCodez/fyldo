@@ -3,6 +3,7 @@ import { __ } from '../../i18n';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 import type { NoticeTone } from '../../types';
+import { Tooltip } from './tooltip';
 
 export type { NoticeTone };
 
@@ -22,22 +23,36 @@ export interface NoticeProps {
   title?: string;
   /** The message: what happened and what to do next. */
   children: ReactNode;
-  /** Figma `Show action`: one Secondary Small Button at the end, centred on the notice's height. */
+  /** Figma `Show action`: one Secondary Small Button (or link button) at the end, centred on the notice's height. */
   action?: ReactNode;
+  /**
+   * Figma `Dismissible`: a close control at the very end. Errors and warnings stay until resolved (design rule 6), so
+   * only offer it on gray, blue and green notices. The caller removes the notice — and moves focus somewhere sensible.
+   */
+  onDismiss?: () => void;
+  /**
+   * The notice appeared AFTER the page loaded (a failed save, a conflict): announce it. Gray, blue and green use
+   * `role="status"` (polite), amber and red `role="alert"` (assertive). Notices that are on the page from the start
+   * are not live: a screen reader would otherwise read all of them out at load.
+   */
+  live?: boolean;
   className?: string;
 }
 
 /**
- * Figma "Notice": tone icon · title (optional) · message · action (optional), full width. Dismissing is Milestone 4. A notice that is on the page from the start is a labelled region, not a live region (it must not
- * interrupt a screen reader when the page loads); the label starts with the tone word: "Warning: Renew soon".
+ * Figma "Notice": tone icon · title (optional) · message · action (optional) · dismiss (optional), full width, radius md.
+ * The tone word is part of what a screen reader hears ("Warning: Renew soon") because colour alone never carries the
+ * meaning — as the region's name, or, for a live notice, as hidden text in front of the message. It never gets the
+ * WordPress `notice` class: core JS would move it out of the screen (design-spec D8).
  */
-export function Notice({ tone = 'gray', title, children, action, className }: NoticeProps): ReactElement {
+export function Notice({ tone = 'gray', title, children, action, onDismiss, live = false, className }: NoticeProps): ReactElement {
   const { look, icon, label } = TONES[tone];
+  const urgent = tone === 'amber' || tone === 'red';
 
   return (
     <div
-      role="region"
-      aria-label={title ? `${label()}: ${title}` : label()}
+      role={live ? (urgent ? 'alert' : 'status') : 'region'}
+      aria-label={live ? undefined : title ? `${label()}: ${title}` : label()}
       data-slot="fy-notice"
       data-tone={tone}
       className={cn('fy:flex fy:w-full fy:items-start fy:gap-3 fy:rounded-md fy:border fy:px-4 fy:py-3', look, className)}
@@ -47,10 +62,34 @@ export function Notice({ tone = 'gray', title, children, action, className }: No
         <Icon name={icon} size={16} />
       </span>
       <div className="fy:flex fy:min-w-0 fy:flex-1 fy:flex-col fy:gap-0.5">
-        {title ? <p className="fy:text-label-14-strong">{title}</p> : null}
-        <p className="fy:text-copy-14">{children}</p>
+        {title ? (
+          <p className="fy:text-label-14-strong">
+            {live ? <span className="fy:sr-only">{label()}: </span> : null}
+            {title}
+          </p>
+        ) : null}
+        <p className="fy:text-copy-14">
+          {live && !title ? <span className="fy:sr-only">{label()}: </span> : null}
+          {children}
+        </p>
       </div>
       {action ? <div className="fy:flex fy:shrink-0 fy:items-center fy:self-stretch">{action}</div> : null}
+      {onDismiss ? (
+        // Figma "Close": the 16px `close-circle` in a 16×20 box like the tone icon; the pointer target grows to 24×24.
+        <span className="fy:flex fy:h-5 fy:shrink-0 fy:items-center fy:rtl:h-6">
+          <Tooltip label={__('Dismiss', 'fyldo')}>
+            <button
+              type="button"
+              data-slot="fy-notice-dismiss"
+              aria-label={__('Dismiss', 'fyldo')}
+              onClick={onDismiss}
+              className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:cursor-pointer fy:items-center fy:justify-center fy:rounded-xs fy:transition-opacity fy:duration-100 fy:ease-out fy:hover:opacity-70 fy:focus-ring fy:before:absolute fy:before:-inset-1"
+            >
+              <Icon name="close-circle" size={16} />
+            </button>
+          </Tooltip>
+        </span>
+      ) : null}
     </div>
   );
 }

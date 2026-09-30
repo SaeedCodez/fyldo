@@ -30,7 +30,7 @@ const SIZE: Record<ButtonSize, string> = {
   lg: 'fy:h-12 fy:px-5 fy:gap-2 fy:rounded-md fy:text-button-16',
 };
 
-const VARIANT: Record<ButtonVariant, string> = {
+export const BUTTON_VARIANT: Record<ButtonVariant, string> = {
   primary: 'fy:bg-action-primary fy:text-text-inverse fy:hover:bg-action-primary-hover',
   secondary:
     'fy:border fy:border-border-default fy:bg-action-secondary fy:text-text-primary fy:hover:border-border-hover fy:hover:bg-action-secondary-hover',
@@ -42,21 +42,19 @@ const VARIANT: Record<ButtonVariant, string> = {
 const DISABLED_BASE = 'fy:data-disabled:cursor-not-allowed fy:data-disabled:text-text-disabled';
 const DISABLED_FILLED =
   'fy:data-disabled:border fy:data-disabled:border-border-default fy:data-disabled:bg-action-disabled fy:data-disabled:hover:border-border-default fy:data-disabled:hover:bg-action-disabled';
-const DISABLED: Record<ButtonVariant, string> = {
+export const BUTTON_DISABLED: Record<ButtonVariant, string> = {
   primary: `${DISABLED_BASE} ${DISABLED_FILLED}`,
   secondary: `${DISABLED_BASE} ${DISABLED_FILLED}`,
   tertiary: `${DISABLED_BASE} fy:data-disabled:bg-transparent fy:data-disabled:hover:bg-transparent`,
   error: `${DISABLED_BASE} ${DISABLED_FILLED}`,
 };
 
+/** What every button shares: layout, transition and the neutral focus ring (Button, ButtonLink and Icon Button). */
+export const BUTTON_BASE =
+  'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out fy:focus-ring';
+
 /** The classes of an enabled button of a type and size (shared with ButtonLink). */
-const look = (variant: ButtonVariant, size: ButtonSize): string =>
-  cn(
-    'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out',
-    'fy:focus-ring',
-    SIZE[size],
-    VARIANT[variant],
-  );
+const look = (variant: ButtonVariant, size: ButtonSize): string => cn(BUTTON_BASE, SIZE[size], BUTTON_VARIANT[variant]);
 
 export interface ButtonLinkProps extends Omit<ComponentPropsWithoutRef<'a'>, 'children'> {
   variant?: ButtonVariant;
@@ -104,7 +102,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       data-loading={loading ? '' : undefined}
-      className={cn(look(variant, size), DISABLED[variant], className as string | undefined)}
+      className={cn(look(variant, size), BUTTON_DISABLED[variant], className as string | undefined)}
     >
       {loading ? <Spinner /> : leadingIcon ? <Icon name={leadingIcon} size={16} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}

@@ -31,6 +31,7 @@ export default tseslint.config(
       'fyldo/no-hex-colors': 'error',
       'fyldo/no-arbitrary-values': 'error',
       'fyldo/portal-container': 'error',
+      'fyldo/icon-button-tooltip': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },

@@ -43,7 +43,7 @@ test('a save based on stale values is refused (409): the edits stay, a notice ex
   const bar = page.getByRole('region', { name: 'Unsaved changes' });
   await expect(bar.getByText('Couldn’t save: these settings were changed somewhere else.')).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Tagline' })).toHaveValue('Mine'); // nothing lost behind the user's back
-  const notice = page.getByRole('region', { name: 'Warning: These settings were changed somewhere else' });
+  const notice = page.getByRole('alert').filter({ hasText: 'These settings were changed somewhere else' }); // live: it appeared after the page loaded
   await expect(notice).toBeVisible();
 
   const reloaded = page.waitForResponse((r) => r.url().includes('/fyldo-acme-beta/v1/pages/general') && r.request().method() === 'GET');

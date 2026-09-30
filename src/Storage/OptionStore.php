@@ -85,6 +85,13 @@ final class OptionStore {
 		}
 	}
 
+	/**
+	 * Forget the stored value: every field is back to its default. Nothing is left behind (the option row goes).
+	 */
+	public function delete( Page $page ): void {
+		delete_option( $page->option_name() );
+	}
+
 	/** Optimistic-concurrency token of what is stored right now. */
 	public function revision( Page $page ): string {
 		$stored = $this->raw( $page );

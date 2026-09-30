@@ -69,8 +69,18 @@ final class PageTest extends TestCase {
 			array( 'id' => 'a', 'title' => 'A again', 'fields' => array() ),
 		);
 		$danger_first = array(
-			array( 'id' => 'reset', 'title' => 'Reset', 'tone' => 'danger', 'fields' => array() ),
+			array( 'id' => 'reset', 'title' => 'Reset', 'tone' => 'danger', 'fields' => array(), 'action' => array( 'id' => 'reset', 'label' => 'Reset settings' ) ),
 			array( 'id' => 'other', 'title' => 'Other', 'fields' => array() ),
+		);
+
+		$danger_fields = array(
+			array(
+				'id'     => 'reset',
+				'title'  => 'Reset',
+				'tone'   => 'danger',
+				'action' => array( 'id' => 'reset', 'label' => 'Reset' ),
+				'fields' => array( array( 'id' => 'x', 'type' => 'toggle', 'label' => 'X' ) ),
+			),
 		);
 
 		return array(
@@ -83,6 +93,13 @@ final class PageTest extends TestCase {
 			'duplicate section'  => array( array( 'sections' => $dup_section ), 'duplicate section id' ),
 			'unknown tab'        => array( array( 'tabs' => array( 'reading' => 'Reading' ), 'sections' => array( array( 'id' => 'a', 'tab' => 'nope', 'title' => 'A', 'fields' => array() ) ) ), 'unknown tab' ),
 			'danger not last'    => array( array( 'sections' => $danger_first ), 'danger sections must come last' ),
+			'danger without action'  => array( array( 'sections' => array( array( 'id' => 'reset', 'title' => 'Reset', 'tone' => 'danger' ) ) ), 'needs an `action`' ),
+			'danger with fields'     => array( array( 'sections' => $danger_fields ), 'not fields' ),
+			'action on plain section' => array( array( 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'action' => array( 'id' => 'reset' ) ) ) ), 'only a danger section' ),
+			'unknown action id'      => array( array( 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'tone' => 'danger', 'action' => array( 'id' => 'wipe', 'label' => 'Wipe' ) ) ) ), 'action id must be' ),
+			'unknown action key'     => array( array( 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'tone' => 'danger', 'action' => array( 'id' => 'reset', 'colour' => 'red' ) ) ) ), 'action has unknown' ),
+			'unknown confirm key'    => array( array( 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'tone' => 'danger', 'action' => array( 'id' => 'reset', 'confirm' => array( 'colour' => 'red' ) ) ) ) ), 'confirm has unknown' ),
+			'keyword too long'       => array( array( 'sections' => array( array( 'id' => 'a', 'title' => 'A', 'tone' => 'danger', 'action' => array( 'id' => 'reset', 'confirm' => array( 'keyword' => str_repeat( 'x', 41 ) ) ) ) ) ), 'longer than 40' ),
 			'option too long'    => array( array( 'option_name' => str_repeat( 'x', 192 ) ), '191' ),
 			'bad tab id'         => array( array( 'tabs' => array( 'Site identity' => 'Site identity' ) ), 'tab id' ),
 			'tab without label'  => array( array( 'tabs' => array( 'identity' => '' ) ), 'needs a label' ),
@@ -90,6 +107,33 @@ final class PageTest extends TestCase {
 			'tab badge array'    => array( array( 'tabs' => array( 'identity' => array( 'label' => 'Identity', 'badge' => array( 3 ) ) ) ), 'badge' ),
 			'page badge bool'    => array( array( 'badge' => true ), 'badge' ),
 		);
+	}
+
+	public function test_a_danger_section_exports_its_action_with_texts_left_for_the_browser_to_default(): void {
+		$page = new Page(
+			'acme-seo',
+			'general',
+			$this->config(
+				array(
+					'sections' => array(
+						array( 'id' => 'a', 'title' => 'A', 'fields' => array( array( 'id' => 'x', 'type' => 'toggle', 'label' => 'X' ) ) ),
+						array( 'id' => 'reset', 'title' => 'Reset settings', 'tone' => 'danger', 'action' => array( 'id' => 'reset', 'label' => ' Reset settings ', 'confirm' => array( 'keyword' => ' RESET ' ) ) ),
+					),
+				)
+			)
+		);
+
+		$this->assertSame(
+			array(
+				'id'      => 'reset',
+				'label'   => 'Reset settings',
+				'confirm' => array( 'title' => '', 'description' => '', 'keyword' => 'RESET', 'label' => '' ),
+			),
+			$page->to_client( array(), '' )['sections'][1]['action']
+		);
+		$this->assertArrayNotHasKey( 'action', $page->to_client( array(), '' )['sections'][0] );
+		$this->assertSame( 'reset', $page->danger_action( 'reset' )->id() );
+		$this->assertNull( $page->danger_action( 'wipe' ) );
 	}
 
 	public function test_tabs_are_exported_in_order(): void {

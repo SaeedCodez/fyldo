@@ -54,6 +54,7 @@ export function Tag({ label, size = 'sm', onRemove, srLabel, disabled, className
         <span className="fy:min-w-0 fy:truncate">{label}</span>
       )}
       {onRemove ? (
+        // eslint-disable-next-line fyldo/icon-button-tooltip -- part of the Tag, not a Figma Icon Button: a pointer-only 12px target (Backspace on the field is the keyboard way) whose "Remove Posts" name a tooltip would only repeat next to the tag's own text
         <button
           type="button"
           // Reachable by pointer and by Backspace on the field; a button per tag would make the field a long tab sequence.

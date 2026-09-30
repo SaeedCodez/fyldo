@@ -16,7 +16,7 @@ use Fyldo\V1\Storage\Saver;
 use Fyldo\V1\Support\Naming;
 
 /**
- * Routes: GET/PATCH `/pages/{page}`.
+ * Routes: GET/PATCH `/pages/{page}`; POST `/pages/{page}/actions/{action}` (a Danger Section Card's action).
  */
 final class Controller {
 
@@ -53,6 +53,24 @@ final class Controller {
 							'required' => true,
 						),
 						'revision' => array(
+							'type'     => 'string',
+							'required' => false,
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			$namespace,
+			$route . '/actions/(?P<action>[a-z0-9_-]+)',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'run_action' ),
+					'permission_callback' => array( $this, 'authorize' ),
+					'args'                => array(
+						'keyword' => array(
 							'type'     => 'string',
 							'required' => false,
 						),
@@ -135,6 +153,37 @@ final class Controller {
 				)
 			);
 		}
+
+		return new \WP_REST_Response(
+			array(
+				'values'   => (object) $result['values'],
+				'revision' => $result['revision'],
+			)
+		);
+	}
+
+	/**
+	 * A Danger Section Card's action. Only actions the page declares exist (404 otherwise); when the action asks for a
+	 * typed confirmation, the keyword is checked HERE too — the browser's disabled button is not a security control.
+	 * The only built-in action is `reset`: forget the page's stored values, so every field reads its default again.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function run_action( \WP_REST_Request $request ) {
+		$page    = $this->page( $request );
+		$section = $page->danger_action( (string) $request['action'] );
+		$action  = null === $section ? null : $section->action();
+
+		if ( null === $action ) {
+			return new \WP_Error( 'fyldo_not_found', __( 'This action does not exist.', 'fyldo' ), array( 'status' => 404 ) );
+		}
+
+		$keyword = $action['confirm']['keyword'];
+		if ( '' !== $keyword && trim( (string) $request['keyword'] ) !== $keyword ) {
+			return new \WP_Error( 'fyldo_confirmation', __( 'The confirmation text does not match.', 'fyldo' ), array( 'status' => 400 ) );
+		}
+
+		$result = ( new Saver( $this->instance ) )->reset( $page );
 
 		return new \WP_REST_Response(
 			array(

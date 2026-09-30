@@ -239,3 +239,43 @@ msgstr "بارگذاری آخرین مقادیر انجام نشد. اتصال �
 # Code-only design (docs/design-spec.md): the password show/hide toggle.
 msgid "Show password"
 msgstr "نمایش رمز عبور"
+
+# M4 — feedback: toasts, notices, the Danger modal and the reset action (texts from the design pack where it has them)
+msgid "Notifications"
+msgstr "اعلان‌ها"
+
+msgid "Dismiss"
+msgstr "بستن اعلان"
+
+msgid "Cancel"
+msgstr "انصراف"
+
+msgid "Retry"
+msgstr "تلاش دوباره"
+
+msgid "This action can’t be undone."
+msgstr "این کار قابل بازگشت نیست."
+
+msgid "Reset settings"
+msgstr "بازنشانی تنظیمات"
+
+msgid "Reset all settings?"
+msgstr "همه‌ی تنظیمات بازنشانی شوند؟"
+
+msgid "Every option on this page will return to its default value. This can’t be undone."
+msgstr "همه‌ی گزینه‌های این صفحه به مقدار پیش‌فرض برمی‌گردند. این کار قابل بازگشت نیست."
+
+msgid "Type %s to confirm"
+msgstr "برای تأیید، «%s» را تایپ کنید"
+
+msgid "Settings reset to defaults"
+msgstr "تنظیمات به مقدار پیش‌فرض بازنشانی شد"
+
+msgid "Couldn't reset settings. Check your connection and try again."
+msgstr "بازنشانی تنظیمات انجام نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+msgid "This action does not exist."
+msgstr "این اقدام وجود ندارد."
+
+msgid "The confirmation text does not match."
+msgstr "متن تأیید مطابقت ندارد."

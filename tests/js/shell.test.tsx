@@ -53,6 +53,7 @@ function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
         placement: 'header',
       },
     ],
+    notices: [],
     pages,
     dir: 'ltr',
     locale: 'en',
@@ -275,7 +276,7 @@ describe('tabs (sub-pages)', () => {
     const savePage = vi.fn(async () => ({ values: advanced.values, revision: 'rev-2' }));
     function Harness() {
       const [tab, setTab] = useState('debug');
-      return <SettingsPage page={advancedGlobal} api={{ savePage, readPage: vi.fn() }} tab={tab} onTabChange={setTab} />;
+      return <SettingsPage page={advancedGlobal} api={{ savePage, readPage: vi.fn(), runAction: vi.fn() }} tab={tab} onTabChange={setTab} />;
     }
     render(
       <PortalContainerContext.Provider value={root}>

@@ -17,7 +17,7 @@ function setup(api: Partial<Api> = {}, current: PageDef = page) {
   document.body.append(root);
   render(
     <PortalContainerContext.Provider value={root}>
-      <SettingsPage page={current} api={{ savePage, readPage: vi.fn() }} />
+      <SettingsPage page={current} api={{ savePage, readPage: vi.fn(), runAction: vi.fn() }} />
     </PortalContainerContext.Provider>,
   );
   return { savePage };

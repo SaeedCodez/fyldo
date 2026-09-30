@@ -1,11 +1,14 @@
-import { useEffect, useRef, type ReactElement, type Ref } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactElement, type Ref } from 'react';
 import { __ } from '../../i18n';
 import { PAGE_SCOPE, scopeState, usePageForm, type FormStore } from '../../lib/page-form';
-import type { Api } from '../../lib/api';
-import { isValueField, type FieldValue, type PageDef, type SectionDef } from '../../types';
+import { ApiError, type Api } from '../../lib/api';
+import { isValueField, type FieldValue, type NoticeDef, type PageDef, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
+import { Modal } from '../ui/modal';
 import { Notice } from '../ui/notice';
+import { useOptionalToaster } from '../ui/toast';
 import { FieldRenderer } from './FieldRenderer';
+import { Notices } from './Notices';
 import type { UtilityLink } from './nav-model';
 import { PageHeader } from './PageHeader';
 import { SaveBar, saveMessages, type SaveBarState } from './SaveBar';
@@ -24,6 +27,9 @@ export interface SettingsPageProps {
   headerLinks?: UtilityLink[];
   headingRef?: Ref<HTMLHeadingElement>;
   locale?: string;
+  /** PHP notices for this page (`Instance::admin_notice()`), most severe first, dismissed ones already left out. */
+  notices?: NoticeDef[];
+  onDismissNotice?: (id: string) => void;
 }
 
 /** A section without a tab belongs to the whole page: it shows on every tab. */
@@ -38,8 +44,14 @@ const savesHere = (page: PageDef, section: SectionDef): boolean =>
  * → Section Cards (24 apart) → floating Save Bar (global save pattern) — or a Save in each card footer (per-section
  * pattern): one pattern per page, never both. Values and edits belong to the page, so switching tabs keeps them.
  */
-export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLinks, headingRef, locale = 'en' }: SettingsPageProps): ReactElement {
-  const { state, dirty, scopes, setValue, discard, save, validateField, reload } = usePageForm(page, api, store);
+export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
+  const { state, dirty, scopes, setValue, discard, save, validateField, reload, runAction } = usePageForm(page, api, store);
+  const toaster = useOptionalToaster();
+  // The Danger card whose confirmation is open; kept after it closes so the dialog can fade out with its text.
+  const [danger, setDanger] = useState<SectionDef | null>(null);
+  const lastDanger = useRef<SectionDef | null>(null);
+  const dangerTrigger = useRef<HTMLElement | null>(null);
+  if (danger) lastDanger.current = danger;
   const column = useRef<HTMLDivElement>(null);
   const focusAfterErrors = useRef(false);
 
@@ -122,6 +134,42 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
     };
   };
 
+  /**
+   * Runs a Danger card's action. Every outcome ends in a toast, never a silent failure; the page's values are replaced
+   * on success, which is the real confirmation (the toast only says so). A failed request offers Retry.
+   */
+  const attempt = useCallback(
+    async (section: SectionDef): Promise<void> => {
+      const action = section.action;
+      if (!action) return;
+      try {
+        await runAction(action.id, action.confirm.keyword);
+        toaster?.success(__('Settings reset to defaults', 'fyldo'));
+      } catch (error) {
+        const unreachable = error instanceof ApiError && (error.status === 0 || error.status >= 500);
+        const message = error instanceof ApiError && !unreachable ? error.message : __("Couldn't reset settings. Check your connection and try again.", 'fyldo');
+        toaster?.error(message, unreachable || !(error instanceof ApiError) ? { action: { label: __('Retry', 'fyldo'), onClick: () => void attempt(section) } } : undefined);
+      }
+    },
+    [runAction, toaster],
+  );
+
+  const dangerFooter = (section: SectionDef) => ({
+    footerText: __('This action can’t be undone.', 'fyldo'),
+    footer: (
+      <Button
+        variant="error"
+        size="sm"
+        onClick={(event) => {
+          dangerTrigger.current = event.currentTarget;
+          setDanger(section);
+        }}
+      >
+        {section.action?.label || __('Reset settings', 'fyldo')}
+      </Button>
+    ),
+  });
+
   const cards = (current: string) => (
     <div className="fy:mt-6 fy:flex fy:flex-col fy:gap-6">
       {page.sections
@@ -132,7 +180,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
             title={section.title}
             description={section.description}
             tone={section.tone}
-            {...(savesHere(page, section) ? footer(section) : {})}
+            {...(section.tone === 'danger' && section.action ? dangerFooter(section) : savesHere(page, section) ? footer(section) : {})}
           >
             {section.fields.map((field, index) => (
               <FieldRenderer
@@ -160,11 +208,15 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
     >
       <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
 
+      <Notices notices={notices} onDismiss={(id) => onDismissNotice?.(id)} />
+
       {state.conflict ? (
-        // 409: the stored values changed after this page read them. The edits stay until the user reloads.
+        // 409: the stored values changed after this page read them. The edits stay until the user reloads. It appears
+        // after the page loaded, so it is announced (role="alert": amber).
         <Notice
           className="fy:mt-6"
           tone="amber"
+          live
           title={__('These settings were changed somewhere else', 'fyldo')}
           action={
             <Button variant="secondary" size="sm" loading={state.reloading} onClick={() => void reload()}>
@@ -195,6 +247,25 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
         <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
       ) : null}
       {page.save !== 'global' || bar === null ? <div className="fy:pb-10" /> : null}
+
+      <Modal
+        open={danger !== null}
+        onOpenChange={(open) => {
+          if (!open) setDanger(null);
+        }}
+        type="danger"
+        title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
+        description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
+        cancelLabel={__('Cancel', 'fyldo')}
+        confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
+        confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
+        onConfirm={async () => {
+          if (danger) await attempt(danger);
+          setDanger(null);
+        }}
+        // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
+        focusAfterConfirm={() => dangerTrigger.current}
+      />
     </div>
   );
 }

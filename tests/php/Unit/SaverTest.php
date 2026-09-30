@@ -136,4 +136,40 @@ final class SaverTest extends TestCase {
 
 		$this->assertSame( 'invalid', $result['status'] );
 	}
+
+	public function test_reset_forgets_the_stored_values_so_every_field_reads_its_default(): void {
+		$this->instance->update( 'general', array( 'site_title' => 'Changed', 'maintenance' => true, 'language' => 'fa_IR' ) );
+		$GLOBALS['__fyldo_test_fired'] = array();
+
+		$result = $this->instance->reset( 'general' );
+
+		$this->assertSame( 'ok', $result['status'] );
+		$this->assertSame( array( 'site_title' => 'My site', 'maintenance' => false, 'language' => 'en_US', 'locked' => 'fixed' ), $result['values'] );
+		$this->assertArrayNotHasKey( 'acme-seo_general', $GLOBALS['__fyldo_test_options'], 'The option row is gone, not overwritten.' );
+		$this->assertSame( $this->instance->store()->revision( $this->instance->page( 'general' ) ), $result['revision'] );
+	}
+
+	public function test_reset_fires_the_save_hooks_and_then_reset_with_what_was_stored(): void {
+		$this->instance->update( 'general', array( 'site_title' => 'Changed' ) );
+		$GLOBALS['__fyldo_test_fired'] = array();
+
+		$this->instance->reset( 'general' );
+
+		$this->assertSame( array( 'fyldo/acme-seo/before_save', 'fyldo/acme-seo/saved', 'fyldo/acme-seo/reset' ), array_column( $GLOBALS['__fyldo_test_fired'], 0 ) );
+		$this->assertSame( array( 'site_title' => 'Changed' ), $GLOBALS['__fyldo_test_fired'][2][2] );
+	}
+
+	public function test_reset_leaves_a_disabled_field_as_it_is(): void {
+		$GLOBALS['__fyldo_test_options']['acme-seo_general'] = array( 'site_title' => 'Changed', 'locked' => 'set elsewhere' );
+
+		$result = $this->instance->reset( 'general' );
+
+		$this->assertSame( array( 'locked' => 'set elsewhere' ), $GLOBALS['__fyldo_test_options']['acme-seo_general'] );
+		$this->assertSame( 'set elsewhere', $result['values']['locked'] );
+		$this->assertSame( 'My site', $result['values']['site_title'] );
+	}
+
+	public function test_resetting_an_unknown_page_is_reported_not_fatal(): void {
+		$this->assertSame( 'invalid', $this->instance->reset( 'nope' )['status'] );
+	}
 }

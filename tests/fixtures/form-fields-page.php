@@ -132,5 +132,17 @@ return array(
 				),
 			),
 		),
+		// M4: the Danger Section Card — always last, its action asks for the typed keyword.
+		array(
+			'id'          => 'reset',
+			'title'       => 'Reset settings',
+			'description' => 'Restore every option on this page to its default value.',
+			'tone'        => 'danger',
+			'action'      => array(
+				'id'      => 'reset',
+				'label'   => 'Reset settings',
+				'confirm' => array( 'keyword' => 'RESET' ),
+			),
+		),
 	),
 );

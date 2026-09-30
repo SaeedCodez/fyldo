@@ -283,5 +283,19 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
     [api, store, page.id, dispatch],
   );
 
-  return { state, dirty, scopes, setValue, discard, save, validateField, reload };
+  /**
+   * A Danger Section Card's action (reset to defaults): runs after any save already queued, then replaces every value
+   * with what the server now holds (unsaved edits on the page are dropped: the confirmation says so). Rejects with the
+   * ApiError when it fails, so the caller can say why.
+   */
+  const runAction = useCallback(
+    (actionId: string, keyword: string): Promise<void> =>
+      store.enqueue(page.id, async () => {
+        const result = await api.runAction(page.id, actionId, keyword);
+        dispatch({ type: 'reloaded', values: result.values, revision: result.revision });
+      }),
+    [api, store, page.id, dispatch],
+  );
+
+  return { state, dirty, scopes, setValue, discard, save, validateField, reload, runAction };
 }
