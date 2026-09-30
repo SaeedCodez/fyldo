@@ -19,6 +19,7 @@ import type { FieldValue, FyldoConfig, PageDef } from '../../app/types';
 const fixture = (name: string) => JSON.parse(readFileSync(resolve(__dirname, `../fixtures/${name}.client.json`), 'utf8')) as PageDef;
 const general = fixture('slice-page'); // global save pattern
 const advanced = fixture('tabs-page'); // per-section save pattern, with tabs
+const fields = fixture('form-fields-page'); // global, with a password field
 
 /** The per-section page with every card on one screen (no tabs). */
 const allOnOnePage: PageDef = { ...advanced, tabs: [], sections: advanced.sections.map((s) => ({ ...s, tab: '' })) };
@@ -131,7 +132,7 @@ function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
     navigation: 'sidebar',
     groups: [],
     links: [],
-    pages: [general, advanced],
+    pages: [general, advanced, fields],
     dir: 'ltr',
     locale: 'en',
     rootId: 'fyldo-acme-seo-root',
@@ -286,6 +287,28 @@ describe('unsaved-changes guard', () => {
     await userEvent.type(screen.getByRole('textbox', { name: 'Site title' }), '?');
     await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
     await waitFor(() => expect(requests[1]?.body).toEqual({ values: { site_title: 'Fyldo!?' }, revision: 'rev-2' }));
+  });
+});
+
+describe('password show/hide (code-only design)', () => {
+  it('goes back to hidden after a successful save and after a page change', async () => {
+    mountApp();
+    await userEvent.click(within(nav()).getByRole('link', { name: fields.title }));
+    const key = () => screen.getByLabelText('API key');
+    await userEvent.type(key(), 'abcdefgh1');
+    await userEvent.click(screen.getByRole('button', { name: 'Show password' }));
+    expect(key()).toHaveAttribute('type', 'text');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    await screen.findByText('All changes saved');
+    expect(key()).toHaveAttribute('type', 'password');
+    expect(screen.getByRole('button', { name: 'Show password' })).toHaveAttribute('aria-pressed', 'false');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Show password' }));
+    expect(key()).toHaveAttribute('type', 'text');
+    await userEvent.click(within(nav()).getByRole('link', { name: 'General' }));
+    await userEvent.click(within(nav()).getByRole('link', { name: fields.title }));
+    expect(key()).toHaveAttribute('type', 'password');
   });
 });
 

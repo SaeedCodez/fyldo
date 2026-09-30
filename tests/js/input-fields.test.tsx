@@ -94,6 +94,54 @@ describe('password field', () => {
     expect(input).toHaveAttribute('autocapitalize', 'off');
   });
 
+  it('show/hide toggle: a real button at the end of the field, labelled and pressed, that switches the type (code-only design)', async () => {
+    function Controlled() {
+      const [value, setValue] = useState<FieldValue>('');
+      return <FieldRenderer field={field} value={value} divider={false} onChange={(_id, next) => setValue(next)} onBlur={() => undefined} />;
+    }
+    render(<Controlled />);
+    const input = screen.getByLabelText('API key');
+    const toggle = screen.getByRole('button', { name: 'Show password' });
+    expect(toggle).toHaveAttribute('type', 'button');
+    expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    expect(toggle.querySelector('svg')).toHaveAttribute('data-fyldo-icon', 'eye');
+    expect(toggle.className).toContain('fy:text-icon-secondary');
+    expect(toggle.className).toContain('fy:hover:text-icon-primary');
+    expect(toggle.className).toContain('fy:focus-ring');
+    expect(input.parentElement?.lastElementChild).toBe(toggle); // the Input's suffix slot, at the inline end
+
+    await userEvent.type(input, 's3cret!');
+    await userEvent.click(toggle);
+    expect(input).toHaveAttribute('type', 'text');
+    expect(input).toHaveValue('s3cret!');
+    expect(toggle).toHaveAccessibleName('Hide password');
+    expect(toggle).toHaveAttribute('aria-pressed', 'true');
+    expect(toggle.querySelector('svg')).toHaveAttribute('data-fyldo-icon', 'eyeslash');
+
+    // keyboard: Tab from the field reaches the toggle; Space / Enter toggle it
+    input.focus();
+    await userEvent.tab();
+    expect(toggle).toHaveFocus();
+    await userEvent.keyboard(' ');
+    expect(input).toHaveAttribute('type', 'password');
+    await userEvent.keyboard('{Enter}');
+    expect(input).toHaveAttribute('type', 'text');
+  });
+
+  it('a stored secret stays out of the DOM even when shown: only what the user types is revealed', async () => {
+    renderField(field, null);
+    await userEvent.click(screen.getByRole('button', { name: 'Show password' }));
+    const input = screen.getByLabelText('API key');
+    expect(input).toHaveAttribute('type', 'text');
+    expect(input).toHaveValue('');
+    expect(input).toHaveAttribute('placeholder', '•••• set');
+  });
+
+  it('a disabled field disables its toggle', () => {
+    renderField({ ...field, disabled: 'Managed by your host.' }, '');
+    expect(screen.getByRole('button', { name: 'Show password' })).toBeDisabled();
+  });
+
   it('the developer can pick another autocomplete token', () => {
     renderField({ ...field, autocomplete: 'off' }, '');
     expect(screen.getByLabelText('API key')).toHaveAttribute('autocomplete', 'off');
