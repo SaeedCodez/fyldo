@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const out = resolve(root, 'e2e/.generated');
-const RUNTIME = ['fyldo.php', 'composer.json', 'LICENSE', 'src', 'assets/dist', 'languages'];
+const RUNTIME = ['fyldo.php', 'composer.json', 'LICENSE', 'src', 'demo', 'assets/dist', 'languages'];
 const STRAUSS_VERSION = '0.30.0';
 
 type Kind = 'v1' | 'v2' | 'strauss';

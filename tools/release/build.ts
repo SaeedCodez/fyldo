@@ -18,7 +18,7 @@ const folder = resolve(out, 'fyldo');
 const zip = resolve(out, 'fyldo.zip');
 
 /** The runtime tree. Everything else in the repository is development-only. Keep in sync with .gitattributes. */
-export const RUNTIME = ['fyldo.php', 'composer.json', 'LICENSE', 'README.md', 'CHANGELOG.md', 'src', 'assets/dist', 'languages'];
+export const RUNTIME = ['fyldo.php', 'composer.json', 'LICENSE', 'README.md', 'CHANGELOG.md', 'src', 'demo', 'assets/dist', 'languages'];
 
 const run = (cmd: string, args: string[], cwd = root): void => {
   console.log(`\n$ ${cmd} ${args.join(' ')}`);

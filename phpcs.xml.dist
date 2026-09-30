@@ -4,6 +4,7 @@
 
 	<file>fyldo.php</file>
 	<file>src</file>
+	<file>demo</file>
 
 	<arg name="extensions" value="php"/>
 	<arg name="basepath" value="."/>

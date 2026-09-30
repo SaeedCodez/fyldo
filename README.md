@@ -12,7 +12,7 @@ One tree, three ways to load it. The code that uses Fyldo is the same in all thr
 
 ### 1. Standalone plugin (ZIP)
 
-Download `fyldo.zip` from the [GitHub Releases](https://github.com/SaeedCodez/fyldo/releases) page and install it from **Plugins → Add New → Upload Plugin**. Activate it, then use the API from your own plugin:
+Download `fyldo.zip` from the [GitHub Releases](https://github.com/SaeedCodez/fyldo/releases) page and install it from **Plugins → Add New → Upload Plugin**. Activate it, then use the API from your own plugin (a demo dashboard under **Settings → Fyldo demo** shows every field type; turn it off with the `fyldo/fyldo-demo/enabled` filter, and it never loads in drop-in or Composer mode):
 
 ```php
 // my-plugin.php — header: "Requires Plugins: fyldo" only checks that Fyldo is active (WordPress cannot install it for the user).
@@ -163,7 +163,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 سه راه برای بارگذاری یک پوشهٔ یکسان. کد استفاده از Fyldo در هر سه یکی است و فایل‌های ساخته‌شده همراه بسته هستند (نیازی به Node نیست).
 
-1. **افزونهٔ مستقل:** فایل `fyldo.zip` را از صفحهٔ [Releases](https://github.com/SaeedCodez/fyldo/releases) دانلود کنید و از **افزونه‌ها ← افزودن ← بارگذاری افزونه** نصب و فعال کنید. سپس در افزونهٔ خودتان `Fyldo::create()` را روی `init` فراخوانی کنید (مثال بالا). سرآیند `Requires Plugins: fyldo` فقط بررسی می‌کند که Fyldo فعال باشد.
+1. **افزونهٔ مستقل:** فایل `fyldo.zip` را از صفحهٔ [Releases](https://github.com/SaeedCodez/fyldo/releases) دانلود کنید و از **افزونه‌ها ← افزودن ← بارگذاری افزونه** نصب و فعال کنید (یک داشبورد دمو در **تنظیمات ← دموی فیلدو** همه‌ی انواع فیلد را نشان می‌دهد؛ با فیلتر `fyldo/fyldo-demo/enabled` خاموش می‌شود و در حالت drop-in و Composer هرگز بارگذاری نمی‌شود). سپس در افزونهٔ خودتان `Fyldo::create()` را روی `init` فراخوانی کنید (مثال بالا). سرآیند `Requires Plugins: fyldo` فقط بررسی می‌کند که Fyldo فعال باشد.
 2. **پوشهٔ drop-in:** `fyldo.zip` را داخل افزونهٔ خود باز کنید و بنویسید:
    ```php
    require_once __DIR__ . '/fyldo/fyldo.php';

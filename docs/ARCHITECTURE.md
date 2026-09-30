@@ -313,6 +313,8 @@ All three modes ship **the same tree** (`fyldo.php`, `src/`, `assets/dist/`, `la
 | 2. Drop-in folder | Consumer: `require_once __DIR__ . '/fyldo/fyldo.php';` | The folder is the unzipped release. A plugin header inside a nested folder is ignored by WP (only top-level/one-deep plugin files are scanned). |
 | 3. Composer | Composer `files` autoload | `composer require fyldo/fyldo`. `composer.json` intentionally declares **no PSR-4 map** (§6.4). Strauss-compatible (§7). |
 
+**Demo dashboard (standalone plugin only).** `fyldo.php` requires `demo/demo.php` only when its folder sits directly in `WP_PLUGIN_DIR` (a drop-in copy or a Composer package has another parent, so it never loads it, and the `Demo` class is defined at most once). The demo is a normal consumer: slug `fyldo-demo`, four pages under Settings, strings in Fyldo's own text domain (EN + FA), no extra assets. It uses only the public API, so it also runs on a newer winning copy. Filter `fyldo/fyldo-demo/enabled` turns it off. `demo/` is part of the runtime tree (`RUNTIME` in `tools/release/build.ts` and `tools/fixtures/make-demos.ts`).
+
 ### 5.1 How each artifact is built (`npm run release`, CI-only; consumers never run it)
 
 ```
