@@ -25,7 +25,7 @@ interface FieldBase {
   default: FieldValue;
   /** `true`, or a string explaining why the field is disabled. */
   disabled: boolean | string;
-  layout: 'inline' | 'stacked';
+  layout: 'inline' | 'stacked' | 'field';
   validate: RuleSet;
   icon?: string;
   badge?: string;

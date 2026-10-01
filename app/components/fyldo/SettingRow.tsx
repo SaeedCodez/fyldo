@@ -13,8 +13,11 @@ export interface SettingRowProps {
   srNote?: string;
   /** Short status label next to the title ("Pro", "Beta"). */
   badge?: ReactNode;
-  /** `inline`: on/off controls at the end of the row. `stacked`: inputs under the description. */
-  layout?: 'inline' | 'stacked';
+  /**
+   * `inline`: on/off controls at the end of the row. `stacked`: inputs under the description. `field`: an input at the end
+   * of the row (stacked width, error under it); at ≤782px it falls back to `stacked`.
+   */
+  layout?: 'inline' | 'stacked' | 'field';
   /** Bottom divider; off on the last row of a card. */
   divider?: boolean;
   error?: string;
@@ -53,6 +56,7 @@ export function SettingRow({
   children,
 }: SettingRowProps): ReactElement {
   const inline = layout === 'inline';
+  const beside = inline || layout === 'field';
   const titleId = useId();
   const descriptionId = useId();
   const reasonId = useId();
@@ -68,11 +72,13 @@ export function SettingRow({
       data-field-id={fieldId}
       className={cn(
         'fy:group/field fy:flex fy:py-5',
-        inline ? 'fy:items-center fy:gap-8' : 'fy:flex-col fy:gap-3',
+        layout === 'stacked' && 'fy:flex-col fy:gap-3',
+        inline && 'fy:items-center fy:gap-8',
+        layout === 'field' && 'fy:items-center fy:gap-8 fy:wp-mobile:flex-col fy:wp-mobile:items-stretch fy:wp-mobile:gap-3',
         divider && 'fy:border-b fy:border-border-default',
       )}
     >
-      <div className={cn('fy:flex fy:min-w-0 fy:flex-col fy:gap-1', inline && 'fy:flex-1')}>
+      <div className={cn('fy:flex fy:min-w-0 fy:flex-col fy:gap-1', beside && 'fy:flex-1', layout === 'field' && 'fy:wp-mobile:flex-none')}>
         <div className="fy:flex fy:items-center fy:gap-2">
           {group ? (
             <div id={titleId} className="fy:text-label-14-strong fy:text-text-primary fy:group-data-[disabled]/field:text-text-disabled">
@@ -108,7 +114,7 @@ export function SettingRow({
         {srNote && !group ? <Field.Description className="fy:sr-only">{srNote}</Field.Description> : null}
       </div>
 
-      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(wide ? 'fy:w-90' : 'fy:w-80', 'fy:max-w-full'))}>
+      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-90' : 'fy:w-80', 'fy:max-w-full'))}>
         {group ? (
           <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
             {children}

@@ -504,7 +504,11 @@ for (const locale of ['EN', 'FA'] as const) {
       rows: rows.map((r) => ({
         title: t(r).Title ?? '',
         description: t(r).Description ?? '',
-        layout: r.instance?.variant.includes('Inline') ? 'inline' : 'stacked',
+        layout: r.instance?.variant.includes('Inline')
+          ? 'inline'
+          : r.instance?.variant.includes('Field')
+            ? 'field'
+            : 'stacked',
         value: t(r).Value ?? '',
       })),
       footerText: layer(footer, 'Footer text').text?.characters ?? '',
@@ -546,16 +550,11 @@ for (const locale of ['EN', 'FA'] as const) {
         actual: await ours(stage, stage.locator('[data-slot=fy-toggle]'), 36, 20),
         max: 0.05,
       });
-      // TODO(Setting Row Layout=Field): the pack's Section Card now holds `Layout=Field` rows (control beside the text,
-      // 82px high) which the code does not implement yet, so it renders them stacked (taller). Drop this guard when it does.
-      const hasFieldRow = rows.some((r) => r.instance?.variant.includes('Field'));
-      if (!hasFieldRow) {
-        const card = await box(stage.locator('[data-slot=fy-section-card]'));
-        expect(
-          Math.abs(card.height - root.height),
-          `card height ${card.height} vs ${root.height}`,
-        ).toBeLessThanOrEqual(6);
-      }
+      const card = await box(stage.locator('[data-slot=fy-section-card]'));
+      expect(
+        Math.abs(card.height - root.height),
+        `card height ${card.height} vs ${root.height}`,
+      ).toBeLessThanOrEqual(6);
     }
     await close();
   });

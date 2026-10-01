@@ -90,7 +90,9 @@ $fyldo->add_page( 'general', [
 
 ### Fields
 
-Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`true` or a reason string), `icon`, `validate`, `sanitize_cb` and `validate_cb`.
+Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`true` or a reason string), `icon`, `layout`, `validate`, `sanitize_cb` and `validate_cb`.
+
+`layout` sets where the control sits in its row: `inline` (at the end, for on/off controls), `stacked` (under the description) or `field` (an input at the end of the row, error under it; stacked on narrow screens). Each type has a sensible default, so set it only to override.
 
 | `type` | Notes |
 |---|---|

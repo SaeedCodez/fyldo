@@ -265,8 +265,8 @@ abstract class AbstractField {
 		}
 
 		$layout = isset( $config['layout'] ) ? (string) $config['layout'] : $this->default_layout();
-		if ( ! in_array( $layout, array( 'inline', 'stacked' ), true ) ) {
-			throw new ConfigException( sprintf( 'Field "%s": layout must be "inline" or "stacked".', $id ) );
+		if ( ! in_array( $layout, array( 'inline', 'stacked', 'field' ), true ) ) {
+			throw new ConfigException( sprintf( 'Field "%s": layout must be "inline", "stacked" or "field".', $id ) );
 		}
 
 		$rules = isset( $config['validate'] ) ? (array) $config['validate'] : array();

@@ -247,7 +247,7 @@ interface CardSpec {
   rows?: Array<{
     title: string;
     description?: string;
-    layout: 'inline' | 'stacked';
+    layout: 'inline' | 'stacked' | 'field';
     value?: string;
     checked?: boolean;
   }>;

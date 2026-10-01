@@ -85,6 +85,44 @@ describe('Setting Row + Input', () => {
     expect(screen.getByText('Managed in wp-config.php')).toBeInTheDocument();
   });
 
+  it('layout="field" puts a stacked-width control at the end of the row, with its error under it', () => {
+    render(
+      <SettingRow title="Site title" description="Shown in the browser tab." layout="field" error="This field is required.">
+        <Input defaultValue="" />
+      </SettingRow>,
+    );
+    const row = document.querySelector('[data-slot=fy-setting-row]') as HTMLElement;
+    const input = screen.getByRole('textbox', { name: 'Site title' });
+    const column = input.closest('[data-slot=fy-setting-row] > div:last-child') as HTMLElement;
+    const text = row.firstElementChild as HTMLElement;
+
+    // beside the text (not stacked), text takes the room, the control keeps the 320px stacked width and does not shrink
+    expect(row).toHaveClass('fy:items-center', 'fy:gap-8', 'fy:wp-mobile:flex-col');
+    expect(row).not.toHaveClass('fy:flex-col');
+    expect(text).toHaveClass('fy:flex-1');
+    expect(column).toHaveClass('fy:w-80', 'fy:shrink-0');
+    // the error is inside the control's column, under the control, and still names the control as invalid
+    const error = screen.getByText('This field is required.');
+    expect(column).toContainElement(error);
+    expect(input.compareDocumentPosition(error) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(input).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  it('layout="field" uses the wide control column when `wide`, and works the same in RTL', () => {
+    render(
+      <div dir="rtl">
+        <SettingRow title="عنوان سایت" layout="field" wide>
+          <Input defaultValue="" />
+        </SettingRow>
+      </div>,
+    );
+    const input = screen.getByRole('textbox', { name: 'عنوان سایت' });
+    expect(input.closest('[data-slot=fy-setting-row] > div:last-child')).toHaveClass('fy:w-90', 'fy:shrink-0');
+    // placement is logical (flex order + gap), nothing is pinned to a physical side
+    const row = document.querySelector('[data-slot=fy-setting-row]') as HTMLElement;
+    expect(row.className).not.toMatch(/fy:(left|right|ml|mr|pl|pr)-/);
+  });
+
   it('URLs and emails can be forced left-to-right', () => {
     render(
       <SettingRow title="Canonical URL">

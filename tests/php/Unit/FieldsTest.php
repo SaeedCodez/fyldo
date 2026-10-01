@@ -46,6 +46,17 @@ final class FieldsTest extends TestCase {
 		$this->assertSame( 'Enter a valid email address.', $field->validate( $field->sanitize( 'nope' ) ) );
 	}
 
+	public function test_field_layout_is_accepted_and_reaches_the_client_while_defaults_stay(): void {
+		$field = FieldFactory::create( array( 'id' => 'site_title', 'type' => 'text', 'label' => 'Site title', 'layout' => 'field' ) );
+		$this->assertSame( 'field', $field->to_client()['layout'] );
+
+		$default = FieldFactory::create( array( 'id' => 'site_title', 'type' => 'text', 'label' => 'Site title' ) );
+		$this->assertSame( 'stacked', $default->to_client()['layout'] );
+
+		$this->expectException( ConfigException::class );
+		FieldFactory::create( array( 'id' => 'site_title', 'type' => 'text', 'label' => 'Site title', 'layout' => 'grid' ) );
+	}
+
 	public function test_toggle_defaults_to_off_and_casts_to_bool(): void {
 		$field = FieldFactory::create( array( 'id' => 'maintenance', 'type' => 'toggle', 'label' => 'Maintenance' ) );
 
