@@ -75,7 +75,7 @@
     "x": 0,
     "y": 0,
     "width": 800,
-    "height": 493,
+    "height": 389,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -249,7 +249,7 @@
       "x": 1,
       "y": 81,
       "width": 798,
-      "height": 354,
+      "height": 250,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
@@ -276,18 +276,18 @@
         "x": 25,
         "y": 81,
         "width": 750,
-        "height": 134,
+        "height": 82,
         "layout": {
-         "layoutMode": "VERTICAL",
+         "layoutMode": "HORIZONTAL",
          "paddingTop": 20,
          "paddingRight": 0,
          "paddingBottom": 20,
          "paddingLeft": 0,
-         "itemSpacing": 12,
+         "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MIN",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
          "layoutGrow": 0,
@@ -296,19 +296,19 @@
         },
         "instance": {
          "component": "Setting Row",
-         "variant": "Locale=EN, Layout=Stacked",
+         "variant": "Locale=EN, Layout=Field",
          "componentProperties": {
-          "Title (FA)#18:115": {
+          "Description (FA)#18:125": {
            "type": "TEXT",
-           "value": "عنوان تنظیم"
+           "value": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید."
+          },
+          "Description#18:120": {
+           "type": "TEXT",
+           "value": "Shown in the browser tab and in search results."
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
            "value": true
-          },
-          "Description (FA)#18:125": {
-           "type": "TEXT",
-           "value": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید."
           },
           "Badge#18:135": {
            "type": "BOOLEAN",
@@ -318,9 +318,9 @@
            "type": "BOOLEAN",
            "value": true
           },
-          "Description#18:120": {
+          "Title (FA)#18:115": {
            "type": "TEXT",
-           "value": "Shown in the browser tab and in search results."
+           "value": "عنوان تنظیم"
           },
           "Title#18:110": {
            "type": "TEXT",
@@ -332,7 +332,7 @@
            "boundVariables": {}
           },
           "Layout": {
-           "value": "Stacked",
+           "value": "Field",
            "type": "VARIANT",
            "boundVariables": {}
           }
@@ -352,20 +352,20 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 215,
+        "y": 163,
         "width": 750,
-        "height": 134,
+        "height": 82,
         "layout": {
-         "layoutMode": "VERTICAL",
+         "layoutMode": "HORIZONTAL",
          "paddingTop": 20,
          "paddingRight": 0,
          "paddingBottom": 20,
          "paddingLeft": 0,
-         "itemSpacing": 12,
+         "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MIN",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
          "layoutGrow": 0,
@@ -374,19 +374,19 @@
         },
         "instance": {
          "component": "Setting Row",
-         "variant": "Locale=EN, Layout=Stacked",
+         "variant": "Locale=EN, Layout=Field",
          "componentProperties": {
-          "Title (FA)#18:115": {
+          "Description (FA)#18:125": {
            "type": "TEXT",
-           "value": "عنوان تنظیم"
+           "value": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید."
+          },
+          "Description#18:120": {
+           "type": "TEXT",
+           "value": "A short sentence that explains what the site is about."
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
            "value": true
-          },
-          "Description (FA)#18:125": {
-           "type": "TEXT",
-           "value": "توضیح دهید این گزینه چه چیزی را تغییر می‌دهد و چه زمانی به کار می‌آید."
           },
           "Badge#18:135": {
            "type": "BOOLEAN",
@@ -396,9 +396,9 @@
            "type": "BOOLEAN",
            "value": true
           },
-          "Description#18:120": {
+          "Title (FA)#18:115": {
            "type": "TEXT",
-           "value": "A short sentence that explains what the site is about."
+           "value": "عنوان تنظیم"
           },
           "Title#18:110": {
            "type": "TEXT",
@@ -410,7 +410,7 @@
            "boundVariables": {}
           },
           "Layout": {
-           "value": "Stacked",
+           "value": "Field",
            "type": "VARIANT",
            "boundVariables": {}
           }
@@ -430,7 +430,7 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 349,
+        "y": 245,
         "width": 750,
         "height": 82,
         "layout": {
@@ -508,7 +508,7 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 435,
+      "y": 331,
       "width": 798,
       "height": 57,
       "layout": {
@@ -561,7 +561,7 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 455,
+        "y": 351,
         "width": 677,
         "height": 18,
         "layout": {
@@ -609,7 +609,7 @@
         "visible": true,
         "opacity": 1,
         "x": 718,
-        "y": 448,
+        "y": 344,
         "width": 57,
         "height": 32,
         "layout": {
@@ -2284,7 +2284,7 @@
     "x": 0,
     "y": 0,
     "width": 800,
-    "height": 521,
+    "height": 417,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -2458,7 +2458,7 @@
       "x": 1,
       "y": 91,
       "width": 798,
-      "height": 372,
+      "height": 268,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
@@ -2485,18 +2485,18 @@
         "x": 25,
         "y": 91,
         "width": 750,
-        "height": 140,
+        "height": 88,
         "layout": {
-         "layoutMode": "VERTICAL",
+         "layoutMode": "HORIZONTAL",
          "paddingTop": 20,
          "paddingRight": 0,
          "paddingBottom": 20,
          "paddingLeft": 0,
-         "itemSpacing": 12,
+         "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MAX",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
          "layoutGrow": 0,
@@ -2505,15 +2505,15 @@
         },
         "instance": {
          "component": "Setting Row",
-         "variant": "Locale=FA, Layout=Stacked",
+         "variant": "Locale=FA, Layout=Field",
          "componentProperties": {
           "Description#18:120": {
            "type": "TEXT",
            "value": "Explain what this option changes and when to use it."
           },
-          "Description (FA)#18:125": {
+          "Title#18:110": {
            "type": "TEXT",
-           "value": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+           "value": "Setting title"
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
@@ -2523,9 +2523,9 @@
            "type": "BOOLEAN",
            "value": false
           },
-          "Title#18:110": {
+          "Description (FA)#18:125": {
            "type": "TEXT",
-           "value": "Setting title"
+           "value": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
           },
           "Show description#18:130": {
            "type": "BOOLEAN",
@@ -2541,17 +2541,17 @@
            "boundVariables": {}
           },
           "Layout": {
-           "value": "Stacked",
+           "value": "Field",
            "type": "VARIANT",
            "boundVariables": {}
           }
          },
          "texts": {
+          "Value": "فیلدو",
+          "Helper text": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود.",
           "Label": "آزمایشی",
           "Title": "عنوان سایت",
-          "Description": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود.",
-          "Value": "فیلدو",
-          "Helper text": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+          "Description": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
          }
         }
        },
@@ -2561,20 +2561,20 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 231,
+        "y": 179,
         "width": 750,
-        "height": 140,
+        "height": 88,
         "layout": {
-         "layoutMode": "VERTICAL",
+         "layoutMode": "HORIZONTAL",
          "paddingTop": 20,
          "paddingRight": 0,
          "paddingBottom": 20,
          "paddingLeft": 0,
-         "itemSpacing": 12,
+         "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MAX",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
          "layoutGrow": 0,
@@ -2583,15 +2583,15 @@
         },
         "instance": {
          "component": "Setting Row",
-         "variant": "Locale=FA, Layout=Stacked",
+         "variant": "Locale=FA, Layout=Field",
          "componentProperties": {
           "Description#18:120": {
            "type": "TEXT",
            "value": "Explain what this option changes and when to use it."
           },
-          "Description (FA)#18:125": {
+          "Title#18:110": {
            "type": "TEXT",
-           "value": "یک جمله‌ی کوتاه که موضوع سایت را توضیح می‌دهد."
+           "value": "Setting title"
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
@@ -2601,9 +2601,9 @@
            "type": "BOOLEAN",
            "value": false
           },
-          "Title#18:110": {
+          "Description (FA)#18:125": {
            "type": "TEXT",
-           "value": "Setting title"
+           "value": "یک جمله‌ی کوتاه که موضوع سایت را توضیح می‌دهد."
           },
           "Show description#18:130": {
            "type": "BOOLEAN",
@@ -2619,17 +2619,17 @@
            "boundVariables": {}
           },
           "Layout": {
-           "value": "Stacked",
+           "value": "Field",
            "type": "VARIANT",
            "boundVariables": {}
           }
          },
          "texts": {
+          "Value": "پنل تنظیمات برای وردپرس",
+          "Helper text": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود.",
           "Label": "آزمایشی",
           "Title": "شعار سایت",
-          "Description": "یک جمله‌ی کوتاه که موضوع سایت را توضیح می‌دهد.",
-          "Value": "پنل تنظیمات برای وردپرس",
-          "Helper text": "در تب مرورگر و نتایج جستجو نمایش داده می‌شود."
+          "Description": "یک جمله‌ی کوتاه که موضوع سایت را توضیح می‌دهد."
          }
         }
        },
@@ -2639,7 +2639,7 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 371,
+        "y": 267,
         "width": 750,
         "height": 88,
         "layout": {
@@ -2717,7 +2717,7 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 463,
+      "y": 359,
       "width": 798,
       "height": 57,
       "layout": {
@@ -2770,7 +2770,7 @@
         "visible": true,
         "opacity": 1,
         "x": 25,
-        "y": 476,
+        "y": 372,
         "width": 58,
         "height": 32,
         "layout": {
@@ -3456,7 +3456,7 @@
         "visible": true,
         "opacity": 1,
         "x": 99,
-        "y": 481,
+        "y": 377,
         "width": 676,
         "height": 22,
         "layout": {

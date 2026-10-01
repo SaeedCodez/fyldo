@@ -1,0 +1,1084 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "251:11264"
+ },
+ "set": {
+  "id": "251:11264",
+  "name": "Segment",
+  "kebab": "segment",
+  "width": 957,
+  "height": 66,
+  "variantCount": 10,
+  "componentPropertyDefinitions": {
+   "Label#251:1514": {
+    "type": "TEXT",
+    "defaultValue": "Segment"
+   },
+   "Label (FA)#251:1525": {
+    "type": "TEXT",
+    "defaultValue": "بخش"
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   },
+   "State": {
+    "type": "VARIANT",
+    "defaultValue": "Default",
+    "variantOptions": [
+     "Default",
+     "Hover",
+     "Selected",
+     "Focus",
+     "Disabled"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "251:11244",
+   "name": "Locale=EN, State=Default",
+   "file": "locale-en--state-default",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=EN, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 91,
+    "height": 32,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 59,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#666666",
+        "token": "text/secondary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#251:1514"
+      },
+      "text": {
+       "characters": "Segment",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/secondary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11246",
+   "name": "Locale=EN, State=Hover",
+   "file": "locale-en--state-hover",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=EN, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 91,
+    "height": 32,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ebebeb",
+      "token": "surface/hover"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 59,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#251:1514"
+      },
+      "text": {
+       "characters": "Segment",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11248",
+   "name": "Locale=EN, State=Selected",
+   "file": "locale-en--state-selected",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=EN, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 92,
+    "height": 32,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "effects": {
+     "style": "Shadow/Small",
+     "values": [
+      {
+       "type": "DROP_SHADOW",
+       "visible": true,
+       "hex": "#000000",
+       "opacity": 0.04,
+       "offset": {
+        "x": 0,
+        "y": 2
+       },
+       "radius": 2,
+       "spread": 0
+      }
+     ]
+    },
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 60,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#251:1514"
+      },
+      "text": {
+       "characters": "Segment",
+       "textStyle": "EN/Label/14 Strong",
+       "fontFamily": "Geist",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11250",
+   "name": "Locale=EN, State=Focus",
+   "file": "locale-en--state-focus",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Focus"
+   },
+   "node": {
+    "name": "Locale=EN, State=Focus",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 91,
+    "height": 32,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#171717",
+       "token": "focus/ring-neutral"
+      }
+     ],
+     "weight": 2,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 59,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#251:1514"
+      },
+      "text": {
+       "characters": "Segment",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11252",
+   "name": "Locale=EN, State=Disabled",
+   "file": "locale-en--state-disabled",
+   "variantProperties": {
+    "Locale": "EN",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=EN, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 91,
+    "height": 32,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 59,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label#251:1514"
+      },
+      "text": {
+       "characters": "Segment",
+       "textStyle": "EN/Label/14",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11254",
+   "name": "Locale=FA, State=Default",
+   "file": "locale-fa--state-default",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Default"
+   },
+   "node": {
+    "name": "Locale=FA, State=Default",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 65,
+    "height": 34,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 33,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#666666",
+        "token": "text/secondary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#251:1525"
+      },
+      "text": {
+       "characters": "بخش",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/secondary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11256",
+   "name": "Locale=FA, State=Hover",
+   "file": "locale-fa--state-hover",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Hover"
+   },
+   "node": {
+    "name": "Locale=FA, State=Hover",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 65,
+    "height": 34,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ebebeb",
+      "token": "surface/hover"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 33,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#251:1525"
+      },
+      "text": {
+       "characters": "بخش",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11258",
+   "name": "Locale=FA, State=Selected",
+   "file": "locale-fa--state-selected",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Selected"
+   },
+   "node": {
+    "name": "Locale=FA, State=Selected",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 65,
+    "height": 34,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "effects": {
+     "style": "Shadow/Small",
+     "values": [
+      {
+       "type": "DROP_SHADOW",
+       "visible": true,
+       "hex": "#000000",
+       "opacity": 0.04,
+       "offset": {
+        "x": 0,
+        "y": 2
+       },
+       "radius": 2,
+       "spread": 0
+      }
+     ]
+    },
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 33,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#251:1525"
+      },
+      "text": {
+       "characters": "بخش",
+       "textStyle": "FA/Label/14 Strong",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Medium",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11260",
+   "name": "Locale=FA, State=Focus",
+   "file": "locale-fa--state-focus",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Focus"
+   },
+   "node": {
+    "name": "Locale=FA, State=Focus",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 65,
+    "height": 34,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#171717",
+       "token": "focus/ring-neutral"
+      }
+     ],
+     "weight": 2,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 33,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#171717",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#251:1525"
+      },
+      "text": {
+       "characters": "بخش",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "251:11262",
+   "name": "Locale=FA, State=Disabled",
+   "file": "locale-fa--state-disabled",
+   "variantProperties": {
+    "Locale": "FA",
+    "State": "Disabled"
+   },
+   "node": {
+    "name": "Locale=FA, State=Disabled",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 65,
+    "height": 34,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 6,
+     "paddingRight": 16,
+     "paddingBottom": 6,
+     "paddingLeft": 16,
+     "itemSpacing": 6,
+     "primaryAxisAlignItems": "CENTER",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 8,
+    "bound": {
+     "itemSpacing": "space/6",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/6",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/6",
+     "topLeftRadius": "radius/md",
+     "topRightRadius": "radius/md",
+     "bottomLeftRadius": "radius/md",
+     "bottomRightRadius": "radius/md"
+    },
+    "children": [
+     {
+      "name": "Label",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 16,
+      "y": 6,
+      "width": 33,
+      "height": 22,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#8f8f8f",
+        "token": "text/disabled"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Label (FA)#251:1525"
+      },
+      "text": {
+       "characters": "بخش",
+       "textStyle": "FA/Label/14",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 14,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 22
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/disabled"
+      }
+     }
+    ]
+   }
+  }
+ ]
+}
