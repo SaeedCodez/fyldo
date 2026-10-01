@@ -324,9 +324,9 @@ type TabsProps = { value; onValueChange; tabs: {id;label;icon?;count?;disabled?}
 ### 4.4 Setting Row — Figma `Setting Row` (18:2719)
 Base: ➕ custom composition over `Field` (`Field.Root/Label/Description`). `ControlSlot` receives the field renderer.
 ```ts
-type SettingRowProps = { title: string; description?: string; badge?: BadgeProps; layout?: 'inline'|'stacked'; divider?: boolean /*true; false on last row*/; control: ReactNode; error?: string };
+type SettingRowProps = { title: string; description?: string; badge?: BadgeProps; layout?: 'inline'|'stacked'|'field'; divider?: boolean /*true; false on last row*/; control: ReactNode; error?: string };
 ```
-**Layout rule from the PHP schema:** `toggle`, `checkbox` ⇒ `inline`; `text|textarea|select|multi_select|number` ⇒ `stacked`; `radio`/`checkbox_group` ⇒ `stacked` (with `Fieldset`). Overridable per field (`'layout' => 'inline'`).
+**Layout rule from the PHP schema:** `toggle`, `checkbox` ⇒ `inline`; `text|textarea|select|multi_select|number` ⇒ `stacked`; `radio`/`checkbox_group` ⇒ `stacked` (with `Fieldset`). Overridable per field (`'layout' => 'inline'`). `field` (Figma `Layout=Field`) puts the control (320 wide, 360 when `wide`) at the end of the row with the error under it; defaults never use it, and at ≤782px it falls back to `stacked`.
 *Disabled with a reason (M2 part 3):* `disabled` is `true` or a string. A string is rendered under the description (kept `text/secondary`, not the faded disabled colour: it is the one thing that must stay readable) as a Base UI `Field.Description` — or, for a checkbox/radio group, an id in the group's `aria-describedby` — so it is part of the control's accessible description for every control type (tested for toggle, checkbox, text, textarea, number, password, select, multi select, checkbox group, radio group). A disabled field is never validated, never sent and ignored by the server.
 
 **Gaps:** ➕ Label association (inline Toggle: title is the switch label via `aria-labelledby`; description via `aria-describedby`). ➕ Divider auto-off on last row (CSS `:last-child`, prop override). ➕ Disabled propagation + “why disabled” text (rule 14). ➕ Conditional visibility hook (`show_if`) — later milestone.
