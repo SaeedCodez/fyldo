@@ -308,6 +308,8 @@ for (const locale of ['EN', 'FA'] as const) {
 // for the group), EN + FA. EN compares the whole component. FA is set in a different font, so it compares the text-free
 // part: the image area of the card / of the first row of the group (borders, corner radii, the check badge on the end side).
 // The picture is the pack's placeholder art, drawn by the gallery. Layout is the same code in both locales.
+// Regions are whole CSS px: a half-pixel clip (the card is 237.5 high) makes the screenshot a device pixel short of the crop.
+const whole = (r: Rect): Rect => ({ ...r, height: Math.floor(r.height) });
 for (const locale of ['EN', 'FA'] as const) {
   test(`Choice Card ${locale} · default`, async ({ browser }, testInfo) => {
     const v = variant('choice-card', { Locale: locale, Content: 'Image and text', Checked: 'False', State: 'Default' });
@@ -325,7 +327,7 @@ for (const locale of ['EN', 'FA'] as const) {
     await still(page);
     const size = pngSize(readFileSync(pngPath('choice-card', v)));
     const width = size.width / SCALE;
-    const region: Rect = locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: image.y - root.y + image.height };
+    const region = whole(locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: image.y - root.y + image.height });
     await comparePixels({ page, testInfo, reference: pngPath('choice-card', v), scale: SCALE, stage, referenceRegion: region, actualRegion: region, maxDiffRatio: locale === 'EN' ? 0.08 : 0.05 });
     await close();
   });
@@ -354,7 +356,7 @@ for (const locale of ['EN', 'FA'] as const) {
     const width = size.width / SCALE;
     const first = cards[0] as Node;
     const firstRowImageBottom = optionsFrame.y - root.y + 2 + ((first.width - 4) * 10) / 16;
-    const region: Rect = locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: firstRowImageBottom };
+    const region = whole(locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: firstRowImageBottom });
     await comparePixels({ page, testInfo, reference: pngPath('choice-card-group', v), scale: SCALE, stage, referenceRegion: region, actualRegion: region, maxDiffRatio: locale === 'EN' ? 0.06 : 0.05 });
     await close();
   });
