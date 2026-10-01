@@ -1,6 +1,7 @@
 /**
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
- * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason.
+ * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
+ * Segmented Control and a Slider.
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -29,6 +30,9 @@ test.describe('English', () => {
     await expect(page.getByRole('checkbox', { name: 'All post types' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('checkbox', { name: 'Products' })).toHaveAttribute('data-disabled', '');
     await expect(page.getByRole('radio', { name: 'Full width' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('radiogroup', { name: 'Sort products' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'By product' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '75');
 
     await meta.fill('Line one\nLine two');
     await expect(page.locator('[data-slot=fy-counter]')).toHaveText('17/160'); // a line break is one character
@@ -36,6 +40,11 @@ test.describe('English', () => {
     await expect(page.getByRole('checkbox', { name: 'All post types' })).toHaveAttribute('aria-checked', 'mixed');
     await page.getByRole('radio', { name: 'Boxed' }).click();
     await page.getByRole('checkbox', { name: 'I agree to the terms' }).click();
+    await page.getByRole('radio', { name: 'By order' }).click();
+    await page.getByRole('slider', { name: 'Image quality' }).focus();
+    await page.keyboard.press('ArrowRight'); // one step of 5
+    await page.keyboard.press('ArrowRight');
+    await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
@@ -48,6 +57,8 @@ test.describe('English', () => {
     await expect(page.getByRole('checkbox', { name: 'Pages' })).toHaveAttribute('aria-checked', 'false');
     await expect(page.getByRole('radio', { name: 'Boxed' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('checkbox', { name: 'I agree to the terms' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('radio', { name: 'By order' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     expect(errors).toEqual([]);
   });
 
@@ -487,6 +498,12 @@ test.describe('Persian (RTL)', () => {
     const radio = await page.getByRole('radio', { name: 'Full width' }).boundingBox();
     const radioLabel = await page.getByText('Full width', { exact: true }).boundingBox();
     expect(radio!.x).toBeGreaterThan(radioLabel!.x);
+
+    // segmented control: the first option sits on the right; slider: the value is written in Persian numerals
+    const firstSegment = await page.getByRole('radio', { name: 'By order' }).boundingBox();
+    const lastSegment = await page.getByRole('radio', { name: 'Simple' }).boundingBox();
+    expect(firstSegment!.x).toBeGreaterThan(lastSegment!.x);
+    await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '۷۵');
 
     // Persian validation messages (client: bundled JED; server: .mo)
     await page.getByRole('textbox', { name: 'Default meta description' }).fill('x'.repeat(161));

@@ -192,6 +192,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
                 onChange={setValue}
                 onBlur={validateField}
                 revision={state.revision}
+                locale={locale}
               />
             ))}
           </SectionCard>

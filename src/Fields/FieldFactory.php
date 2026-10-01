@@ -30,7 +30,9 @@ final class FieldFactory {
 			CheckboxField::class,
 			CheckboxGroupField::class,
 			RadioField::class,
+			SegmentedField::class,
 			SelectField::class,
+			SliderField::class,
 			MultiSelectField::class,
 		);
 	}

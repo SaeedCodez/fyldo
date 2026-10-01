@@ -198,6 +198,36 @@ type TagProps = { label: string; size?: 'sm'|'md'; onRemove?: () => void /* abse
 
 ### 2.10 Tag — see 2.9. Also usable standalone (filters). Radius `xs`, fill `surface/default`, hover `surface/hover`.
 
+### 2.11 Segmented Control — Figma `Segment` (set, 10 variants) + `Segmented Control` (2)
+
+Base: Base UI `RadioGroup` + `Radio.Root` (a radio group gives `role="radiogroup"`, roving focus and arrow keys, mirrored in RTL, for free; `ToggleGroup` is a set of toggle buttons without a single-choice contract).
+```ts
+type SegmentedControlProps = { options: { value: string; label: string; disabled?: boolean }[]; value: string; onValueChange(value: string): void; disabled?: boolean; name?: string };
+```
+| Figma | Code |
+|---|---|
+| Segment State Default / Hover / Selected / Focus / Disabled | `text/secondary` · `surface/hover` + `text/primary` · `background/default` + Shadow/Small + Label/14 Strong (`data-checked`) · neutral focus ring (O5) · `text/disabled` |
+| Segmented Control Locale EN / FA | Track `surface/default`, `radius/lg`, padding 4, gap 2; segments padding 6/16, gap 6, `radius/md`. The DOM order is the option order; RTL mirrors it (first option on the right), the Figma FA frame lists its layers the other way round |
+
+`SegmentedControlField` adds label → control → helper (or error) for stand-alone use; inside a page the Setting Row names the group (`group` mode, as for radio). PHP: `segmented` (src/Fields/SegmentedField.php) like `radio`: 2–5 options (warns from 6), `default` required and an enabled option, exports `required` + `allowed`; layout `stacked`.
+
+### 2.12 Slider — Figma `Slider` (Locale × Size × Position × State)
+
+Base: Base UI `Slider` (single thumb, `thumbAlignment="edge"`). `Position` (25 / 50 / 75) is only Figma's showcase of the thumb: it is not an API, the thumb follows `value`.
+```ts
+type SliderProps = { value: number; onValueChange(value: number): void; min?; max?; step?; size?: 'sm'|'md'; formatValue?(n: number): string; showValue?: boolean; disabled?: boolean };
+```
+| Figma | Code |
+|---|---|
+| Size Small / Medium | `size`: track 20 / 24 high, thumb 24×16 / 28×20 |
+| Header (Label, Value) / Control / Helper text; Show label / value / helper | `SliderField` (`hideLabel`, `showValue`, `description`); the Value is always LTR; a bare `Slider` in a Setting Row shows only the value above the control (`showValue`) |
+| Track `surface/active` · Range `control/on` · Thumb `control/thumb` + Shadow/Thumb | tokens; hover `control/on-hover`; Disabled: `control/off-disabled` track, `control/on-disabled` range, 1px `control/on-disabled` stroke on the thumb, no shadow |
+| RTL | Everything mirrors: the range fills from the right, the thumb moves left as the value grows |
+
+Keyboard (Base UI): arrows ±`step`, Home/End, PageUp/PageDown and Shift+arrows ± a tenth of the range; `aria-valuetext` is the formatted value (Persian digits in FA). **Gap:** Figma draws the range as `Position`% of the track with the thumb at its end, which cannot work at 0 and 100; the thumb here travels inside the track (2px rim kept at both ends), so it sits a few px off the showcase in between (7px at 75%).
+
+PHP: `slider` (src/Fields/SliderField.php): `min` (0), `max` (100), `step` (1) on the field, exported as the `min` / `max` / `step` rules plus `number` and `required`; `default` is `min` unless given and must be inside the range and on the step; an out-of-range or off-step value is an error (no clamping, as for `number`).
+
 ---
 
 ## 3. Feedback / status
@@ -381,6 +411,8 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `checkbox` | `Checkbox` (single statement) | inline | boolean | required (must agree) |
 | `checkbox_group` | `CheckboxGroupField` | stacked | subset of allowed keys | min/max selected |
 | `radio` | `RadioGroupField` | stacked | one of allowed keys (else default) | required, allowed |
+| `segmented` | `SegmentedControl` | stacked | `sanitize_text_field`; `allowed` rejects anything but an enabled option | required, allowed |
+| `slider` | `Slider` (`size=md`, value above the control) | stacked | Persian digits → ASCII, int/float; unreadable text stays text so `number` fails | number, required, min, max, step |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |

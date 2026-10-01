@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Added
+
+- **Fields**: `segmented` (a Segmented Control: one of 2–5 short options) and `slider` (a number in a range with `min`, `max` and `step`, shown with its value). Both go through the normal sanitize, validate and save pipeline and mirror in RTL.
+
 ## [1.0.0-beta.2] - 2026-09-30
 
 ### Added

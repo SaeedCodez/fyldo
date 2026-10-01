@@ -117,6 +117,18 @@ export interface RadioFieldDef extends FieldBase {
   options: ChoiceOptionDef[];
 }
 
+export interface SegmentedFieldDef extends FieldBase {
+  type: 'segmented';
+  options: SelectOptionDef[];
+}
+
+export interface SliderFieldDef extends FieldBase {
+  type: 'slider';
+  min: number;
+  max: number;
+  step: number;
+}
+
 export type ValueFieldDef =
   | TextFieldDef
   | NumberFieldDef
@@ -126,6 +138,8 @@ export type ValueFieldDef =
   | CheckboxFieldDef
   | CheckboxGroupFieldDef
   | RadioFieldDef
+  | SegmentedFieldDef
+  | SliderFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef;
 

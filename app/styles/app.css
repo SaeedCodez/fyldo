@@ -36,6 +36,16 @@
   }
 }
 
+/* The same ring on a box that contains the focused control (the Slider thumb's box around its hidden input). */
+@utility focus-ring-within {
+  &:has(:focus-visible) {
+    box-shadow:
+      0 0 0 2px var(--fyldo-white),
+      0 0 0 4px var(--fyldo-focus-ring-color);
+    outline: 2px solid transparent;
+  }
+}
+
 /* Text fields draw their own halo on the bordered wrapper; the control inside must show nothing. */
 @utility focus-none {
   &:focus,
