@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { useState } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FieldRenderer } from '../../app/components/fyldo/FieldRenderer';
 import { SegmentedControlField } from '../../app/components/ui/segmented-control-field';
 import { SliderField } from '../../app/components/ui/slider-field';
@@ -109,6 +109,15 @@ function Slider({ dir = 'ltr', disabled = false }: { dir?: 'ltr' | 'rtl'; disabl
 }
 
 describe('Slider', () => {
+  // Base UI keeps the edge-aligned thumb hidden until it has measured the control; jsdom has no layout, so give it sizes.
+  beforeEach(() => {
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
+      const width = this.dataset.slot === 'fy-slider-thumb' ? 32 : 320;
+      return { x: 0, y: 0, top: 0, left: 0, right: width, bottom: 24, width, height: 24, toJSON: () => ({}) };
+    });
+  });
+  afterEach(() => vi.restoreAllMocks());
+
   it('is a named slider; the value shown in the header is the same text as aria-valuetext, always LTR', () => {
     render(<Slider dir="rtl" />);
     const slider = screen.getByRole('slider', { name: 'Image quality' });
