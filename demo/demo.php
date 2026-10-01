@@ -180,7 +180,6 @@ final class Demo {
 						array(
 							'id'          => 'site_title',
 							'type'        => 'text',
-							'layout'      => 'field',
 							'label'       => __( 'Site title', 'fyldo' ),
 							'description' => __( 'Shown in the browser tab and in search results.', 'fyldo' ),
 							'default'     => __( 'My WordPress site', 'fyldo' ),
@@ -506,7 +505,7 @@ final class Demo {
 						array(
 							'id'          => 'account_name',
 							'type'        => 'text',
-							'layout'      => 'field',
+							'layout'      => 'stacked',
 							'label'       => __( 'Account name', 'fyldo' ),
 							'description' => __( 'Checked by a rule that only runs on the server. Try “admin”.', 'fyldo' ),
 							'validate_cb' => static function ( $value ) {

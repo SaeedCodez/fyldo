@@ -49,7 +49,7 @@ final class SegmentedSliderFieldsTest extends TestCase {
 		$this->assertSame( 'This field is required.', $field->validate( '' ) );
 		$this->assertSame( '', $field->sanitize( array( 'order' ) ) );
 		$this->assertSame( 'product', $field->default_value() );
-		$this->assertSame( 'stacked', $field->to_client()['layout'] );
+		$this->assertSame( 'field', $field->to_client()['layout'] );
 		$this->assertSame( array( 'segmented' ), $field::types() );
 		$this->assertEquals(
 			array( 'required' => true, 'allowed' => array( 'order', 'product', 'simple' ) ),
@@ -94,7 +94,7 @@ final class SegmentedSliderFieldsTest extends TestCase {
 		$client = $field->to_client();
 
 		$this->assertSame( 0, $field->default_value() );
-		$this->assertSame( 'stacked', $client['layout'] );
+		$this->assertSame( 'field', $client['layout'] );
 		$this->assertSame( array( 0, 100, 1 ), array( $client['min'], $client['max'], $client['step'] ) );
 		$this->assertEquals( (object) array( 'number' => true, 'required' => true, 'min' => 0, 'max' => 100, 'step' => 1 ), $client['validate'] );
 		$this->assertSame( 10, $this->slider( array( 'min' => 10, 'max' => 50 ) )->default_value(), 'min is the default when none is given' );

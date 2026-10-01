@@ -24,7 +24,7 @@ final class ColorFieldTest extends TestCase {
 
 		$this->assertSame( array( 'color' ), $field::types() );
 		$this->assertSame( '', $field->default_value() );
-		$this->assertSame( 'stacked', $client['layout'] );
+		$this->assertSame( 'field', $client['layout'] );
 		$this->assertSame( ColorField::DEFAULT_PRESETS, $client['presets'] );
 		$this->assertCount( 16, $client['presets'] );
 		$this->assertEquals( (object) array( 'color' => true ), $client['validate'] );

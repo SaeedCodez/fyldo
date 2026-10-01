@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Changed
+
+- **Fields**: single-line and list fields now default to the `field` layout (control beside the label); set `layout => 'stacked'` for the old look. `choice` stays `stacked`, `toggle` and `checkbox` stay `inline`.
+
 ### Added
 
 - **Fields**: `choice` (a Choice Card Group: one of a few selectable cards, each with an optional image and description; `content` `auto` | `image` | `text`, `columns` 2 | 3 | 4, option `image` URLs are sanitized). Single choice, validated like `radio` (required, one of the enabled options), mirrored in RTL, two columns at most up to 782px and one up to 480px.
