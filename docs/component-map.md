@@ -228,6 +228,27 @@ Keyboard (Base UI): arrows ±`step`, Home/End, PageUp/PageDown and Shift+arrows 
 
 PHP: `slider` (src/Fields/SliderField.php): `min` (0), `max` (100), `step` (1) on the field, exported as the `min` / `max` / `step` rules plus `number` and `required`; `default` is `min` unless given and must be inside the range and on the step; an out-of-range or off-step value is an error (no clamping, as for `number`).
 
+### 2.13 Color Picker — Figma `Color Picker` (Locale × Size × State), `Color Picker Panel` (Locale), `Color Swatch` (State)
+
+Base: a field control (Base UI `Field.Control` rendered as a `<button>`, so the label, helper and error wiring is the Select's) that opens a non-modal Base UI `Popover` with the panel. No colour library: `app/lib/color.ts` has the HSV↔hex maths and the one reader of typed hex (`parseHex`), the pointer and keyboard handling is in the panel.
+```ts
+type ColorPickerProps = { value: string /* '' | #rrggbb */; onValueChange(value: string): void; presets?: string[] | false; size?: 'sm'|'md'|'lg'; placeholder?: string; disabled?: boolean; locale?: string };
+```
+| Figma | Code |
+|---|---|
+| Field: Label / Control (Swatch, Value or Placeholder, Chevron) / Helper; Size Small / Medium / Large | `ColorPickerField` (`FieldShell`) around `ColorPicker`; control height as the Select (32 / 40 / 48), swatch 16 / 20 / 24 (`ColorDot`), value `Mono/14` |
+| State Default (no colour: dashed `border/strong` swatch + placeholder) / Hover / Focus / Open / Filled / Error / Disabled | `CONTROL_BASE` states (hover border, focus/open halo, red error, `surface/disabled`); Open = `data-popup-open`; Disabled dims the swatch to 40% |
+| Value is always LTR (FA/Mono) | `<bdi dir="ltr">` in a slot that follows the page: Persian puts swatch and value at the right, the chevron at the left. The value is shown upper case (`#2271B1`), stored lower case |
+| Panel (280 wide, `radius/lg`, `Shadow/Medium`, padding 12, gap 12) opens 4px below the control | `Popover.Positioner` `side="bottom" align="start" sideOffset=4`, lazily loaded (`React.lazy`, its own chunk with the Popover) so `app.js` stays within its budget |
+| Area 254×160 (saturation × brightness) and Hue 254×16 (track 12 high) with 16px thumbs | `role="slider"`, `dir="ltr"` always (they do not mirror in FA); arrows ±1, Shift ±10, hue Home/End; `aria-valuetext` "Saturation 81%, brightness 69%" in the page numerals |
+| Hex row: 32px Preview + Input Small | `Input size="sm" ltr`; typing commits only a valid colour (`#abc`, `abc` and `#AABBCC` all read), an invalid text goes back to the last valid one on blur, an emptied box clears the colour |
+| Presets label + 24px `Color Swatch` instances (Default / Hover / Selected / Focus / Disabled) | `ColorSwatch` buttons in a `radiogroup`, 8 per row, roving tabindex (arrows follow the reading direction, Up/Down jump a row, Home/End); Selected = 2px `focus/border` |
+| No alpha slider, no eyedropper | not built |
+
+Esc and an outside press close the panel (a press on the field itself is the field's own toggle) and focus goes back to the field. The area, hue and the preview/swatch fills are literal colours on purpose (the colour is the data); everything else is token-bound.
+
+PHP: `color` (src/Fields/ColorField.php), layout `stacked`, config `default` (hex) and `presets` (hex list, default the 16 of the panel, `false` hides them; a non-hex preset throws a `ConfigException`). Sanitize: trim, lower case, `#abc` → `#aabbcc`, a missing `#` is added; text that is not a colour is kept so the implied `color` rule (`#rrggbb` only) reports it instead of silently replacing it; empty is allowed unless `required`.
+
 ---
 
 ## 3. Feedback / status
@@ -413,6 +434,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `radio` | `RadioGroupField` | stacked | one of allowed keys (else default) | required, allowed |
 | `segmented` | `SegmentedControl` | stacked | `sanitize_text_field`; `allowed` rejects anything but an enabled option | required, allowed |
 | `slider` | `Slider` (`size=md`, value above the control) | stacked | Persian digits → ASCII, int/float; unreadable text stays text so `number` fails | number, required, min, max, step |
+| `color` | `ColorPicker` | stacked | trim, lower case, `#abc` → `#aabbcc`; unreadable text stays text so `color` fails | color, required |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |

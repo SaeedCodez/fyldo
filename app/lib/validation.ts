@@ -2,10 +2,11 @@
  * Client mirror of src/Validation/Rules.php. The server is authoritative; this exists for instant feedback.
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
- * Rule order: required, min_length, max_length, pattern, schemes, email, number, allowed, min, max, step.
+ * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, allowed, min, max, step.
  */
 import { __, _n, sprintf } from '../i18n';
 import type { RuleSet } from '../types';
+import { isHexColor } from './color';
 
 export interface Failure {
   rule: keyof RuleSet;
@@ -65,6 +66,8 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
     if (rules.email && !isEmail(value)) return fail('email');
     // A number field's value is a number; text that could not be read as one stays a string and lands here.
     if (rules.number) return fail('number');
+    // A color field stores `#rrggbb`; anything else the server could not read stays text and lands here.
+    if (rules.color && !isHexColor(value)) return fail('color');
   }
 
   if (rules.allowed !== undefined) {
@@ -109,6 +112,8 @@ export function messageFor(failure: Failure): string {
       return __('Enter a valid email address.', 'fyldo');
     case 'number':
       return __('Enter a number.', 'fyldo');
+    case 'color':
+      return __('Enter a valid color, like #rrggbb.', 'fyldo');
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
     case 'step':

@@ -146,6 +146,13 @@ return array(
 					'step'        => 5,
 				),
 				array(
+					'id'          => 'accent_color',
+					'type'        => 'color',
+					'label'       => 'Accent color',
+					'description' => 'Used for links and buttons on your settings page.',
+					'default'     => '#2271b1',
+				),
+				array(
 					'id'          => 'license_key',
 					'type'        => 'text',
 					'label'       => 'License key',

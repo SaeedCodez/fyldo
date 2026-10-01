@@ -346,3 +346,74 @@ for (const locale of ['EN', 'FA'] as const) {
     await close();
   });
 }
+
+// ── Color Picker ─────────────────────────────────────────────────────────────────────────────────────────────
+// Default variant: Small, Default (no colour yet: the dashed swatch and the placeholder). EN compares the whole field. FA is set
+// in a different font, so it compares the two glyphs of the control instead (the swatch at the start, the chevron at the end).
+// The swatch is also covered by the panel's presets; the Open state is the panel below it.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Color Picker ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('color-picker', { Locale: locale, Size: 'Small', State: 'Default' });
+    const root = v.node;
+    const control = layer(root, 'Control');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'color-picker',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      size: 'sm',
+      label: layer(root, 'Label').text?.characters ?? '',
+      placeholder: layer(control, 'Placeholder').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+    });
+    await still(page);
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('color-picker', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const s = await box(stage);
+      const ours: Array<[string, Locator]> = [
+        ['Swatch', stage.locator('[data-slot=fy-color-dot]')],
+        ['Chevron', stage.locator('[data-slot=fy-color-picker] > span:last-child')],
+      ];
+      for (const [name, locator] of ours) {
+        const region = rect(layer(control, name), root);
+        const b = await box(locator);
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('color-picker', v),
+          scale: SCALE,
+          stage,
+          referenceRegion: region,
+          actualRegion: { x: b.x - s.x, y: b.y - s.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+    }
+    await close();
+  });
+}
+
+// "Color Picker Panel": the 280px card. The pack's PNG includes the Shadow/Medium margin (16px each side, none above), so the
+// card itself is cropped out of it. Area / hue strip are not mirrored in FA and the hex row / presets are; the text is the only
+// part set in a different font (EN Geist / FA IRANYekanX vs Vazirmatn), hence the slightly wider allowance in FA.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Color Picker Panel ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('color-picker-panel', { Locale: locale });
+    const root = v.node;
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, { c: 'color-picker-panel', dir: locale === 'FA' ? 'rtl' : 'ltr', value: '#2271b1' });
+    await still(page);
+    const card = { x: 16, y: 0, width: root.width, height: root.height };
+    await comparePixels({
+      page,
+      testInfo,
+      reference: pngPath('color-picker-panel', v),
+      scale: SCALE,
+      stage,
+      referenceRegion: card,
+      actualRegion: { x: 0, y: 0, width: card.width, height: card.height },
+      maxDiffRatio: locale === 'EN' ? 0.08 : 0.1,
+    });
+    await close();
+  });
+}

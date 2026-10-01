@@ -9,6 +9,8 @@ export interface RuleSet {
   email?: boolean;
   /** Implied by the `number` field: the value must be a number. */
   number?: boolean;
+  /** Implied by the `color` field: the value must be `#rrggbb`. */
+  color?: boolean;
   allowed?: string[];
   min?: number;
   max?: number;
@@ -129,6 +131,12 @@ export interface SliderFieldDef extends FieldBase {
   step: number;
 }
 
+export interface ColorFieldDef extends FieldBase {
+  type: 'color';
+  /** Hex list in the panel; `false` hides the section. */
+  presets: string[] | false;
+}
+
 export type ValueFieldDef =
   | TextFieldDef
   | NumberFieldDef
@@ -140,6 +148,7 @@ export type ValueFieldDef =
   | RadioFieldDef
   | SegmentedFieldDef
   | SliderFieldDef
+  | ColorFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef;
 

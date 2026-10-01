@@ -306,6 +306,36 @@
                     "step": 5
                 },
                 {
+                    "id": "accent_color",
+                    "type": "color",
+                    "label": "Accent color",
+                    "description": "Used for links and buttons on your settings page.",
+                    "default": "#2271b1",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "color": true
+                    },
+                    "presets": [
+                        "#1d2327",
+                        "#50575e",
+                        "#8c8f94",
+                        "#c3c4c7",
+                        "#f0f0f1",
+                        "#ffffff",
+                        "#2271b1",
+                        "#135e96",
+                        "#00a32a",
+                        "#007017",
+                        "#dba617",
+                        "#996800",
+                        "#d63638",
+                        "#8a2424",
+                        "#8e44ad",
+                        "#e25c9a"
+                    ]
+                },
+                {
                     "id": "license_key",
                     "type": "text",
                     "label": "License key",
@@ -355,6 +385,7 @@
         "per_page": 10,
         "sort_by": "product",
         "image_quality": 75,
+        "accent_color": "#2271b1",
         "license_key": "FYLDO-FREE"
     },
     "revision": "rev-1"

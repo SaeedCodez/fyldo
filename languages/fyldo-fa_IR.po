@@ -544,3 +544,33 @@ msgstr "فیلدهای متن، نشانی، ایمیل، متن چندخطی، 
 
 msgid "A write-only password, a disabled field, a server-side rule and a Danger card that resets the page."
 msgstr "یک رمز عبور فقط‌نوشتنی، یک فیلد غیرفعال، یک قاعده‌ی سمت سرور و یک کارت خطر که صفحه را بازنشانی می‌کند."
+
+msgid "Accent color"
+msgstr "رنگ تأکید"
+
+msgid "Used for links and buttons on your settings page."
+msgstr "برای پیوندها و دکمه‌ها در صفحه‌ی تنظیمات استفاده می‌شود."
+
+msgid "Pick a color…"
+msgstr "یک رنگ انتخاب کنید…"
+
+msgid "Presets"
+msgstr "پیش‌تنظیم‌ها"
+
+msgid "Color picker"
+msgstr "انتخابگر رنگ"
+
+msgid "Hex color"
+msgstr "کد هگز رنگ"
+
+msgid "Saturation and brightness"
+msgstr "اشباع و روشنایی"
+
+msgid "Saturation %1$s, brightness %2$s"
+msgstr "اشباع %1$s، روشنایی %2$s"
+
+msgid "Hue"
+msgstr "فام رنگ"
+
+msgid "Enter a valid color, like #rrggbb."
+msgstr "یک رنگ معتبر مانند #rrggbb وارد کنید."
