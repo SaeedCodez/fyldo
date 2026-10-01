@@ -10,6 +10,9 @@ import { Input } from './input';
 
 const clamp = (n: number, min: number, max: number): number => Math.min(max, Math.max(min, n));
 
+/** The shape of the value, not words: it is the same in every language. */
+const HEX_PLACEHOLDER = '#RRGGBB';
+
 /** Presets wrap at 8 per row inside the panel's 254px content width (8 × 24 + 7 × 8). */
 const PRESET_COLUMNS = 8;
 
@@ -141,7 +144,7 @@ function HexRow({ value, onValueChange }: { value: string; onValueChange: (value
           size="sm"
           ltr
           aria-label={__('Hex color', 'fyldo')}
-          placeholder="#RRGGBB"
+          placeholder={HEX_PLACEHOLDER}
           autoComplete="off"
           spellCheck={false}
           autoCapitalize="off"
