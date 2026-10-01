@@ -211,6 +211,25 @@ type SegmentedControlProps = { options: { value: string; label: string; disabled
 
 `SegmentedControlField` adds label → control → helper (or error) for stand-alone use; inside a page the Setting Row names the group (`group` mode, as for radio). PHP: `segmented` (src/Fields/SegmentedField.php) like `radio`: 2–5 options (warns from 6), `default` required and an enabled option, exports `required` + `allowed`; layout `stacked`.
 
+### 2.11b Choice Card + Choice Card Group — Figma `Choice Card` (48 variants) + `Choice Card Group` (54)
+
+Base: Base UI `RadioGroup` + `Radio.Root` (visually hidden input; `role="radiogroup"` with the cards as radios, Tab enters, arrow keys move the choice and are mirrored in RTL, Space selects). Single choice only; multi-select cards are out of scope.
+```ts
+type ChoiceCardOption = { value: string; label: string; description?: string; image?: string; disabled?: boolean };
+type ChoiceCardsProps = { options: ChoiceCardOption[]; content: 'image_text' | 'image' | 'text'; columns?: 2 | 3 | 4; value: string; onValueChange(value: string): void; disabled?: boolean };
+```
+| Figma | Code |
+|---|---|
+| Choice Card Content: Image and text / Image only / Text only | `content` `image_text` / `image` / `text`. Image 16:10 (`aspect-16/10`, follows the card width), Footer padding 12 gap 2 with a top divider (Label/13 Strong + Copy/13 `text/secondary`). Text only: no divider, padding 16 and 44 at the end so the badge never overlaps. Image only: no footer, the label is the `aria-label` and the `<img>` has `alt=""` |
+| Checked False / True | Unchecked: 1px `border/input` + 1px padding. Checked: 2px `focus/border`, no padding (the height never jumps) and a 20px `control/on` check badge 8px from the top **end** corner (top-right in EN, top-left in FA; `end-1.5`) |
+| State Default / Hover / Focus / Disabled | Hover (unchecked) `border/input-hover`. Focus: `focus/border` and the neutral ring (O5; a checked card has no other cue). Disabled: `background/subtle`, `border/default` (checked `border/strong`, badge `control/on-disabled`), text `text/disabled`, image at 50% |
+| Choice Card Group Columns 2 / 3 / 4, State Default / Error / Disabled | 576 wide, label Label/14 Strong, gap 8, cards in a grid with gap 12 (282 / 184 / 135 wide), helper Copy/13. Error = nothing selected: error text in `status/error/text`, **no icon** (as drawn), replaces the helper. FA: the grid follows the direction, so every row runs right to left and a wrapped row starts on the right |
+
+Responsive (design silent; owner decision): up to 782px (`wp-mobile`, WordPress goes mobile) at most 2 columns, up to 480px one. The 480px step is the new `narrow` variant next to `wp-mobile` in `app/styles/app.css`. The pack's sun and mountain art is a placeholder, not an asset: the gallery draws it for the pixel tests, the product only renders the `image` URL it is given.
+
+`ChoiceCardGroup` adds label → cards → helper (or error) for stand-alone use. Inside a page the Setting Row names the group (`group` + `cards`: the control column is 576 wide, 144 × 4, and shrinks on narrow containers like every stacked control).
+PHP: `choice` (src/Fields/ChoiceField.php, extends `AbstractOptionsField`) like `radio`: `required` + `allowed`, layout `stacked`, but `default` is optional (nothing selected is the error state) and must be an enabled option when given. Option keys beyond `value` / `label` / `disabled`: `description` and `image` (`esc_url_raw`, `http`/`https` or a root-relative `/path` only; anything else is a configuration error), `label` is required and non-empty. `content` `auto` (default) | `image` | `text` and `columns` `2` | `3` | `4`; invalid values, a mix of options with and without `image` under `auto`, or `content: image` without images throw a `ConfigException`. The client gets the resolved `content` (`image_text` | `image` | `text`), `columns` and the options (without `image` for `text`).
+
 ### 2.12 Slider — Figma `Slider` (Locale × Size × Position × State)
 
 Base: Base UI `Slider` (single thumb, `thumbAlignment="edge"`). `Position` (25 / 50 / 75) is only Figma's showcase of the thumb: it is not an API, the thumb follows `value`.
@@ -432,6 +451,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `checkbox` | `Checkbox` (single statement) | inline | boolean | required (must agree) |
 | `checkbox_group` | `CheckboxGroupField` | stacked | subset of allowed keys | min/max selected |
 | `radio` | `RadioGroupField` | stacked | one of allowed keys (else default) | required, allowed |
+| `choice` | `ChoiceCards` (inside the Setting Row; `ChoiceCardGroup` stand-alone) | stacked (576 wide) | `sanitize_text_field`; `allowed` rejects anything but an enabled option; `esc_url_raw` on option images | required, allowed |
 | `segmented` | `SegmentedControl` | stacked | `sanitize_text_field`; `allowed` rejects anything but an enabled option | required, allowed |
 | `slider` | `Slider` (`size=md`, value above the control) | stacked | Persian digits → ASCII, int/float; unreadable text stays text so `number` fails | number, required, min, max, step |
 | `color` | `ColorPicker` | stacked | trim, lower case, `#abc` → `#aabbcc`; unreadable text stays text so `color` fails | color, required |

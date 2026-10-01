@@ -27,6 +27,8 @@ export interface SettingRowProps {
   group?: boolean;
   /** Figma Textarea is 360 wide; every other control 320. */
   wide?: boolean;
+  /** Figma Choice Card Group is 576 wide. Like every stacked control it shrinks (`max-w-full`) on narrow containers. */
+  cards?: boolean;
   disabled?: boolean;
   name?: string;
   /** Field id, exposed for focusing the first invalid field. */
@@ -50,6 +52,7 @@ export function SettingRow({
   errorInControl = false,
   group = false,
   wide = false,
+  cards = false,
   disabled,
   name,
   fieldId,
@@ -114,7 +117,7 @@ export function SettingRow({
         {srNote && !group ? <Field.Description className="fy:sr-only">{srNote}</Field.Description> : null}
       </div>
 
-      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-90' : 'fy:w-80', 'fy:max-w-full'))}>
+      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-90' : cards ? 'fy:w-144' : 'fy:w-80', 'fy:max-w-full'))}>
         {group ? (
           <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
             {children}

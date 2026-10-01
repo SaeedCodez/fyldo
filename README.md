@@ -102,6 +102,7 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`
 | `textarea` | `rows`. With `validate.max_length` it shows a live counter. |
 | `toggle` `checkbox` | A boolean. |
 | `checkbox_group` `radio` `select` `multi_select` | `options`: `[ 'value' => 'Label' ]`, a list of `[ 'value', 'label', 'disabled' ]`, or a callable. `radio` needs a `default`. `select` and `multi_select` take `searchable`. |
+| `choice` | A Choice Card Group: exactly one of a few selectable cards (single choice, like `radio`). `options` as for `radio`, plus per option `description` and `image` (an `http(s)` URL or a path starting with `/`); every option needs a `label`, which names the card even when only the image shows. `content`: `auto` (default: every option has an `image` → image and text, none has → text only, a mix is a configuration error), `image` (images only, every option needs one) or `text` (ignores images). `columns`: `2` (default), `3` or `4`; up to 782px wide at most 2, up to 480px one. Nothing selected is an error (`required`), so a `default` is optional; if given it must be an enabled option. |
 | `segmented` | A Segmented Control: exactly one of 2–5 short `options` (same forms as `radio`, without descriptions). Needs a `default` that is an enabled option. |
 | `slider` | A number in a bounded range, picked with a single thumb. `min` (default `0`), `max` (`100`) and `step` (`1`) are set on the field; they are exported as the `min` / `max` / `step` rules, so a value outside the range or off the step is rejected in PHP and in the browser (nothing is clamped silently). `default` is `min` unless given. |
 | `color` | One free colour: a swatch and its hex value that open a picker (saturation/brightness area, hue strip, hex box, presets). Stored as lower-case `#rrggbb`, no alpha; typed text such as `#ABC` or `2271b1` is read as `#aabbcc` / `#2271b1`. `default` is a hex colour (none by default); `presets` is a list of hex colours (default: the 16 of the design) or `false` to hide the section; a non-hex preset is a configuration error. Empty is allowed unless `validate.required`. |
@@ -181,7 +182,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 ### مرجع پیکربندی (خلاصه)
 
-- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `segmented` `slider` `color` `select` `multi_select` و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP.
+- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `select` `multi_select` و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP.
 - **صفحه‌ها و ناوبری:** `navigation` برابر `sidebar` (پیش‌فرض) یا `top`؛ گروه‌ها با `add_group`؛ زبانه‌ها با `tabs`؛ نشان عددی با `badge`.
 - **حالت ذخیره:** `'save' => 'global'` (نوار ذخیره برای کل صفحه) یا `'section'` (دکمهٔ ذخیره در هر کارت)؛ یکی برای هر صفحه.
 - **لوگو و عنوان:** `title` نام برند است و `logo` نام یک آیکون Iconsax یا نشانی تصویر.

@@ -2,7 +2,7 @@
 /**
  * The demo dashboard: four pages of sample settings, shown only when Fyldo is installed as a plugin
  * (`wp-content/plugins/fyldo/`), never as a drop-in folder or a Composer package. `fyldo.php` decides that; this
- * file only declares the pages with the public API, exactly as a consumer plugin would (PHP only: no extra assets).
+ * file only declares the pages with the public API, exactly as a consumer plugin would (PHP, plus three tiny SVGs for the Choice Card demo).
  *
  * Strings use Fyldo's own text domain, so the demo follows the site (or profile) language: English or فارسی.
  * Turn it off with the `fyldo/fyldo-demo/enabled` filter.
@@ -379,6 +379,34 @@ final class Demo {
 								array(
 									'value' => 'boxed',
 									'label' => __( 'Boxed', 'fyldo' ),
+								),
+							),
+						),
+						array(
+							'id'          => 'color_scheme',
+							'type'        => 'choice',
+							'label'       => __( 'Theme', 'fyldo' ),
+							'description' => __( 'Choose how the settings panel looks.', 'fyldo' ),
+							'default'     => 'light',
+							'columns'     => 3,
+							'options'     => array(
+								array(
+									'value'       => 'light',
+									'label'       => __( 'Light', 'fyldo' ),
+									'description' => __( 'Bright surfaces', 'fyldo' ),
+									'image'       => plugins_url( 'demo/choice-light.svg', self::$main_file ),
+								),
+								array(
+									'value'       => 'dark',
+									'label'       => __( 'Dark', 'fyldo' ),
+									'description' => __( 'Low-light ready', 'fyldo' ),
+									'image'       => plugins_url( 'demo/choice-dark.svg', self::$main_file ),
+								),
+								array(
+									'value'       => 'system',
+									'label'       => __( 'System', 'fyldo' ),
+									'description' => __( 'Match device', 'fyldo' ),
+									'image'       => plugins_url( 'demo/choice-system.svg', self::$main_file ),
 								),
 							),
 						),

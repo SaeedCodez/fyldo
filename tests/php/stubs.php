@@ -91,9 +91,22 @@ if ( ! function_exists( 'sanitize_textarea_field' ) ) {
 }
 
 if ( ! function_exists( 'esc_url_raw' ) ) {
-	function esc_url_raw( $url ) {
+	function esc_url_raw( $url, $protocols = null ) {
 		$url = trim( (string) $url );
+		if ( null !== $protocols ) {
+			// Like WordPress: only the listed schemes, and a path or fragment without a scheme stays as it is.
+			if ( preg_match( '#^[/\\#?]#', $url ) ) {
+				return $url;
+			}
+			return preg_match( '#^(' . implode( '|', array_map( 'preg_quote', $protocols ) ) . ')://#i', $url ) ? $url : '';
+		}
 		return preg_match( '#^(https?|mailto|tel)(:|://)#i', $url ) ? $url : '';
+	}
+}
+
+if ( ! function_exists( 'plugins_url' ) ) {
+	function plugins_url( $path = '', $plugin = '' ) {
+		return 'https://example.com/wp-content/plugins/fyldo/' . ltrim( (string) $path, '/' );
 	}
 }
 

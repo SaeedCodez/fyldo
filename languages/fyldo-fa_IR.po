@@ -574,3 +574,27 @@ msgstr "فام رنگ"
 
 msgid "Enter a valid color, like #rrggbb."
 msgstr "یک رنگ معتبر مانند #rrggbb وارد کنید."
+
+msgid "Theme"
+msgstr "قالب"
+
+msgid "Choose how the settings panel looks."
+msgstr "ظاهر پنل تنظیمات را انتخاب کنید."
+
+msgid "Light"
+msgstr "روشن"
+
+msgid "Dark"
+msgstr "تیره"
+
+msgid "System"
+msgstr "سیستم"
+
+msgid "Bright surfaces"
+msgstr "سطوح روشن"
+
+msgid "Low-light ready"
+msgstr "مناسب شب"
+
+msgid "Match device"
+msgstr "مطابق دستگاه"
