@@ -6,6 +6,7 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ### Added
 
+- **Fields**: `color` (a Color Picker: swatch and hex value that open a panel with a saturation/brightness area, a hue strip, a hex box and presets). The value is lower-case `#rrggbb`; `default`, `presets` (a list of hex colours, or `false`) and `validate.required` are supported, and the new implied `color` rule runs in PHP and in the browser. The panel is loaded on first use, so the main script stays small.
 - **Fields**: `segmented` (a Segmented Control: one of 2–5 short options) and `slider` (a number in a range with `min`, `max` and `step`, shown with its value). Both go through the normal sanitize, validate and save pipeline and mirror in RTL.
 
 ## [1.0.0-beta.2] - 2026-09-30

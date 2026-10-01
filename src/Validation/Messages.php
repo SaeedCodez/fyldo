@@ -44,6 +44,9 @@ final class Messages {
 			case 'number':
 				return __( 'Enter a number.', 'fyldo' );
 
+			case 'color':
+				return __( 'Enter a valid color, like #rrggbb.', 'fyldo' );
+
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
 

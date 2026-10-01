@@ -400,6 +400,13 @@ final class Demo {
 							'label'   => __( 'Show publish dates', 'fyldo' ),
 							'default' => true,
 						),
+						array(
+							'id'          => 'accent_color',
+							'type'        => 'color',
+							'label'       => __( 'Accent color', 'fyldo' ),
+							'description' => __( 'Used for links and buttons on your settings page.', 'fyldo' ),
+							'default'     => '#2271b1',
+						),
 					),
 				),
 				array(

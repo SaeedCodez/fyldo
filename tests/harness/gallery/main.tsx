@@ -9,6 +9,8 @@
  *       options are value:label:description:disabled:icon
  *   ?c=segmented-control&options=a:By order|b:By product|c:Simple&value=b   (hugs its content, as in the pack)
  *   ?c=slider&size=sm|md&state=default|disabled&label=…&helper=…&value=75&suffix=%   (320 wide; the value is formatted in the page's numerals)
+ *   ?c=color-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=#2271b1&helper=…&error=…   (320 wide; empty = the dashed swatch)
+ *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
  *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
@@ -52,6 +54,8 @@ import { FieldShell } from '../../../app/components/ui/field-shell';
 import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { SegmentedControl } from '../../../app/components/ui/segmented-control';
+import { ColorPickerField } from '../../../app/components/ui/color-picker-field';
+import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
@@ -204,6 +208,30 @@ function SliderDemo() {
       />
     </div>
   );
+}
+
+function ColorPickerDemo() {
+  const [value, setValue] = useState(param('value'));
+  return (
+    <div style={{ width: 320 }}>
+      <ColorPickerField
+        label={param('label')}
+        description={param('helper') || undefined}
+        placeholder={param('placeholder') || undefined}
+        size={size}
+        value={value}
+        onValueChange={setValue}
+        locale={locale}
+        error={state === 'error' ? param('error') : undefined}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
+}
+
+function ColorPickerPanelDemo() {
+  const [value, setValue] = useState(param('value', '#2271b1'));
+  return <ColorPickerPanel value={value} onValueChange={setValue} locale={locale} />;
 }
 
 function MultiSelectDemo() {
@@ -541,6 +569,10 @@ function Variant() {
       return <SegmentedDemo />;
     case 'slider':
       return <SliderDemo />;
+    case 'color-picker':
+      return <ColorPickerDemo />;
+    case 'color-picker-panel':
+      return <ColorPickerPanelDemo />;
     case 'notice':
       return (
         <div style={{ width: 560 }}>
@@ -646,7 +678,7 @@ function Variant() {
       return (
         <p>
           Pick a component:
-          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|segmented-control|slider|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
+          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|segmented-control|slider|color-picker|color-picker-panel|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
         </p>
       );
   }

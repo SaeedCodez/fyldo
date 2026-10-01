@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII, the Arabic decimal separator (U+066B) as \".\" and the Arabic thousands separator (U+066C) is removed: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, color, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII, the Arabic decimal separator (U+066B) as \".\" and the Arabic thousands separator (U+066C) is removed: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). `colors`: what a color field makes of any raw value (`sanitizeColor` in TS, `ColorField::read` in PHP): a colour in any accepted spelling (`#rgb`, `#rrggbb`, with or without the `#`, any case, surrounding space) becomes `#rrggbb` in lower case; other text is kept trimmed so the `color` rule can report it; a value that is not text is nothing. Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
   "cases": [
     { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
     { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
@@ -141,6 +141,19 @@
     { "name": "segmented: not one of the options", "rules": { "required": true, "allowed": ["order", "product", "simple"] }, "value": "other", "expect": "allowed" },
     { "name": "segmented: never empty", "rules": { "required": true, "allowed": ["order", "product", "simple"] }, "value": "", "expect": "required" },
 
+    { "name": "color: a stored colour passes", "rules": { "color": true }, "value": "#2271b1", "expect": null },
+    { "name": "color: short hex is not the stored form", "rules": { "color": true }, "value": "#abc", "expect": "color" },
+    { "name": "color: upper case is not the stored form", "rules": { "color": true }, "value": "#2271B1", "expect": "color" },
+    { "name": "color: a name is not a colour", "rules": { "color": true }, "value": "red", "expect": "color" },
+    { "name": "color: five digits", "rules": { "color": true }, "value": "#12345", "expect": "color" },
+    { "name": "color: seven digits", "rules": { "color": true }, "value": "#1234567", "expect": "color" },
+    { "name": "color: not hex digits", "rules": { "color": true }, "value": "#gggggg", "expect": "color" },
+    { "name": "color: the hash is required", "rules": { "color": true }, "value": "2271b1", "expect": "color" },
+    { "name": "color: alpha is not supported", "rules": { "color": true }, "value": "#2271b1ff", "expect": "color" },
+    { "name": "color: empty is optional", "rules": { "color": true }, "value": "", "expect": null },
+    { "name": "color: required and empty fails before color", "rules": { "required": true, "color": true }, "value": "", "expect": "required" },
+    { "name": "color: required and valid passes", "rules": { "required": true, "color": true }, "value": "#000000", "expect": null },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],
@@ -199,6 +212,28 @@
     { "name": "a JSON float", "input": 2.5, "expect": 2.5 },
     { "name": "a whole float becomes an int", "input": 4.0, "expect": 4 },
     { "name": "null is nothing", "input": null, "expect": "" },
+    { "name": "a boolean is nothing", "input": true, "expect": "" },
+    { "name": "a list is nothing", "input": [], "expect": "" }
+  ],
+  "colors": [
+    { "name": "a stored colour stays as it is", "input": "#2271b1", "expect": "#2271b1" },
+    { "name": "upper case is lowered", "input": "#2271B1", "expect": "#2271b1" },
+    { "name": "short hex is expanded", "input": "#abc", "expect": "#aabbcc" },
+    { "name": "short hex in upper case", "input": "#F0A", "expect": "#ff00aa" },
+    { "name": "the hash is optional", "input": "2271b1", "expect": "#2271b1" },
+    { "name": "short hex without a hash", "input": "abc", "expect": "#aabbcc" },
+    { "name": "surrounding spaces are ignored", "input": "  #2271B1 ", "expect": "#2271b1" },
+    { "name": "a trailing line break is ignored", "input": "#2271b1\n", "expect": "#2271b1" },
+    { "name": "empty is nothing", "input": "", "expect": "" },
+    { "name": "blank is nothing", "input": "   ", "expect": "" },
+    { "name": "four digits are not a colour (no alpha)", "input": "#abcd", "expect": "#abcd" },
+    { "name": "eight digits are not a colour (no alpha)", "input": "#2271b1ff", "expect": "#2271b1ff" },
+    { "name": "five digits are not a colour", "input": "#12345", "expect": "#12345" },
+    { "name": "not hex digits", "input": "#ggg", "expect": "#ggg" },
+    { "name": "a colour name is kept as text", "input": " red ", "expect": "red" },
+    { "name": "a double hash is not a colour", "input": "##abc", "expect": "##abc" },
+    { "name": "null is nothing", "input": null, "expect": "" },
+    { "name": "a number is nothing", "input": 123456, "expect": "" },
     { "name": "a boolean is nothing", "input": true, "expect": "" },
     { "name": "a list is nothing", "input": [], "expect": "" }
   ]

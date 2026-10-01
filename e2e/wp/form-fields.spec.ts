@@ -1,7 +1,7 @@
 /**
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
- * Segmented Control and a Slider.
+ * Segmented Control, a Slider and a Color Picker (its panel is a lazily loaded chunk).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -33,6 +33,8 @@ test.describe('English', () => {
     await expect(page.getByRole('radiogroup', { name: 'Sort products' })).toBeVisible();
     await expect(page.getByRole('radio', { name: 'By product' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '75');
+    const accent = page.getByRole('button', { name: 'Accent color' });
+    await expect(accent).toHaveText('#2271B1');
 
     await meta.fill('Line one\nLine two');
     await expect(page.locator('[data-slot=fy-counter]')).toHaveText('17/160'); // a line break is one character
@@ -45,6 +47,13 @@ test.describe('English', () => {
     await page.keyboard.press('ArrowRight'); // one step of 5
     await page.keyboard.press('ArrowRight');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
+    await accent.click();
+    await page.getByRole('radio', { name: '#d63638' }).click(); // a preset from the lazily loaded panel
+    await expect(page.getByRole('textbox', { name: 'Hex color' })).toHaveValue('#D63638');
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(accent).toBeFocused();
+    await expect(accent).toHaveText('#D63638');
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
@@ -59,6 +68,7 @@ test.describe('English', () => {
     await expect(page.getByRole('checkbox', { name: 'I agree to the terms' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('radio', { name: 'By order' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
+    await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     expect(errors).toEqual([]);
   });
 
@@ -504,6 +514,13 @@ test.describe('Persian (RTL)', () => {
     const lastSegment = await page.getByRole('radio', { name: 'Simple' }).boundingBox();
     expect(firstSegment!.x).toBeGreaterThan(lastSegment!.x);
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '۷۵');
+
+    // color picker: swatch at the start (right), chevron at the end (left); the hex value stays left to right
+    const accent = page.getByRole('button', { name: 'Accent color' });
+    await expect(accent.locator('bdi')).toHaveAttribute('dir', 'ltr');
+    const swatch = await accent.locator('[data-slot=fy-color-dot]').boundingBox();
+    const control = await accent.boundingBox();
+    expect(swatch!.x + swatch!.width).toBeGreaterThan(control!.x + control!.width / 2);
 
     // Persian validation messages (client: bundled JED; server: .mo)
     await page.getByRole('textbox', { name: 'Default meta description' }).fill('x'.repeat(161));

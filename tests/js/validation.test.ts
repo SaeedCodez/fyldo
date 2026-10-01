@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { sanitizeColor } from '../../app/lib/color';
 import { normalizeTyped, sanitizeNumber, toAsciiDigits } from '../../app/lib/digits';
 import { check, length, messageFor, validateValue } from '../../app/lib/validation';
 import type { RuleSet } from '../../app/types';
@@ -13,10 +14,11 @@ interface Case {
 }
 
 // The SAME file PHPUnit runs (tests/php/Unit/RulesTest.php): client and server cannot drift silently.
-const { cases, digits, numbers } = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/validation-cases.json'), 'utf8')) as {
+const { cases, digits, numbers, colors } = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/validation-cases.json'), 'utf8')) as {
   cases: Case[];
   digits: { name: string; type: string; input: string; expect: string }[];
   numbers: { name: string; input: unknown; expect: number | string }[];
+  colors: { name: string; input: unknown; expect: string }[];
 };
 
 describe('validation rules (shared fixture with PHP)', () => {
@@ -26,7 +28,7 @@ describe('validation rules (shared fixture with PHP)', () => {
 
   it('exercises every rule the PHP side knows', () => {
     const used = new Set(cases.flatMap((c) => Object.keys(c.rules)));
-    const known = ['required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'allowed', 'min', 'max', 'step'];
+    const known = ['required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'allowed', 'min', 'max', 'step'];
     expect(known.filter((r) => !used.has(r))).toEqual([]);
   });
 });
@@ -38,6 +40,10 @@ describe('digit normalisation (shared fixture with PHP)', () => {
 
   it.each(numbers.map((c) => [c.name, c] as const))('number: %s', (_name, c) => {
     expect(sanitizeNumber(c.input)).toBe(c.expect);
+  });
+
+  it.each(colors.map((c) => [c.name, c] as const))('color: %s', (_name, c) => {
+    expect(sanitizeColor(c.input)).toBe(c.expect);
   });
 
   it('never yields -0', () => {

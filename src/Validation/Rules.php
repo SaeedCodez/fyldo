@@ -16,10 +16,10 @@ namespace Fyldo\V1\Validation;
 final class Rules {
 
 	/**
-	 * Rules understood by both PHP and the client, in evaluation order. `email` and `number` are implied by the field
-	 * type (the value must be an address / a number); the others are declared by the developer.
+	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number` and `color` are implied by the
+	 * field type (the value must be an address / a number / `#rrggbb`); the others are declared by the developer.
 	 */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'allowed', 'min', 'max', 'step' );
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'allowed', 'min', 'max', 'step' );
 
 	/**
 	 * @param array<string,mixed> $rules Field `validate` array.
@@ -59,6 +59,10 @@ final class Rules {
 			// A number field stores int|float; text that could not be read as a number stays a string and lands here.
 			if ( ! empty( $rules['number'] ) ) {
 				return self::fail( 'number', array() );
+			}
+			// A color field stores `#rrggbb`; text the server could not read as a colour stays text and lands here.
+			if ( ! empty( $rules['color'] ) && 1 !== preg_match( '/^#[0-9a-f]{6}$/D', $value ) ) {
+				return self::fail( 'color', array() );
 			}
 		}
 

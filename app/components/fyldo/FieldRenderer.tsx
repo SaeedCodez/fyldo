@@ -5,6 +5,7 @@ import type { FieldDef, FieldValue } from '../../types';
 import { cn } from '../../lib/cn';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
+import { ColorPicker } from '../ui/color-picker';
 import { Input } from '../ui/input';
 import { MultiSelect } from '../ui/multi-select';
 import { Notice } from '../ui/notice';
@@ -132,6 +133,20 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
             value={typeof value === 'number' ? value : field.min}
             formatValue={(n) => formatNumber(n, locale)}
             showValue
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+
+    case 'color':
+      return (
+        <SettingRow {...common}>
+          <ColorPicker
+            value={typeof value === 'string' ? value : ''}
+            presets={field.presets}
+            disabled={disabled}
+            locale={locale}
             onValueChange={(next) => onChange(field.id, next)}
             onBlur={() => onBlur(field.id)}
           />
