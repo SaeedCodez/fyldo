@@ -22,7 +22,7 @@
                     "description": "Shown in the browser tab and in search results.",
                     "default": "Fyldo",
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {
                         "required": true,
                         "max_length": 60
@@ -36,7 +36,7 @@
                     "description": "A short sentence that explains what the site is about.",
                     "default": "Settings panels for WordPress",
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {},
                     "placeholder": ""
                 },
@@ -66,7 +66,7 @@
                     "description": "Default language for the interface and emails.",
                     "default": "en_US",
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {
                         "allowed": [
                             "en_US",
@@ -126,7 +126,7 @@
                     "description": "Used to schedule posts and reports.",
                     "default": "Asia/Tehran",
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {
                         "allowed": [
                             "UTC",

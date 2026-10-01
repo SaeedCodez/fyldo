@@ -19,7 +19,7 @@ final class TextField extends AbstractField {
 	}
 
 	protected function default_layout(): string {
-		return 'stacked';
+		return 'field';
 	}
 
 	protected function extra_keys(): array {

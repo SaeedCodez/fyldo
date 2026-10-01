@@ -45,7 +45,7 @@
                     "description": "In minutes, between 5 and 1440.",
                     "default": 60,
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {
                         "min": 5,
                         "max": 1440,
@@ -79,7 +79,7 @@
                     "description": "Letters, digits and dashes only.",
                     "default": "acme",
                     "disabled": false,
-                    "layout": "stacked",
+                    "layout": "field",
                     "validate": {
                         "required": true,
                         "pattern": "^[a-z0-9-]+$"

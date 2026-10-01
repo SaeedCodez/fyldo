@@ -85,7 +85,7 @@ final class FormFieldsTest extends TestCase {
 
 		$this->assertSame( "Line one\nLine two bold", $field->sanitize( "  Line one\r\nLine two <b>bold</b>  " ) );
 		$this->assertSame( '', $field->sanitize( array( 'x' ) ), 'Non-scalars become an empty string.' );
-		$this->assertSame( 'stacked', $field->to_client()['layout'] );
+		$this->assertSame( 'field', $field->to_client()['layout'] );
 		$this->assertSame( '', $field->default_value() );
 	}
 
@@ -263,7 +263,7 @@ final class FormFieldsTest extends TestCase {
 		$client = $this->multi( array( 'placeholder' => 'Select content types…', 'default' => array( 'page', 'post' ) ) )->to_client();
 
 		$this->assertSame( 'multi_select', $client['type'] );
-		$this->assertSame( 'stacked', $client['layout'] );
+		$this->assertSame( 'field', $client['layout'] );
 		$this->assertSame( 'Select content types…', $client['placeholder'] );
 		$this->assertTrue( $client['searchable'], 'The popup search row is on by default.' );
 		$this->assertFalse( $client['clearable'], 'The inline Clear button is opt-in (Figma "Clear button" defaults to off).' );
@@ -311,7 +311,7 @@ final class FormFieldsTest extends TestCase {
 		$this->assertSame( 'This field is required.', $field->validate( '' ) );
 		$this->assertSame( '', $field->sanitize( array( 'index' ) ) );
 		$this->assertSame( 'index', $field->default_value() );
-		$this->assertSame( 'stacked', $field->to_client()['layout'] );
+		$this->assertSame( 'field', $field->to_client()['layout'] );
 		$this->assertEquals(
 			array( 'required' => true, 'allowed' => array( 'index', 'noindex' ) ),
 			(array) $field->to_client()['validate']
