@@ -212,7 +212,13 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     const footer = await page.getByRole('navigation', { name: 'Resources' }).boundingBox();
     expect(Math.round(footer!.y + footer!.height)).toBe(900);
 
-    // sticky: after scrolling the content, the sidebar is still right below the admin bar
+    // sticky: after scrolling the content, the sidebar is still right below the admin bar.
+    // The page may fit the viewport (the `field` layout keeps rows short), so add height to the content column first.
+    await page.locator('[data-slot=fy-section-card]').first().evaluate((card) => {
+      const spacer = document.createElement('div');
+      spacer.style.height = '1200px';
+      card.parentElement?.append(spacer);
+    });
     await page.mouse.wheel(0, 600);
     await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
     expect(Math.round((await sidebar.boundingBox())!.y)).toBe(Math.round(bar!.height));
