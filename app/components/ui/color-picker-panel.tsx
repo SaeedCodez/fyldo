@@ -200,6 +200,7 @@ function Presets({ presets, value, onSelect }: { presets: readonly string[]; val
       <span id={labelId} className="fy:text-label-13 fy:text-text-secondary">
         {__('Presets', 'fyldo')}
       </span>
+      {/* eslint-disable-next-line jsx-a11y/interactive-supports-focus -- roving tabindex: the group itself is not a tab stop, exactly one radio inside it is */}
       <div role="radiogroup" aria-labelledby={labelId} onKeyDown={onKeyDown}
         onBlur={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget)) setFocused(null);
