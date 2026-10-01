@@ -109,7 +109,8 @@ function Slider({ dir = 'ltr', disabled = false }: { dir?: 'ltr' | 'rtl'; disabl
 }
 
 describe('Slider', () => {
-  // Base UI keeps the edge-aligned thumb hidden until it has measured the control; jsdom has no layout, so give it sizes.
+  // Base UI keeps the edge-aligned thumb hidden until it has measured the control (in a microtask, after mount); jsdom has no
+  // layout, so give it sizes, and find the slider with `findByRole`, which waits for it.
   beforeEach(() => {
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(function (this: HTMLElement) {
       const width = this.dataset.slot === 'fy-slider-thumb' ? 32 : 320;
@@ -118,9 +119,9 @@ describe('Slider', () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
-  it('is a named slider; the value shown in the header is the same text as aria-valuetext, always LTR', () => {
+  it('is a named slider; the value shown in the header is the same text as aria-valuetext, always LTR', async () => {
     render(<Slider dir="rtl" />);
-    const slider = screen.getByRole('slider', { name: 'Image quality' });
+    const slider = await screen.findByRole('slider', { name: 'Image quality' });
     expect(slider).toHaveAccessibleDescription('Higher quality creates larger files.');
     expect(slider).toHaveAttribute('aria-valuetext', '75%');
     expect(slider).toHaveValue('75');
@@ -131,7 +132,7 @@ describe('Slider', () => {
 
   it('arrows move one step, Home/End jump to the ends, PageUp/PageDown move a tenth of the range', async () => {
     render(<Slider />);
-    const slider = screen.getByRole('slider', { name: 'Image quality' });
+    const slider = await screen.findByRole('slider', { name: 'Image quality' });
     slider.focus();
     await userEvent.keyboard('{ArrowRight}');
     expect(slider).toHaveAttribute('aria-valuetext', '80%');
@@ -152,7 +153,7 @@ describe('Slider', () => {
 
   it('in RTL the horizontal arrows are mirrored: the value grows to the left', async () => {
     render(<Slider dir="rtl" />);
-    const slider = screen.getByRole('slider', { name: 'Image quality' });
+    const slider = await screen.findByRole('slider', { name: 'Image quality' });
     slider.focus();
     await userEvent.keyboard('{ArrowLeft}');
     expect(slider).toHaveAttribute('aria-valuetext', '80%');
@@ -162,7 +163,7 @@ describe('Slider', () => {
 
   it('a disabled slider ignores the keyboard and says so', async () => {
     render(<Slider disabled />);
-    const slider = screen.getByRole('slider', { name: 'Image quality' });
+    const slider = await screen.findByRole('slider', { name: 'Image quality' });
     expect(slider).toBeDisabled();
     await userEvent.keyboard('{ArrowRight}');
     expect(slider).toHaveAttribute('aria-valuetext', '75%');
@@ -190,7 +191,7 @@ describe('Slider', () => {
         </div>
       </DirectionProvider>,
     );
-    const slider = screen.getByRole('slider', { name: 'کیفیت تصویر' });
+    const slider = await screen.findByRole('slider', { name: 'کیفیت تصویر' });
     expect(slider).toHaveAttribute('aria-valuetext', '۷۵');
     expect(document.querySelector('[data-slot=fy-slider-value]')).toHaveTextContent('۷۵');
     slider.focus();
