@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
-import { __ } from '../../i18n';
+import { __, formatNumber } from '../../i18n';
 import type { FieldDef, FieldValue } from '../../types';
 import { cn } from '../../lib/cn';
 import { length } from '../../lib/validation';
@@ -11,7 +11,9 @@ import { Notice } from '../ui/notice';
 import { NumberInput } from '../ui/number-input';
 import { PasswordInput } from '../ui/password-input';
 import { RadioGroup } from '../ui/radio';
+import { SegmentedControl } from '../ui/segmented-control';
 import { Select } from '../ui/select';
+import { Slider } from '../ui/slider';
 import { Textarea, TextareaFooter } from '../ui/textarea';
 import { Toggle } from '../ui/toggle';
 import { SettingRow } from './SettingRow';
@@ -25,6 +27,8 @@ export interface FieldRendererProps {
   onBlur: (id: string) => void;
   /** The page's stored revision: a password shown in clear is hidden again when it changes (a successful save). */
   revision?: string;
+  /** The page's locale: a Slider's value is written in its numerals (۷۵ in Persian). */
+  locale?: string;
 }
 
 /** `onBlur` for a group: only when focus leaves the group, not when it moves between its options. */
@@ -35,7 +39,7 @@ const leavesGroup = (done: () => void) => (event: FocusEvent<HTMLElement>) => {
 const list = (value: FieldValue): string[] => (Array.isArray(value) ? value : []);
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
-export function FieldRenderer({ field, value, error, divider, onChange, onBlur, revision }: FieldRendererProps): ReactElement {
+export function FieldRenderer({ field, value, error, divider, onChange, onBlur, revision, locale = 'en' }: FieldRendererProps): ReactElement {
   // Display only: no value, no label association, nothing to change, nothing to send.
   if (field.type === 'notice') {
     return (
@@ -99,6 +103,37 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
             disabled={disabled}
             onValueChange={(next) => onChange(field.id, next)}
             onBlur={leavesGroup(() => onBlur(field.id))}
+          />
+        </SettingRow>
+      );
+
+    case 'segmented':
+      return (
+        <SettingRow {...common} group>
+          <SegmentedControl
+            options={field.options}
+            value={typeof value === 'string' ? value : ''}
+            disabled={disabled}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={leavesGroup(() => onBlur(field.id))}
+          />
+        </SettingRow>
+      );
+
+    case 'slider':
+      return (
+        <SettingRow {...common}>
+          <Slider
+            size="md"
+            min={field.min}
+            max={field.max}
+            step={field.step}
+            // Not a number (a hand-edited option): park the thumb at the start; the first move writes a real value.
+            value={typeof value === 'number' ? value : field.min}
+            formatValue={(n) => formatNumber(n, locale)}
+            showValue
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
           />
         </SettingRow>
       );

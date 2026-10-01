@@ -253,6 +253,59 @@
                     "placeholder": ""
                 },
                 {
+                    "id": "sort_by",
+                    "type": "segmented",
+                    "label": "Sort products",
+                    "description": "Choose how the list is grouped.",
+                    "default": "product",
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "required": true,
+                        "allowed": [
+                            "order",
+                            "product",
+                            "simple"
+                        ]
+                    },
+                    "options": [
+                        {
+                            "value": "order",
+                            "label": "By order",
+                            "disabled": false
+                        },
+                        {
+                            "value": "product",
+                            "label": "By product",
+                            "disabled": false
+                        },
+                        {
+                            "value": "simple",
+                            "label": "Simple",
+                            "disabled": false
+                        }
+                    ]
+                },
+                {
+                    "id": "image_quality",
+                    "type": "slider",
+                    "label": "Image quality",
+                    "description": "Higher quality creates larger files.",
+                    "default": 75,
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "number": true,
+                        "required": true,
+                        "min": 0,
+                        "max": 100,
+                        "step": 5
+                    },
+                    "min": 0,
+                    "max": 100,
+                    "step": 5
+                },
+                {
                     "id": "license_key",
                     "type": "text",
                     "label": "License key",
@@ -300,6 +353,8 @@
         "contact_email": "",
         "api_key": "",
         "per_page": 10,
+        "sort_by": "product",
+        "image_quality": 75,
         "license_key": "FYLDO-FREE"
     },
     "revision": "rev-1"

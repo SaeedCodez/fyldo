@@ -124,6 +124,28 @@ return array(
 					'validate'    => array( 'min' => 5, 'max' => 100, 'step' => 5 ),
 				),
 				array(
+					'id'          => 'sort_by',
+					'type'        => 'segmented',
+					'label'       => 'Sort products',
+					'description' => 'Choose how the list is grouped.',
+					'default'     => 'product',
+					'options'     => array(
+						'order'   => 'By order',
+						'product' => 'By product',
+						'simple'  => 'Simple',
+					),
+				),
+				array(
+					'id'          => 'image_quality',
+					'type'        => 'slider',
+					'label'       => 'Image quality',
+					'description' => 'Higher quality creates larger files.',
+					'default'     => 75,
+					'min'         => 0,
+					'max'         => 100,
+					'step'        => 5,
+				),
+				array(
 					'id'          => 'license_key',
 					'type'        => 'text',
 					'label'       => 'License key',

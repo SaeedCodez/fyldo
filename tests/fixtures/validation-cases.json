@@ -125,6 +125,22 @@
     { "name": "number: all four together, off the grid", "rules": { "number": true, "min": 1, "max": 10, "step": 3 }, "value": 5, "expect": "step" },
     { "name": "step: an empty optional number is not checked", "rules": { "step": 5 }, "value": "", "expect": null },
 
+    { "name": "slider: the rules a slider exports, value at min", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": 0, "expect": null },
+    { "name": "slider: value at max", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": 100, "expect": null },
+    { "name": "slider: below min is rejected, not clamped", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": -5, "expect": "min" },
+    { "name": "slider: above max is rejected, not clamped", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": 105, "expect": "max" },
+    { "name": "slider: off the step grid", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": 33, "expect": "step" },
+    { "name": "slider: nothing is never valid (a slider always has a value)", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": "", "expect": "required" },
+    { "name": "slider: text that is not a number", "rules": { "required": true, "number": true, "min": 0, "max": 100, "step": 5 }, "value": "abc", "expect": "number" },
+    { "name": "slider: the grid starts at min (10, 25, 40)", "rules": { "required": true, "number": true, "min": 10, "max": 50, "step": 15 }, "value": 25, "expect": null },
+    { "name": "slider: the grid starts at min (30 is off it)", "rules": { "required": true, "number": true, "min": 10, "max": 50, "step": 15 }, "value": 30, "expect": "step" },
+    { "name": "slider: decimal step (0.3 on a 0.1 grid)", "rules": { "required": true, "number": true, "min": 0, "max": 1, "step": 0.1 }, "value": 0.3, "expect": null },
+    { "name": "slider: decimal step, off the grid", "rules": { "required": true, "number": true, "min": 0, "max": 1, "step": 0.1 }, "value": 0.35, "expect": "step" },
+
+    { "name": "segmented: an enabled option", "rules": { "required": true, "allowed": ["order", "product", "simple"] }, "value": "product", "expect": null },
+    { "name": "segmented: not one of the options", "rules": { "required": true, "allowed": ["order", "product", "simple"] }, "value": "other", "expect": "allowed" },
+    { "name": "segmented: never empty", "rules": { "required": true, "allowed": ["order", "product", "simple"] }, "value": "", "expect": "required" },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],

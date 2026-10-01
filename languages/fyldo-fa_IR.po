@@ -14,11 +14,32 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Domain: fyldo\n"
 
+msgid "By order"
+msgstr "بر اساس سفارش"
+
+msgid "By product"
+msgstr "بر اساس محصول"
+
+msgid "Choose how the list is grouped."
+msgstr "نحوه‌ی گروه‌بندی فهرست را انتخاب کنید."
+
 msgid "Fyldo"
 msgstr "فیلدو"
 
+msgid "Higher quality creates larger files."
+msgstr "کیفیت بالاتر فایل‌های بزرگ‌تری می‌سازد."
+
+msgid "Image quality"
+msgstr "کیفیت تصویر"
+
 msgid "Settings-page framework for WordPress plugin developers. Declare pages, sections and fields in PHP; get a modern admin UI with REST-backed validation and saving."
 msgstr "چارچوب صفحه‌ی تنظیمات برای توسعه‌دهندگان افزونه‌ی وردپرس. صفحه‌ها، بخش‌ها و فیلدها را در PHP تعریف کنید و یک رابط مدیریتی مدرن با اعتبارسنجی و ذخیره‌سازی از طریق REST دریافت کنید."
+
+msgid "Simple"
+msgstr "ساده"
+
+msgid "Sort products"
+msgstr "ترتیب نمایش"
 
 msgid "You have unsaved changes"
 msgstr "تغییرات ذخیره‌نشده دارید"

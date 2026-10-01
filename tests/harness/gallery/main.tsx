@@ -7,6 +7,8 @@
  *   ?c=checkbox-group / ?c=radio-group — the option cards of the "Checkbox & Radio · Usage" frame
  *       (?title=&description=&options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled&value=post&parent=All)
  *       options are value:label:description:disabled:icon
+ *   ?c=segmented-control&options=a:By order|b:By product|c:Simple&value=b   (hugs its content, as in the pack)
+ *   ?c=slider&size=sm|md&state=default|disabled&label=…&helper=…&value=75&suffix=%   (320 wide; the value is formatted in the page's numerals)
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
  *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
@@ -49,6 +51,8 @@ import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
 import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
+import { SegmentedControl } from '../../../app/components/ui/segmented-control';
+import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
 import { EmptyState } from '../../../app/components/ui/empty-state';
@@ -62,7 +66,7 @@ import { SelectField } from '../../../app/components/ui/select-field';
 import { Tag, type TagSize } from '../../../app/components/ui/tag';
 import { TextField } from '../../../app/components/ui/text-field';
 import { Toggle } from '../../../app/components/ui/toggle';
-import { setLocaleData } from '../../../app/i18n';
+import { formatNumber, setLocaleData } from '../../../app/i18n';
 import { preloadIcons } from '../../../app/icons/registry';
 import { PortalContainerContext } from '../../../app/lib/portal';
 import '../../../app/styles/app.css';
@@ -177,6 +181,29 @@ function CheckboxGroupDemo() {
 function RadioGroupDemo() {
   const [value, setValue] = useState(param('value'));
   return <RadioGroup options={optionsParam()} value={value} onValueChange={setValue} />;
+}
+
+function SegmentedDemo() {
+  const [value, setValue] = useState(param('value'));
+  return <SegmentedControl aria-label={param('label', 'View')} options={optionsParam()} value={value} onValueChange={setValue} disabled={state === 'disabled'} />;
+}
+
+function SliderDemo() {
+  const [value, setValue] = useState(Number(param('value', '75')));
+  const suffix = param('suffix');
+  return (
+    <div style={{ width: 320 }}>
+      <SliderField
+        label={param('label')}
+        description={param('helper') || undefined}
+        size={size === 'md' ? 'md' : 'sm'}
+        value={value}
+        onValueChange={setValue}
+        formatValue={(n) => formatNumber(n, rtl ? 'fa' : 'en') + suffix}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
 }
 
 function MultiSelectDemo() {
@@ -510,6 +537,10 @@ function Variant() {
       );
     case 'multi-select':
       return <MultiSelectDemo />;
+    case 'segmented-control':
+      return <SegmentedDemo />;
+    case 'slider':
+      return <SliderDemo />;
     case 'notice':
       return (
         <div style={{ width: 560 }}>
@@ -615,7 +646,7 @@ function Variant() {
       return (
         <p>
           Pick a component:
-          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
+          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|segmented-control|slider|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
         </p>
       );
   }

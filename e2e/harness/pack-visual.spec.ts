@@ -265,3 +265,84 @@ for (const locale of ['EN', 'FA'] as const) {
     await close();
   });
 }
+
+// ── Segmented Control ────────────────────────────────────────────────────────────────────────────────────
+// Default variant (the second segment selected), one test per locale. EN compares the whole component; FA is set in a
+// different font, so segment widths differ: it compares the end cap of the track on the inline-start side (the pack
+// draws the first option on the right), which is text-free. Layout is asserted in pack-parity.spec.ts.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Segmented Control ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('segmented-control', { Locale: locale });
+    const segments = (v.node.children ?? []).filter((n) => n.name === 'Segment');
+    // The FA frame lists its layers left to right; the options run the other way (first option on the right).
+    const ordered = locale === 'FA' ? [...segments].reverse() : segments;
+    const options = ordered.map((n, i) => `s${i}:${n.instance?.texts.Label ?? ''}`).join('|');
+    const selected = ordered.findIndex((n) => n.instance?.variant.includes('State=Selected'));
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, { c: 'segmented-control', dir: locale === 'FA' ? 'rtl' : 'ltr', options, value: `s${selected}` });
+    await still(page);
+    const size = pngSize(readFileSync(pngPath('segmented-control', v)));
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('segmented-control', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const cap = 12; // radius/lg
+      const width = size.width / SCALE;
+      const ours = await box(stage);
+      await comparePixels({
+        page,
+        testInfo,
+        reference: pngPath('segmented-control', v),
+        scale: SCALE,
+        stage,
+        referenceRegion: { x: width - cap, y: 0, width: cap, height: size.height / SCALE },
+        actualRegion: { x: ours.width - cap, y: 0, width: cap, height: size.height / SCALE },
+        maxDiffRatio: 0.03,
+      });
+    }
+    await close();
+  });
+}
+
+// ── Slider ───────────────────────────────────────────────────────────────────────────────────────────────
+// Default variant: Small, Position 75, Default. `Position` is only Figma's showcase of the thumb, and Figma draws the range
+// as a share of the track with the thumb at its end; the component keeps the thumb inside the track at both ends, so the
+// thumb sits a few px off Figma's showcase (7px at 75%). EN compares the whole component; FA (a different font) the control.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Slider ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('slider', { Locale: locale, Size: 'Small', Position: '75', State: 'Default' });
+    const root = v.node;
+    const control = layer(root, 'Control');
+    const valueText = layer(root, 'Value').text?.characters ?? '';
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'slider',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      size: 'sm',
+      label: layer(root, 'Label').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+      value: String(digits(valueText)[0] ?? 0),
+      suffix: valueText.replace(/[\d۰-۹٠-٩]/g, ''),
+    });
+    await still(page);
+    const size = pngSize(readFileSync(pngPath('slider', v)));
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('slider', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const region = rect(control, root);
+      const ours = await box(stage.locator('[data-slot=fy-slider-control]'));
+      const s = await box(stage);
+      await comparePixels({
+        page,
+        testInfo,
+        reference: pngPath('slider', v),
+        scale: SCALE,
+        stage,
+        referenceRegion: region,
+        actualRegion: { x: ours.x - s.x, y: ours.y - s.y, width: region.width, height: region.height },
+        maxDiffRatio: 0.1,
+      });
+      if (Math.abs(size.height / SCALE - (await box(stage)).height) > 8) throw new Error(`Slider height ${(await box(stage)).height} is far from the pack's ${size.height / SCALE}`);
+    }
+    await close();
+  });
+}
