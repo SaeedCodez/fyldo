@@ -303,6 +303,63 @@ for (const locale of ['EN', 'FA'] as const) {
   });
 }
 
+// ── Choice Card and Choice Card Group ───────────────────────────────────────────────────────────────────
+// ONE pixel test each: the default variant (Image and text, nothing checked for the card; Columns 2, first option checked
+// for the group), EN + FA. EN compares the whole component. FA is set in a different font, so it compares the text-free
+// part: the image area of the card / of the first row of the group (borders, corner radii, the check badge on the end side).
+// The picture is the pack's placeholder art, drawn by the gallery. Layout is the same code in both locales.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Choice Card ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('choice-card', { Locale: locale, Content: 'Image and text', Checked: 'False', State: 'Default' });
+    const root = v.node;
+    const image = layer(root, 'Image');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'choice-card',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      content: 'image_text',
+      checked: '0',
+      label: layer(root, 'Label').text?.characters ?? '',
+      description: layer(root, 'Description').text?.characters ?? '',
+    });
+    await still(page);
+    const size = pngSize(readFileSync(pngPath('choice-card', v)));
+    const width = size.width / SCALE;
+    const region: Rect = locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: image.y - root.y + image.height };
+    await comparePixels({ page, testInfo, reference: pngPath('choice-card', v), scale: SCALE, stage, referenceRegion: region, actualRegion: region, maxDiffRatio: locale === 'EN' ? 0.08 : 0.05 });
+    await close();
+  });
+
+  test(`Choice Card Group ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('choice-card-group', { Locale: locale, Content: 'Image and text', Columns: '2', State: 'Default' });
+    const root = v.node;
+    const optionsFrame = layer(root, 'Options');
+    // The FA frame lists its layers in the order they sit (right to left); the options themselves run Option 1, 2, 3…
+    const cards = (optionsFrame.children ?? []).filter((n) => n.name.startsWith('Option ')).sort((a, b) => Number(a.name.slice(7)) - Number(b.name.slice(7)));
+    const checked = cards.findIndex((n) => n.instance?.variant.includes('Checked=True'));
+    const options = cards.map((n, i) => `o${i}:${n.instance?.texts.Label ?? ''}:${n.instance?.texts.Description ?? ''}`).join('|');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'choice-card-group',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      content: 'image_text',
+      columns: '2',
+      label: layer(root, 'Label').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+      options,
+      value: `o${checked}`,
+    });
+    await still(page);
+    const size = pngSize(readFileSync(pngPath('choice-card-group', v)));
+    const width = size.width / SCALE;
+    const first = cards[0] as Node;
+    const firstRowImageBottom = optionsFrame.y - root.y + 2 + ((first.width - 4) * 10) / 16;
+    const region: Rect = locale === 'EN' ? { x: 0, y: 0, width, height: size.height / SCALE } : { x: 0, y: 0, width, height: firstRowImageBottom };
+    await comparePixels({ page, testInfo, reference: pngPath('choice-card-group', v), scale: SCALE, stage, referenceRegion: region, actualRegion: region, maxDiffRatio: locale === 'EN' ? 0.06 : 0.05 });
+    await close();
+  });
+}
+
 // ── Slider ───────────────────────────────────────────────────────────────────────────────────────────────
 // Default variant: Small, Position 75, Default. `Position` is only Figma's showcase of the thumb, and Figma draws the range
 // as a share of the track with the thumb at its end; the component keeps the thumb inside the track at both ends, so the

@@ -32,6 +32,8 @@ test.describe('English', () => {
     await expect(page.getByRole('radio', { name: 'Full width' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('radiogroup', { name: 'Sort products' })).toBeVisible();
     await expect(page.getByRole('radio', { name: 'By product' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('radiogroup', { name: 'Dashboard density' })).toBeVisible();
+    await expect(page.getByRole('radio', { name: 'Comfortable' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '75');
     const accent = page.getByRole('button', { name: 'Accent color' });
     await expect(accent).toHaveText('#2271B1');
@@ -43,6 +45,8 @@ test.describe('English', () => {
     await page.getByRole('radio', { name: 'Boxed' }).click();
     await page.getByRole('checkbox', { name: 'I agree to the terms' }).click();
     await page.getByRole('radio', { name: 'By order' }).click();
+    await page.getByRole('radio', { name: 'Spacious' }).click(); // a Choice Card
+    await expect(page.getByRole('radio', { name: 'Comfortable' })).toHaveAttribute('aria-checked', 'false');
     await page.getByRole('slider', { name: 'Image quality' }).focus();
     await page.keyboard.press('ArrowRight'); // one step of 5
     await page.keyboard.press('ArrowRight');
@@ -67,6 +71,7 @@ test.describe('English', () => {
     await expect(page.getByRole('radio', { name: 'Boxed' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('checkbox', { name: 'I agree to the terms' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('radio', { name: 'By order' })).toHaveAttribute('aria-checked', 'true');
+    await expect(page.getByRole('radio', { name: 'Spacious' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     expect(errors).toEqual([]);
@@ -514,6 +519,11 @@ test.describe('Persian (RTL)', () => {
     const lastSegment = await page.getByRole('radio', { name: 'Simple' }).boundingBox();
     expect(firstSegment!.x).toBeGreaterThan(lastSegment!.x);
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '۷۵');
+
+    // choice cards: the first card sits on the right, the last on the left
+    const firstCard = await page.getByRole('radio', { name: 'Compact' }).boundingBox();
+    const lastCard = await page.getByRole('radio', { name: 'Spacious' }).boundingBox();
+    expect(firstCard!.x).toBeGreaterThan(lastCard!.x);
 
     // color picker: swatch at the start (right), chevron at the end (left); the hex value stays left to right
     const accent = page.getByRole('button', { name: 'Accent color' });

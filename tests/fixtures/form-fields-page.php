@@ -136,6 +136,19 @@ return array(
 					),
 				),
 				array(
+					'id'          => 'density',
+					'type'        => 'choice',
+					'label'       => 'Dashboard density',
+					'description' => 'How much fits on one screen.',
+					'default'     => 'comfortable',
+					'columns'     => 3,
+					'options'     => array(
+						array( 'value' => 'compact', 'label' => 'Compact', 'description' => 'Tighter rows.' ),
+						array( 'value' => 'comfortable', 'label' => 'Comfortable', 'description' => 'Balanced spacing.' ),
+						array( 'value' => 'spacious', 'label' => 'Spacious', 'description' => 'Room to breathe.' ),
+					),
+				),
+				array(
 					'id'          => 'image_quality',
 					'type'        => 'slider',
 					'label'       => 'Image quality',

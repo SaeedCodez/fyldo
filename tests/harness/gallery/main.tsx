@@ -8,6 +8,8 @@
  *       (?title=&description=&options=post:Posts|page:Pages|product:Products:Available in Pro.:disabled&value=post&parent=All)
  *       options are value:label:description:disabled:icon
  *   ?c=segmented-control&options=a:By order|b:By product|c:Simple&value=b   (hugs its content, as in the pack)
+ *   ?c=choice-card&content=image_text|image|text&checked=0|1&state=default|disabled&label=…&description=…   (280 wide, the pack's placeholder art)
+ *   ?c=choice-card-group&content=image_text|image|text&columns=2|3|4&state=default|error|disabled&label=…&helper=…&error=…&options=a:Light:Bright surfaces|b:Dark:Low-light ready&value=a   (576 wide)
  *   ?c=slider&size=sm|md&state=default|disabled&label=…&helper=…&value=75&suffix=%   (320 wide; the value is formatted in the page's numerals)
  *   ?c=color-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=#2271b1&helper=…&error=…   (320 wide; empty = the dashed swatch)
  *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
@@ -33,6 +35,7 @@
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Field } from '@base-ui/react/field';
+import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { NavItem } from '../../../app/components/fyldo/NavItem';
@@ -53,6 +56,8 @@ import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
 import { GroupField } from '../../../app/components/ui/group-field';
 import { RadioGroup } from '../../../app/components/ui/radio';
+import { ChoiceCard, type ChoiceCardContent } from '../../../app/components/ui/choice-card';
+import { ChoiceCardGroup } from '../../../app/components/ui/choice-card-group';
 import { SegmentedControl } from '../../../app/components/ui/segmented-control';
 import { ColorPickerField } from '../../../app/components/ui/color-picker-field';
 import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel';
@@ -190,6 +195,52 @@ function RadioGroupDemo() {
 function SegmentedDemo() {
   const [value, setValue] = useState(param('value'));
   return <SegmentedControl aria-label={param('label', 'View')} options={optionsParam()} value={value} onValueChange={setValue} disabled={state === 'disabled'} />;
+}
+
+/** The pack's placeholder art (sun, mountain, hill; `border/default`, `border/strong`, `border/hover`) as a picture, 16:10. Not an asset of the product. */
+const CARD_ART =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 276 172.5" preserveAspectRatio="none">' +
+      '<rect width="276" height="172.5" fill="#ebebeb"/><circle cx="204.05" cy="40.11" r="10.85" fill="#ffffff"/>' +
+      '<polygon points="110,74.49 33.12,172.5 186.89,172.5" fill="#a8a8a8"/>' +
+      '<polygon points="186.1,109.77 126.96,172.5 245.25,172.5" fill="#c9c9c9"/></svg>',
+  );
+
+function ChoiceCardDemo() {
+  const content = param('content', 'image_text') as ChoiceCardContent;
+  return (
+    <div style={{ width: 280 }}>
+      <BaseRadioGroup value={q.get('checked') === '1' ? 'a' : ''} onValueChange={() => undefined} disabled={state === 'disabled'}>
+        <ChoiceCard
+          option={{ value: 'a', label: param('label', 'Light'), description: param('description') || undefined, image: CARD_ART }}
+          content={content}
+          disabled={state === 'disabled'}
+        />
+      </BaseRadioGroup>
+    </div>
+  );
+}
+
+function ChoiceCardGroupDemo() {
+  const [value, setValue] = useState(param('value'));
+  const content = param('content', 'image_text') as ChoiceCardContent;
+  const options = optionsParam().map((option) => ({ ...option, ...(content === 'text' ? {} : { image: CARD_ART }) }));
+  return (
+    <div style={{ width: 576 }}>
+      <ChoiceCardGroup
+        label={param('label')}
+        description={param('helper') || undefined}
+        error={state === 'error' ? param('error') : undefined}
+        options={options}
+        content={content}
+        columns={Number(param('columns', '2')) as 2 | 3 | 4}
+        value={value}
+        onValueChange={setValue}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
 }
 
 function SliderDemo() {
@@ -567,6 +618,10 @@ function Variant() {
       return <MultiSelectDemo />;
     case 'segmented-control':
       return <SegmentedDemo />;
+    case 'choice-card':
+      return <ChoiceCardDemo />;
+    case 'choice-card-group':
+      return <ChoiceCardGroupDemo />;
     case 'slider':
       return <SliderDemo />;
     case 'color-picker':
@@ -678,7 +733,7 @@ function Variant() {
       return (
         <p>
           Pick a component:
-          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|segmented-control|slider|color-picker|color-picker-panel|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
+          ?c=button|input|toggle|select|textarea|checkbox|radio|checkbox-group|radio-group|segmented-control|choice-card|choice-card-group|slider|color-picker|color-picker-panel|tag|multi-select|notice|badge|nav-item|tab|tabs|sidebar|top-navigation|page-header|section-card
         </p>
       );
   }

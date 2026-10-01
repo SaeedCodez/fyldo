@@ -11,6 +11,7 @@ import { MultiSelect } from '../ui/multi-select';
 import { Notice } from '../ui/notice';
 import { NumberInput } from '../ui/number-input';
 import { PasswordInput } from '../ui/password-input';
+import { ChoiceCards } from '../ui/choice-card';
 import { RadioGroup } from '../ui/radio';
 import { SegmentedControl } from '../ui/segmented-control';
 import { Select } from '../ui/select';
@@ -100,6 +101,21 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
         <SettingRow {...common} group>
           <RadioGroup
             options={field.options}
+            value={typeof value === 'string' ? value : ''}
+            disabled={disabled}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={leavesGroup(() => onBlur(field.id))}
+          />
+        </SettingRow>
+      );
+
+    case 'choice':
+      return (
+        <SettingRow {...common} group cards>
+          <ChoiceCards
+            options={field.options}
+            content={field.content}
+            columns={field.columns}
             value={typeof value === 'string' ? value : ''}
             disabled={disabled}
             onValueChange={(next) => onChange(field.id, next)}

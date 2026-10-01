@@ -13,6 +13,9 @@
 /* wp-admin's own breakpoint: at 782px and below the admin goes mobile (46px admin bar, no side menu). */
 @custom-variant wp-mobile (@media (max-width: 782px));
 
+/* Phones: one column of Choice Cards (declared after `wp-mobile` so it wins when both match). */
+@custom-variant narrow (@media (max-width: 480px));
+
 /* Geometry (not just direction) changes in RTL: switch travel, icon flips, tab indicator. */
 @custom-variant rtl (&:where([dir='rtl'], [dir='rtl'] *));
 

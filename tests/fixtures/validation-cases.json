@@ -154,6 +154,11 @@
     { "name": "color: required and empty fails before color", "rules": { "required": true, "color": true }, "value": "", "expect": "required" },
     { "name": "color: required and valid passes", "rules": { "required": true, "color": true }, "value": "#000000", "expect": null },
 
+    { "name": "choice: an enabled option", "rules": { "required": true, "allowed": ["light", "dark", "system"] }, "value": "dark", "expect": null },
+    { "name": "choice: nothing selected is the required error", "rules": { "required": true, "allowed": ["light", "dark", "system"] }, "value": "", "expect": "required" },
+    { "name": "choice: not one of the options", "rules": { "required": true, "allowed": ["light", "dark", "system"] }, "value": "contrast", "expect": "allowed" },
+    { "name": "choice: a disabled option is not in allowed, so it cannot be chosen", "rules": { "required": true, "allowed": ["light", "dark"] }, "value": "system", "expect": "allowed" },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],

@@ -30,6 +30,18 @@ abstract class AbstractOptionsField extends AbstractField {
 	}
 
 	/**
+	 * Type-specific check or cleaning of one built option (e.g. a URL). Runs for every option, lazily resolved ones too.
+	 *
+	 * @param array<string,mixed> $option   The option with `value`, `label`, `disabled` and the type's extra keys.
+	 * @param string              $field_id For error messages.
+	 * @return array<string,mixed>
+	 * @throws ConfigException On an invalid option.
+	 */
+	protected function clean_option( array $option, string $field_id ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- overridden by the types that need it.
+		return $option;
+	}
+
+	/**
 	 * Validates `options` and resolves an array immediately (a callable is resolved lazily, once per request).
 	 *
 	 * @param array<string,mixed> $config Config after common normalisation.
@@ -117,6 +129,8 @@ abstract class AbstractOptionsField extends AbstractField {
 					'disabled' => false,
 				);
 			}
+
+			$option = $this->clean_option( $option, $field_id );
 
 			if ( isset( $seen[ $option['value'] ] ) ) {
 				throw new ConfigException( sprintf( '%1$s field "%2$s": option value "%3$s" is used twice.', $this->noun(), $field_id, $option['value'] ) );

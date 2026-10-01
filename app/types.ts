@@ -119,6 +119,23 @@ export interface RadioFieldDef extends FieldBase {
   options: ChoiceOptionDef[];
 }
 
+export interface ChoiceCardOptionDef {
+  value: string;
+  label: string;
+  disabled: boolean;
+  description?: string;
+  /** Already sanitized by PHP (http(s) URL or a `/path`); absent when the cards show text only. */
+  image?: string;
+}
+
+export interface ChoiceFieldDef extends FieldBase {
+  type: 'choice';
+  options: ChoiceCardOptionDef[];
+  /** Resolved by PHP: `image_text` (image + label + description), `image` (image only) or `text`. */
+  content: 'image_text' | 'image' | 'text';
+  columns: 2 | 3 | 4;
+}
+
 export interface SegmentedFieldDef extends FieldBase {
   type: 'segmented';
   options: SelectOptionDef[];
@@ -146,6 +163,7 @@ export type ValueFieldDef =
   | CheckboxFieldDef
   | CheckboxGroupFieldDef
   | RadioFieldDef
+  | ChoiceFieldDef
   | SegmentedFieldDef
   | SliderFieldDef
   | ColorFieldDef

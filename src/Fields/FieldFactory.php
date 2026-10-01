@@ -29,6 +29,7 @@ final class FieldFactory {
 			ToggleField::class,
 			CheckboxField::class,
 			CheckboxGroupField::class,
+			ChoiceField::class,
 			ColorField::class,
 			RadioField::class,
 			SegmentedField::class,
