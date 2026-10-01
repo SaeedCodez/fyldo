@@ -1,6 +1,7 @@
 /**
- * WCAG 2.2 AA on the design tokens. There are NO expectedFail entries: a failing pair fails the build.
- * (Decision O4: the failing tokens are fixed in Figma, not worked around in code.)
+ * WCAG 2.2 AA on the design tokens. A failing pair fails the build; the only exceptions are the owner-approved
+ * entries in UI_EXCEPTIONS below (decision O16), each with a reason and a floor so it cannot get worse silently.
+ * (Decision O4: failing tokens are fixed in Figma, not worked around in code.)
  *
  * Text pairs need 4.5:1 (1.4.3); UI components, their boundaries and focus indicators need 3:1 (1.4.11).
  * Disabled text is exempt (1.4.3), decorative dividers/card borders are exempt.
@@ -50,7 +51,6 @@ const TEXT: Array<[fg: string, bg: string, why: string]> = [
 ];
 
 const UI: Array<[fg: string, bg: string, why: string]> = [
-  ['border/input', 'background/default', 'text field boundary (1.4.11)'],
   ['border/input-hover', 'background/default', 'text field hover boundary'],
   ['focus/border', 'background/default', 'focused field boundary'],
   ['focus/ring-neutral', 'background/default', 'keyboard focus ring (against the white gap)'],
@@ -68,8 +68,32 @@ describe('WCAG 2.2 AA — text (≥ 4.5:1)', () => {
   });
 });
 
+/**
+ * Owner-approved exceptions to the 3:1 rule (decision O16, 2026-10-01). Keep this list short and every entry justified.
+ * `floor` is the lowest ratio accepted, so the exception cannot quietly get worse; if the pair ever reaches 3:1 the
+ * guard below fails and the entry must be deleted.
+ */
+const UI_EXCEPTIONS: Array<{ fg: string; bg: string; why: string; floor: number }> = [
+  {
+    fg: 'border/input',
+    bg: 'background/default',
+    why: 'resting text-field boundary: the owner chose a soft gray/500 (#c9c9c9) over WCAG 1.4.11; hover (≥ 3:1), focus and error borders still pass',
+    floor: 1.6,
+  },
+];
+
 describe('WCAG 2.2 AA — UI components and focus (≥ 3:1)', () => {
   it.each(UI)('%s on %s (%s)', (fg, bg) => {
     expect(ratio(fg, bg)).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('WCAG 2.2 AA — approved exceptions (O16)', () => {
+  it.each(UI_EXCEPTIONS)('$fg on $bg stays at or above its floor ($why)', ({ fg, bg, floor }) => {
+    expect(ratio(fg, bg)).toBeGreaterThanOrEqual(floor);
+  });
+
+  it.each(UI_EXCEPTIONS)('$fg on $bg is still an exception (delete the entry once it reaches 3:1)', ({ fg, bg }) => {
+    expect(ratio(fg, bg)).toBeLessThan(3);
   });
 });

@@ -1,0 +1,541 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "252:11279"
+ },
+ "set": {
+  "id": "252:11279",
+  "name": "Segmented Control",
+  "kebab": "segmented-control",
+  "width": 666,
+  "height": 74,
+  "variantCount": 2,
+  "componentPropertyDefinitions": {
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "252:11265",
+   "name": "Locale=EN",
+   "file": "locale-en",
+   "variantProperties": {
+    "Locale": "EN"
+   },
+   "node": {
+    "name": "Locale=EN",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 279,
+    "height": 40,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 4,
+     "paddingRight": 4,
+     "paddingBottom": 4,
+     "paddingLeft": 4,
+     "itemSpacing": 2,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/2",
+     "paddingLeft": "space/4",
+     "paddingTop": "space/4",
+     "paddingRight": "space/4",
+     "paddingBottom": "space/4",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 4,
+      "y": 4,
+      "width": 86,
+      "height": 32,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=EN, State=Default",
+       "componentProperties": {
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "بر اساس سفارش"
+        },
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "By order"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "By order"
+       }
+      }
+     },
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 92,
+      "y": 4,
+      "width": 104,
+      "height": 32,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=EN, State=Selected",
+       "componentProperties": {
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "بر اساس محصول"
+        },
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "By product"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Selected",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "By product"
+       }
+      }
+     },
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 198,
+      "y": 4,
+      "width": 77,
+      "height": 32,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=EN, State=Default",
+       "componentProperties": {
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "ساده"
+        },
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "Simple"
+        },
+        "Locale": {
+         "value": "EN",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "Simple"
+       }
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "252:11272",
+   "name": "Locale=FA",
+   "file": "locale-fa",
+   "variantProperties": {
+    "Locale": "FA"
+   },
+   "node": {
+    "name": "Locale=FA",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 331,
+    "height": 42,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 4,
+     "paddingRight": 4,
+     "paddingBottom": 4,
+     "paddingLeft": 4,
+     "itemSpacing": 2,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "AUTO",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#f2f2f2",
+      "token": "surface/default"
+     }
+    ],
+    "bound": {
+     "itemSpacing": "space/2",
+     "paddingLeft": "space/4",
+     "paddingTop": "space/4",
+     "paddingRight": "space/4",
+     "paddingBottom": "space/4",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 4,
+      "y": 4,
+      "width": 61,
+      "height": 34,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=FA, State=Default",
+       "componentProperties": {
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "Simple"
+        },
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "ساده"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "ساده"
+       }
+      }
+     },
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 67,
+      "y": 4,
+      "width": 131,
+      "height": 34,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#ffffff",
+        "token": "background/default"
+       }
+      ],
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=FA, State=Selected",
+       "componentProperties": {
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "By product"
+        },
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "بر اساس محصول"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Selected",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "بر اساس محصول"
+       }
+      }
+     },
+     {
+      "name": "Segment",
+      "type": "INSTANCE",
+      "visible": true,
+      "opacity": 1,
+      "x": 200,
+      "y": 4,
+      "width": 127,
+      "height": 34,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 6,
+       "paddingRight": 16,
+       "paddingBottom": 6,
+       "paddingLeft": 16,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "CENTER",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "cornerRadius": 8,
+      "bound": {
+       "itemSpacing": "space/6",
+       "paddingLeft": "space/16",
+       "paddingTop": "space/6",
+       "paddingRight": "space/16",
+       "paddingBottom": "space/6",
+       "topLeftRadius": "radius/md",
+       "topRightRadius": "radius/md",
+       "bottomLeftRadius": "radius/md",
+       "bottomRightRadius": "radius/md"
+      },
+      "instance": {
+       "component": "Segment",
+       "variant": "Locale=FA, State=Default",
+       "componentProperties": {
+        "Label#251:1514": {
+         "type": "TEXT",
+         "value": "By order"
+        },
+        "Label (FA)#251:1525": {
+         "type": "TEXT",
+         "value": "بر اساس سفارش"
+        },
+        "Locale": {
+         "value": "FA",
+         "type": "VARIANT",
+         "boundVariables": {}
+        },
+        "State": {
+         "value": "Default",
+         "type": "VARIANT",
+         "boundVariables": {}
+        }
+       },
+       "texts": {
+        "Label": "بر اساس سفارش"
+       }
+      }
+     }
+    ]
+   }
+  }
+ ]
+}

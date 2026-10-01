@@ -103,13 +103,13 @@
     {
       "name": "color.border.input",
       "type": "color",
-      "value": "{primitives.color.gray.700}",
+      "value": "{primitives.color.gray.500}",
       "css": "--fyldo-border-input"
     },
     {
       "name": "color.border.input-hover",
       "type": "color",
-      "value": "{primitives.color.gray.900}",
+      "value": "{primitives.color.gray.700}",
       "css": "--fyldo-border-input-hover"
     },
     {
