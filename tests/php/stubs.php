@@ -267,6 +267,17 @@ if ( ! function_exists( 'wp_get_mime_types' ) ) {
 		);
 	}
 }
+if ( ! function_exists( 'wp_get_ext_types' ) ) {
+	function wp_get_ext_types() {
+		return array(
+			'image'    => array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'bmp', 'tif', 'tiff', 'ico', 'heic', 'webp' ),
+			'audio'    => array( 'aac', 'ac3', 'aif', 'aiff', 'flac', 'm3a', 'm4a', 'm4b', 'mka', 'mp1', 'mp2', 'mp3', 'ogg', 'oga', 'ram', 'wav', 'wma' ),
+			'document' => array( 'doc', 'docx', 'pdf', 'rtf', 'wp', 'wpd' ),
+			'archive'  => array( 'bz2', 'cab', 'dmg', 'gz', 'rar', 'sea', 'sit', 'sqx', 'tar', 'tgz', 'zip', '7z' ),
+			'code'     => array( 'css', 'htm', 'html', 'php', 'js' ),
+		);
+	}
+}
 if ( ! function_exists( 'size_format' ) ) {
 	function size_format( $bytes, $decimals = 0 ) {
 		$units = array( 'GB' => 1073741824, 'MB' => 1048576, 'KB' => 1024, 'B' => 1 );

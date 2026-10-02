@@ -453,7 +453,7 @@ final class Demo {
 							'type'        => 'file',
 							'label'       => __( 'Brand guidelines', 'fyldo' ),
 							'description' => __( 'Offered as a download on the About tab.', 'fyldo' ),
-							'types'       => array( 'pdf', 'zip' ),
+							'types'       => array( 'document', 'archive', 'image' ),
 						),
 					),
 				),
