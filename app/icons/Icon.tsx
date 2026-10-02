@@ -5,12 +5,12 @@ import { useIconNodes } from './registry';
 import { RTL_FLIP } from './rtl-flip';
 import type { IconNode } from './types';
 
-export type IconSize = 12 | 16 | 20 | 24;
+export type IconSize = 12 | 14 | 16 | 20 | 24;
 
 export interface IconProps {
   /** Any Iconsax icon by kebab-case name: `setting-2`, `arrow-down`, `tick-circle`… */
   name: string;
-  /** 16 default · 12 Badge/Tag · 20 large Icon Button · 24 Empty State. */
+  /** 16 default · 12 Badge/Tag · 14 Icon Picker preview (Small) · 20 large Icon Button · 24 Empty State. */
   size?: IconSize;
   /** Meaningful icons only. Decorative icons (the default) are `aria-hidden`. */
   label?: string;

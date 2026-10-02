@@ -14,6 +14,7 @@ import { test, type Browser, type Locator, type Page, type TestInfo } from '@pla
 import { box, open } from './support/figma';
 import { digits, layer, pngPath, pngSize, shown, variant, type Node } from './support/pack';
 import { comparePixels, type Rect } from './support/pixels';
+import { at, componentIn, expect, relative } from './support/visual';
 
 const SCALE = 2;
 const pick = (v: { variantProperties: Record<string, string> }) => v.variantProperties;
@@ -473,6 +474,103 @@ for (const locale of ['EN', 'FA'] as const) {
       actualRegion: { x: 0, y: 0, width: card.width, height: card.height },
       maxDiffRatio: locale === 'EN' ? 0.08 : 0.1,
     });
+    await close();
+  });
+}
+
+// ── Icon Picker ──────────────────────────────────────────────────────────────────────────────────────────────
+// Default variant: Small, Default (nothing chosen yet: the dashed tile and the placeholder). EN compares the whole field. FA is set in
+// a different font, so it compares the two glyphs of the control (the dashed tile at the start, the grid icon at the end).
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Icon Picker ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('icon-picker', { Locale: locale, Size: 'Small', State: 'Default' });
+    const root = v.node;
+    const control = layer(root, 'Control');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'icon-picker',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      size: 'sm',
+      label: layer(root, 'Label').text?.characters ?? '',
+      placeholder: layer(control, 'Placeholder').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+      names: layer(control, 'Trailing icon').icon?.name ?? 'element-3',
+    });
+    await still(page);
+    await expect(stage.locator('[data-slot=fy-icon-picker] svg[data-fyldo-icon]')).toHaveCount(1);
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('icon-picker', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const s = await box(stage);
+      const ours: Array<[string, Locator]> = [
+        ['Preview', stage.locator('[data-slot=fy-icon-preview]')],
+        ['Trailing icon', stage.locator('[data-slot=fy-icon-picker] > span:last-child')],
+      ];
+      for (const [name, locator] of ours) {
+        const region = rect(layer(control, name), root);
+        const b = await box(locator);
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('icon-picker', v),
+          scale: SCALE,
+          stage,
+          referenceRegion: region,
+          actualRegion: { x: b.x - s.x, y: b.y - s.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+    }
+    await close();
+  });
+}
+
+// "Icon Picker Modal" (Default): the 618px card over a 48-icon grid with "star" chosen. The pack's PNG includes the Shadow/Large margin,
+// so the card itself is cropped out of it. The Icon Tile is covered here (the chosen tile with its check, the rest at rest). EN compares
+// the whole card; FA is set in a different font, so it compares the text-free parts: the close button and the mirrored grid.
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Icon Picker Modal ${locale} · default`, async ({ browser }, testInfo) => {
+    const props = { Locale: locale, State: 'Default' };
+    const v = variant('icon-picker-modal', props);
+    const root = v.node;
+    const grid = layer(root, 'Body', 'Grid');
+    const tiles = (grid.children ?? []).map((tile) => tile.name);
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'icon-picker-modal',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      value: layer(root, 'Footer', 'Name').text?.characters ?? '',
+      icons: tiles.join(','),
+      names: [...tiles, 'search-normal', 'close-circle'].join(','),
+    });
+    await still(page);
+    const modal = page.locator('[data-slot=fy-icon-picker-modal]');
+    await expect(modal).toBeVisible();
+    // every tile's icon is fetched once the tile is (nearly) in view: all 48 sit within the 372px grid plus its look-ahead
+    await expect(modal.locator('[data-slot=fy-icon-grid] svg[data-fyldo-icon]')).toHaveCount(tiles.length);
+    await page.mouse.move(0, 0);
+    // the focus halo on the search box (initial focus) is not in the pack: take it off for the picture
+    await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
+    const ref = componentIn('icon-picker-modal', props);
+    const ours = await relative(stage, modal);
+    expect([ours.width, Math.round(ours.height)]).toEqual([root.width, root.height]);
+
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('icon-picker-modal', v), scale: SCALE, stage, referenceRegion: ref, actualRegion: ours, maxDiffRatio: 0.08 });
+    } else {
+      for (const node of [layer(root, 'Header', 'Close'), grid]) {
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('icon-picker-modal', v),
+          scale: SCALE,
+          stage,
+          referenceRegion: at(ref, node, 0),
+          actualRegion: at(ours, node, 0),
+          maxDiffRatio: 0.08,
+        });
+      }
+    }
     await close();
   });
 }

@@ -166,6 +166,14 @@ return array(
 					'default'     => '#2271b1',
 				),
 				array(
+					'id'          => 'menu_icon',
+					'type'        => 'icon',
+					'label'       => 'Menu icon',
+					'description' => 'Shown next to the menu item.',
+					'icons'       => array( 'home-2', 'setting-2', 'star', 'user' ),
+					'default'     => 'home-2',
+				),
+				array(
 					'id'          => 'license_key',
 					'type'        => 'text',
 					'label'       => 'License key',

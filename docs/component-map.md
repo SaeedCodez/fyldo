@@ -268,6 +268,25 @@ Esc and an outside press close the panel (a press on the field itself is the fie
 
 PHP: `color` (src/Fields/ColorField.php), layout `stacked`, config `default` (hex) and `presets` (hex list, default the 16 of the panel, `false` hides them; a non-hex preset throws a `ConfigException`). Sanitize: trim, lower case, `#abc` → `#aabbcc`, a missing `#` is added; text that is not a colour is kept so the implied `color` rule (`#rrggbb` only) reports it instead of silently replacing it; empty is allowed unless `required`.
 
+### 2.14 Icon Picker — Figma `Icon Picker` (Locale × Size × State), `Icon Picker Modal` (Locale × State), `Icon Tile` (Locale × State)
+
+Base: the same field control as the Color Picker (Base UI `Field.Control` rendered as a `<button>`) that opens a modal Base UI `Dialog`. The modal, the generated list of every icon name (`app/icons/names.generated.ts`, written by `npm run icons`) and the Dialog are one lazily loaded chunk (`React.lazy`), imported by nothing else, so `app.js` stays within its budget.
+```ts
+type IconPickerProps = { value: string /* '' | kebab name */; onValueChange(value: string): void; icons?: string[] | null /* null = every icon */; size?: 'sm'|'md'|'lg'; placeholder?: string; disabled?: boolean; locale?: string };
+```
+| Figma | Code |
+|---|---|
+| Field: Label / Control (Preview, Value or Placeholder, Trailing icon `element-3`) / Helper; Size Small / Medium / Large | `IconPickerField` (`FieldShell`) around `IconPicker`; control height as the Select (32 / 40 / 48), preview 20 / 24 / 28 with an icon of 14 / 16 / 20 (`IconPreview`), value `Mono/14` |
+| State Default (no icon: dashed `border/strong` tile + placeholder) / Hover / Focus / Filled (`background/subtle` tile + the name) / Error / Disabled | `CONTROL_BASE` states; Disabled dims the tile to 40%. There is no Open state: the field opens the modal (`data-popup-open` keeps the focus look while it is open) |
+| Value is always LTR (FA/Mono) | `<bdi dir="ltr">` in a slot that follows the page |
+| Modal 618 wide, `radius/lg`, `Shadow/Large`: Header (title, description, close Icon Button), Search (Input Medium, `search-normal`; Filled + a clear button while searching), count line, Grid 372 high, Footer (preview + name, Cancel, "Select icon") | `IconPickerModal` (its own composition of the Dialog primitives: the Modal's footer does not fit). Count: "N icons", then "N results for “query”" (Persian: just "N نتیجه", no Latin word inside the sentence); no match shows the empty state ("No icons found") and "No icon selected" |
+| Grid: 8 columns of 64px tiles, 8px gap, the 6th row peeks | `grid-template-columns: repeat(auto-fill, 64px)`: 8 at the pack's 568px, fewer on a narrower dialog. All tiles are in the DOM; each tile's icon module is requested only when it scrolls into view (one `IntersectionObserver`, 2 tiles of look-ahead), no virtualization library |
+| Icon Tile Default / Hover / Selected / Focus / Disabled (64×64, 24px icon) | `IconTile` (`role="option"`, named by the icon): Selected = 2px `focus/border`, `background/subtle` and a 16px `control/on` check at the end corner (start in FA) |
+
+Choosing applies only on "Select icon" (disabled until a tile is selected); Cancel, Escape and the close button discard, and so does nothing else: a press on the dimmed page does not close it. On open the current icon is preselected and scrolled into view, focus starts in the search box, and focus returns to the field on close. Search is a case-insensitive substring of the kebab name. Grid keyboard: roving tabindex (one tab stop), arrows move by one tile (mirrored in RTL) or by one row, Home/End jump to the ends, Enter/Space select, Down in the search box enters the grid.
+
+PHP: `icon` (src/Fields/IconField.php), layout `field`, config `default` (an icon name) and `icons` (a non-empty list of names). The names are not shipped to PHP: sanitize is trim; the implied rules are the name pattern `^[a-z0-9]+(-[a-z0-9]+)*$` and, with `icons`, `allowed` (the list). A malformed name in `icons` or `default`, or a `default` outside `icons`, throws a `ConfigException`. A well-formed name that is not an Iconsax icon is accepted; the browser draws nothing and warns once (the existing unknown-icon behaviour).
+
 ---
 
 ## 3. Feedback / status
@@ -455,10 +474,11 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `segmented` | `SegmentedControl` | stacked | `sanitize_text_field`; `allowed` rejects anything but an enabled option | required, allowed |
 | `slider` | `Slider` (`size=md`, value above the control) | stacked | Persian digits → ASCII, int/float; unreadable text stays text so `number` fails | number, required, min, max, step |
 | `color` | `ColorPicker` | stacked | trim, lower case, `#abc` → `#aabbcc`; unreadable text stays text so `color` fails | color, required |
+| `icon` | `IconPicker` | field | trim; a non-text value is nothing | pattern (name shape), allowed (`icons`), required |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
-| *later* `repeater`, `color`, `media`, `code editor`, `date` | out of scope until designed | | | |
+| *later* `repeater`, `media`, `code editor`, `date` | out of scope until designed | | | |
 
 ## 6. Shared gaps summary (design silent — proposals in ARCHITECTURE §15)
 

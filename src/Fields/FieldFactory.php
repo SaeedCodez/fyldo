@@ -31,6 +31,7 @@ final class FieldFactory {
 			CheckboxGroupField::class,
 			ChoiceField::class,
 			ColorField::class,
+			IconField::class,
 			RadioField::class,
 			SegmentedField::class,
 			SelectField::class,
