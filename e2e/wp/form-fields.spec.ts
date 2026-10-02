@@ -31,13 +31,14 @@ async function createAttachment(request: APIRequestContext, filename: string, mi
 }
 
 /**
- * The real media modal is WordPress chrome and is not driven here: once the page has loaded, `wp.media` is replaced by a stand-in
- * whose frame "picks" the given attachment for the field whose label is the frame's title. What it hands over is deliberately not
+ * The real media modal is WordPress chrome and is not driven here: once the page has loaded (call it after `goto`, so WordPress's own
+ * media scripts have finished with `wp.media.view`), `wp.media` is replaced by a stand-in whose frame "picks" the given attachment
+ * for the field whose label is the frame's title. What it hands over is deliberately not
  * what the server knows (another file name), so the preview that comes back after saving can only be the server's.
  */
 async function stubMediaModal(page: Page, picks: Record<string, number>): Promise<void> {
-  await page.addInitScript((byTitle) => {
-    window.addEventListener('load', () => {
+  await page.evaluate((byTitle) => {
+    {
       const wp = ((window as unknown as { wp?: Record<string, unknown> }).wp ??= {});
       wp.media = Object.assign(
         (options: { title: string }) => {
@@ -64,7 +65,7 @@ async function stubMediaModal(page: Page, picks: Record<string, number>): Promis
         },
         { attachment: (id: number) => ({ id, fetch: () => undefined, toJSON: () => ({ id }) }) },
       );
-    });
+    }
   }, picks);
 }
 
@@ -77,10 +78,10 @@ test.describe('English', () => {
 
     const logo = await createAttachment(request, 'logo-mark.png', 'image/png', PNG);
     const guide = await createAttachment(request, 'brand-guidelines.pdf', 'application/pdf', PDF);
-    await stubMediaModal(page, { 'Site logo': logo.id, 'Brand guidelines': guide.id });
 
     await page.goto(EN);
     await expect(page.getByRole('heading', { level: 1, name: 'Content' })).toBeVisible();
+    await stubMediaModal(page, { 'Site logo': logo.id, 'Brand guidelines': guide.id });
 
     const meta = page.getByRole('textbox', { name: 'Default meta description' });
     await expect(meta).toHaveValue('Fyldo is a lightweight settings framework.');
