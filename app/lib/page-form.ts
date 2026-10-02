@@ -5,7 +5,7 @@
  */
 import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
-import { isValueField, type FieldValue, type PageDef, type ValueFieldDef } from '../types';
+import { isValueField, type FieldValue, type MediaItem, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
 import { ApiError, type Api } from './api';
 import { validateValue } from './validation';
 
@@ -21,6 +21,10 @@ export interface FormState {
   values: Record<string, FieldValue>;
   /** Last values known to be stored. */
   saved: Record<string, FieldValue>;
+  /** What the media fields (`image`, `file`) draw for their attachment IDs: the saved ones, and what was chosen since. */
+  media: MediaMap;
+  /** `media` as the server last sent it. */
+  savedMedia: MediaMap;
   errors: Record<string, string>;
   revision: string;
   /** Per save scope; a scope that is not listed is idle. */
@@ -35,17 +39,18 @@ export interface FormState {
 export const PAGE_SCOPE = 'page';
 
 export type Action =
-  | { type: 'change'; id: string; value: FieldValue; scope: string }
+  /** `media`: the attachment a media field was just set to (null when cleared); the other fields leave it out. */
+  | { type: 'change'; id: string; value: FieldValue; scope: string; media?: MediaItem | null }
   | { type: 'discard' }
   /** Replace the errors of `ids` with `errors`; with a `scope`, a failed submit: that scope shows the error. */
   | { type: 'invalid'; errors: Record<string, string>; ids: string[]; scope?: string }
   | { type: 'saving'; scope: string; ids: string[] }
   /** `sent`: what the request carried, so an edit made while it ran is kept. */
-  | { type: 'saved'; scope: string; sent: Record<string, FieldValue>; values: Record<string, FieldValue>; revision: string }
+  | { type: 'saved'; scope: string; sent: Record<string, FieldValue>; values: Record<string, FieldValue>; revision: string; media?: MediaMap }
   | { type: 'failed'; scope: string; message: string }
   | { type: 'conflict'; scope: string; message: string }
   | { type: 'reloading' }
-  | { type: 'reloaded'; values: Record<string, FieldValue>; revision: string }
+  | { type: 'reloaded'; values: Record<string, FieldValue>; revision: string; media?: MediaMap }
   | { type: 'reload-failed'; message: string }
   | { type: 'settle'; scope: string };
 
@@ -55,8 +60,18 @@ const IDLE: ScopeState = { status: 'idle', message: '' };
 
 export const scopeState = (state: FormState, scope: string): ScopeState => state.scopes[scope] ?? IDLE;
 
-export function initialState(page: Pick<PageDef, 'values' | 'revision'>): FormState {
-  return { values: { ...page.values }, saved: { ...page.values }, errors: {}, revision: page.revision, scopes: {}, conflict: false, reloading: false };
+export function initialState(page: Pick<PageDef, 'values' | 'revision' | 'media'>): FormState {
+  return {
+    values: { ...page.values },
+    saved: { ...page.values },
+    media: { ...page.media },
+    savedMedia: { ...page.media },
+    errors: {},
+    revision: page.revision,
+    scopes: {},
+    conflict: false,
+    reloading: false,
+  };
 }
 
 const without = (errors: Record<string, string>, ids: string[]): Record<string, string> =>
@@ -75,12 +90,14 @@ export function reducer(state: FormState, action: Action): FormState {
       const current = scopeState(state, action.scope);
       // Editing after a save (or a failed save) starts a new edit session for that scope: "Saved" goes (O15).
       const scopes = current.status === 'saved' || current.status === 'error' ? withScope(state, action.scope, IDLE) : state.scopes;
-      return { ...state, values: { ...state.values, [action.id]: action.value }, errors: without(state.errors, [action.id]), scopes };
+      const media = action.media === undefined ? state.media : { ...state.media, [action.id]: action.media };
+      return { ...state, values: { ...state.values, [action.id]: action.value }, media, errors: without(state.errors, [action.id]), scopes };
     }
     case 'discard':
       return {
         ...state,
         values: { ...state.saved },
+        media: { ...state.savedMedia },
         errors: {},
         scopes: Object.fromEntries(Object.entries(state.scopes).filter(([, s]) => s.status === 'saving')),
       };
@@ -93,13 +110,16 @@ export function reducer(state: FormState, action: Action): FormState {
       return { ...state, errors: without(state.errors, action.ids), scopes: withScope(state, action.scope, { status: 'saving', message: '' }) };
     case 'saved': {
       const values: Record<string, FieldValue> = {};
+      const media: MediaMap = { ...state.media };
       for (const id of new Set([...Object.keys(action.values), ...Object.keys(state.values)])) {
         const local = state.values[id];
         // Keep what the user typed since: a field edited while the request ran, or dirty and not part of this save.
         const keepLocal = id in action.sent ? !valuesEqual(local, action.sent[id]) : !valuesEqual(local, state.saved[id]);
         values[id] = keepLocal ? (local as FieldValue) : (action.values[id] as FieldValue);
+        // A media field's attachment follows its value: what was chosen since stays, otherwise the server's description.
+        if (id in state.media || (action.media !== undefined && id in action.media)) media[id] = keepLocal ? (state.media[id] ?? null) : (action.media?.[id] ?? null);
       }
-      return { ...state, values, saved: { ...action.values }, revision: action.revision, scopes: withScope(state, action.scope, { status: 'saved', message: '' }) };
+      return { ...state, values, media, saved: { ...action.values }, savedMedia: { ...action.media }, revision: action.revision, scopes: withScope(state, action.scope, { status: 'saved', message: '' }) };
     }
     case 'failed':
       return { ...state, scopes: withScope(state, action.scope, { status: 'error', message: action.message }) };
@@ -109,7 +129,7 @@ export function reducer(state: FormState, action: Action): FormState {
     case 'reloading':
       return { ...state, reloading: true };
     case 'reloaded':
-      return { ...initialState({ values: action.values, revision: action.revision }) };
+      return { ...initialState({ values: action.values, revision: action.revision, media: action.media }) };
     case 'reload-failed':
       return { ...state, reloading: false, scopes: withScope(state, PAGE_SCOPE, { status: 'error', message: action.message }) };
     case 'settle':
@@ -135,12 +155,12 @@ export interface FormStore {
   enqueue<T>(pageId: string, task: () => Promise<T>): Promise<T>;
 }
 
-export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 'revision'>>): FormStore {
+export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 'revision' | 'media'>>): FormStore {
   const states = new Map(pages.map((p) => [p.id, initialState(p)]));
   const listeners = new Set<() => void>();
   const timers = new Map<string, number>();
   const queues = new Map<string, Promise<unknown>>();
-  const empty = initialState({ values: {}, revision: '' });
+  const empty = initialState({ values: {}, revision: '', media: {} });
 
   const get = (pageId: string): FormState => states.get(pageId) ?? empty;
 
@@ -211,9 +231,12 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
   const dispatch = useCallback((action: Action) => store.dispatch(page.id, action), [store, page.id]);
 
   const setValue = useCallback(
-    (id: string, value: FieldValue) => dispatch({ type: 'change', id, value, scope: scopes.get(id) ?? PAGE_SCOPE }),
+    (id: string, value: FieldValue, media?: MediaItem | null) =>
+      dispatch({ type: 'change', id, value, scope: scopes.get(id) ?? PAGE_SCOPE, ...(media === undefined ? {} : { media }) }),
     [dispatch, scopes],
   );
+  /** Show a field's own message (a media field: the chosen file is the wrong type or too large); the value stays as it was. */
+  const setError = useCallback((id: string, message: string) => dispatch({ type: 'invalid', errors: { [id]: message }, ids: [id] }), [dispatch]);
   const discard = useCallback(() => dispatch({ type: 'discard' }), [dispatch]);
 
   /** Validate one field now (used on blur); returns whether it is valid. */
@@ -252,7 +275,7 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
         dispatch({ type: 'saving', scope, ids: changed });
         try {
           const result = await api.savePage(page.id, sent, current.revision);
-          dispatch({ type: 'saved', scope, sent, values: result.values, revision: result.revision });
+          dispatch({ type: 'saved', scope, sent, values: result.values, revision: result.revision, media: result.media });
           return true;
         } catch (e) {
           if (e instanceof ApiError && e.status === 422) {
@@ -275,7 +298,7 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
         dispatch({ type: 'reloading' });
         try {
           const latest = await api.readPage(page.id);
-          dispatch({ type: 'reloaded', values: latest.values, revision: latest.revision });
+          dispatch({ type: 'reloaded', values: latest.values, revision: latest.revision, media: latest.media });
         } catch {
           dispatch({ type: 'reload-failed', message: __('Couldn’t load the latest values. Check your connection and try again.', 'fyldo') });
         }
@@ -292,10 +315,10 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
     (actionId: string, keyword: string): Promise<void> =>
       store.enqueue(page.id, async () => {
         const result = await api.runAction(page.id, actionId, keyword);
-        dispatch({ type: 'reloaded', values: result.values, revision: result.revision });
+        dispatch({ type: 'reloaded', values: result.values, revision: result.revision, media: result.media });
       }),
     [api, store, page.id, dispatch],
   );
 
-  return { state, dirty, scopes, setValue, discard, save, validateField, reload, runAction };
+  return { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction };
 }

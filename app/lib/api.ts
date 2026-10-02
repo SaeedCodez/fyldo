@@ -1,4 +1,4 @@
-import type { FieldValue, FyldoConfig } from '../types';
+import type { FieldValue, FyldoConfig, MediaMap } from '../types';
 
 export class ApiError extends Error {
   constructor(
@@ -16,6 +16,8 @@ export class ApiError extends Error {
 export interface SaveResult {
   values: Record<string, FieldValue>;
   revision: string;
+  /** The saved attachments of the page's media fields; absent when the page has none. */
+  media?: MediaMap;
 }
 
 export interface Api {
@@ -59,7 +61,7 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
       });
     }
 
-    return { values: body.values as Record<string, FieldValue>, revision: String(body.revision) };
+    return { values: body.values as Record<string, FieldValue>, revision: String(body.revision), ...(body.media ? { media: body.media as MediaMap } : {}) };
   };
 
   return {

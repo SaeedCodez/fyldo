@@ -50,6 +50,22 @@ final class Messages {
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
 
+			case 'media':
+				return __( 'Choose a file from the media library.', 'fyldo' );
+
+			case 'attachment':
+				return __( 'This file is no longer available. Choose another one.', 'fyldo' );
+
+			case 'media_image':
+				return __( 'Choose an image.', 'fyldo' );
+
+			case 'media_type':
+				return __( 'This file type is not allowed.', 'fyldo' );
+
+			case 'media_size':
+				/* translators: %s: the largest allowed file size, such as 2 MB. */
+				return sprintf( __( 'Choose a file of %s or less.', 'fyldo' ), size_format( (int) ( $params['max'] ?? 0 ) ) );
+
 			case 'min':
 				if ( ! empty( $params['items'] ) ) {
 					$min = (int) ( $params['min'] ?? 0 );

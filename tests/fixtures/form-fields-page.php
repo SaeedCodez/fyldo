@@ -174,6 +174,20 @@ return array(
 					'default'     => 'home-2',
 				),
 				array(
+					'id'          => 'site_logo',
+					'type'        => 'image',
+					'label'       => 'Site logo',
+					'description' => 'Shown in the sidebar and on the login screen.',
+					'max_size'    => '2MB',
+				),
+				array(
+					'id'          => 'brand_guidelines',
+					'type'        => 'file',
+					'label'       => 'Brand guidelines',
+					'description' => 'Offered as a download on the About tab.',
+					'types'       => array( 'pdf', 'zip' ),
+				),
+				array(
 					'id'          => 'license_key',
 					'type'        => 'text',
 					'label'       => 'License key',

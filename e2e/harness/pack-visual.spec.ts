@@ -525,6 +525,55 @@ for (const locale of ['EN', 'FA'] as const) {
   });
 }
 
+// ── Upload Image / Select File ───────────────────────────────────────────────────────────────────────────────
+// Default variant: Empty, Default (nothing chosen yet: the dashed thumbnail / tile, "No … selected" and the select button). The texts
+// are Fyldo's own strings, so EN compares the whole field. FA is set in a different font, so it compares the dashed thumbnail / tile
+// at the control's start side (the layout is mirrored: it sits on the right).
+for (const [set, c, tile, icon] of [
+  ['upload-image', 'upload-image', 'Thumb', 'gallery-add'],
+  ['select-file', 'select-file', 'File tile', 'document-upload'],
+] as const) {
+  for (const locale of ['EN', 'FA'] as const) {
+    test(`${set === 'upload-image' ? 'Upload Image' : 'Select File'} ${locale} · default`, async ({ browser }, testInfo) => {
+      const v = variant(set, { Locale: locale, Preview: 'Empty', State: 'Default' });
+      const root = v.node;
+      const control = layer(root, 'Control');
+      const { page, close } = await newPage(browser, SCALE);
+      const stage = await open(page, {
+        c,
+        dir: locale === 'FA' ? 'rtl' : 'ltr',
+        preview: 'empty',
+        label: layer(root, 'Label').text?.characters ?? '',
+        helper: layer(root, 'Helper text').text?.characters ?? '',
+        names: [icon, 'trash'].join(','),
+      });
+      await still(page);
+      await expect(stage.locator('[data-slot=fy-media-field] svg[data-fyldo-icon]')).toHaveCount(1);
+      const size = pngSize(readFileSync(pngPath(set, v)));
+      expect([Math.round((await box(stage.locator('[data-slot=fy-media-field-root]'))).height)]).toEqual([root.height]);
+      if (locale === 'EN') {
+        await comparePixels({ page, testInfo, reference: pngPath(set, v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+        expect(size.width / SCALE).toBe(root.width);
+      } else {
+        const s = await box(stage);
+        const region = rect(layer(control, tile), root);
+        const b = await box(stage.locator('[data-slot=fy-media-tile]'));
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath(set, v),
+          scale: SCALE,
+          stage,
+          referenceRegion: region,
+          actualRegion: { x: b.x - s.x, y: b.y - s.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+      await close();
+    });
+  }
+}
+
 // "Icon Picker Modal" (Default): the 618px card over a 48-icon grid with "star" chosen. The pack's PNG includes the Shadow/Large margin,
 // so the card itself is cropped out of it. The Icon Tile is covered here (the chosen tile with its check, the rest at rest). EN compares
 // the whole card; FA is set in a different font, so it compares the text-free parts: the close button and the mirrored grid.

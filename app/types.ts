@@ -11,6 +11,8 @@ export interface RuleSet {
   number?: boolean;
   /** Implied by the `color` field: the value must be `#rrggbb`. */
   color?: boolean;
+  /** Implied by the `image` and `file` fields: the value is an attachment ID, a whole number of 0 or more (0 = nothing chosen). */
+  media?: boolean;
   allowed?: string[];
   min?: number;
   max?: number;
@@ -160,6 +162,42 @@ export interface IconFieldDef extends FieldBase {
   icons: string[] | null;
 }
 
+/** What the browser draws for a saved attachment (PHP: AbstractMediaField::media). The name, size and type come from the attachment, never from its URL. */
+export interface MediaItem {
+  id: number;
+  filename: string;
+  /** Bytes; 0 = unknown. */
+  filesize: number;
+  mime: string;
+  /** Lower case, without the dot. */
+  extension: string;
+  width: number | null;
+  height: number | null;
+  /** An image field's thumbnail; null for a file or an image without one. */
+  thumbnail: string | null;
+}
+
+/** The attachment ID of each media field of a page, drawn from this. `null` = nothing chosen. */
+export type MediaMap = Record<string, MediaItem | null>;
+
+interface MediaFieldBase extends FieldBase {
+  /** The extensions the field is narrowed to; `null` = every image (`image`) or every type WordPress allows (`file`). */
+  types: string[] | null;
+  /** The MIME types of `types`, for the media library's filter and the check on choosing. */
+  mimes: string[] | null;
+  /** Largest file in bytes; `null` = no limit. */
+  max_size: number | null;
+}
+
+/** The value is the attachment ID (0 = none). */
+export interface ImageFieldDef extends MediaFieldBase {
+  type: 'image';
+}
+
+export interface FileFieldDef extends MediaFieldBase {
+  type: 'file';
+}
+
 export type ValueFieldDef =
   | TextFieldDef
   | NumberFieldDef
@@ -174,6 +212,8 @@ export type ValueFieldDef =
   | SliderFieldDef
   | ColorFieldDef
   | IconFieldDef
+  | ImageFieldDef
+  | FileFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef;
 
@@ -228,6 +268,8 @@ export interface PageDef {
   tabs: TabDef[];
   sections: SectionDef[];
   values: Record<string, FieldValue>;
+  /** The saved attachments of the page's `image` and `file` fields; absent when it has none. */
+  media?: MediaMap;
   revision: string;
 }
 

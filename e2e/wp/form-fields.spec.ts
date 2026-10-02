@@ -1,11 +1,12 @@
 /**
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
- * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks).
+ * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), and the Upload Image
+ * and Select File fields (the native media modal is stubbed; the attachments are real).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
-import { readConfig, resetData, settingsUrl } from './helpers';
+import { readConfig, resetData, restNonce, settingsUrl } from './helpers';
 
 const EN = `${settingsUrl('acme-beta')}#/fields`;
 const FA = `${settingsUrl('acme-beta', '&fyldo_locale=fa_IR')}#/fields`;
@@ -14,15 +15,73 @@ test.beforeEach(async ({ request }) => {
   await resetData(request);
 });
 
+// A 1×1 PNG and a tiny PDF: real attachments WordPress accepts, created through its own REST API.
+const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+const PDF = Buffer.from('%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj\n2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj\n3 0 obj<</Type/Page/Parent 2 0 R/MediaBox[0 0 3 3]>>endobj\ntrailer<</Root 1 0 R>>\n%%EOF\n');
+
+/** Uploads a file to the media library and returns what the library calls it. */
+async function createAttachment(request: APIRequestContext, filename: string, mime: string, data: Buffer): Promise<{ id: number; name: string }> {
+  const response = await request.post('/index.php?rest_route=/wp/v2/media', {
+    headers: { 'X-WP-Nonce': await restNonce(request), 'Content-Disposition': `attachment; filename="${filename}"`, 'Content-Type': mime },
+    data,
+  });
+  expect(response.ok(), await response.text()).toBe(true);
+  const json = (await response.json()) as { id: number; source_url: string };
+  return { id: json.id, name: decodeURIComponent(new URL(json.source_url).pathname.split('/').pop() ?? '') };
+}
+
+/**
+ * The real media modal is WordPress chrome and is not driven here: once the page has loaded (call it after `goto`, so WordPress's own
+ * media scripts have finished with `wp.media.view`), `wp.media` is replaced by a stand-in whose frame "picks" the given attachment
+ * for the field whose label is the frame's title. What it hands over is deliberately not
+ * what the server knows (another file name), so the preview that comes back after saving can only be the server's.
+ */
+async function stubMediaModal(page: Page, picks: Record<string, number>): Promise<void> {
+  await page.evaluate((byTitle) => {
+    {
+      const wp = ((window as unknown as { wp?: Record<string, unknown> }).wp ??= {});
+      wp.media = Object.assign(
+        (options: { title: string }) => {
+          const handlers: Record<string, () => void> = {};
+          const id = byTitle[options.title] as number;
+          const attachment = {
+            id,
+            type: options.title === 'Site logo' ? 'image' : 'application',
+            mime: options.title === 'Site logo' ? 'image/png' : 'application/pdf',
+            filename: options.title === 'Site logo' ? 'picked-in-modal.png' : 'picked-in-modal.pdf',
+            filesizeInBytes: 1024,
+            width: 1,
+            height: 1,
+          };
+          return {
+            on: (event: string, callback: () => void) => void (handlers[event] = callback),
+            state: () => ({ get: () => ({ reset: () => undefined, add: () => undefined, first: () => ({ toJSON: () => attachment }) }) }),
+            open: () => {
+              handlers.open?.();
+              handlers.select?.();
+              handlers.close?.();
+            },
+          };
+        },
+        { attachment: (id: number) => ({ id, fetch: () => undefined, toJSON: () => ({ id }) }) },
+      );
+    }
+  }, picks);
+}
+
 const save = (page: Page) => page.getByRole('button', { name: /Save changes|ذخیره‌ی تغییرات/ }).click();
 
 test.describe('English', () => {
-  test('renders the defaults, edits every control, saves through REST and persists', async ({ page }) => {
+  test('renders the defaults, edits every control, saves through REST and persists', async ({ page, request }) => {
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
 
+    const logo = await createAttachment(request, 'logo-mark.png', 'image/png', PNG);
+    const guide = await createAttachment(request, 'brand-guidelines.pdf', 'application/pdf', PDF);
+
     await page.goto(EN);
     await expect(page.getByRole('heading', { level: 1, name: 'Content' })).toBeVisible();
+    await stubMediaModal(page, { 'Site logo': logo.id, 'Brand guidelines': guide.id });
 
     const meta = page.getByRole('textbox', { name: 'Default meta description' });
     await expect(meta).toHaveValue('Fyldo is a lightweight settings framework.');
@@ -68,11 +127,27 @@ test.describe('English', () => {
     await expect(page.getByRole('dialog')).toBeHidden();
     await expect(menuIcon).toBeFocused();
     await expect(menuIcon).toHaveText('star');
+
+    // Upload Image and Select File: empty, then "Select …" takes what the (stubbed) media modal hands over
+    const logoField = page.getByRole('group', { name: 'Site logo' });
+    const guideField = page.getByRole('group', { name: 'Brand guidelines' });
+    await expect(logoField).toContainText('No image selected');
+    await expect(guideField).toContainText('No file selected');
+    await logoField.getByRole('button', { name: 'Select image: Site logo' }).click();
+    await expect(logoField).toContainText('picked-in-modal.png');
+    await expect(logoField.getByRole('button', { name: 'Replace: Site logo' })).toBeFocused();
+    await guideField.getByRole('button', { name: 'Select file: Brand guidelines' }).click();
+    await expect(guideField).toContainText('picked-in-modal.pdf');
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
     await save(page);
     await expect(page.getByText('All changes saved')).toBeVisible();
+    // the save response carries the attachment as the server knows it: no extra request, the preview is already the real one
+    await expect(logoField).toContainText(logo.name);
+    await expect(logoField).toContainText(/1 × 1 · \d+ B/);
+    await expect(guideField).toContainText(guide.name);
+    await expect(guideField).toContainText(/PDF · \d+ B/);
 
     await page.reload();
     await expect(page.getByRole('textbox', { name: 'Default meta description' })).toHaveValue('Line one\nLine two');
@@ -85,6 +160,21 @@ test.describe('English', () => {
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
+    // after a reload the preview comes from the server's initial payload
+    await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(logo.name);
+    await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(/1 × 1 · \d+ B/);
+    await expect(page.getByRole('group', { name: 'Brand guidelines' })).toContainText(guide.name);
+    await expect(page.getByRole('group', { name: 'Site logo' }).getByRole('button', { name: 'Replace: Site logo' })).toBeVisible();
+
+    // Remove only clears the value: after saving, the field is empty and the file is still in the media library
+    await page.getByRole('button', { name: 'Remove Site logo' }).click();
+    await expect(page.getByRole('group', { name: 'Site logo' })).toContainText('No image selected');
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+    await page.reload();
+    await expect(page.getByRole('group', { name: 'Site logo' })).toContainText('No image selected');
+    await expect(page.getByRole('group', { name: 'Brand guidelines' })).toContainText(guide.name);
+    expect((await request.get(`/index.php?rest_route=/wp/v2/media/${logo.id}`)).ok()).toBe(true);
     expect(errors).toEqual([]);
   });
 

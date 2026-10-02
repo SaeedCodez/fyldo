@@ -252,6 +252,32 @@ if ( ! function_exists( 'wp_verify_nonce' ) ) {
 		return ( $GLOBALS['__fyldo_test_nonces'][ $action ] ?? null ) === $nonce ? 1 : false;
 	}
 }
+// Media fields: the file types WordPress allows (a few of them) and the size text of the "too large" message.
+if ( ! function_exists( 'wp_get_mime_types' ) ) {
+	function wp_get_mime_types() {
+		return array(
+			'jpg|jpeg|jpe' => 'image/jpeg',
+			'png'          => 'image/png',
+			'gif'          => 'image/gif',
+			'webp'         => 'image/webp',
+			'pdf'          => 'application/pdf',
+			'zip'          => 'application/zip',
+			'docx'         => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+			'mp3|m4a|m4b'  => 'audio/mpeg',
+		);
+	}
+}
+if ( ! function_exists( 'size_format' ) ) {
+	function size_format( $bytes, $decimals = 0 ) {
+		$units = array( 'GB' => 1073741824, 'MB' => 1048576, 'KB' => 1024, 'B' => 1 );
+		foreach ( $units as $unit => $size ) {
+			if ( $bytes >= $size ) {
+				return number_format( $bytes / $size, $decimals ) . ' ' . $unit;
+			}
+		}
+		return '0 B';
+	}
+}
 if ( ! function_exists( 'current_user_can' ) ) {
 	function current_user_can( $capability ) {
 		return in_array( $capability, $GLOBALS['__fyldo_test_caps'] ?? array( 'manage_options' ), true );

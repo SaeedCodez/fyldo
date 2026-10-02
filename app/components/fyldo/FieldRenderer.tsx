@@ -1,13 +1,15 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
 import { __, formatNumber } from '../../i18n';
-import type { FieldDef, FieldValue } from '../../types';
+import type { FieldDef, FieldValue, MediaItem } from '../../types';
 import { cn } from '../../lib/cn';
+import { sanitizeMediaId } from '../../lib/wp-media';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { ColorPicker } from '../ui/color-picker';
 import { IconPicker } from '../ui/icon-picker';
 import { Input } from '../ui/input';
+import { MediaPicker } from '../ui/media-field';
 import { MultiSelect } from '../ui/multi-select';
 import { Notice } from '../ui/notice';
 import { NumberInput } from '../ui/number-input';
@@ -26,8 +28,13 @@ export interface FieldRendererProps {
   value: FieldValue;
   error?: string;
   divider: boolean;
-  onChange: (id: string, value: FieldValue) => void;
+  /** `media`: the attachment a media field was set to (null when cleared); the other fields never pass it. */
+  onChange: (id: string, value: FieldValue, media?: MediaItem | null) => void;
   onBlur: (id: string) => void;
+  /** What an `image` / `file` field draws for its saved attachment (the page's `media[field.id]`). */
+  media?: MediaItem | null;
+  /** A field shows a message of its own (a chosen file that is the wrong type or too large); its value is left as it was. */
+  onError?: (id: string, message: string) => void;
   /** The page's stored revision: a password shown in clear is hidden again when it changes (a successful save). */
   revision?: string;
   /** The page's locale: a Slider's value is written in its numerals (۷۵ in Persian). */
@@ -42,7 +49,7 @@ const leavesGroup = (done: () => void) => (event: FocusEvent<HTMLElement>) => {
 const list = (value: FieldValue): string[] => (Array.isArray(value) ? value : []);
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
-export function FieldRenderer({ field, value, error, divider, onChange, onBlur, revision, locale = 'en' }: FieldRendererProps): ReactElement {
+export function FieldRenderer({ field, value, error, divider, onChange, onBlur, media = null, onError, revision, locale = 'en' }: FieldRendererProps): ReactElement {
   // Display only: no value, no label association, nothing to change, nothing to send.
   if (field.type === 'notice') {
     return (
@@ -179,6 +186,28 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
             disabled={disabled}
             locale={locale}
             onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+
+    case 'image':
+    case 'file':
+      // A group: the title names it, the buttons inside name themselves (the field label is part of each name).
+      return (
+        <SettingRow {...common} group wide>
+          <MediaPicker
+            kind={field.type}
+            label={field.label}
+            value={sanitizeMediaId(value)}
+            media={media}
+            mimes={field.mimes}
+            maxSize={field.max_size}
+            disabled={disabled}
+            locale={locale}
+            onSelect={(item) => onChange(field.id, item.id, item)}
+            onRemove={() => onChange(field.id, 0, null)}
+            onError={(message) => onError?.(field.id, message)}
             onBlur={() => onBlur(field.id)}
           />
         </SettingRow>

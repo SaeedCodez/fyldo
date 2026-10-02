@@ -172,14 +172,15 @@ final class Page {
 	}
 
 	/**
-	 * @param array<string,mixed> $values   Current sanitized values, keyed by field id.
-	 * @param string              $revision Revision token of the stored value.
+	 * @param array<string,mixed>      $values   Current sanitized values, keyed by field id.
+	 * @param string                   $revision Revision token of the stored value.
+	 * @param array<string,mixed>|null $media    Saved attachments of the media fields (OptionStore::client_media()); null = none.
 	 * @return array<string,mixed>
 	 */
-	public function to_client( array $values, string $revision ): array {
+	public function to_client( array $values, string $revision, ?array $media = null ): array {
 		$tabs = array_values( (array) $this->config['tabs'] );
 
-		return array(
+		$client = array(
 			'id'          => $this->id,
 			'title'       => (string) $this->config['title'],
 			'description' => (string) $this->config['description'],
@@ -197,6 +198,12 @@ final class Page {
 			'values'      => (object) $values,
 			'revision'    => $revision,
 		);
+
+		if ( null !== $media ) {
+			$client['media'] = (object) $media;
+		}
+
+		return $client;
 	}
 
 	/**

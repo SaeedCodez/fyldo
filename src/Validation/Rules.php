@@ -17,9 +17,9 @@ final class Rules {
 
 	/**
 	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number` and `color` are implied by the
-	 * field type (the value must be an address / a number / `#rrggbb`); the others are declared by the developer.
+	 * field type (the value must be an address / a number / `#rrggbb` / an attachment ID); the others are declared by the developer.
 	 */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'allowed', 'min', 'max', 'step' );
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'allowed', 'min', 'max', 'step' );
 
 	/**
 	 * @param array<string,mixed> $rules Field `validate` array.
@@ -27,11 +27,17 @@ final class Rules {
 	 * @return array{rule:string,params:array<string,mixed>}|null
 	 */
 	public static function check( array $rules, $value ): ?array {
-		if ( ! empty( $rules['required'] ) && self::is_empty( $value ) ) {
+		// A media field stores the attachment ID: 0 means nothing is chosen, which `required` does not accept.
+		if ( ! empty( $rules['required'] ) && ( self::is_empty( $value ) || ( ! empty( $rules['media'] ) && 0 === $value ) ) ) {
 			return array(
 				'rule'   => 'required',
 				'params' => array(),
 			);
+		}
+
+		// An attachment ID is a whole number, 0 or more (the field's sanitizer guarantees it; a stored value may not be).
+		if ( ! empty( $rules['media'] ) && ! self::is_empty( $value ) ) {
+			return is_int( $value ) && $value >= 0 ? null : self::fail( 'media', array() );
 		}
 
 		if ( self::is_empty( $value ) && ! is_array( $value ) ) {

@@ -399,6 +399,42 @@
                     ]
                 },
                 {
+                    "id": "site_logo",
+                    "type": "image",
+                    "label": "Site logo",
+                    "description": "Shown in the sidebar and on the login screen.",
+                    "default": 0,
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "media": true
+                    },
+                    "types": null,
+                    "mimes": null,
+                    "max_size": 2097152
+                },
+                {
+                    "id": "brand_guidelines",
+                    "type": "file",
+                    "label": "Brand guidelines",
+                    "description": "Offered as a download on the About tab.",
+                    "default": 0,
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "media": true
+                    },
+                    "types": [
+                        "pdf",
+                        "zip"
+                    ],
+                    "mimes": [
+                        "application/pdf",
+                        "application/zip"
+                    ],
+                    "max_size": null
+                },
+                {
                     "id": "license_key",
                     "type": "text",
                     "label": "License key",
@@ -451,6 +487,8 @@
         "image_quality": 75,
         "accent_color": "#2271b1",
         "menu_icon": "home-2",
+        "site_logo": 0,
+        "brand_guidelines": 0,
         "license_key": "FYLDO-FREE"
     },
     "revision": "rev-1"

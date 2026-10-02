@@ -7,6 +7,7 @@
 
 namespace Fyldo\V1\Storage;
 
+use Fyldo\V1\Fields\AbstractMediaField;
 use Fyldo\V1\Schema\Page;
 
 /**
@@ -62,6 +63,29 @@ final class OptionStore {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * What the browser draws for the media fields (`image`, `file`) of a page: field id → the saved attachment's name, size,
+	 * type, dimensions and thumbnail, or null when nothing is chosen. Null when the page has no media field at all.
+	 *
+	 * @return array<string,array<string,mixed>|null>|null
+	 */
+	public function client_media( Page $page ): ?array {
+		$media  = null;
+		$values = null;
+
+		foreach ( $page->fields() as $id => $field ) {
+			if ( ! $field instanceof AbstractMediaField ) {
+				continue;
+			}
+			$values = $values ?? $this->values( $page );
+			$media  = $media ?? array();
+
+			$media[ $id ] = $field->media( $values[ $id ] );
+		}
+
+		return $media;
 	}
 
 	/**

@@ -8,6 +8,7 @@
 namespace Fyldo\V1\Assets;
 
 use Fyldo\V1\Bootstrap\Loader;
+use Fyldo\V1\Fields\AbstractMediaField;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Support\Naming;
 
@@ -53,6 +54,11 @@ final class Assets {
 		wp_register_style( $handle, $base . '/app.css', array( $fonts_handle ), $cache_bust );
 		wp_enqueue_style( $handle );
 
+		// The native media modal (wp.media) for the `image` and `file` fields: only on a screen that has one.
+		if ( self::has_media_field( $instance ) && function_exists( 'wp_enqueue_media' ) ) {
+			wp_enqueue_media();
+		}
+
 		wp_register_script(
 			$handle,
 			$base . '/boot.js',
@@ -68,6 +74,19 @@ final class Assets {
 		$json = wp_json_encode( ClientConfig::build( $instance ), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE );
 		wp_add_inline_script( $handle, 'window.' . Naming::config_var( $slug ) . '=' . $json . ';', 'before' );
 		wp_enqueue_script( $handle );
+	}
+
+	/** Whether any page of the instance has an `image` or `file` field. */
+	private static function has_media_field( Instance $instance ): bool {
+		foreach ( $instance->pages() as $page ) {
+			foreach ( $page->fields() as $field ) {
+				if ( $field instanceof AbstractMediaField ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/** Development builds (`-dev`) bust the cache with the file time. */
