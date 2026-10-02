@@ -2,7 +2,7 @@
 
 A settings-page framework for WordPress plugin developers. Declare **pages → sections → fields** in PHP; Fyldo renders a React admin UI (Vercel/Geist look, English + Persian/RTL) and sanitizes, validates and saves the values through the REST API.
 
-> **Status: `1.0.0-beta.2`.** Feature-complete for 1.0, API not yet frozen. Requires PHP 7.4+ and WordPress 6.5+. Not published on wordpress.org. Version history: [CHANGELOG.md](CHANGELOG.md).
+> **Status: `1.0.0-beta.3`.** Feature-complete for 1.0, API not yet frozen. Requires PHP 7.4+ and WordPress 6.5+. Not published on wordpress.org. Version history: [CHANGELOG.md](CHANGELOG.md).
 
 **Contents:** [Install](#install) · [Config reference](#config-reference) · [Coexistence and Strauss](#coexistence-and-strauss) · [Contributing](#contributing) · [فارسی](#فارسی)
 
@@ -166,7 +166,7 @@ Releases: bump the version (`fyldo.php`, `package.json`), add a `CHANGELOG.md` e
 
 Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهندگان افزونه‌های وردپرس است. **صفحه‌ها ← بخش‌ها ← فیلدها** را در PHP تعریف می‌کنید؛ Fyldo رابط کاربری React (با پشتیبانی کامل از فارسی و راست‌به‌چپ) را می‌سازد و مقادیر را از طریق REST API پاک‌سازی، اعتبارسنجی و ذخیره می‌کند.
 
-> **وضعیت: `1.0.0-beta.2`.** از نظر امکانات برای 1.0 کامل است، اما API هنوز قطعی نشده. به PHP 7.4+ و وردپرس 6.5+ نیاز دارد. در wordpress.org منتشر نشده است.
+> **وضعیت: `1.0.0-beta.3`.** از نظر امکانات برای 1.0 کامل است، اما API هنوز قطعی نشده. به PHP 7.4+ و وردپرس 6.5+ نیاز دارد. در wordpress.org منتشر نشده است.
 
 ### نصب
 
