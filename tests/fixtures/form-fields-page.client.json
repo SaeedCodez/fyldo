@@ -375,6 +375,30 @@
                     ]
                 },
                 {
+                    "id": "menu_icon",
+                    "type": "icon",
+                    "label": "Menu icon",
+                    "description": "Shown next to the menu item.",
+                    "default": "home-2",
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                        "allowed": [
+                            "home-2",
+                            "setting-2",
+                            "star",
+                            "user"
+                        ]
+                    },
+                    "icons": [
+                        "home-2",
+                        "setting-2",
+                        "star",
+                        "user"
+                    ]
+                },
+                {
                     "id": "license_key",
                     "type": "text",
                     "label": "License key",
@@ -426,6 +450,7 @@
         "density": "comfortable",
         "image_quality": 75,
         "accent_color": "#2271b1",
+        "menu_icon": "home-2",
         "license_key": "FYLDO-FREE"
     },
     "revision": "rev-1"

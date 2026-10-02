@@ -19,6 +19,12 @@
 /* Geometry (not just direction) changes in RTL: switch travel, icon flips, tab indicator. */
 @custom-variant rtl (&:where([dir='rtl'], [dir='rtl'] *));
 
+/* A thin, quiet scrollbar for inner scroll areas (the Icon Picker grid): `border/strong` thumb, no track. */
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--fyldo-border-strong) transparent;
+}
+
 /* Neutral, never-blue keyboard focus (docs/ARCHITECTURE.md §11): 2px white gap + 2px ring. :focus-visible only. */
 @utility focus-ring {
   &:focus-visible {

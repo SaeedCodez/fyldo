@@ -25,6 +25,7 @@ export default defineConfig({
       output: {
         format: 'es',
         entryFileNames: '[name].js',
+        chunkFileNames: 'chunks/[name]-[hash].js', // as in the real build: the icon loader finds `icons/` from a chunk too
         assetFileNames: (info) => (info.names?.some((n) => n.endsWith('.css')) ? 'app.css' : 'assets/[name]-[hash][extname]'),
       },
     },

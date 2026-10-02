@@ -13,6 +13,8 @@
  *   ?c=slider&size=sm|md&state=default|disabled&label=…&helper=…&value=75&suffix=%   (320 wide; the value is formatted in the page's numerals)
  *   ?c=color-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=#2271b1&helper=…&error=…   (320 wide; empty = the dashed swatch)
  *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
+ *   ?c=icon-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=home-2&helper=…&error=…   (320 wide; empty = the dashed tile; preload its icons with names=)
+ *   ?c=icon-picker-modal&value=star&icons=a,b,c&names=a,b,c   (the open modal on its own; icons = the names to offer, none = every Iconsax icon)
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
  *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
@@ -61,6 +63,8 @@ import { ChoiceCardGroup } from '../../../app/components/ui/choice-card-group';
 import { SegmentedControl } from '../../../app/components/ui/segmented-control';
 import { ColorPickerField } from '../../../app/components/ui/color-picker-field';
 import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel';
+import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
+import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
@@ -276,6 +280,35 @@ function ColorPickerDemo() {
         error={state === 'error' ? param('error') : undefined}
         disabled={state === 'disabled'}
       />
+    </div>
+  );
+}
+
+function IconPickerDemo() {
+  const [value, setValue] = useState(param('value'));
+  return (
+    <div style={{ width: 320 }}>
+      <IconPickerField
+        label={param('label')}
+        description={param('helper') || undefined}
+        placeholder={param('placeholder') || undefined}
+        size={size}
+        value={value}
+        onValueChange={setValue}
+        locale={locale}
+        error={state === 'error' ? param('error') : undefined}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
+}
+
+function IconPickerModalDemo() {
+  const icons = param('icons').split(',').filter(Boolean);
+  // the modal portals into the root, centred in the viewport; the stage keeps a box so the test can find it
+  return (
+    <div style={{ width: 1, height: 1 }}>
+      <IconPickerModal open anchorRef={{ current: null }} value={param('value')} icons={icons.length > 0 ? icons : null} locale={locale} onSelect={() => undefined} onClose={() => undefined} />
     </div>
   );
 }
@@ -628,6 +661,10 @@ function Variant() {
       return <ColorPickerDemo />;
     case 'color-picker-panel':
       return <ColorPickerPanelDemo />;
+    case 'icon-picker':
+      return <IconPickerDemo />;
+    case 'icon-picker-modal':
+      return <IconPickerModalDemo />;
     case 'notice':
       return (
         <div style={{ width: 560 }}>

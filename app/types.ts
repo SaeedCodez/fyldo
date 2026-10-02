@@ -154,6 +154,12 @@ export interface ColorFieldDef extends FieldBase {
   presets: string[] | false;
 }
 
+export interface IconFieldDef extends FieldBase {
+  type: 'icon';
+  /** The icon names the picker offers and the server accepts; `null` = every Iconsax icon. */
+  icons: string[] | null;
+}
+
 export type ValueFieldDef =
   | TextFieldDef
   | NumberFieldDef
@@ -167,6 +173,7 @@ export type ValueFieldDef =
   | SegmentedFieldDef
   | SliderFieldDef
   | ColorFieldDef
+  | IconFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef;
 

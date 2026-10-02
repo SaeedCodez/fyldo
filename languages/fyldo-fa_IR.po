@@ -598,3 +598,55 @@ msgstr "مناسب شب"
 
 msgid "Match device"
 msgstr "مطابق دستگاه"
+
+msgid "Menu icon"
+msgstr "آیکن منو"
+
+msgid "Shown next to the menu item."
+msgstr "کنار آیتم منو نمایش داده می‌شود."
+
+msgid "Choose an icon…"
+msgstr "یک آیکن انتخاب کنید…"
+
+msgid "Choose an icon"
+msgstr "یک آیکن انتخاب کنید"
+
+msgid "Search the library, then pick one icon."
+msgstr "کتابخانه را جستجو کنید و یک آیکن انتخاب کنید."
+
+msgid "Search icons"
+msgstr "جستجوی آیکن‌ها"
+
+msgid "Search icons…"
+msgstr "جستجوی آیکن‌ها…"
+
+msgid "Clear search"
+msgstr "پاک کردن جستجو"
+
+msgid "%s icon"
+msgid_plural "%s icons"
+msgstr[0] "%s آیکن"
+msgstr[1] "%s آیکن"
+
+msgid "%1$s result for “%2$s”"
+msgid_plural "%1$s results for “%2$s”"
+msgstr[0] "%1$s نتیجه"
+msgstr[1] "%1$s نتیجه"
+
+msgid "Icons"
+msgstr "آیکن‌ها"
+
+msgid "No icons found"
+msgstr "آیکنی پیدا نشد"
+
+msgid "Try another keyword, like “home” or “arrow”."
+msgstr "کلمه‌ی دیگری را امتحان کنید."
+
+msgid "No icon selected"
+msgstr "آیکنی انتخاب نشده"
+
+msgid "Selected icon"
+msgstr "آیکن انتخاب‌شده"
+
+msgid "Select icon"
+msgstr "انتخاب آیکن"

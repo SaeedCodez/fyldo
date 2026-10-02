@@ -6,6 +6,7 @@ import { cn } from '../../lib/cn';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { ColorPicker } from '../ui/color-picker';
+import { IconPicker } from '../ui/icon-picker';
 import { Input } from '../ui/input';
 import { MultiSelect } from '../ui/multi-select';
 import { Notice } from '../ui/notice';
@@ -161,6 +162,20 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
           <ColorPicker
             value={typeof value === 'string' ? value : ''}
             presets={field.presets}
+            disabled={disabled}
+            locale={locale}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+
+    case 'icon':
+      return (
+        <SettingRow {...common}>
+          <IconPicker
+            value={typeof value === 'string' ? value : ''}
+            icons={field.icons}
             disabled={disabled}
             locale={locale}
             onValueChange={(next) => onChange(field.id, next)}

@@ -106,6 +106,7 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`
 | `segmented` | A Segmented Control: exactly one of 2–5 short `options` (same forms as `radio`, without descriptions). Needs a `default` that is an enabled option. |
 | `slider` | A number in a bounded range, picked with a single thumb. `min` (default `0`), `max` (`100`) and `step` (`1`) are set on the field; they are exported as the `min` / `max` / `step` rules, so a value outside the range or off the step is rejected in PHP and in the browser (nothing is clamped silently). `default` is `min` unless given. |
 | `color` | One free colour: a swatch and its hex value that open a picker (saturation/brightness area, hue strip, hex box, presets). Stored as lower-case `#rrggbb`, no alpha; typed text such as `#ABC` or `2271b1` is read as `#aabbcc` / `#2271b1`. `default` is a hex colour (none by default); `presets` is a list of hex colours (default: the 16 of the design) or `false` to hide the section; a non-hex preset is a configuration error. Empty is allowed unless `validate.required`. |
+| `icon` | One icon from the Iconsax Linear library: a preview tile and the icon's name that open a modal with a search box and a scrolling icon grid. Stored as the kebab-case name, e.g. `setting-2` (the same names as the `icon` option). `default` is an icon name (none by default). `icons` is an optional list of names that restricts both the picker and the server-side check; the server never holds the full list, so a well-formed name it has no list for is accepted (the browser then draws nothing). Layout default `field`; `validate.required` is supported. |
 | `notice` | Display only, never stored: `description`, `tone` (`gray` `blue` `green` `amber` `red`). |
 
 `validate` keys: `required`, `min_length`, `max_length`, `pattern`, `min`, `max`, `step`, `schemes`, `allowed`. They run in PHP **and** in the browser. `validate_cb( $value )` (return `true`, `false` or a message) and `sanitize_cb` are PHP-only; the server is authoritative.
@@ -182,7 +183,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 ### مرجع پیکربندی (خلاصه)
 
-- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `select` `multi_select` و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP.
+- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `icon` `select` `multi_select` و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP.
 - **صفحه‌ها و ناوبری:** `navigation` برابر `sidebar` (پیش‌فرض) یا `top`؛ گروه‌ها با `add_group`؛ زبانه‌ها با `tabs`؛ نشان عددی با `badge`.
 - **حالت ذخیره:** `'save' => 'global'` (نوار ذخیره برای کل صفحه) یا `'section'` (دکمهٔ ذخیره در هر کارت)؛ یکی برای هر صفحه.
 - **لوگو و عنوان:** `title` نام برند است و `logo` نام یک آیکون Iconsax یا نشانی تصویر.

@@ -434,6 +434,13 @@ final class Demo {
 							'description' => __( 'Used for links and buttons on your settings page.', 'fyldo' ),
 							'default'     => '#2271b1',
 						),
+						array(
+							'id'          => 'menu_icon',
+							'type'        => 'icon',
+							'label'       => __( 'Menu icon', 'fyldo' ),
+							'description' => __( 'Shown next to the menu item.', 'fyldo' ),
+							'default'     => 'home-2',
+						),
 					),
 				),
 				array(

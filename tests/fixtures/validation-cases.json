@@ -159,6 +159,22 @@
     { "name": "choice: not one of the options", "rules": { "required": true, "allowed": ["light", "dark", "system"] }, "value": "contrast", "expect": "allowed" },
     { "name": "choice: a disabled option is not in allowed, so it cannot be chosen", "rules": { "required": true, "allowed": ["light", "dark"] }, "value": "system", "expect": "allowed" },
 
+    { "name": "icon: a kebab name passes", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "setting-2", "expect": null },
+    { "name": "icon: a single word passes", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "home", "expect": null },
+    { "name": "icon: a name that starts with a digit passes", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "3d-cube-scan", "expect": null },
+    { "name": "icon: upper case fails the pattern", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "Setting-2", "expect": "pattern" },
+    { "name": "icon: a double hyphen fails the pattern", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "setting--2", "expect": "pattern" },
+    { "name": "icon: a trailing hyphen fails the pattern", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "setting-", "expect": "pattern" },
+    { "name": "icon: a space fails the pattern", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "setting 2", "expect": "pattern" },
+    { "name": "icon: markup fails the pattern", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "<svg/onload=x>", "expect": "pattern" },
+    { "name": "icon: empty is optional", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "", "expect": null },
+    { "name": "icon: required and empty fails before the pattern", "rules": { "required": true, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "value": "", "expect": "required" },
+    { "name": "icon: icons list, a member passes", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2", "setting-2"] }, "value": "setting-2", "expect": null },
+    { "name": "icon: icons list, a well-formed non-member fails", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2", "setting-2"] }, "value": "user", "expect": "allowed" },
+    { "name": "icon: icons list, a malformed name fails the pattern first", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2", "setting-2"] }, "value": "Home-2", "expect": "pattern" },
+    { "name": "icon: icons list, empty is optional", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2"] }, "value": "", "expect": null },
+    { "name": "icon: required with an icons list, a member passes", "rules": { "required": true, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2"] }, "value": "home-2", "expect": null },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],

@@ -1,7 +1,7 @@
 /**
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
- * Segmented Control, a Slider and a Color Picker (its panel is a lazily loaded chunk).
+ * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -58,6 +58,16 @@ test.describe('English', () => {
     await expect(page.getByRole('dialog')).toBeHidden();
     await expect(accent).toBeFocused();
     await expect(accent).toHaveText('#D63638');
+    // `includeHidden`: the page behind the open modal is aria-hidden
+    const menuIcon = page.getByRole('button', { name: 'Menu icon', includeHidden: true });
+    await expect(menuIcon).toHaveText('home-2');
+    await menuIcon.click();
+    await page.getByRole('option', { name: 'star' }).click(); // a tile of the lazily loaded modal (the field offers 4 icons)
+    await expect(menuIcon).toHaveText('home-2'); // nothing changes until "Select icon"
+    await page.getByRole('button', { name: 'Select icon' }).click();
+    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(menuIcon).toBeFocused();
+    await expect(menuIcon).toHaveText('star');
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
@@ -74,6 +84,7 @@ test.describe('English', () => {
     await expect(page.getByRole('radio', { name: 'Spacious' })).toHaveAttribute('aria-checked', 'true');
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
+    await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
     expect(errors).toEqual([]);
   });
 
@@ -531,6 +542,13 @@ test.describe('Persian (RTL)', () => {
     const swatch = await accent.locator('[data-slot=fy-color-dot]').boundingBox();
     const control = await accent.boundingBox();
     expect(swatch!.x + swatch!.width).toBeGreaterThan(control!.x + control!.width / 2);
+
+    // icon picker: preview tile at the start (right), grid icon at the end (left); the icon name stays left to right
+    const menuIcon = page.getByRole('button', { name: 'Menu icon' });
+    await expect(menuIcon.locator('bdi')).toHaveAttribute('dir', 'ltr');
+    const tile = await menuIcon.locator('[data-slot=fy-icon-preview]').boundingBox();
+    const iconControl = await menuIcon.boundingBox();
+    expect(tile!.x + tile!.width).toBeGreaterThan(iconControl!.x + iconControl!.width / 2);
 
     // Persian validation messages (client: bundled JED; server: .mo)
     await page.getByRole('textbox', { name: 'Default meta description' }).fill('x'.repeat(161));
