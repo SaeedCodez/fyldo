@@ -4,9 +4,13 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.3] - 2026-10-02
+
 ### Changed
 
 - **Fields**: single-line and list fields now default to the `field` layout (control beside the label); set `layout => 'stacked'` for the old look. `choice` stays `stacked`, `toggle` and `checkbox` stay `inline`.
+- **Design**: text-field borders are softer (`border/input` is `gray/500`, hover `gray/700`), following the refreshed design. The resting border is 1.66:1 on white, below WCAG 1.4.11 (3:1); this is a recorded exception (decision O16), hover, focus and error borders still pass.
+- **Setting Row**: a new `field` layout (title and description on the start side, a 320px control on the end, 360px for wide controls) and the matching Section Card.
 
 ### Added
 
@@ -43,5 +47,6 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.3]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.1
