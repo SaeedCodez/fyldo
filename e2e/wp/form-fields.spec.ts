@@ -58,7 +58,8 @@ test.describe('English', () => {
     await expect(page.getByRole('dialog')).toBeHidden();
     await expect(accent).toBeFocused();
     await expect(accent).toHaveText('#D63638');
-    const menuIcon = page.getByRole('button', { name: 'Menu icon' });
+    // `includeHidden`: the page behind the open modal is aria-hidden
+    const menuIcon = page.getByRole('button', { name: 'Menu icon', includeHidden: true });
     await expect(menuIcon).toHaveText('home-2');
     await menuIcon.click();
     await page.getByRole('option', { name: 'star' }).click(); // a tile of the lazily loaded modal (the field offers 4 icons)
