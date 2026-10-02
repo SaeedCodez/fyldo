@@ -27,7 +27,7 @@ final class Saver {
 	 * @param Page                $page     Page being saved.
 	 * @param array<string,mixed> $incoming Untrusted values keyed by field id (partial).
 	 * @param string|null         $revision Revision the client last saw; null skips the concurrency check.
-	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string,media:array<string,mixed>|null}
 	 *         status: `ok` | `invalid` | `conflict`.
 	 */
 	public function save( Page $page, array $incoming, ?string $revision ): array {
@@ -98,7 +98,7 @@ final class Saver {
 	 * reset is a change. Fires `before_save` / `saved` with what is now stored (an empty array when nothing is kept),
 	 * like any other write, then `reset`.
 	 *
-	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string,media:array<string,mixed>|null}
 	 */
 	public function reset( Page $page ): array {
 		$store  = $this->instance->store();
@@ -135,7 +135,7 @@ final class Saver {
 
 	/**
 	 * @param array<string,string> $errors Errors.
-	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string,media:array<string,mixed>|null}
 	 */
 	private function result( string $status, array $errors, Page $page ): array {
 		$store = $this->instance->store();
@@ -145,6 +145,7 @@ final class Saver {
 			'errors'   => $errors,
 			'values'   => $store->client_values( $page ),
 			'revision' => $store->revision( $page ),
+			'media'    => $store->client_media( $page ),
 		);
 	}
 }

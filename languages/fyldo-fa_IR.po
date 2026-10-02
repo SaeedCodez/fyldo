@@ -650,3 +650,70 @@ msgstr "آیکن انتخاب‌شده"
 
 msgid "Select icon"
 msgstr "انتخاب آیکن"
+
+msgid "Choose a file from the media library."
+msgstr "یک فایل از کتابخانه رسانه انتخاب کنید."
+
+msgid "This file is no longer available. Choose another one."
+msgstr "این فایل دیگر در دسترس نیست. فایل دیگری انتخاب کنید."
+
+msgid "Choose an image."
+msgstr "یک تصویر انتخاب کنید."
+
+msgid "This file type is not allowed."
+msgstr "این نوع فایل مجاز نیست."
+
+#. translators: %s: the largest allowed file size, such as 2 MB.
+msgid "Choose a file of %s or less."
+msgstr "فایلی با حجم حداکثر %s انتخاب کنید."
+
+msgid "Select"
+msgstr "انتخاب"
+
+msgid "Select image"
+msgstr "انتخاب تصویر"
+
+msgid "Select file"
+msgstr "انتخاب فایل"
+
+msgid "Replace"
+msgstr "جایگزینی"
+
+msgid "No image selected"
+msgstr "تصویری انتخاب نشده"
+
+msgid "No file selected"
+msgstr "فایلی انتخاب نشده"
+
+msgid "From the media library"
+msgstr "از کتابخانه رسانه"
+
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+msgid "B"
+msgstr "بایت"
+
+msgid "KB"
+msgstr "کیلوبایت"
+
+msgid "MB"
+msgstr "مگابایت"
+
+msgid "GB"
+msgstr "گیگابایت"
+
+msgid "%1$s · %2$s"
+msgstr "%2$s · %1$s"
+
+msgid "Site logo"
+msgstr "لوگوی سایت"
+
+msgid "Shown in the sidebar and on the login screen."
+msgstr "در نوار کناری و صفحه ورود نمایش داده می‌شود."
+
+msgid "Brand guidelines"
+msgstr "راهنمای برند"
+
+msgid "Offered as a download on the About tab."
+msgstr "در برگه درباره، به‌صورت فایل قابل دانلود نمایش داده می‌شود."

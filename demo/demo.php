@@ -441,6 +441,20 @@ final class Demo {
 							'description' => __( 'Shown next to the menu item.', 'fyldo' ),
 							'default'     => 'home-2',
 						),
+						array(
+							'id'          => 'site_logo',
+							'type'        => 'image',
+							'label'       => __( 'Site logo', 'fyldo' ),
+							'description' => __( 'Shown in the sidebar and on the login screen.', 'fyldo' ),
+							'max_size'    => '2MB',
+						),
+						array(
+							'id'          => 'brand_guidelines',
+							'type'        => 'file',
+							'label'       => __( 'Brand guidelines', 'fyldo' ),
+							'description' => __( 'Offered as a download on the About tab.', 'fyldo' ),
+							'types'       => array( 'pdf', 'zip' ),
+						),
 					),
 				),
 				array(

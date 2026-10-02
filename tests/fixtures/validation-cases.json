@@ -1,5 +1,5 @@
 {
-  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, color, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII, the Arabic decimal separator (U+066B) as \".\" and the Arabic thousands separator (U+066C) is removed: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). `colors`: what a color field makes of any raw value (`sanitizeColor` in TS, `ColorField::read` in PHP): a colour in any accepted spelling (`#rgb`, `#rrggbb`, with or without the `#`, any case, surrounding space) becomes `#rrggbb` in lower case; other text is kept trimmed so the `color` rule can report it; a value that is not text is nothing. Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
+  "$comment": "Shared by PHPUnit (tests/php/Unit/RulesTest.php, DigitsTest.php) and Vitest (tests/js/validation.test.ts, digits.test.ts). `cases`: `expect` is the id of the first failing rule, or null when the value is valid. Rule order: required, min_length, max_length, pattern, schemes, email, number, color, allowed, min, max, step. For a list value (checkbox group, multi select) min/max count the selected items and an empty list still counts against min. A number field's value is int|float, or text that could not be read as a number (the implied `number` rule fails it); `step` counts from `min` (0 when there is none). `digits`: what a field of that type keeps of a typed/pasted text once Persian (U+06F0-9) and Arabic-Indic (U+0660-9) digits are read as ASCII, the Arabic decimal separator (U+066B) as \".\" and the Arabic thousands separator (U+066C) is removed: only url, email and number do it (text and password are never touched). `numbers`: what a number field makes of any raw value (`sanitizeNumber` in TS, `NumberField::read` in PHP). `media`: what an image or file field makes of any raw value (`sanitizeMediaId` in TS, `AbstractMediaField::sanitize_value` in PHP): a whole number of 0 or more (the attachment ID, 0 = nothing chosen); text that is a number is read as one, a fraction loses its decimals, a negative number loses its sign (absint) and anything else is 0. The implied `media` rule fails a stored value that is not such a whole number, and makes `required` reject 0. `colors`: what a color field makes of any raw value (`sanitizeColor` in TS, `ColorField::read` in PHP): a colour in any accepted spelling (`#rgb`, `#rrggbb`, with or without the `#`, any case, surrounding space) becomes `#rrggbb` in lower case; other text is kept trimmed so the `color` rule can report it; a value that is not text is nothing. Callbacks (`validate_cb`, `sanitize_cb`) are PHP callables and cannot run in the browser; they are covered by PHPUnit only.",
   "cases": [
     { "name": "required: empty string fails", "rules": { "required": true }, "value": "", "expect": "required" },
     { "name": "required: null fails", "rules": { "required": true }, "value": null, "expect": "required" },
@@ -175,6 +175,14 @@
     { "name": "icon: icons list, empty is optional", "rules": { "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2"] }, "value": "", "expect": null },
     { "name": "icon: required with an icons list, a member passes", "rules": { "required": true, "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "allowed": ["home-2"] }, "value": "home-2", "expect": null },
 
+    { "name": "media: nothing chosen is optional", "rules": { "media": true }, "value": 0, "expect": null },
+    { "name": "media: an attachment id passes", "rules": { "media": true }, "value": 12, "expect": null },
+    { "name": "media: required rejects 0 (nothing chosen)", "rules": { "required": true, "media": true }, "value": 0, "expect": "required" },
+    { "name": "media: required accepts an id", "rules": { "required": true, "media": true }, "value": 12, "expect": null },
+    { "name": "media: a negative id is not an attachment", "rules": { "media": true }, "value": -3, "expect": "media" },
+    { "name": "media: a fraction is not an attachment", "rules": { "media": true }, "value": 1.5, "expect": "media" },
+    { "name": "media: text is not an attachment id", "rules": { "media": true }, "value": "12", "expect": "media" },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],
@@ -257,5 +265,18 @@
     { "name": "a number is nothing", "input": 123456, "expect": "" },
     { "name": "a boolean is nothing", "input": true, "expect": "" },
     { "name": "a list is nothing", "input": [], "expect": "" }
+  ],
+
+  "media": [
+    { "name": "an id stays", "input": 12, "expect": 12 },
+    { "name": "digits as text", "input": "12", "expect": 12 },
+    { "name": "zero is nothing chosen", "input": 0, "expect": 0 },
+    { "name": "empty text is nothing", "input": "", "expect": 0 },
+    { "name": "null is nothing", "input": null, "expect": 0 },
+    { "name": "negative becomes positive (absint)", "input": -5, "expect": 5 },
+    { "name": "a fraction drops its decimals", "input": 3.7, "expect": 3 },
+    { "name": "text that is not a number is nothing", "input": "abc", "expect": 0 },
+    { "name": "a list is nothing", "input": [4], "expect": 0 },
+    { "name": "a boolean is nothing", "input": true, "expect": 0 }
   ]
 }

@@ -146,20 +146,18 @@ final class Controller {
 			return new \WP_Error(
 				'fyldo_conflict',
 				__( 'These settings were changed somewhere else. Reload to see the latest values.', 'fyldo' ),
-				array(
-					'status'   => 409,
-					'values'   => (object) $result['values'],
-					'revision' => $result['revision'],
+				array_merge(
+					array(
+						'status'   => 409,
+						'values'   => (object) $result['values'],
+						'revision' => $result['revision'],
+					),
+					self::media_part( $result['media'] )
 				)
 			);
 		}
 
-		return new \WP_REST_Response(
-			array(
-				'values'   => (object) $result['values'],
-				'revision' => $result['revision'],
-			)
-		);
+		return new \WP_REST_Response( self::saved( $result ) );
 	}
 
 	/**
@@ -185,12 +183,7 @@ final class Controller {
 
 		$result = ( new Saver( $this->instance ) )->reset( $page );
 
-		return new \WP_REST_Response(
-			array(
-				'values'   => (object) $result['values'],
-				'revision' => $result['revision'],
-			)
-		);
+		return new \WP_REST_Response( self::saved( $result ) );
 	}
 
 	private function page( \WP_REST_Request $request ): Page {
@@ -204,14 +197,41 @@ final class Controller {
 	}
 
 	/**
-	 * @return array{values:object,revision:string}
+	 * @return array<string,mixed>
 	 */
 	private function payload( Page $page ): array {
 		$store = $this->instance->store();
 
-		return array(
-			'values'   => (object) $store->client_values( $page ),
-			'revision' => $store->revision( $page ),
+		return array_merge(
+			array(
+				'values'   => (object) $store->client_values( $page ),
+				'revision' => $store->revision( $page ),
+			),
+			self::media_part( $store->client_media( $page ) )
 		);
+	}
+
+	/**
+	 * The body of a successful write: the values, the revision and (when the page has media fields) the saved attachments.
+	 *
+	 * @param array{values:array<string,mixed>,revision:string,media:array<string,mixed>|null} $result Saver result.
+	 * @return array<string,mixed>
+	 */
+	private static function saved( array $result ): array {
+		return array_merge(
+			array(
+				'values'   => (object) $result['values'],
+				'revision' => $result['revision'],
+			),
+			self::media_part( $result['media'] )
+		);
+	}
+
+	/**
+	 * @param array<string,mixed>|null $media Saved attachments, or null when the page has no media field.
+	 * @return array<string,object>
+	 */
+	private static function media_part( ?array $media ): array {
+		return null === $media ? array() : array( 'media' => (object) $media );
 	}
 }

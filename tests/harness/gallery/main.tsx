@@ -15,6 +15,7 @@
  *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
  *   ?c=icon-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=home-2&helper=…&error=…   (320 wide; empty = the dashed tile; preload its icons with names=)
  *   ?c=icon-picker-modal&value=star&icons=a,b,c&names=a,b,c   (the open modal on its own; icons = the names to offer, none = every Iconsax icon)
+ *   ?c=upload-image|select-file&preview=empty|filled&state=default|error|disabled&label=…&helper=…&error=…&filename=…&filesize=38912&mime=…&ext=…&width=512&height=512&thumb=<url>&names=gallery-add,trash   (360 wide; the texts are Fyldo's own strings)
  *   ?c=tag&size=sm|md&state=default|disabled&label=Posts&removable=0|1
  *   ?c=notice&tone=gray|blue|green|amber|red&title=…&message=…      (the static Notice; 560 wide as in the pack)
  *   ?c=multi-select&size=sm&state=default|error|disabled&label=&placeholder=&helper=&error=&options=post:Posts|…&value=post,page&max=3&clear=1&search=0&footer=0
@@ -64,6 +65,8 @@ import { SegmentedControl } from '../../../app/components/ui/segmented-control';
 import { ColorPickerField } from '../../../app/components/ui/color-picker-field';
 import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel';
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
+import { MediaField } from '../../../app/components/ui/media-field';
+import type { MediaKind } from '../../../app/lib/wp-media';
 import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
@@ -296,6 +299,40 @@ function IconPickerDemo() {
         value={value}
         onValueChange={setValue}
         locale={locale}
+        error={state === 'error' ? param('error') : undefined}
+        disabled={state === 'disabled'}
+      />
+    </div>
+  );
+}
+
+/** Upload Image / Select File, empty or filled (`preview=filled` + the attachment's facts). Hover and focus are forced by the test. */
+function MediaDemo({ kind }: { kind: MediaKind }) {
+  const filled = param('preview') === 'filled';
+  const media = filled
+    ? {
+        id: 7,
+        filename: param('filename'),
+        filesize: Number(param('filesize', '0')),
+        mime: param('mime'),
+        extension: param('ext'),
+        width: q.get('width') === null ? null : Number(param('width')),
+        height: q.get('height') === null ? null : Number(param('height')),
+        thumbnail: param('thumb') || null,
+      }
+    : null;
+  return (
+    <div style={{ width: 360 }}>
+      <MediaField
+        kind={kind}
+        label={param('label')}
+        description={param('helper') || undefined}
+        value={filled ? 7 : 0}
+        media={media}
+        locale={locale}
+        onSelect={() => undefined}
+        onRemove={() => undefined}
+        onError={() => undefined}
         error={state === 'error' ? param('error') : undefined}
         disabled={state === 'disabled'}
       />
@@ -665,6 +702,10 @@ function Variant() {
       return <IconPickerDemo />;
     case 'icon-picker-modal':
       return <IconPickerModalDemo />;
+    case 'upload-image':
+      return <MediaDemo kind="image" />;
+    case 'select-file':
+      return <MediaDemo kind="file" />;
     case 'notice':
       return (
         <div style={{ width: 560 }}>

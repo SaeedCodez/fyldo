@@ -2,7 +2,7 @@
  * Client mirror of src/Validation/Rules.php. The server is authoritative; this exists for instant feedback.
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
- * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, allowed, min, max, step.
+ * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, media, allowed, min, max, step.
  */
 import { __, _n, sprintf } from '../i18n';
 import type { RuleSet } from '../types';
@@ -54,7 +54,10 @@ function onStep(value: number, step: number, base: number): boolean {
 }
 
 export function check(rules: RuleSet, value: unknown): Failure | null {
-  if (rules.required && isEmpty(value)) return fail('required');
+  // A media field stores the attachment ID: 0 means nothing is chosen, which `required` does not accept.
+  if (rules.required && (isEmpty(value) || (rules.media && value === 0))) return fail('required');
+  // An attachment ID is a whole number, 0 or more (what the field's sanitizer produces).
+  if (rules.media && !isEmpty(value)) return typeof value === 'number' && Number.isInteger(value) && value >= 0 ? null : fail('media');
   if (isEmpty(value) && !Array.isArray(value)) return null; // (an empty list still counts against `min`)
 
   if (typeof value === 'string') {
@@ -116,6 +119,8 @@ export function messageFor(failure: Failure): string {
       return __('Enter a valid color, like #rrggbb.', 'fyldo');
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
+    case 'media':
+      return __('Choose a file from the media library.', 'fyldo');
     case 'step':
       return sprintf(__('Enter a value in steps of %s.', 'fyldo'), String(failure.params.step ?? ''));
     case 'min':

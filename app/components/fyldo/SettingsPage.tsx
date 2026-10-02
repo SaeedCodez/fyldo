@@ -45,7 +45,7 @@ const savesHere = (page: PageDef, section: SectionDef): boolean =>
  * pattern): one pattern per page, never both. Values and edits belong to the page, so switching tabs keeps them.
  */
 export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
-  const { state, dirty, scopes, setValue, discard, save, validateField, reload, runAction } = usePageForm(page, api, store);
+  const { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction } = usePageForm(page, api, store);
   const toaster = useOptionalToaster();
   // The Danger card whose confirmation is open; kept after it closes so the dialog can fade out with its text.
   const [danger, setDanger] = useState<SectionDef | null>(null);
@@ -191,6 +191,8 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
                 divider={index < section.fields.length - 1}
                 onChange={setValue}
                 onBlur={validateField}
+                media={state.media[field.id] ?? null}
+                onError={setError}
                 revision={state.revision}
                 locale={locale}
               />

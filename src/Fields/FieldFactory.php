@@ -32,6 +32,8 @@ final class FieldFactory {
 			ChoiceField::class,
 			ColorField::class,
 			IconField::class,
+			ImageField::class,
+			FileField::class,
 			RadioField::class,
 			SegmentedField::class,
 			SelectField::class,
