@@ -14,8 +14,9 @@ use Fyldo\V1\Support\Attachments;
  * One attachment from the WordPress media library. The value is the attachment ID (an int, 0 = nothing chosen): the name, size,
  * type and dimensions are read from the attachment, never from its URL, and clearing the field never deletes anything.
  *
- * Config: `types` (a list of file extensions such as `array( 'pdf', 'zip' )`, mapped to MIME types with `wp_get_mime_types()`;
- * an extension WordPress does not know is a ConfigException) and `max_size` (bytes, or text like `2MB`). The browser asks the
+ * Config: `types` (a list of file extensions such as `array( 'pdf', 'zip' )` and/or WordPress type groups from
+ * `wp_get_ext_types()` such as `array( 'document', 'image' )`, which expand to their extensions; mapped to MIME types with
+ * `wp_get_mime_types()`; a name that is neither is a ConfigException) and `max_size` (bytes, or text like `2MB`). The browser asks the
  * media library for those types only and checks the choice again; the server checks the stored attachment.
  */
 abstract class AbstractMediaField extends AbstractField {
@@ -78,6 +79,23 @@ abstract class AbstractMediaField extends AbstractField {
 		return $bytes > 0 ? $bytes : null;
 	}
 
+	/**
+	 * The extensions of a WordPress type group (`image`, `document`, …) that WordPress also allows to upload, or null when the
+	 * name is not a group.
+	 *
+	 * @param string $name Lower-case name.
+	 * @param array  $table Extension → MIME type.
+	 * @return string[]|null
+	 */
+	private static function group_extensions( string $name, array $table ): ?array {
+		$groups = wp_get_ext_types();
+		if ( ! isset( $groups[ $name ] ) || ! is_array( $groups[ $name ] ) ) {
+			return null;
+		}
+
+		return array_values( array_filter( array_map( 'strval', $groups[ $name ] ), static fn( string $extension ): bool => isset( $table[ $extension ] ) ) );
+	}
+
 	protected function normalize_type( array $config ): array {
 		$id    = (string) $config['id'];
 		$kind  = $this->kind();
@@ -87,24 +105,29 @@ abstract class AbstractMediaField extends AbstractField {
 		$mimes = null;
 		if ( isset( $config['types'] ) ) {
 			if ( ! is_array( $config['types'] ) || array() === $config['types'] ) {
-				throw new ConfigException( sprintf( '%1$s field "%2$s": `types` must be a non-empty list of file extensions like "pdf".', $label, $id ) );
+				throw new ConfigException( sprintf( '%1$s field "%2$s": `types` must be a non-empty list of file extensions like "pdf" or type groups like "image".', $label, $id ) );
 			}
 
 			$table = self::mime_table();
 			$types = array();
 			$mimes = array();
-			foreach ( $config['types'] as $extension ) {
-				$name = is_string( $extension ) ? strtolower( ltrim( trim( $extension ), '.' ) ) : '';
-				if ( '' === $name || ! isset( $table[ $name ] ) ) {
-					throw new ConfigException( sprintf( '%1$s field "%2$s": "%3$s" in `types` is not a file extension WordPress allows (see wp_get_mime_types()).', $label, $id, is_scalar( $extension ) ? (string) $extension : gettype( $extension ) ) );
+			foreach ( $config['types'] as $entry ) {
+				$name       = is_string( $entry ) ? strtolower( ltrim( trim( $entry ), '.' ) ) : '';
+				$group      = '' === $name ? null : self::group_extensions( $name, $table );
+				$extensions = null === $group ? array( $name ) : $group;
+				if ( '' === $name || array() === $extensions || ( null === $group && ! isset( $table[ $name ] ) ) ) {
+					throw new ConfigException( sprintf( '%1$s field "%2$s": "%3$s" in `types` is not a file extension or type group WordPress knows (see wp_get_mime_types() and wp_get_ext_types()).', $label, $id, is_scalar( $entry ) ? (string) $entry : gettype( $entry ) ) );
 				}
-				if ( 'image' === $kind && 0 !== strpos( $table[ $name ], 'image/' ) ) {
-					throw new ConfigException( sprintf( 'Image field "%1$s": `types` may only narrow to image extensions, "%2$s" is not one. Use a `file` field for it.', $id, $name ) );
-				}
-				$types[ $name ] = $name;
 
-				$mime           = $table[ $name ];
-				$mimes[ $mime ] = $mime;
+				foreach ( $extensions as $extension ) {
+					if ( 'image' === $kind && 0 !== strpos( $table[ $extension ], 'image/' ) ) {
+						throw new ConfigException( sprintf( 'Image field "%1$s": `types` may only narrow to image extensions, "%2$s" is not one. Use a `file` field for it.', $id, $name ) );
+					}
+					$types[ $extension ] = $extension;
+
+					$mime           = $table[ $extension ];
+					$mimes[ $mime ] = $mime;
+				}
 			}
 			$types = array_values( $types );
 			$mimes = array_values( $mimes );

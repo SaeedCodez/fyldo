@@ -80,6 +80,64 @@ final class MediaFieldsTest extends TestCase {
 		$this->assertSame( array( 'image/jpeg', 'image/png' ), $image->to_client()['mimes'], 'one MIME type for both spellings of JPEG' );
 	}
 
+	public function test_types_take_wordpress_type_groups(): void {
+		$file = $this->file( array( 'types' => array( 'archive', 'document' ) ) );
+		$this->assertSame( array( 'zip', 'docx', 'pdf' ), $file->to_client()['types'], 'a group expands to the extensions of its kind that WordPress allows' );
+		$this->assertContains( 'application/zip', $file->to_client()['mimes'] );
+		$this->assertContains( 'application/pdf', $file->to_client()['mimes'] );
+
+		$image = $this->file( array( 'types' => array( 'IMAGE' ) ) );
+		$this->assertSame( array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ), $image->to_client()['types'] );
+		$this->assertSame( array( 'image/jpeg', 'image/gif', 'image/png', 'image/webp' ), $image->to_client()['mimes'] );
+	}
+
+	public function test_extensions_wordpress_does_not_allow_are_dropped_from_a_group(): void {
+		$document = $this->file( array( 'types' => array( 'document' ) ) );
+		$this->assertSame( array( 'docx', 'pdf' ), $document->to_client()['types'], 'doc, rtf, wp and wpd are in the group but not in the (stubbed) allowed uploads' );
+	}
+
+	public function test_groups_and_extensions_mix_and_duplicates_collapse(): void {
+		$file  = $this->file( array( 'types' => array( 'pdf', 'document', 'png', 'image', 'zip', 'pdf' ) ) );
+		$types = $file->to_client()['types'];
+		$this->assertSame( count( $types ), count( array_unique( $types ) ), 'no extension twice' );
+		$this->assertSame( array( 'pdf', 'docx', 'png', 'jpg', 'jpeg', 'jpe', 'gif', 'webp', 'zip' ), $types, 'first appearance wins the order' );
+		$mimes = $file->to_client()['mimes'];
+		$this->assertSame( count( $mimes ), count( array_unique( $mimes ) ), 'no MIME type twice' );
+	}
+
+	public function test_a_file_field_accepts_an_image_when_the_image_group_is_listed(): void {
+		$file = $this->file( array( 'types' => array( 'document', 'archive', 'image' ) ) );
+		$this->assertNull( $file->validate( 7 ), 'an image passes' );
+		$this->assertNull( $file->validate( 9 ), 'a document passes' );
+	}
+
+	public function test_the_image_field_takes_the_image_group_and_nothing_else(): void {
+		$image = $this->image( array( 'types' => array( 'image' ) ) );
+		$this->assertContains( 'png', $image->to_client()['types'] );
+		$this->assertNotContains( 'pdf', $image->to_client()['types'] );
+		$this->assertContains( 'image/png', $image->to_client()['mimes'] );
+
+		$mixed = $this->image( array( 'types' => array( 'image', 'webp' ) ) );
+		$this->assertContains( 'webp', $mixed->to_client()['types'] );
+	}
+
+	/**
+	 * @dataProvider non_image_groups
+	 */
+	public function test_the_image_field_rejects_other_groups( string $group ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( 'may only narrow to image extensions' );
+		$this->image( array( 'types' => array( $group ) ) );
+	}
+
+	public function non_image_groups(): array {
+		return array(
+			'document' => array( 'document' ),
+			'archive'  => array( 'archive' ),
+			'audio'    => array( 'audio' ),
+		);
+	}
+
 	public function test_max_size_takes_bytes_or_text(): void {
 		$this->assertSame( 2097152, $this->image( array( 'max_size' => '2MB' ) )->to_client()['max_size'] );
 		$this->assertSame( 512000, $this->file( array( 'max_size' => '500 kb' ) )->to_client()['max_size'] );
@@ -100,6 +158,7 @@ final class MediaFieldsTest extends TestCase {
 	public function bad_config(): array {
 		return array(
 			'unknown extension'    => array( 'file', array( 'types' => array( 'pdf', 'exe-ish' ) ), '"exe-ish" in `types`' ),
+			'unknown group'        => array( 'file', array( 'types' => array( 'document', 'documents' ) ), '"documents" in `types` is not a file extension or type group' ),
 			'types not a list'     => array( 'file', array( 'types' => 'pdf' ), '`types` must be a non-empty list' ),
 			'empty types'          => array( 'file', array( 'types' => array() ), '`types` must be a non-empty list' ),
 			'a number as type'     => array( 'file', array( 'types' => array( 7 ) ), '`types`' ),
