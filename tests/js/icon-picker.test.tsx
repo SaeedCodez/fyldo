@@ -33,7 +33,8 @@ function Field({ initial = '', icons = NAMES, dir = 'ltr', onValueChange, onBlur
   );
 }
 
-const trigger = () => screen.getByRole('button', { name: 'Menu icon' });
+// While the modal is open the page behind it is aria-hidden, so the field is looked up with `hidden: true`.
+const trigger = () => screen.getByRole('button', { name: 'Menu icon', hidden: true });
 const open = async () => {
   await userEvent.click(trigger());
   return screen.findByRole('dialog', { name: 'Choose an icon' });
