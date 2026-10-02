@@ -42,7 +42,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: npm }
       - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.2', tools: wp-cli, coverage: none }
+        with: { php-version: '8.2', coverage: none }
+      - uses: ./.github/actions/install-wp-cli
       - run: npm ci
       - name: "Design tokens are in sync with the Figma snapshot (strict: missing Figma tokens fail here)"
         run: npm run tokens:check
@@ -67,7 +68,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: npm }
       - uses: shivammathur/setup-php@v2
-        with: { php-version: '8.2', tools: wp-cli, coverage: none }
+        with: { php-version: '8.2', coverage: none }
+      - uses: ./.github/actions/install-wp-cli
       - run: sudo apt-get install -y gettext zip
       - run: npm ci
       - name: Build build/fyldo.zip (the same command as a release)
