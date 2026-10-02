@@ -16,6 +16,24 @@ const PREVIEW: Record<ControlSize, { box: string; icon: IconSize; side: number }
 };
 
 /**
+ * Figma's dashed outline of the empty tile: dashes 3 long that start and end 2.5 from each corner (the corners stay open), spaced
+ * evenly along each side: 3 dashes on 20, 4 on 24 and 28. Drawn as lines, not a dashed rect, so the dashes sit where the pack has them.
+ */
+function dashedOutline(side: number): string {
+  const span = side - 5;
+  const count = Math.max(2, Math.round((span + 3) / 6));
+  const gap = (span - 3 * count) / (count - 1);
+  const near = 0.5;
+  const far = side - 0.5;
+  let path = '';
+  for (let i = 0; i < count; i++) {
+    const at = +(2.5 + i * (3 + gap)).toFixed(2);
+    path += `M${at} ${near}h3M${at} ${far}h3M${near} ${at}v3M${far} ${at}v3`;
+  }
+  return path;
+}
+
+/**
  * The picker's small square: `radius/xs`, a 1px `border/default` stroke and `background/subtle` around the icon; with no icon
  * it is Figma's dashed outline (`border/strong`, dashes 3/3) and nothing inside.
  */
@@ -30,7 +48,7 @@ export function IconPreview({ name, size = 'sm', className }: { name: string; si
         viewBox={`0 0 ${side} ${side}`}
         className={cn('fy:block fy:shrink-0 fy:fill-none fy:stroke-border-strong', box, className)}
       >
-        <rect x="0.5" y="0.5" width={side - 1} height={side - 1} rx="3.5" strokeDasharray="3 3" />
+        <path d={dashedOutline(side)} />
       </svg>
     );
   }
