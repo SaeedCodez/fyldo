@@ -1,0 +1,15 @@
+name: Install WP-CLI
+description: >
+  Installs a pinned WP-CLI phar with retries. Replaces `tools: wp-cli` of shivammathur/setup-php, whose download step
+  failed intermittently ("Could not setup wp-cli"), which broke `npm run i18n` (it needs `wp i18n make-pot`).
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      run: |
+        WP_CLI_VERSION=2.12.0
+        curl -fsSL --retry 6 --retry-delay 5 --retry-all-errors \
+          -o /tmp/wp "https://github.com/wp-cli/wp-cli/releases/download/v${WP_CLI_VERSION}/wp-cli-${WP_CLI_VERSION}.phar"
+        chmod +x /tmp/wp
+        sudo mv /tmp/wp /usr/local/bin/wp
+        wp --info
