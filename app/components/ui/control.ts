@@ -12,7 +12,7 @@ export type ControlSize = ButtonSize;
  */
 export const CONTROL_LOOK = [
   'fy:border fy:bg-background-default fy:text-text-primary',
-  'fy:border-border-input fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:border-border-input fy:motion-base',
   'fy:hover:border-border-input-hover',
   // keyboard/pointer focus on the control inside: neutral border + Figma's 0.5px halo
   'fy:has-[:focus-visible]:border-focus-border fy:has-[:focus-visible]:shadow-focus-input',

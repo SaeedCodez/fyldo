@@ -26,7 +26,7 @@ export interface ChoiceCardOption {
  */
 const CARD = [
   'fy:group/card fy:relative fy:flex fy:min-w-0 fy:cursor-pointer fy:flex-col fy:overflow-hidden fy:rounded-md fy:border fy:border-border-input',
-  'fy:bg-background-default fy:p-px fy:text-start fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:bg-background-default fy:p-px fy:text-start fy:motion-base',
   'fy:data-unchecked:hover:border-border-input-hover',
   'fy:data-checked:border-2 fy:data-checked:border-focus-border fy:data-checked:p-0',
   'fy:focus-visible:border-focus-border',

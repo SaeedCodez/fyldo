@@ -137,6 +137,12 @@
   border-spacing: 0;
 }
 
+@keyframes fyldo-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
 @keyframes fyldo-spin {
   to {
     transform: rotate(360deg);

@@ -56,7 +56,7 @@ export const ColorSwatch = forwardRef<HTMLButtonElement, ColorSwatchProps>(funct
       data-selected={selected ? '' : undefined}
       className={cn(
         'fy:box-border fy:inline-flex fy:size-6 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-sm fy:border-2 fy:p-0 fy:outline-none',
-        'fy:cursor-pointer fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:cursor-pointer fy:motion-base',
         selected ? 'fy:border-focus-border' : 'fy:border-transparent fy:hover:bg-surface-hover',
         'fy:focus-visible:border-focus-ring-neutral fy:focus-visible:bg-background-default fy:focus-visible:shadow-focus-input',
         'fy:disabled:cursor-not-allowed fy:disabled:opacity-40 fy:disabled:hover:bg-transparent',

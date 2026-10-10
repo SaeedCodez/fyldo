@@ -87,7 +87,7 @@ export function NavItem({
 
   const look = cn(
     'fy:group/nav fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-md fy:px-3.5 fy:py-3 fy:rtl:py-2.75 fy:no-underline',
-    'fy:transition-colors fy:duration-100 fy:ease-out',
+    'fy:motion-base',
     disabled
       ? 'fy:cursor-not-allowed fy:text-text-disabled'
       : active

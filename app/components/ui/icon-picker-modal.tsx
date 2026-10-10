@@ -220,7 +220,7 @@ function IconPickerBody({ value, icons, locale, onSelect, onClose }: Pick<IconPi
                     setQuery('');
                     searchBox.current?.querySelector('input')?.focus();
                   }}
-                  className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:transition-colors fy:duration-100 fy:ease-out fy:hover:text-icon-primary fy:focus-ring fy:before:absolute fy:before:-inset-1"
+                  className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:motion-base fy:hover:text-icon-primary fy:focus-ring fy:before:absolute fy:before:-inset-1"
                 >
                   <Icon name="close-circle" size={16} />
                 </button>

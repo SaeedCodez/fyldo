@@ -36,7 +36,7 @@ export function Toggle({ size = 'sm', label, description, className, ...props }:
       data-slot="fy-toggle"
       data-size={size}
       className={cn(
-        'fy:inline-flex fy:shrink-0 fy:items-center fy:rounded-full fy:p-0.5 fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:inline-flex fy:shrink-0 fy:items-center fy:rounded-full fy:p-0.5 fy:motion-base',
         'fy:bg-control-off fy:hover:bg-control-off-hover fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover',
         'fy:data-disabled:cursor-not-allowed fy:data-disabled:bg-control-off-disabled fy:data-disabled:hover:bg-control-off-disabled',
         'fy:data-disabled:data-checked:bg-control-on-disabled fy:data-disabled:data-checked:hover:bg-control-on-disabled',
@@ -47,7 +47,7 @@ export function Toggle({ size = 'sm', label, description, className, ...props }:
     >
       <Switch.Thumb
         className={cn(
-          'fy:block fy:rounded-full fy:bg-control-thumb fy:shadow-thumb fy:transition-transform fy:duration-100 fy:ease-out',
+          'fy:block fy:rounded-full fy:bg-control-thumb fy:shadow-thumb fy:transition-transform fy:duration-150 fy:ease-out',
           'fy:data-disabled:shadow-none',
           THUMB[size],
         )}

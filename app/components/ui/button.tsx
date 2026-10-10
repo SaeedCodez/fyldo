@@ -54,7 +54,7 @@ export const BUTTON_DISABLED: Record<ButtonVariant, string> = {
 
 /** What every button shares: layout, transition and the neutral focus ring (Button, ButtonLink and Icon Button). */
 export const BUTTON_BASE =
-  'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:transition-colors fy:duration-100 fy:ease-out fy:focus-ring';
+  'fy:inline-flex fy:shrink-0 fy:items-center fy:justify-center fy:whitespace-nowrap fy:select-none fy:motion-base fy:focus-ring';
 
 /** The classes of an enabled button of a type and size (shared with ButtonLink). */
 const look = (variant: ButtonVariant, size: ButtonSize): string => cn(BUTTON_BASE, SIZE[size], BUTTON_VARIANT[variant]);

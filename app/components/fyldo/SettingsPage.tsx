@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ReactElement, type Ref }
 import { __ } from '../../i18n';
 import { PAGE_SCOPE, scopeState, usePageForm, type FormStore } from '../../lib/page-form';
 import { ApiError, type Api } from '../../lib/api';
+import { cn } from '../../lib/cn';
 import { isValueField, type FieldValue, type NoticeDef, type PageDef, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
@@ -170,8 +171,16 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
     ),
   });
 
+  // The page fades in when it mounts (the shell remounts it per page); a tab switch fades only the cards.
+  const lastTab = useRef(tab);
+  const tabSwitched = useRef(false);
+  if (tab !== lastTab.current) {
+    tabSwitched.current = true;
+    lastTab.current = tab;
+  }
+
   const cards = (current: string) => (
-    <div className="fy:mt-6 fy:flex fy:flex-col fy:gap-6">
+    <div key={current} className={cn('fy:mt-6 fy:flex fy:flex-col fy:gap-6', tabSwitched.current && 'fy:fade-in')}>
       {page.sections
         .filter((section) => onTab(section, current))
         .map((section) => (
@@ -207,7 +216,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
       ref={column}
       data-slot="fy-content"
       data-save={page.save}
-      className="fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
+      className="fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
     >
       <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
 

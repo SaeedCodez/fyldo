@@ -17,7 +17,7 @@ export interface SegmentOption {
  */
 const SEGMENT = [
   'fy:inline-flex fy:cursor-pointer fy:select-none fy:items-center fy:justify-center fy:gap-1.5 fy:min-h-9 fy:rounded-md fy:px-4 fy:py-1.5',
-  'fy:text-label-14 fy:text-text-secondary fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:text-label-14 fy:text-text-secondary fy:motion-base',
   'fy:hover:bg-surface-hover fy:hover:text-text-primary',
   'fy:data-checked:bg-background-default fy:data-checked:text-label-14-strong fy:data-checked:text-text-primary fy:data-checked:shadow-small',
   'fy:data-checked:hover:bg-background-default',

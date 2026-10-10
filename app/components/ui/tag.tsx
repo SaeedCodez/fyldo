@@ -37,7 +37,7 @@ export function Tag({ label, size = 'sm', onRemove, srLabel, disabled, className
       data-disabled={disabled ? '' : undefined}
       className={cn(
         'fy:group/tag fy:inline-flex fy:max-w-full fy:shrink-0 fy:items-center fy:gap-1 fy:rounded-xs fy:border fy:border-border-default fy:bg-surface-default fy:text-text-primary fy:select-none',
-        'fy:transition-colors fy:duration-100 fy:ease-out fy:hover:bg-surface-hover',
+        'fy:motion-base fy:hover:bg-surface-hover',
         'fy:data-disabled:cursor-not-allowed fy:data-disabled:bg-surface-disabled fy:data-disabled:text-text-disabled fy:data-disabled:hover:bg-surface-disabled',
         SIZE[size],
         className,

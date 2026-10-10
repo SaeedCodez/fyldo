@@ -104,7 +104,7 @@ export function Slider({
         <BaseSlider.Track className="fy:flex fy:h-full fy:w-full fy:overflow-hidden fy:rounded-full fy:bg-surface-active fy:group-data-[disabled]/slider:bg-control-off-disabled">
           <div
             data-slot="fy-slider-range"
-            className="fy:h-full fy:shrink-0 fy:rounded-full fy:bg-control-on fy:transition-colors fy:duration-100 fy:ease-out fy:group-hover/slider:bg-control-on-hover fy:group-data-[disabled]/slider:bg-control-on-disabled fy:group-data-[disabled]/slider:group-hover/slider:bg-control-on-disabled"
+            className="fy:h-full fy:shrink-0 fy:rounded-full fy:bg-control-on fy:motion-base fy:group-hover/slider:bg-control-on-hover fy:group-data-[disabled]/slider:bg-control-on-disabled fy:group-data-[disabled]/slider:group-hover/slider:bg-control-on-disabled"
             style={{ width: `calc(${box}px + (100% - ${box}px) * ${ratio})` }}
           />
         </BaseSlider.Track>

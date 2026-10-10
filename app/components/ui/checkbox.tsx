@@ -20,7 +20,7 @@ export interface CheckboxProps extends Omit<ComponentPropsWithoutRef<typeof Base
  */
 const BOX = [
   'fy:group/box fy:relative fy:inline-flex fy:size-5 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:border',
-  'fy:border-control-border fy:bg-background-default fy:text-control-thumb fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:border-control-border fy:bg-background-default fy:text-control-thumb fy:motion-base',
   'fy:hover:border-control-border-hover fy:group-hover/option:border-control-border-hover fy:group-data-[highlighted]/option:border-control-border-hover',
   'fy:data-checked:border-0 fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover fy:data-checked:group-hover/option:bg-control-on-hover fy:data-checked:group-data-[highlighted]/option:bg-control-on-hover',
   'fy:data-indeterminate:border-0 fy:data-indeterminate:bg-control-on fy:data-indeterminate:hover:bg-control-on-hover fy:data-indeterminate:group-hover/option:bg-control-on-hover',

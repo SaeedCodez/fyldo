@@ -29,7 +29,7 @@ export const IconTile = forwardRef<HTMLButtonElement, IconTileProps>(function Ic
       data-selected={selected ? '' : undefined}
       className={cn(
         'fy:relative fy:box-border fy:flex fy:size-16 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-md fy:p-0 fy:text-icon-primary fy:outline-none',
-        'fy:cursor-pointer fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:cursor-pointer fy:motion-base',
         selected ? 'fy:border-2 fy:border-focus-border fy:bg-background-subtle' : 'fy:border fy:border-border-default fy:bg-background-default fy:hover:border-border-strong fy:hover:bg-surface-hover',
         'fy:focus-visible:border-2 fy:focus-visible:border-focus-ring-neutral fy:focus-visible:shadow-focus-input',
         'fy:disabled:cursor-not-allowed fy:disabled:opacity-40 fy:disabled:hover:border-border-default fy:disabled:hover:bg-background-default',

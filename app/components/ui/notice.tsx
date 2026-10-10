@@ -83,7 +83,7 @@ export function Notice({ tone = 'gray', title, children, action, onDismiss, live
               data-slot="fy-notice-dismiss"
               aria-label={__('Dismiss', 'fyldo')}
               onClick={onDismiss}
-              className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:cursor-pointer fy:items-center fy:justify-center fy:rounded-xs fy:transition-opacity fy:duration-100 fy:ease-out fy:hover:opacity-70 fy:focus-ring fy:before:absolute fy:before:-inset-1"
+              className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:cursor-pointer fy:items-center fy:justify-center fy:rounded-xs fy:transition-opacity fy:duration-150 fy:ease-out fy:hover:opacity-70 fy:focus-ring fy:before:absolute fy:before:-inset-1"
             >
               <Icon name="close-circle" size={16} />
             </button>

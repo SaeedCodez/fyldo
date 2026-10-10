@@ -649,7 +649,7 @@ JS (all chunks loaded on the settings screen, excl. lazy icons) ≤ **200 KB gzi
 
 **Token contrast failures** (design-spec §9 D3–D6, D9) were **fixed in Figma before M1 closed** (O4, changed; applied and re-snapshotted 2026-09-29) and the code is built against the fixed values. The contrast test has **no `expectedFail` entries** and is green.
 
-**Motion proposal** (Figma has none): colour transitions 120 ms `ease-out`; popups fade + scale from 0.98 in 150 ms; toast slide-in 200 ms; Save Bar slide/fade 200 ms; **all removed under `prefers-reduced-motion`**.
+**Motion** (Figma has none; updated 2026-10-11): one `motion-base` transition for every state change (colour, background, border, shadow, opacity: 150 ms, `cubic-bezier(.2,0,0,1)`) and a 150 ms `fade-in` when a page or a tab's cards mount; the older proposal read: colour transitions 120 ms `ease-out`; popups fade + scale from 0.98 in 150 ms; toast slide-in 200 ms; Save Bar slide/fade 200 ms; **all removed under `prefers-reduced-motion`**.
 
 ---
 
