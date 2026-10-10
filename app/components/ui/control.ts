@@ -14,7 +14,7 @@ export const CONTROL_LOOK = [
   'fy:border fy:bg-background-default fy:text-text-primary',
   'fy:border-border-input fy:transition-colors fy:duration-100 fy:ease-out',
   'fy:hover:border-border-input-hover',
-  // keyboard/pointer focus on the control inside: neutral border + Figma's soft halo
+  // keyboard/pointer focus on the control inside: neutral border + Figma's 0.5px halo
   'fy:has-[:focus-visible]:border-focus-border fy:has-[:focus-visible]:shadow-focus-input',
   // popup open (Select): same look as focus
   'fy:data-popup-open:border-focus-border fy:data-popup-open:shadow-focus-input',

@@ -700,13 +700,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -1971,13 +1974,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -3242,13 +3248,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -4513,13 +4522,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -5862,13 +5874,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -6017,13 +6032,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -7416,13 +7434,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -7626,13 +7647,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -8970,13 +8994,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -9125,13 +9152,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -10524,13 +10554,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -10734,13 +10767,16 @@
        "type": "DROP_SHADOW",
        "visible": true,
        "hex": "#6e62fe",
-       "opacity": 0.18,
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },

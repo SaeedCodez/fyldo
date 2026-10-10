@@ -201,7 +201,7 @@ test('Input focus: the approved neutral border (Figma token focus/border) + the 
   const focused = await style(stage.locator('[data-slot=fy-input]'), ['border-top-color', 'box-shadow']);
   // Figma token `focus/border` (decision O5).
   expect(focused['border-top-color']).toBe(token('focus/border'));
-  expect(shadows(focused['box-shadow'] as string)).toEqual([shadow('#6e62fe2e', 0, 0, 0, 3)]); // Focus/Input: 3px primary at 18 %
+  expect(shadows(focused['box-shadow'] as string)).toEqual([shadow('#6e62fe', 0, 0, 0, 0.5)]); // Focus/Input: 0.5px in the border colour
 });
 
 // ── Toggle ─────────────────────────────────────────────────────────────────────────────────────────────
@@ -315,7 +315,7 @@ test.describe('Select', () => {
     await trigger.click();
 
     const open$ = await style(trigger, ['border-top-color', 'box-shadow']);
-    expect(shadows(open$['box-shadow'] as string)).toEqual([shadow('#6e62fe2e', 0, 0, 0, 3)]); // open = the focus look
+    expect(shadows(open$['box-shadow'] as string)).toEqual([shadow('#6e62fe', 0, 0, 0, 0.5)]); // open = the focus look
     expect(open$['border-top-color']).toBe(token('focus/border')); // Open uses focus/border
     await expect(trigger.locator('svg[data-fyldo-icon="arrowup2"]')).toBeVisible();
 

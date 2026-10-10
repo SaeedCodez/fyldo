@@ -440,8 +440,8 @@
           "x": 0,
           "y": 0,
           "blur": 0,
-          "spread": 3,
-          "color": "#6e62fe2e"
+          "spread": 0.5,
+          "color": "#6e62fe"
         }
       ]
     },

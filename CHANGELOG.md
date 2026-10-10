@@ -8,6 +8,7 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 - **Design (redesign pass)**: a brand colour and softer neutrals. Primary is `#6e62fe` (buttons, the active navigation item, toggles and checked controls, focus, links, info tones); grays, borders, shadows and the page background are tinted toward `#f6f7fc` instead of pure gray/black; dividers between settings are lighter (`border/subtle`).
 - **Design**: bigger controls and a wider settings column. Buttons, inputs and selects are 36 / 44 / 52 px (were 32 / 40 / 48), toggles, checkboxes, radios, tags and sliders are larger, navigation items are 44 px with a solid primary active state, the sidebar header is 76 px with the version at the far end, tabs are 56 px, the content column is 960 px (was 800), and the modal, toast and empty state are wider. Corner radii are unchanged.
+- **Design**: a focused field's halo is a 0.5 px ring in the border colour (was a 3 px, 18 % tint), so the border looks thicker while you type. Sidebar items turn white on hover. Setting Row controls are 400 px wide (the Textarea 448).
 - **Accessibility checks**: the contrast test is less strict than WCAG AA (text 4:1, UI 2.5:1; decision O17). White text on the primary fill is 4.34:1.
 
 ## [1.0.0-beta.3] - 2026-10-02

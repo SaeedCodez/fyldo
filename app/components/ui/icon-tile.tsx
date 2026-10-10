@@ -13,7 +13,7 @@ export interface IconTileProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
 /*
  * Figma "Icon Tile" (64×64, radius md, a 24px Linear icon in `icon/primary`). Default: 1px `border/default`. Hover:
  * `surface/hover` + `border/strong`. Selected: `background/subtle`, a 2px `focus/border` stroke and a 16px `control/on` check at
- * the top END corner (top-start in Persian). Focus: a 2px `focus/ring-neutral` stroke and the soft 3px halo of the inputs.
+ * the top END corner (top-start in Persian). Focus: a 2px `focus/ring-neutral` stroke and the 0.5px halo of the inputs.
  * Disabled: 40% opacity. An option of the picker's listbox: the name is the icon's name, since the glyph alone says nothing.
  */
 export const IconTile = forwardRef<HTMLButtonElement, IconTileProps>(function IconTile({ icon, selected = false, showIcon = true, className, ...props }, ref) {

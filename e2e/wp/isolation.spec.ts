@@ -127,7 +127,7 @@ test('keyboard focus is visible and neutral on every control', async ({ page }) 
   await title.focus();
   const wrapper = page.locator('[data-slot=fy-input]').first();
   const halo = await wrapper.evaluate((el) => getComputedStyle(el).boxShadow);
-  expect(halo).toContain('0px 0px 0px 3px'); // Figma "Focus/Input" halo
+  expect(halo).toContain('0px 0px 0px 0.5px'); // Figma "Focus/Input" halo
 
   await page.locator('[data-slot=fy-toggle]').first().focus();
   await page.keyboard.press('Tab'); // move away and back with the keyboard so :focus-visible applies

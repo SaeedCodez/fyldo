@@ -141,7 +141,7 @@ Shadows and halos are tinted: the shadow base is `#282a64` (it was black), the f
 | `Shadow/Medium` | 0 4 8 −4 rgba(40,42,100,.06), 0 16 24 −8 rgba(40,42,100,.09) | Select Menu, Toast, Save Bar |
 | `Shadow/Large` | 0 1 1 0 .03, 0 8 16 −4 .06, 0 24 32 −8 .10 (all `#282a64`) | Modal |
 | `Shadow/Thumb` | 0 1 2 0 rgba(40,42,100,.20), 0 0 0 0.5 rgba(40,42,100,.10) | Switch thumb (enabled only) |
-| `Focus/Input` | 0 0 0 3 rgba(110,98,254,.18) (`primary/600` at 18 %) | Text field / select focus & open halo |
+| `Focus/Input` | 0 0 0 0.5 `focus/border` (`primary/600`, opaque) | Text field / select focus & open halo: the 1 px border looks 1.5 px |
 | `Focus/Input Error` | 0 0 0 3 rgba(218,47,53,.16) | Field error halo (always on in Error state) |
 | `Focus/Ring` | 0 0 0 2 #fff, 0 0 0 4 **#7f78ff** (`primary/500`) | Keyboard focus — defined in Foundations ("2 px white gap + 2 px brand"), **not applied anywhere** |
 
@@ -269,7 +269,7 @@ Vertical stack, gap 8, width fills (Figma 320): `Label` → `Control` → `Helpe
 - **Control**: horizontal, padding-x 12, gap 8, fill `background/default`, 1 px stroke `border/input`, radius sm (Large: md). Height 36 / 44 / 52. Text **Copy/14** (Large **Copy/16**). Prefix / suffix icon 16 px `icon/tertiary`; placeholder `text/tertiary`; value `text/primary`.
 - **States** (control only unless noted):
   - Hover: stroke `border/input-hover`.
-  - Focus: stroke `focus/border` (`primary/600`) + effect `Focus/Input` (3 px brand halo, 18 %); a 1×16 `text/primary` caret is drawn (design-only).
+  - Focus: stroke `focus/border` (`primary/600`) + effect `Focus/Input` (0.5 px, the border colour); a 1×16 `text/primary` caret is drawn (design-only).
   - Filled: placeholder replaced by value.
   - Error: stroke `status/error/solid` + effect `Focus/Input Error` (halo always on); Helper is **replaced** by an Error row: 16 px `info-circle` + message Copy/13 `status/error/text`.
   - Disabled: label, placeholder, helper → `text/disabled`; fill `surface/disabled`.

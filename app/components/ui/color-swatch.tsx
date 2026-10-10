@@ -44,7 +44,7 @@ export interface ColorSwatchProps extends Omit<ButtonHTMLAttributes<HTMLButtonEl
 /*
  * Figma "Color Swatch" (24×24, `radius/sm`, a 16px chip centred in it). Default: nothing around the chip. Hover:
  * `surface/hover`. Selected: a 2px `focus/border` stroke. Focus: `background/default`, a 2px `focus/ring-neutral` stroke and
- * the soft 3px halo of the inputs. Disabled: 40% opacity.
+ * the 0.5px halo of the inputs. Disabled: 40% opacity.
  */
 export const ColorSwatch = forwardRef<HTMLButtonElement, ColorSwatchProps>(function ColorSwatch({ color, selected = false, className, ...props }, ref) {
   return (
