@@ -212,15 +212,18 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     const footer = await page.getByRole('navigation', { name: 'Resources' }).boundingBox();
     expect(Math.round(footer!.y + footer!.height)).toBe(900);
 
-    // sticky: after scrolling the content, the sidebar is still right below the admin bar.
-    // The page may fit the viewport (the `field` layout keeps rows short), so add height to the content column first.
+    // the content area scrolls inside the shell (Fyldo's own scrollbar): the document itself does not, and the sidebar stays
+    // right below the admin bar. The page may fit the viewport (the `field` layout keeps rows short), so add height first.
     await page.locator('[data-slot=fy-section-card]').first().evaluate((card) => {
       const spacer = document.createElement('div');
       spacer.style.height = '1200px';
       card.parentElement?.append(spacer);
     });
+    await page.locator('[data-slot=fy-main]').hover();
     await page.mouse.wheel(0, 600);
-    await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    await expect.poll(async () => page.locator('[data-slot=fy-main]').evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight - document.documentElement.clientHeight)).toBeLessThanOrEqual(0); // no WordPress window scrollbar
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
     expect(Math.round((await sidebar.boundingBox())!.y)).toBe(Math.round(bar!.height));
 
     // the content column is 960px, centred in the main area

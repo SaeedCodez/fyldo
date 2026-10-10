@@ -99,7 +99,7 @@ export function Shell({ config, route, onNavigate, children }: ShellProps): Reac
           locale={config.locale}
           onNavigate={go}
         />
-        <div className="fy:flex fy:min-w-0 fy:flex-1 fy:flex-col">{children}</div>
+        <div data-slot="fy-main" className="fy:scrollbar-thin fy:flex fy:min-w-0 fy:flex-1 fy:flex-col">{children}</div>
       </div>
     );
   }
@@ -120,7 +120,7 @@ export function Shell({ config, route, onNavigate, children }: ShellProps): Reac
           </div>
         </div>
       )}
-      <div className="fy:flex fy:min-w-0 fy:flex-1 fy:flex-col">
+      <div data-slot="fy-main" className="fy:scrollbar-thin fy:flex fy:min-w-0 fy:flex-1 fy:flex-col">
         {mobile ? (
           <MenuDisclosure
             brand={brand}
