@@ -36,7 +36,7 @@ export const isPlainClick = (event: MouseEvent): boolean =>
 /*
  * Figma Nav Item: padding 12/14, 11/14 in FA (44px tall in both: Label/14 is 20 high in EN, 22 in FA), gap 12, radius md, 20px icon + Label/14.
  *   Default  label text/secondary, icon icon/secondary
- *   Hover    fill brand/subtle, label and icon brand/text
+ *   Hover    fill background/default (white on the subtle sidebar), label and icon brand/text
  *   Active   fill action/primary, Label/14 Strong text/inverse, icon text/inverse
  *   Focus    fill background/default + the neutral ring (O5; Figma draws the fill only)
  *   Disabled label text/disabled, icon icon/tertiary
@@ -92,7 +92,7 @@ export function NavItem({
       ? 'fy:cursor-not-allowed fy:text-text-disabled'
       : active
         ? 'fy:bg-action-primary fy:text-text-inverse fy:focus-ring'
-        : 'fy:text-text-secondary fy:hover:bg-brand-subtle fy:hover:text-brand-text fy:focus-visible:bg-background-default fy:focus-visible:text-text-primary fy:focus-ring',
+        : 'fy:text-text-secondary fy:hover:bg-background-default fy:hover:text-brand-text fy:focus-visible:bg-background-default fy:focus-visible:text-text-primary fy:focus-ring',
   );
 
   if (disabled) {

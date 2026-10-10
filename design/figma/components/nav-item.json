@@ -500,8 +500,8 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#f2f4ff",
-      "token": "brand/subtle"
+      "hex": "#ffffff",
+      "token": "background/default"
      }
     ],
     "bound": {
@@ -2571,8 +2571,8 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#f2f4ff",
-      "token": "brand/subtle"
+      "hex": "#ffffff",
+      "token": "background/default"
      }
     ],
     "bound": {

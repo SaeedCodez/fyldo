@@ -65,7 +65,7 @@ Count: gray 12 (10 steps + 850 + 1000-hover) + blue, red, amber, green 40 + prim
 | | `action/tertiary-hover` gray/100 | Ghost hover |
 | | `action/danger` red/800 · `-hover` red/900 | Destructive |
 | | `action/disabled` gray/100 | Disabled **and** loading button |
-| **Brand** (new) | `brand/subtle` primary/50 · `-hover` primary/100 | Nav Item hover fill (`brand/subtle-hover` and `brand/border` are defined but not used by any variant) |
+| **Brand** (new) | `brand/subtle` primary/50 · `-hover` primary/100 | `brand/text` is the Nav Item hover label/icon colour (`brand/subtle`, `brand/subtle-hover` and `brand/border` are defined but not used by any variant) |
 | | `brand/border` primary/200 · `brand/text` primary/700 | Nav Item hover label and icon |
 | **Control** | `control/off` gray/700 · `-hover` gray/900 · `-disabled` gray/200 | Switch track off |
 | | `control/on` **primary/600** · `-hover` **primary/700** · `-disabled` gray/500 | Switch track / checked box / radio / slider range |
@@ -318,7 +318,7 @@ Multi Select control: **min height 38 / 46 / 54** (Small / Medium / Large; paddi
 
 ### 4.9 Nav Item (18:2155), Sidebar (18:2391)
 
-Nav Item: 44 high (EN and FA), padding 14/12, gap 12, radius md, 20 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `brand/subtle` + label and icon `brand/text`; **Active** = solid `action/primary` fill + label **Label/14 Strong** and icon `text/inverse`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
+Nav Item: 44 high (EN and FA), padding 14/12, gap 12, radius md, 20 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `background/default` (white on the subtle sidebar) + label and icon `brand/text`; **Active** = solid `action/primary` fill + label **Label/14 Strong** and icon `text/inverse`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
 
 Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 76 (padding 28/20, gap 12): 36 px logo + "Fyldo" Heading/20 + version Badge (Medium, 24) at the far end. Navigation (padding top 8, sides 16, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support).
 
