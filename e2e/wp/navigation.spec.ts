@@ -223,11 +223,11 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
     expect(Math.round((await sidebar.boundingBox())!.y)).toBe(Math.round(bar!.height));
 
-    // the content column is 800px, centred in the main area
+    // the content column is 960px, centred in the main area
     const card = await page.locator('[data-slot=fy-section-card]').first().boundingBox();
-    expect(Math.round(card!.width)).toBe(800);
+    expect(Math.round(card!.width)).toBe(960);
     const main = 1440 - (box!.x + box!.width);
-    expect(Math.abs(card!.x - (box!.x + box!.width) - (main - 800) / 2)).toBeLessThanOrEqual(1);
+    expect(Math.abs(card!.x - (box!.x + box!.width) - (main - 960) / 2)).toBeLessThanOrEqual(1);
   });
 
   test('groups, the nav badge and the utility links (opening a new tab, announced)', async ({
@@ -282,7 +282,7 @@ test.describe('top navigation layout', () => {
     const menu = await page.locator('#adminmenuwrap').boundingBox();
     expect(Math.round(box!.y)).toBe(Math.round(bar!.height));
     expect(Math.round(box!.x)).toBe(Math.round(menu!.x + menu!.width));
-    expect(Math.round(box!.height)).toBe(96);
+    expect(Math.round(box!.height)).toBe(108);
     await expect(nav(page, 'Acme Gamma').getByRole('link', { name: 'General' })).toHaveAttribute(
       'aria-current',
       'page',

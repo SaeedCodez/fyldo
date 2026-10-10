@@ -2174,7 +2174,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2199,7 +2199,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -2412,7 +2412,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2437,7 +2437,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -2650,7 +2650,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2675,7 +2675,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -2888,7 +2888,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2913,7 +2913,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -3126,7 +3126,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -3151,7 +3151,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -3182,7 +3182,7 @@
           "visible": true,
           "opacity": 1,
           "x": 73,
-          "y": 7,
+          "y": 8,
           "width": 6,
           "height": 6,
           "fills": [
@@ -3372,7 +3372,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -3397,7 +3397,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -3428,7 +3428,7 @@
           "visible": true,
           "opacity": 1,
           "x": 73,
-          "y": 7,
+          "y": 8,
           "width": 6,
           "height": 6,
           "fills": [
@@ -3618,7 +3618,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -3643,7 +3643,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -3674,7 +3674,7 @@
           "visible": true,
           "opacity": 1,
           "x": 73,
-          "y": 7,
+          "y": 8,
           "width": 6,
           "height": 6,
           "fills": [
@@ -3864,7 +3864,7 @@
       "x": 66,
       "y": 0,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -3889,7 +3889,7 @@
         "visible": true,
         "opacity": 1,
         "x": 66,
-        "y": 0,
+        "y": 1,
         "width": 20,
         "height": 20,
         "layout": {
@@ -3920,7 +3920,7 @@
           "visible": true,
           "opacity": 1,
           "x": 73,
-          "y": 7,
+          "y": 8,
           "width": 6,
           "height": 6,
           "fills": [

@@ -608,7 +608,7 @@ test.describe('Persian (RTL)', () => {
     const parentLabel = await page.getByText('All post types', { exact: true }).boundingBox();
     const child = await page.getByRole('checkbox', { name: 'Posts' }).boundingBox();
     expect(parent!.x).toBeGreaterThan(parentLabel!.x);
-    expect(parent!.x + parent!.width - (child!.x + child!.width)).toBeCloseTo(24, 0); // 24px indent from the right edge
+    expect(parent!.x + parent!.width - (child!.x + child!.width)).toBeCloseTo(28, 0); // 28px indent (20px box + 8px gap) from the right edge
 
     // radio: the circle is right of its label
     const radio = await page.getByRole('radio', { name: 'Full width' }).boundingBox();

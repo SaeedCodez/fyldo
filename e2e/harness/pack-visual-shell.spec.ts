@@ -168,7 +168,7 @@ for (const locale of ['EN', 'FA'] as const) {
         set: 'nav-item',
         props,
         region: around(icon),
-        actual: await ours(stage, item.locator('svg'), 16, 16),
+        actual: await ours(stage, item.locator('svg'), icon.width, icon.height),
         max: 0.05,
       });
     }
@@ -239,7 +239,7 @@ for (const locale of ['EN', 'FA'] as const) {
       const ourTab = await box(stage.locator('[role=tab][aria-selected=true]'));
       const s = await box(stage);
       expect(ourTab.height).toBe(root.height);
-      expect(Math.round(ourTab.x + ourTab.width - s.x)).toBe(Math.round(active.x + active.width)); // flush with the end of the 800 row
+      expect(Math.round(ourTab.x + ourTab.width - s.x)).toBe(Math.round(active.x + active.width)); // flush with the end of the 960 row
       const region: Rect = {
         x: active.x + active.width - 40,
         y: root.height - 4,
@@ -275,7 +275,7 @@ for (const locale of ['EN', 'FA'] as const) {
     const packItems = instances(root, 'Nav Item');
     const ourItems = stage.locator('[data-slot=fy-nav-item]');
     await expect(ourItems).toHaveCount(packItems.length);
-    // Every Nav Item where the pack puts it (groups, gaps, the footer pinned to the bottom of the 800px column).
+    // Every Nav Item where the pack puts it (groups, gaps, the footer pinned to the bottom of the 960px column).
     for (let i = 0; i < packItems.length; i++) {
       const b = await box(ourItems.nth(i));
       expect(Math.round(b.y - s.y), `item ${i} top`).toBe(Math.round((packItems[i] as Node).y));
@@ -295,10 +295,10 @@ for (const locale of ['EN', 'FA'] as const) {
         const n = packItems[i] as Node;
         const icon: Node = {
           ...n,
-          x: n.x + n.width - 8 - 16,
-          y: n.y + (n.height - 16) / 2,
-          width: 16,
-          height: 16,
+          x: n.x + n.width - 14 - 20,
+          y: n.y + (n.height - 20) / 2,
+          width: 20,
+          height: 20,
         };
         await compare({
           page,
@@ -307,7 +307,7 @@ for (const locale of ['EN', 'FA'] as const) {
           set: 'sidebar',
           props,
           region: around(icon),
-          actual: await ours(stage, ourItems.nth(i).locator('svg'), 16, 16),
+          actual: await ours(stage, ourItems.nth(i).locator('svg'), 20, 20),
           max: 0.05,
         });
       }
@@ -417,10 +417,10 @@ for (const locale of ['EN', 'FA'] as const) {
         const content = { x: t.x, y: t.y + 8, width: t.width, height: t.height - 16 };
         const icon: Node = {
           ...t,
-          x: content.x + content.width - 12 - 16,
-          y: content.y + (content.height - 16) / 2,
-          width: 16,
-          height: 16,
+          x: content.x + content.width - 16 - 18,
+          y: content.y + (content.height - 18) / 2,
+          width: 18,
+          height: 18,
         };
         await compare({
           page,
@@ -429,7 +429,7 @@ for (const locale of ['EN', 'FA'] as const) {
           set: 'top-navigation',
           props,
           region: around(icon),
-          actual: await ours(stage, ourTabs.nth(i).locator('svg'), 16, 16),
+          actual: await ours(stage, ourTabs.nth(i).locator('svg'), 18, 18),
           max: 0.05,
         });
       }
@@ -463,11 +463,11 @@ for (const locale of ['EN', 'FA'] as const) {
       await compare({ page, testInfo, stage, set: 'page-header', props });
     } else {
       // the trailing external-link icon (at the button's inline end = its left side in RTL)
-      // 12px padding + the 1px stroke Figma counts in the layout (the EN icon matches at width − 12 − 1 − 16)
+      // 16px padding + the 1px stroke Figma counts in the layout (the EN icon matches at width − 16 − 1 − 16)
       const icon: Node = {
         ...action,
-        x: action.x + 12 + 1,
-        y: action.y + 8,
+        x: action.x + 16 + 1,
+        y: action.y + (action.height - 16) / 2,
         width: 16,
         height: 16,
       };
@@ -536,9 +536,9 @@ for (const locale of ['EN', 'FA'] as const) {
       const toggle: Node = {
         ...inline,
         x: inline.x,
-        y: inline.y + (inline.height - 20) / 2,
-        width: 36,
-        height: 20,
+        y: inline.y + (inline.height - 24) / 2,
+        width: 44,
+        height: 24,
       };
       await compare({
         page,
@@ -547,7 +547,7 @@ for (const locale of ['EN', 'FA'] as const) {
         set: 'section-card',
         props,
         region: around(toggle),
-        actual: await ours(stage, stage.locator('[data-slot=fy-toggle]'), 36, 20),
+        actual: await ours(stage, stage.locator('[data-slot=fy-toggle]'), 44, 24),
         max: 0.05,
       });
       const card = await box(stage.locator('[data-slot=fy-section-card]'));

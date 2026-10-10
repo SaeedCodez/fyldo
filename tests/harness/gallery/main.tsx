@@ -32,7 +32,7 @@
  *   ?c=toast&tone=neutral|success|error|loading&title=…&description=…&action=…   (one toast, queued without a timeout)
  *   ?c=tooltip&placement=top|bottom|start|end&label=…   (an Icon Button whose tooltip is opened by keyboard focus)
  *   ?c=icon-button&variant=tertiary&size=sm&icon=more&label=…
- *   ?c=empty-state&size=lg|sm&icon=element-plus&title=…&description=…&primary=…&secondary=…   (480 / 360 wide, as in the pack)
+ *   ?c=empty-state&size=lg|sm&icon=element-plus&title=…&description=…&primary=…&secondary=…   (560 / 360 wide, as in the pack)
  *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
@@ -434,7 +434,7 @@ interface CardSpec {
 function SectionCardDemo({ spec, tone }: { spec: CardSpec; tone: 'default' | 'danger' }) {
   const rows = spec.rows ?? [];
   return (
-    <div style={{ width: 800 }}>
+    <div style={{ width: 960 }}>
       <SectionCard
         title={spec.title}
         description={spec.description}
@@ -527,7 +527,7 @@ function Variant() {
     case 'empty-state': {
       const large = q.get('size') !== 'sm';
       return (
-        <div style={{ width: large ? 480 : 360 }}>
+        <div style={{ width: large ? 560 : 360 }}>
           <EmptyState
             size={large ? 'lg' : 'sm'}
             icon={param('icon', 'element-plus')}
@@ -599,7 +599,7 @@ function Variant() {
     case 'tabs': {
       const labels = param('tabs').split('|').filter(Boolean);
       return (
-        <div style={{ width: 800 }}>
+        <div style={{ width: 960 }}>
           <Tabs
             label="Tabs"
             value="t0"
@@ -629,7 +629,7 @@ function Variant() {
     }
     case 'page-header':
       return (
-        <div style={{ width: 800 }}>
+        <div style={{ width: 960 }}>
           <PageHeader
             title={param('title')}
             description={param('description') || undefined}
@@ -641,7 +641,7 @@ function Variant() {
       );
     case 'save-bar':
       return (
-        <div style={{ width: 800 }}>
+        <div style={{ width: 960 }}>
           <SaveBar
             state={state as SaveBarState}
             onSave={() => undefined}
