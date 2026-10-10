@@ -107,7 +107,7 @@ export function Button({
       data-loading={loading ? '' : undefined}
       className={cn(look(variant, size), BUTTON_DISABLED[variant], className as string | undefined)}
     >
-      {loading ? <Spinner size={ICON[size]} /> : leadingIcon ? <Icon name={leadingIcon} size={ICON[size]} /> : null}
+      {loading ? <Spinner /> : leadingIcon ? <Icon name={leadingIcon} size={ICON[size]} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}
       {trailingIcon ? <Icon name={trailingIcon} size={ICON[size]} /> : null}
     </BaseButton>

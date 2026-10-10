@@ -34,7 +34,7 @@ export const isPlainClick = (event: MouseEvent): boolean =>
   !event.defaultPrevented;
 
 /*
- * Figma Nav Item: padding 12/14 (44px tall in EN, 46 in FA: the height follows the line height), gap 12, radius md, 20px icon + Label/14.
+ * Figma Nav Item: padding 12/14, 11/14 in FA (44px tall in both: Label/14 is 20 high in EN, 22 in FA), gap 12, radius md, 20px icon + Label/14.
  *   Default  label text/secondary, icon icon/secondary
  *   Hover    fill brand/subtle, label and icon brand/text
  *   Active   fill action/primary, Label/14 Strong text/inverse, icon text/inverse
@@ -86,7 +86,7 @@ export function NavItem({
   );
 
   const look = cn(
-    'fy:group/nav fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-md fy:px-3.5 fy:py-3 fy:no-underline',
+    'fy:group/nav fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-md fy:px-3.5 fy:py-3 fy:rtl:py-2.75 fy:no-underline',
     'fy:transition-colors fy:duration-100 fy:ease-out',
     disabled
       ? 'fy:cursor-not-allowed fy:text-text-disabled'

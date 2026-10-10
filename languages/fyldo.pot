@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-02T10:36:30+00:00\n"
+"POT-Creation-Date: 2026-10-10T21:42:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -27,13 +27,13 @@ msgstr ""
 msgid "Keep editing"
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:283
+#: app/components/fyldo/FieldRenderer.tsx:288
 msgid ""
 "A value is already saved. Leave this empty to keep it, or type a new one to "
 "replace it."
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:288
+#: app/components/fyldo/FieldRenderer.tsx:294
 msgid "•••• set"
 msgstr ""
 
@@ -1154,7 +1154,7 @@ msgctxt "unsaved changes dialog"
 msgid "Discard"
 msgstr ""
 
-#: app/components/fyldo/BrandMark.tsx:54
+#: app/components/fyldo/BrandMark.tsx:64
 msgctxt "version badge"
 msgid "v%s"
 msgstr ""
