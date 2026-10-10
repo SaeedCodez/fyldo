@@ -83,7 +83,7 @@ const UI_EXCEPTIONS: Array<{ fg: string; bg: string; why: string; floor: number 
   {
     fg: 'border/input',
     bg: 'background/default',
-    why: 'resting text-field boundary: the owner chose a soft gray/500 (#c9c9c9) over WCAG 1.4.11; hover (≥ 3:1), focus and error borders still pass',
+    why: 'resting text-field boundary: the owner chose a soft gray/500 (#babfdb) over WCAG 1.4.11; hover (≥ 3:1), focus and error borders still pass',
     floor: 1.6,
   },
 ];

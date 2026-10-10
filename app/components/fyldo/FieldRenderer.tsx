@@ -167,6 +167,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <ColorPicker
+            size="md"
             value={typeof value === 'string' ? value : ''}
             presets={field.presets}
             disabled={disabled}
@@ -181,6 +182,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <IconPicker
+            size="md"
             value={typeof value === 'string' ? value : ''}
             icons={field.icons}
             disabled={disabled}
@@ -234,6 +236,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <Select
+            size="md"
             options={field.options}
             value={typeof value === 'string' ? value : ''}
             placeholder={field.placeholder}
@@ -250,6 +253,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <MultiSelect
+            size="md"
             options={field.options}
             value={list(value)}
             placeholder={field.placeholder}
@@ -267,6 +271,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <NumberInput
+            size="md"
             value={typeof value === 'number' || typeof value === 'string' ? value : ''}
             placeholder={field.placeholder}
             prefixIcon={field.icon}
@@ -282,6 +287,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common} srNote={stored ? __('A value is already saved. Leave this empty to keep it, or type a new one to replace it.', 'fyldo') : undefined}>
           <PasswordInput
+            size="md"
             hideOn={revision}
             disabled={disabled}
             value={typeof value === 'string' ? value : ''}
@@ -303,6 +309,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
       return (
         <SettingRow {...common}>
           <Input
+            size="md"
             value={typeof value === 'string' ? value : ''}
             placeholder={field.placeholder}
             prefixIcon={field.icon}
