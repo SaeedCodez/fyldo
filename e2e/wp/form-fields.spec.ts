@@ -361,7 +361,8 @@ test.describe('English', () => {
     await keyword.press('Shift+Tab'); // keyboard focus opens a tooltip at once
     await expect(dialog.getByRole('button', { name: 'Close' })).toBeFocused();
     await expect(page.locator('[data-fyldo-v1] [data-slot=fy-tooltip]', { hasText: 'Close' })).toBeVisible();
-    await page.mouse.click(4, 400);
+    const viewport = page.viewportSize() as { width: number; height: number };
+    await page.mouse.click(viewport.width - 40, 400); // on the scrim, away from the admin menu and the content scrollbar
     await expect(dialog).toBeVisible();
 
     await keyword.fill('reset');

@@ -126,15 +126,15 @@ test('keyboard focus is visible and neutral on every control', async ({ page }) 
   const title = page.getByRole('textbox', { name: 'Site title' });
   await title.focus();
   const wrapper = page.locator('[data-slot=fy-input]').first();
-  const halo = await wrapper.evaluate((el) => getComputedStyle(el).boxShadow);
-  expect(halo).toContain('0px 0px 0px 0.5px'); // Figma "Focus/Input" halo
+  // the halo fades in (motion-base, 150 ms): wait for the end of the transition
+  await expect.poll(() => wrapper.evaluate((el) => getComputedStyle(el).boxShadow)).toContain('0px 0px 0px 0.5px'); // Figma "Focus/Input" halo
 
   await page.locator('[data-slot=fy-toggle]').first().focus();
   await page.keyboard.press('Tab'); // move away and back with the keyboard so :focus-visible applies
   await page.keyboard.press('Shift+Tab');
-  const ring = await page.locator('[data-slot=fy-toggle]').first().evaluate((el) => getComputedStyle(el).boxShadow);
-  expect(ring).toMatch(/rgb\(255, 255, 255\) 0px 0px 0px 2px/); // 2px white gap …
-  expect(ring).toMatch(/rgb\(110, 98, 254\) 0px 0px 0px 4px/); // … + 2px primary ring (focus/ring-neutral)
+  const toggle = page.locator('[data-slot=fy-toggle]').first();
+  await expect.poll(() => toggle.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(/rgb\(255, 255, 255\) 0px 0px 0px 2px/); // 2px white gap …
+  await expect.poll(() => toggle.evaluate((el) => getComputedStyle(el).boxShadow)).toMatch(/rgb\(110, 98, 254\) 0px 0px 0px 4px/); // … + 2px primary ring (focus/ring-neutral)
 });
 
 test('popups render INSIDE the Fyldo root and keep their styles', async ({ page }) => {
