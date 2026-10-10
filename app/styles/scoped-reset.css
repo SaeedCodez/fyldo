@@ -111,8 +111,16 @@
 
 /* Neutralise EVERY inherited :focus decoration; components draw their own :focus-visible indicator. */
 [data-fyldo-v1] :where(a, button, input, select, textarea, summary, [tabindex], [role='switch'], [role='button']):focus {
-  outline: 2px solid transparent;
+  outline: 0;
   box-shadow: none;
+}
+
+/* No browser or wp-admin outline on any element, ever (owner decision 2026-10-11). The keyboard focus indicator is the
+   box-shadow ring of `focus-ring`, drawn on :focus-visible only, so a mouse click never shows it. */
+[data-fyldo-v1] *,
+[data-fyldo-v1] *::before,
+[data-fyldo-v1] *::after {
+  outline: 0 !important;
 }
 
 [data-fyldo-v1] :where(input, textarea)::placeholder {

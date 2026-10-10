@@ -31,7 +31,7 @@
     box-shadow:
       0 0 0 2px var(--fyldo-white),
       0 0 0 4px var(--fyldo-focus-ring-color);
-    outline: 2px solid transparent;
+    outline: 0;
   }
 }
 
@@ -41,7 +41,7 @@
     box-shadow:
       0 0 0 2px var(--fyldo-white),
       0 0 0 4px var(--fyldo-focus-ring-color);
-    outline: 2px solid transparent;
+    outline: 0;
   }
 }
 
@@ -51,7 +51,7 @@
     box-shadow:
       0 0 0 2px var(--fyldo-white),
       0 0 0 4px var(--fyldo-focus-ring-color);
-    outline: 2px solid transparent;
+    outline: 0;
   }
 }
 
@@ -59,7 +59,7 @@
 @utility focus-none {
   &:focus,
   &:focus-visible {
-    outline: 2px solid transparent;
+    outline: 0;
     box-shadow: none;
   }
 }
