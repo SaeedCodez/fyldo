@@ -111,7 +111,7 @@ describe('Icon Button + Tooltip (design rule 10)', () => {
     expect(await screen.findByText('Copy shortcode', { selector: '[data-slot=fy-tooltip]' })).toBeVisible();
   });
 
-  it('sizes are 32 / 40 / 48 squares; Loading replaces the icon with the spinner and ignores clicks', async () => {
+  it('sizes are 36 / 44 / 52 squares; Loading replaces the icon with the spinner and ignores clicks', async () => {
     const onClick = vi.fn();
     mount(
       <>
@@ -121,11 +121,11 @@ describe('Icon Button + Tooltip (design rule 10)', () => {
         <IconButton icon="close-circle" label="Saving" loading onClick={onClick} />
       </>,
     );
-    expect(screen.getByRole('button', { name: 'Small' })).toHaveClass('fy:size-8');
-    expect(screen.getByRole('button', { name: 'Medium' })).toHaveClass('fy:size-10');
-    expect(screen.getByRole('button', { name: 'Large' })).toHaveClass('fy:size-12');
-    expect(screen.getByRole('button', { name: 'Large' }).querySelector('svg')).toHaveAttribute('width', '20'); // 20px icon at Large
-    expect(screen.getByRole('button', { name: 'Small' }).querySelector('svg')).toHaveAttribute('width', '16');
+    expect(screen.getByRole('button', { name: 'Small' })).toHaveClass('fy:size-9');
+    expect(screen.getByRole('button', { name: 'Medium' })).toHaveClass('fy:size-11');
+    expect(screen.getByRole('button', { name: 'Large' })).toHaveClass('fy:size-13');
+    expect(screen.getByRole('button', { name: 'Large' }).querySelector('svg')).toHaveAttribute('width', '24'); // 24px icon at Large
+    expect(screen.getByRole('button', { name: 'Small' }).querySelector('svg')).toHaveAttribute('width', '18');
 
     const saving = screen.getByRole('button', { name: 'Saving' });
     expect(saving).toHaveAttribute('aria-busy', 'true');
@@ -222,7 +222,7 @@ describe('Empty State', () => {
     expect(large).toHaveAttribute('data-size', 'lg');
     expect(screen.getByRole('heading', { level: 3, name: 'No integrations yet' })).toHaveClass('fy:text-heading-20');
     expect(screen.getByText('Connect a service to sync forms and analytics with your site.')).toHaveClass('fy:text-copy-14');
-    expect(large.querySelector('[data-slot=fy-empty-state-icon]')).toHaveClass('fy:size-12', 'fy:rounded-lg');
+    expect(large.querySelector('[data-slot=fy-empty-state-icon]')).toHaveClass('fy:size-14', 'fy:rounded-lg');
     expect(large.querySelector('[data-slot=fy-empty-state-icon] svg')).toHaveAttribute('width', '24');
 
     const actions = [...large.querySelectorAll('[data-slot=fy-empty-state-actions] > *')] as HTMLElement[];

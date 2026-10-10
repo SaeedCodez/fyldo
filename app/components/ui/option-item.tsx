@@ -13,13 +13,13 @@ export interface OptionItemProps {
   label: string;
   description?: string;
   disabled?: boolean;
-  /** The 16px control (Checkbox / Radio). */
+  /** The 20px control (Checkbox / Radio). */
   control: ReactNode;
   className?: string;
 }
 
 /**
- * Figma Checkbox / Radio anatomy: a 16px control centred on the first text line (its slot is one line tall, 20px in
+ * Figma Checkbox / Radio anatomy: a 20px control centred on the first text line (its slot is one line tall, 20px in
  * English, 22px in Persian), 8px gap, Label/14 and an optional Copy/13 description 2px below it. The control and the
  * label are one `<label>`: the whole row is the click target. A Base UI `Field.Item`, so every option of a group has its
  * own label and description. Must be inside a Base UI `Field.Root` (Setting Row / GroupField).
@@ -32,7 +32,7 @@ export function OptionItem({ label, description, disabled, control, className }:
         <span className="fy:text-label-14 fy:text-text-primary fy:group-data-[disabled]/option:text-text-disabled">{label}</span>
       </Field.Label>
       {description ? (
-        <Field.Description className="fy:ps-6 fy:text-copy-13 fy:text-text-secondary">{description}</Field.Description>
+        <Field.Description className="fy:ps-7 fy:text-copy-13 fy:text-text-secondary">{description}</Field.Description>
       ) : null}
     </Field.Item>
   );

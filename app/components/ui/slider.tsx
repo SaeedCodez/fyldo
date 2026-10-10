@@ -6,16 +6,16 @@ export type SliderSize = 'sm' | 'md';
 
 /*
  * Figma Slider: Control = Track (`radius/full`, `surface/active`, 20 high Small / 24 Medium) + Range (`control/on`, 2px
- * padding) + Thumb (white pill, Shadow/Thumb; 24×16 Small / 28×20 Medium). The thumb sits inside the range with a 2px
+ * padding) + Thumb (white pill, Shadow/Thumb; 28×20 Small / 32×24 Medium). The thumb sits inside the range with a 2px
  * rim, so Base UI's thumb is a transparent 4px-wider box (pill + rim) that travels edge to edge, and the range ends at
  * that box's far side. Hover = `control/on-hover`; Disabled = `control/off-disabled` track, `control/on-disabled` range,
  * a 1px `control/on-disabled` stroke on the thumb and no shadow.
  */
-const TRACK: Record<SliderSize, string> = { sm: 'fy:h-5', md: 'fy:h-6' };
-const THUMB_BOX: Record<SliderSize, string> = { sm: 'fy:h-5 fy:w-7', md: 'fy:h-6 fy:w-8' };
-const THUMB_PILL: Record<SliderSize, string> = { sm: 'fy:h-4 fy:w-6', md: 'fy:h-5 fy:w-7' };
+const TRACK: Record<SliderSize, string> = { sm: 'fy:h-6', md: 'fy:h-7' };
+const THUMB_BOX: Record<SliderSize, string> = { sm: 'fy:h-6 fy:w-8', md: 'fy:h-7 fy:w-9' };
+const THUMB_PILL: Record<SliderSize, string> = { sm: 'fy:h-5 fy:w-7', md: 'fy:h-6 fy:w-8' };
 /** Width of the thumb box in px (pill + 2×2 rim): the range reaches its far side. */
-const THUMB_BOX_PX: Record<SliderSize, number> = { sm: 28, md: 32 };
+const THUMB_BOX_PX: Record<SliderSize, number> = { sm: 32, md: 36 };
 
 /** Largest "big" step (PageUp/PageDown, Shift+arrow): a tenth of the range, on the step grid. */
 const largeStep = (min: number, max: number, step: number): number => Math.max(step, Math.round((max - min) / 10 / step) * step);

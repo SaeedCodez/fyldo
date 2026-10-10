@@ -24,8 +24,8 @@ export interface TagProps {
  * a real border, so Small is 20px tall and "Posts" is 59px wide. Hover fills `surface/hover` and darkens the remove icon.
  */
 const SIZE: Record<TagSize, string> = {
-  sm: 'fy:h-5 fy:ps-1.5 fy:pe-1 fy:text-label-12',
-  md: 'fy:h-6 fy:ps-2 fy:pe-1.5 fy:text-label-13',
+  sm: 'fy:h-6 fy:ps-1.5 fy:pe-1 fy:text-label-12',
+  md: 'fy:h-7 fy:ps-2 fy:pe-1.5 fy:text-label-13',
 };
 
 /** Tag / chip: a picked value in a Multi Select, or standalone in a filter row. */

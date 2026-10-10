@@ -24,9 +24,9 @@ export interface EmptyStateProps {
   className?: string;
 }
 
-/** Figma sizes: padding 48/32 · gap 20 · box 48 r-lg · icon 24 · text gap 8 (Large); 32/24 · 16 · 40 r-md · 20 · 4 (Small). */
+/** Figma sizes: padding 48/32 · gap 20 · box 56 r-lg · icon 24 · text gap 8 (Large); 32/24 · 16 · 40 r-md · 20 · 4 (Small). */
 const LOOK = {
-  lg: { root: 'fy:gap-5 fy:px-8 fy:py-12', box: 'fy:size-12 fy:rounded-lg', icon: 24, text: 'fy:max-w-104 fy:gap-2', title: 'fy:text-heading-20', description: 'fy:text-copy-14' },
+  lg: { root: 'fy:gap-5 fy:px-8 fy:py-12', box: 'fy:size-14 fy:rounded-lg', icon: 24, text: 'fy:max-w-124 fy:gap-2', title: 'fy:text-heading-20', description: 'fy:text-copy-14' },
   sm: { root: 'fy:gap-4 fy:px-6 fy:py-8', box: 'fy:size-10 fy:rounded-md', icon: 20, text: 'fy:max-w-78 fy:gap-1', title: 'fy:text-heading-16', description: 'fy:text-copy-13' },
 } as const;
 

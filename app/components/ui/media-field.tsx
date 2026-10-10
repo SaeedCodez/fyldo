@@ -12,7 +12,7 @@ import { GroupLabelProvider, useGroupLabels } from './group-field';
 import { IconButton } from './icon-button';
 
 /** Figma: the Upload Image thumbnail is 64, the Select File tile 40; both are `radius/sm`. */
-const TILE: Record<MediaKind, string> = { image: 'fy:size-16', file: 'fy:size-10' };
+const TILE: Record<MediaKind, string> = { image: 'fy:size-18', file: 'fy:size-12' };
 
 /** Figma's dashed outline of an empty thumbnail / tile: a 1px `border/input` stroke inside, dashes 4 long with 4 gaps. */
 function DashedOutline({ side }: { side: number }): ReactElement {
@@ -199,7 +199,7 @@ export function MediaPicker({ kind, label, value, media, mimes = null, maxSize =
       data-kind={kind}
       data-filled={filled ? '' : undefined}
       onBlur={leave}
-      className={cn('fy:box-border fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-sm fy:p-3 fy:text-copy-14', CONTROL_LOOK, className)}
+      className={cn('fy:box-border fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-sm fy:p-4 fy:text-copy-14', CONTROL_LOOK, className)}
     >
       <Tile kind={kind} item={item} />
 

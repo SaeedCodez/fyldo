@@ -10,7 +10,7 @@ import { OPTION_LIST, OptionItem, type OptionDef } from './option-item';
  * `control/thumb` dot. Hover / disabled follow Checkbox.
  */
 const CIRCLE = [
-  'fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-full fy:border',
+  'fy:relative fy:inline-flex fy:size-5 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-full fy:border',
   'fy:border-control-border fy:bg-background-default fy:transition-colors fy:duration-100 fy:ease-out',
   'fy:hover:border-control-border-hover fy:group-hover/option:border-control-border-hover',
   'fy:data-checked:border-0 fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover fy:data-checked:group-hover/option:bg-control-on-hover',

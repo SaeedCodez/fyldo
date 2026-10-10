@@ -59,8 +59,8 @@ const FIELD: Record<ControlSize, string> = {
   md: 'fy:py-2 fy:rounded-sm fy:text-copy-14',
   lg: 'fy:py-3 fy:rounded-md fy:text-copy-16',
 };
-const LINE: Record<ControlSize, string> = { sm: 'fy:min-h-5', md: 'fy:min-h-6', lg: 'fy:min-h-6' };
-const ICONS: Record<ControlSize, string> = { sm: 'fy:h-5', md: 'fy:h-6', lg: 'fy:h-6' };
+const LINE: Record<ControlSize, string> = { sm: 'fy:min-h-6', md: 'fy:min-h-7', lg: 'fy:min-h-7' };
+const ICONS: Record<ControlSize, string> = { sm: 'fy:h-6', md: 'fy:h-7', lg: 'fy:h-7' };
 
 /**
  * Many-of-many field. Base UI Combobox with `multiple`, the search input INSIDE the popup (ARCHITECTURE O14): the field is
@@ -254,7 +254,7 @@ export function MultiSelect({
               />
             </div>
             <Combobox.Empty className="fy:p-1 fy:empty:hidden">
-              <div className="fy:flex fy:h-9 fy:items-center fy:p-2 fy:text-copy-14 fy:text-text-tertiary">{__('No results found.', 'fyldo')}</div>
+              <div className="fy:flex fy:h-10 fy:items-center fy:p-2 fy:text-copy-14 fy:text-text-tertiary">{__('No results found.', 'fyldo')}</div>
             </Combobox.Empty>
             <Combobox.List
               className="fy:flex fy:flex-col fy:gap-0.5 fy:overflow-y-auto fy:p-1 fy:empty:hidden"
@@ -266,7 +266,7 @@ export function MultiSelect({
                   value={option.value}
                   disabled={option.disabled}
                   className={cn(
-                    'fy:group/option fy:flex fy:h-9 fy:shrink-0 fy:cursor-pointer fy:items-center fy:gap-2 fy:rounded-sm fy:p-2 fy:text-label-14 fy:text-text-primary fy:outline-none fy:select-none',
+                    'fy:group/option fy:flex fy:h-10 fy:shrink-0 fy:cursor-pointer fy:items-center fy:gap-2 fy:rounded-sm fy:p-2 fy:text-label-14 fy:text-text-primary fy:outline-none fy:select-none',
                     'fy:data-highlighted:bg-surface-default fy:data-disabled:cursor-not-allowed fy:data-disabled:text-text-disabled',
                   )}
                 >

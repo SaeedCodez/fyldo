@@ -23,7 +23,7 @@ export interface SidebarProps {
 
 /*
  * Figma Sidebar (256 wide, background/subtle, 1px end border):
- *   Header      padding 20/20/16/20, gap 10: brand (60 high)
+ *   Header      padding 20/28, gap 12: brand (76 high), version Badge at the far end
  *   Navigation  padding 8/16/0/16, groups 20 apart; a group = Group label (Label/12 text/tertiary, padding 0/8/6/8) +
  *               Nav Items 2 apart
  *   Footer      padding 12/16, gap 2, 1px top border: utility Nav Items
@@ -55,9 +55,9 @@ export function Sidebar({
       {drawer ? null : (
         <div
           data-slot="fy-sidebar-header"
-          className="fy:flex fy:shrink-0 fy:items-center fy:gap-2.5 fy:px-5 fy:pt-5 fy:pb-4"
+          className="fy:flex fy:shrink-0 fy:items-center fy:px-7 fy:py-5"
         >
-          <BrandMark brand={brand} locale={locale} />
+          <BrandMark brand={brand} locale={locale} large />
         </div>
       )}
 

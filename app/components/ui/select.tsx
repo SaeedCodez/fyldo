@@ -81,7 +81,7 @@ export function Select({ options, value, onValueChange, placeholder, size = 'sm'
                   value={option.value}
                   disabled={option.disabled}
                   className={cn(
-                    'fy:flex fy:h-9 fy:cursor-pointer fy:items-center fy:gap-2 fy:rounded-sm fy:p-2 fy:text-label-14 fy:text-text-primary fy:outline-none fy:select-none',
+                    'fy:flex fy:h-10 fy:cursor-pointer fy:items-center fy:gap-2 fy:rounded-sm fy:p-2 fy:text-label-14 fy:text-text-primary fy:outline-none fy:select-none',
                     'fy:data-highlighted:bg-surface-default fy:data-disabled:cursor-not-allowed fy:data-disabled:text-text-disabled',
                   )}
                 >

@@ -67,7 +67,7 @@ export interface ShellProps {
  * The two Settings page templates of the pack:
  *   sidebar  the 256px Sidebar, full height and sticky below the admin bar, beside the content area
  *   top      the Top Navigation across the full width above the content area
- * The content column (800px, centred) is the page's own. At ≤782px (wp-admin's mobile breakpoint; the design is
+ * The content column (960px, centred) is the page's own. At ≤782px (wp-admin's mobile breakpoint; the design is
  * silent, docs/ARCHITECTURE.md §8.3) the Sidebar becomes a "Menu" disclosure above the content.
  */
 export function Shell({ config, route, onNavigate, children }: ShellProps): ReactElement {

@@ -65,7 +65,7 @@ export function TopNavigation({
       />
       <div
         data-slot="fy-top-nav-header"
-        className="fy:flex fy:min-h-12 fy:items-center fy:gap-4 fy:px-6 fy:pt-3 fy:pb-1 fy:wp-mobile:flex-wrap"
+        className="fy:flex fy:min-h-13 fy:items-center fy:gap-4 fy:px-6 fy:pt-3 fy:pb-1 fy:wp-mobile:flex-wrap"
       >
         <BrandMark brand={brand} locale={locale} />
         <span className="fy:flex-1" />

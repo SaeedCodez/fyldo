@@ -40,7 +40,7 @@ const savesHere = (page: PageDef, section: SectionDef): boolean =>
   page.save === 'section' && section.tone !== 'danger' && section.fields.some(isValueField);
 
 /**
- * Content column (800px, centred, 40px from the top): Page Header → 24 → [conflict Notice → 24] → Tabs (sub-pages) → 24
+ * Content column (960px, centred, 40px from the top): Page Header → 24 → [conflict Notice → 24] → Tabs (sub-pages) → 24
  * → Section Cards (24 apart) → floating Save Bar (global save pattern) — or a Save in each card footer (per-section
  * pattern): one pattern per page, never both. Values and edits belong to the page, so switching tabs keeps them.
  */
@@ -207,7 +207,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
       ref={column}
       data-slot="fy-content"
       data-save={page.save}
-      className="fy:mx-auto fy:flex fy:w-full fy:max-w-208 fy:flex-1 fy:flex-col fy:px-4 fy:pt-10"
+      className="fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
     >
       <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
 

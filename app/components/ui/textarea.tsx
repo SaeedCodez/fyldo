@@ -7,15 +7,15 @@ import { length } from '../../lib/validation';
 import { CONTROL_BASE } from './control';
 import { FieldError, FieldShell, type FieldShellProps } from './field-shell';
 
-/** Figma's default Textarea control is 104px tall (≈ 4 rows); each further row adds one 20px line. */
+/** Figma's default Textarea control is 120px tall (≈ 4 rows); each further row adds one 20px line. */
 export const TEXTAREA_DEFAULT_ROWS = 4;
-const CONTROL_HEIGHT = 104;
+const CONTROL_HEIGHT = 120;
 const LINE = 20;
-const BORDER = 2; // 1px stroke ×2 (Figma counts it inside the 104)
+const BORDER = 2; // 1px stroke ×2 (Figma counts it inside the 120)
 const PADDING = 16; // 8px ×2
 
 export interface TextareaProps extends Omit<ComponentPropsWithoutRef<typeof Field.Control>, 'size' | 'children' | 'render' | 'rows' | 'maxLength'> {
-  /** Rows the default height is authored for (Figma: 4 → 104px). The user can still resize. */
+  /** Rows the default height is authored for (Figma: 4 → 120px). The user can still resize. */
   rows?: number;
   /** Figma "Resize handle": vertical only, or none. */
   resize?: 'vertical' | 'none';

@@ -134,7 +134,7 @@ function HexRow({ value, onValueChange }: { value: string; onValueChange: (value
         aria-hidden="true"
         data-slot="fy-color-preview"
         className={cn(
-          'fy:box-border fy:size-8 fy:shrink-0 fy:rounded-sm fy:border',
+          'fy:box-border fy:size-9 fy:shrink-0 fy:rounded-sm fy:border',
           value === '' ? 'fy:border-dashed fy:border-border-strong' : 'fy:border-border-default',
         )}
         style={{ backgroundColor: value === '' ? undefined : value }}

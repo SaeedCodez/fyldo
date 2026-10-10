@@ -74,11 +74,11 @@ export function SettingRow({
       data-slot="fy-setting-row"
       data-field-id={fieldId}
       className={cn(
-        'fy:group/field fy:flex fy:py-5',
+        'fy:group/field fy:flex fy:py-6',
         layout === 'stacked' && 'fy:flex-col fy:gap-3',
         inline && 'fy:items-center fy:gap-8',
         layout === 'field' && 'fy:items-center fy:gap-8 fy:wp-mobile:flex-col fy:wp-mobile:items-stretch fy:wp-mobile:gap-3',
-        divider && 'fy:border-b fy:border-border-default',
+        divider && 'fy:border-b fy:border-border-subtle',
       )}
     >
       <div className={cn('fy:flex fy:min-w-0 fy:flex-col fy:gap-1', beside && 'fy:flex-1', layout === 'field' && 'fy:wp-mobile:flex-none')}>

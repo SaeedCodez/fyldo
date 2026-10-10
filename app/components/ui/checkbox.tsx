@@ -19,7 +19,7 @@ export interface CheckboxProps extends Omit<ComponentPropsWithoutRef<typeof Base
  * `border/default` (unchecked) or `control/on-disabled` (checked).
  */
 const BOX = [
-  'fy:group/box fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:border',
+  'fy:group/box fy:relative fy:inline-flex fy:size-5 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:border',
   'fy:border-control-border fy:bg-background-default fy:text-control-thumb fy:transition-colors fy:duration-100 fy:ease-out',
   'fy:hover:border-control-border-hover fy:group-hover/option:border-control-border-hover fy:group-data-[highlighted]/option:border-control-border-hover',
   'fy:data-checked:border-0 fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover fy:data-checked:group-hover/option:bg-control-on-hover fy:data-checked:group-data-[highlighted]/option:bg-control-on-hover',
@@ -32,14 +32,14 @@ const BOX = [
 ].join(' ');
 
 const GLYPH = (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
-    {/* Figma: Check 7.5×5.25 at (4.25, 5.63), Dash 7 wide at (4.5, 8) inside the 16px box */}
-    <path data-glyph="check" d="M4.25 8.375L6.75 10.875L11.75 5.625" className="fy:group-data-[indeterminate]/box:hidden" />
-    <path data-glyph="dash" d="M4.5 8H11.5" className="fy:hidden fy:group-data-[indeterminate]/box:block" />
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false">
+    {/* Figma: Check 7.5×5.25 at (6.25, 7.63), Dash 7 wide at (6.5, 10) inside the 20px box */}
+    <path data-glyph="check" d="M6.25 10.375L8.75 12.875L13.75 7.625" className="fy:group-data-[indeterminate]/box:hidden" />
+    <path data-glyph="dash" d="M6.5 10H13.5" className="fy:hidden fy:group-data-[indeterminate]/box:block" />
   </svg>
 );
 
-/** The bare 16px box. Inside a Setting Row / group the surrounding Field names it. */
+/** The bare 20px box. Inside a Setting Row / group the surrounding Field names it. */
 function CheckboxBox({ className, ...props }: Omit<CheckboxProps, 'label' | 'description'>): ReactElement {
   return (
     <BaseCheckbox.Root {...props} data-slot="fy-checkbox" className={cn(BOX, className)}>
@@ -119,7 +119,7 @@ export function CheckboxGroup({ options, value, onValueChange, parent, disabled,
       className={cn(OPTION_LIST, className)}
     >
       {parent ? <OptionItem label={parent} disabled={disabled} control={<CheckboxBox parent name={name} />} /> : null}
-      <div className={cn(OPTION_LIST, parent && 'fy:ps-6')} data-slot="fy-checkbox-options">
+      <div className={cn(OPTION_LIST, parent && 'fy:ps-7')} data-slot="fy-checkbox-options">
         {options.map((option) => (
           <OptionItem
             key={option.value}

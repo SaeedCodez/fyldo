@@ -10,7 +10,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 export interface ButtonProps extends Omit<ComponentPropsWithoutRef<typeof BaseButton>, 'children'> {
   /** Figma `Type`. */
   variant?: ButtonVariant;
-  /** Figma `Size`: 32 / 40 / 48. */
+  /** Figma `Size`: 36 / 44 / 52. */
   size?: ButtonSize;
   /** Figma `State=Loading`: keeps the label and width, shows a spinner, ignores clicks. */
   loading?: boolean;
@@ -25,10 +25,13 @@ export interface ButtonProps extends Omit<ComponentPropsWithoutRef<typeof BaseBu
  * border exists only where Figma has a stroke: Secondary always, every other type only when disabled/loading.
  */
 const SIZE: Record<ButtonSize, string> = {
-  sm: 'fy:h-8 fy:px-3 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
-  md: 'fy:h-10 fy:px-4 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
-  lg: 'fy:h-12 fy:px-5 fy:gap-2 fy:rounded-md fy:text-button-16',
+  sm: 'fy:h-9 fy:px-4 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
+  md: 'fy:h-11 fy:px-5 fy:gap-1.5 fy:rounded-sm fy:text-button-14',
+  lg: 'fy:h-13 fy:px-6 fy:gap-2 fy:rounded-md fy:text-button-16',
 };
+
+/** Icon sizes by button size (Figma: 16 / 18 / 20). */
+export const ICON: Record<ButtonSize, 16 | 18 | 20> = { sm: 16, md: 18, lg: 20 };
 
 export const BUTTON_VARIANT: Record<ButtonVariant, string> = {
   primary: 'fy:bg-action-primary fy:text-text-inverse fy:hover:bg-action-primary-hover',
@@ -71,9 +74,9 @@ export interface ButtonLinkProps extends Omit<ComponentPropsWithoutRef<'a'>, 'ch
 export function ButtonLink({ variant = 'primary', size = 'sm', leadingIcon, trailingIcon, className, children, ...props }: ButtonLinkProps): ReactElement {
   return (
     <a {...props} data-slot="fy-button" data-variant={variant} data-size={size} className={cn(look(variant, size), 'fy:no-underline', className)}>
-      {leadingIcon ? <Icon name={leadingIcon} size={16} /> : null}
+      {leadingIcon ? <Icon name={leadingIcon} size={ICON[size]} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}
-      {trailingIcon ? <Icon name={trailingIcon} size={16} /> : null}
+      {trailingIcon ? <Icon name={trailingIcon} size={ICON[size]} /> : null}
     </a>
   );
 }
@@ -104,9 +107,9 @@ export function Button({
       data-loading={loading ? '' : undefined}
       className={cn(look(variant, size), BUTTON_DISABLED[variant], className as string | undefined)}
     >
-      {loading ? <Spinner /> : leadingIcon ? <Icon name={leadingIcon} size={16} /> : null}
+      {loading ? <Spinner size={ICON[size]} /> : leadingIcon ? <Icon name={leadingIcon} size={ICON[size]} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}
-      {trailingIcon ? <Icon name={trailingIcon} size={16} /> : null}
+      {trailingIcon ? <Icon name={trailingIcon} size={ICON[size]} /> : null}
     </BaseButton>
   );
 }

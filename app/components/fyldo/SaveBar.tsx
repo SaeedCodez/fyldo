@@ -62,7 +62,7 @@ export function SaveBar({ state, onSave, onDiscard, errorMessage }: SaveBarProps
         data-leaving={leaving ? '' : undefined}
         aria-hidden={leaving ? true : undefined}
         className={cn(
-          'fy:flex fy:items-center fy:gap-4 fy:rounded-lg fy:border fy:bg-background-default fy:ps-5 fy:pe-3 fy:py-2.5 fy:shadow-medium',
+          'fy:flex fy:items-center fy:gap-4 fy:rounded-lg fy:border fy:bg-background-default fy:ps-6 fy:pe-4 fy:py-3 fy:shadow-medium',
           'fy:transition fy:duration-200 fy:ease-out fy:starting:translate-y-2 fy:starting:opacity-0 fy:motion-reduce:transition-none',
           leaving && 'fy:translate-y-2 fy:opacity-0',
           shown === 'error' ? 'fy:border-status-error-border' : 'fy:border-border-default',

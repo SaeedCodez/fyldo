@@ -9,7 +9,7 @@
   "name": "Modal",
   "kebab": "modal",
   "width": 1272,
-  "height": 758,
+  "height": 766,
   "variantCount": 4,
   "componentPropertyDefinitions": {
    "Close button#50:268": {
@@ -2003,7 +2003,7 @@
     "x": 0,
     "y": 0,
     "width": 560,
-    "height": 305,
+    "height": 313,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -2503,13 +2503,13 @@
       "x": 1,
       "y": 131,
       "width": 558,
-      "height": 96,
+      "height": 104,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
-       "paddingRight": 24,
-       "paddingBottom": 24,
-       "paddingLeft": 24,
+       "paddingRight": 32,
+       "paddingBottom": 32,
+       "paddingLeft": 32,
        "itemSpacing": 0,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -2521,15 +2521,20 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/32"
+      },
       "children": [
        {
         "name": "Confirmation",
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
+        "x": 33,
         "y": 131,
-        "width": 510,
+        "width": 494,
         "height": 72,
         "layout": {
          "layoutMode": "VERTICAL",
@@ -3040,7 +3045,7 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 227,
+      "y": 235,
       "width": 558,
       "height": 77,
       "layout": {
@@ -3096,7 +3101,7 @@
         "visible": true,
         "opacity": 1,
         "x": 33,
-        "y": 248,
+        "y": 256,
         "width": 80,
         "height": 36,
         "layout": {
@@ -3793,7 +3798,7 @@
         "visible": true,
         "opacity": 1,
         "x": 398,
-        "y": 248,
+        "y": 256,
         "width": 129,
         "height": 36,
         "layout": {
@@ -6457,7 +6462,7 @@
     "x": 0,
     "y": 0,
     "width": 560,
-    "height": 321,
+    "height": 329,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -6957,13 +6962,13 @@
       "x": 1,
       "y": 145,
       "width": 558,
-      "height": 98,
+      "height": 106,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
-       "paddingRight": 24,
-       "paddingBottom": 24,
-       "paddingLeft": 24,
+       "paddingRight": 32,
+       "paddingBottom": 32,
+       "paddingLeft": 32,
        "itemSpacing": 0,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -6975,15 +6980,20 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/32"
+      },
       "children": [
        {
         "name": "Confirmation",
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
+        "x": 33,
         "y": 145,
-        "width": 510,
+        "width": 494,
         "height": 74,
         "layout": {
          "layoutMode": "VERTICAL",
@@ -7494,7 +7504,7 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 243,
+      "y": 251,
       "width": 558,
       "height": 77,
       "layout": {
@@ -7550,7 +7560,7 @@
         "visible": true,
         "opacity": 1,
         "x": 33,
-        "y": 264,
+        "y": 272,
         "width": 137,
         "height": 36,
         "layout": {
@@ -8247,7 +8257,7 @@
         "visible": true,
         "opacity": 1,
         "x": 451,
-        "y": 264,
+        "y": 272,
         "width": 76,
         "height": 36,
         "layout": {

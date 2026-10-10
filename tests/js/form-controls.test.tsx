@@ -27,13 +27,13 @@ describe('Textarea', () => {
     expect(box).not.toHaveAttribute('maxlength');
   });
 
-  it('draws the default height Figma specifies (104px = 4 rows) and one 20px line per extra row', () => {
+  it('draws the default height Figma specifies (120px = 4 rows) and one 20px line per extra row', () => {
     const { rerender } = render(
       <TextareaField label="A" />,
     );
-    expect(screen.getByRole('textbox')).toHaveStyle({ height: '102px' }); // 104 − the wrapper's own 2px border
+    expect(screen.getByRole('textbox')).toHaveStyle({ height: '118px' }); // 120 − the wrapper's own 2px border
     rerender(<TextareaField label="A" rows={8} />);
-    expect(screen.getByRole('textbox')).toHaveStyle({ height: '182px' }); // 104 + 4 × 20 − 2
+    expect(screen.getByRole('textbox')).toHaveStyle({ height: '198px' }); // 120 + 4 × 20 − 2
     expect(screen.getByRole('textbox').closest('[data-slot=fy-textarea]')).not.toBeNull();
   });
 
@@ -216,10 +216,10 @@ describe('Checkbox group', () => {
     expect(parent).toHaveAttribute('aria-checked', 'false');
   });
 
-  it('children indent 24px toward the reading direction (logical padding), the parent does not', () => {
+  it('children indent 28px toward the reading direction (logical padding), the parent does not', () => {
     render(<Group parent="All post types" />);
     const options = document.querySelector('[data-slot=fy-checkbox-options]') as HTMLElement;
-    expect(options.className).toContain('ps-6');
+    expect(options.className).toContain('ps-7');
     expect(options.closest('[data-slot=fy-checkbox-group]')?.firstElementChild?.getAttribute('data-slot')).toBe('fy-option');
   });
 });
