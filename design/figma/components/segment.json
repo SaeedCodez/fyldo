@@ -103,7 +103,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#666666",
+        "hex": "#5c5f71",
         "token": "text/secondary"
        }
       ],
@@ -170,7 +170,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "surface/hover"
      }
     ],
@@ -204,7 +204,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -281,8 +281,8 @@
       {
        "type": "DROP_SHADOW",
        "visible": true,
-       "hex": "#000000",
-       "opacity": 0.04,
+       "hex": "#282a64",
+       "opacity": 0.06,
        "offset": {
         "x": 0,
         "y": 2
@@ -322,7 +322,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -397,7 +397,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#171717",
+       "hex": "#6e62fe",
        "token": "focus/ring-neutral"
       }
      ],
@@ -434,7 +434,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -528,7 +528,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#8f8f8f",
+        "hex": "#888b9b",
         "token": "text/disabled"
        }
       ],
@@ -622,7 +622,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#666666",
+        "hex": "#5c5f71",
         "token": "text/secondary"
        }
       ],
@@ -689,7 +689,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "surface/hover"
      }
     ],
@@ -723,7 +723,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -800,8 +800,8 @@
       {
        "type": "DROP_SHADOW",
        "visible": true,
-       "hex": "#000000",
-       "opacity": 0.04,
+       "hex": "#282a64",
+       "opacity": 0.06,
        "offset": {
         "x": 0,
         "y": 2
@@ -841,7 +841,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -916,7 +916,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#171717",
+       "hex": "#6e62fe",
        "token": "focus/ring-neutral"
       }
      ],
@@ -953,7 +953,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -1047,7 +1047,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#8f8f8f",
+        "hex": "#888b9b",
         "token": "text/disabled"
        }
       ],

@@ -9,7 +9,7 @@ Figma file was modified. The "Fyldo – HeroUI" file, the Foundations page and t
 
 | Path | What |
 |---|---|
-| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (150 = `tokens/figma.tokens.json`). Start here. |
+| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (166 = `tokens/figma.tokens.json`). Start here. |
 | `components/<kebab-name>.json` | One file per COMPONENT_SET (27): property definitions and, per variant, the full node tree. |
 | `png/<kebab-name>/<variant>.png` | Every variant at **2x** (534 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
 | `png/usage/*.png` | The 12 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**. |

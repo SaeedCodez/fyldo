@@ -8,8 +8,8 @@
   "id": "18:2614",
   "name": "Tabs",
   "kebab": "tabs",
-  "width": 1712,
-  "height": 118,
+  "width": 2072,
+  "height": 126,
   "variantCount": 2,
   "componentPropertyDefinitions": {
    "Locale": {
@@ -37,8 +37,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 48,
+    "width": 960,
+    "height": 56,
     "layout": {
      "layoutMode": "HORIZONTAL",
      "paddingTop": 0,
@@ -59,8 +59,8 @@
       "visible": true,
       "opacity": 1,
       "x": 0,
-      "y": 47,
-      "width": 800,
+      "y": 55,
+      "width": 960,
       "height": 1,
       "layout": {
        "layoutSizingHorizontal": "FIXED",
@@ -72,7 +72,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#ebebeb",
+        "hex": "#dadef4",
         "token": "border/default"
        }
       ]
@@ -84,8 +84,8 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 101,
-      "height": 48,
+      "width": 109,
+      "height": 56,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -379,10 +379,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 105,
+      "x": 113,
       "y": 0,
-      "width": 77,
-      "height": 48,
+      "width": 85,
+      "height": 56,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -676,10 +676,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 186,
+      "x": 202,
       "y": 0,
-      "width": 95,
-      "height": 48,
+      "width": 103,
+      "height": 56,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -973,10 +973,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 285,
+      "x": 309,
       "y": 0,
-      "width": 71,
-      "height": 48,
+      "width": 79,
+      "height": 56,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -1282,8 +1282,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 50,
+    "width": 960,
+    "height": 58,
     "layout": {
      "layoutMode": "HORIZONTAL",
      "paddingTop": 0,
@@ -1304,8 +1304,8 @@
       "visible": true,
       "opacity": 1,
       "x": 0,
-      "y": 49,
-      "width": 800,
+      "y": 57,
+      "width": 960,
       "height": 1,
       "layout": {
        "layoutSizingHorizontal": "FIXED",
@@ -1317,7 +1317,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#ebebeb",
+        "hex": "#dadef4",
         "token": "border/default"
        }
       ]
@@ -1327,10 +1327,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 416,
+      "x": 544,
       "y": 0,
-      "width": 105,
-      "height": 50,
+      "width": 113,
+      "height": 58,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -1624,10 +1624,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 525,
+      "x": 661,
       "y": 0,
-      "width": 105,
-      "height": 50,
+      "width": 113,
+      "height": 58,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -1921,10 +1921,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 634,
+      "x": 778,
       "y": 0,
-      "width": 67,
-      "height": 50,
+      "width": 75,
+      "height": 58,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -2218,10 +2218,10 @@
       "type": "INSTANCE",
       "visible": true,
       "opacity": 1,
-      "x": 705,
+      "x": 857,
       "y": 0,
-      "width": 95,
-      "height": 50,
+      "width": 103,
+      "height": 58,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
