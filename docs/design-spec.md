@@ -220,7 +220,7 @@ These cut across components; the implementation must enforce them where possible
 | 16 | Sidebar | 18:2391 | 2 | — | (composition: header, groups, footer) |
 | 17 | Tab | 18:2506 | 10 | State (5) | Label T · Icon ▢ + swap ⇄ · Count ▢ |
 | 18 | Tabs | 18:2614 | 2 | — | (composition: divider + Tab instances) |
-| 19 | Setting Row | 18:2719 | 6 | Layout: Inline·Stacked·**Field** (control at the end, 320 wide) | Title · Description T · Show description ▢ · Badge ▢ · Divider ▢ · exposed Control instance |
+| 19 | Setting Row | 18:2719 | 6 | Layout: Inline·Stacked·**Field** (control at the end, 400 wide) | Title · Description T · Show description ▢ · Badge ▢ · Divider ▢ · exposed Control instance |
 | 20 | Section Card | 18:2913 | 4 | Tone: Default·Danger | Title · Description T · Show description ▢ · Footer ▢ · Footer text ▢ |
 | 21 | Save Bar | 18:3079 | 8 | State: Dirty·Saving·Saved·Error | Discard button ▢ |
 | 22 | Page Header | 20:3127 | 2 | — | Title · Description T · Show description ▢ · Actions ▢ |
@@ -330,7 +330,7 @@ Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider.
 
 ### 4.11 Setting Row (18:2719), Section Card (18:2913)
 
-Setting Row: 894 wide inside the 960 card, padding-y 24, bottom 1 px divider (`border/subtle`, hideable). **Inline** (horizontal, gap 32): text block (Title Label/14 Strong + optional Badge, gap 8; Description Copy/13 `text/secondary`; gap 4) and the control (Toggle/Checkbox) vertically centred at the end. **Stacked** (vertical, gap 12): text block then a control (Input/Select/Multi Select/Textarea, Figma shows 320 wide × 44). **Field** (horizontal, gap 32): text block (542 wide) at the start and a 320 wide control (Input Medium) at the end.
+Setting Row: 894 wide inside the 960 card, padding-y 24, bottom 1 px divider (`border/subtle`, hideable). **Inline** (horizontal, gap 32): text block (Title Label/14 Strong + optional Badge, gap 8; Description Copy/13 `text/secondary`; gap 4) and the control (Toggle/Checkbox) vertically centred at the end. **Stacked** (vertical, gap 12): text block then a control (Input/Select/Multi Select/Textarea, Figma shows 400 wide × 44). **Field** (horizontal, gap 32): text block (462 wide) at the start and a 400 wide control (Input Medium) at the end.
 
 Section Card: 960 wide, vertical, fill `background/default`, 1 px `border/default`, radius **lg**. Header padding 32 (bottom 4), gap 6: Title Heading/20 + Description Copy/14 `text/secondary`. Content padding 32 (bottom 4) holds Setting Rows. Footer (optional): padding 32/16, gap 16, fill `background/subtle`, top border; footer text Copy/13 `text/secondary` + Primary Button.
 **Danger**: card border `status/error/border`; header padding 32 (bottom 24); no content; footer fill `status/error/bg`, border `status/error/border`, text `status/error/text`, Error-type button.

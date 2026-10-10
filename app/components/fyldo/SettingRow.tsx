@@ -25,7 +25,7 @@ export interface SettingRowProps {
   errorInControl?: boolean;
   /** The control is a group (checkbox group, radio group): the title names the group instead of labelling one control. */
   group?: boolean;
-  /** Figma Textarea is 360 wide; every other control 320. */
+  /** The Textarea control is 448 wide in a Setting Row; every other control 400. */
   wide?: boolean;
   /** Figma Choice Card Group is 576 wide. Like every stacked control it shrinks (`max-w-full`) on narrow containers. */
   cards?: boolean;
@@ -117,7 +117,7 @@ export function SettingRow({
         {srNote && !group ? <Field.Description className="fy:sr-only">{srNote}</Field.Description> : null}
       </div>
 
-      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-90' : cards ? 'fy:w-144' : 'fy:w-80', 'fy:max-w-full'))}>
+      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-112' : cards ? 'fy:w-144' : 'fy:w-100', 'fy:max-w-full'))}>
         {group ? (
           <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
             {children}
