@@ -9,21 +9,21 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-10T21:42:25+00:00\n"
+"POT-Creation-Date: 2026-10-11T15:29:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 
-#: app/components/fyldo/App.tsx:135
+#: app/components/fyldo/App.tsx:139
 msgid "Discard unsaved changes?"
 msgstr ""
 
-#: app/components/fyldo/App.tsx:136
+#: app/components/fyldo/App.tsx:140
 msgid "Your edits on this page haven’t been saved and will be lost."
 msgstr ""
 
-#: app/components/fyldo/App.tsx:140
+#: app/components/fyldo/App.tsx:144
 msgid "Keep editing"
 msgstr ""
 
@@ -73,56 +73,56 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:115
+#: app/components/fyldo/SettingsPage.tsx:116
 msgid "Changes take effect after you save."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:131
+#: app/components/fyldo/SettingsPage.tsx:132
 msgid "Save"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:147
+#: app/components/fyldo/SettingsPage.tsx:148
 msgid "Settings reset to defaults"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:150
+#: app/components/fyldo/SettingsPage.tsx:151
 msgid "Couldn't reset settings. Check your connection and try again."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:151
+#: app/components/fyldo/SettingsPage.tsx:152
 msgid "Retry"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:158
+#: app/components/fyldo/SettingsPage.tsx:159
 msgid "This action can’t be undone."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:223
+#: app/components/fyldo/SettingsPage.tsx:232
 msgid "These settings were changed somewhere else"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:226
+#: app/components/fyldo/SettingsPage.tsx:235
 msgid "Reload latest values"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:230
+#: app/components/fyldo/SettingsPage.tsx:239
 msgid ""
 "They were saved in another tab or by another person after this page was "
 "opened, so your changes were not saved. Reload the latest values to "
 "continue; your unsaved changes on this page will be lost."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:260
+#: app/components/fyldo/SettingsPage.tsx:269
 msgid "Reset all settings?"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:261
+#: app/components/fyldo/SettingsPage.tsx:270
 msgid ""
 "Every option on this page will return to its default value. This can’t be "
 "undone."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:262
+#: app/components/fyldo/SettingsPage.tsx:271
 #: app/components/ui/icon-picker-modal.tsx:289
 msgid "Cancel"
 msgstr ""
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Skip to page content"
 msgstr ""
 
-#: app/components/fyldo/Sidebar.tsx:109
+#: app/components/fyldo/Sidebar.tsx:113
 #: app/components/fyldo/TopNavigation.tsx:74
 msgid "Resources"
 msgstr ""
@@ -895,8 +895,8 @@ msgstr ""
 #: build/fyldo/demo/demo.php:552
 #: demo/demo.php:547
 #: demo/demo.php:552
-#: app/components/fyldo/SettingsPage.tsx:168
-#: app/components/fyldo/SettingsPage.tsx:263
+#: app/components/fyldo/SettingsPage.tsx:169
+#: app/components/fyldo/SettingsPage.tsx:272
 msgid "Reset settings"
 msgstr ""
 
@@ -1149,7 +1149,7 @@ msgstr ""
 msgid "Fyldo"
 msgstr ""
 
-#: app/components/fyldo/App.tsx:141
+#: app/components/fyldo/App.tsx:145
 msgctxt "unsaved changes dialog"
 msgid "Discard"
 msgstr ""
@@ -1157,4 +1157,9 @@ msgstr ""
 #: app/components/fyldo/BrandMark.tsx:64
 msgctxt "version badge"
 msgid "v%s"
+msgstr ""
+
+#: app/components/fyldo/Sidebar.tsx:136
+msgctxt "sidebar version"
+msgid "Version %s"
 msgstr ""

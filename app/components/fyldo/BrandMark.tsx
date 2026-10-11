@@ -51,16 +51,16 @@ function Logo({ logo, large }: { logo?: BrandLogo; large: boolean }): ReactEleme
 
 /**
  * Figma Top Navigation "Brand" (design/figma/brand/README.md): logo (24) · name (Heading/16) · version Badge, gap 10.
- * `large` is the Sidebar header: logo 36 · name Heading/20 · Medium version Badge pushed to the far end, gap 12.
+ * `large` is the Sidebar header: logo 36 · name Heading/20, gap 12 — no version (the Sidebar shows it in its footer).
  */
 export function BrandMark({ brand, locale, large = false }: { brand: Brand; locale: string; large?: boolean }): ReactElement {
   return (
     <div data-slot="fy-brand" className={cn('fy:flex fy:min-w-0 fy:items-center fy:text-text-primary', large ? 'fy:w-full fy:gap-3' : 'fy:gap-2.5')}>
       <Logo logo={brand.logo} large={large} />
       <span data-slot="fy-brand-name" className={cn('fy:truncate fy:text-text-primary', large ? 'fy:min-w-0 fy:flex-1 fy:text-heading-20' : 'fy:text-heading-16')}>{brand.name}</span>
-      {brand.version ? (
+      {brand.version && !large ? (
         /* translators: %s: version number of the plugin, e.g. 1.0 */
-        <Badge size={large ? 'md' : 'sm'}>
+        <Badge>
           {sprintf(_x('v%s', 'version badge', 'fyldo'), localizeDigits(brand.version, locale))}
         </Badge>
       ) : null}

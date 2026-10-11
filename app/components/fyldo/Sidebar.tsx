@@ -1,5 +1,5 @@
 import { useId, type MouseEvent, type ReactElement } from 'react';
-import { __ } from '../../i18n';
+import { __, _x, localizeDigits, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { BrandMark } from './BrandMark';
 import type { Brand, NavGroup, UtilityLink } from './nav-model';
@@ -104,26 +104,41 @@ export function Sidebar({
         })}
       </nav>
 
-      {links.length > 0 ? (
-        <nav
-          aria-label={__('Resources', 'fyldo')}
+      {links.length > 0 || (brand.version && !drawer) ? (
+        <div
           data-slot="fy-sidebar-footer"
           className="fy:shrink-0 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
         >
-          <ul className="fy:flex fy:flex-col fy:gap-0.5">
-            {links.map((link) => (
-              <li key={link.href}>
-                <NavItem
-                  label={link.label}
-                  href={link.href}
-                  icon={link.icon}
-                  external={link.external}
-                  locale={locale}
-                />
-              </li>
-            ))}
-          </ul>
-        </nav>
+          {links.length > 0 ? (
+            <nav aria-label={__('Resources', 'fyldo')}>
+              <ul className="fy:flex fy:flex-col fy:gap-0.5">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <NavItem
+                      label={link.label}
+                      href={link.href}
+                      icon={link.icon}
+                      external={link.external}
+                      locale={locale}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+          {brand.version && !drawer ? (
+            <p
+              data-slot="fy-sidebar-version"
+              className="fy:px-3.5 fy:pt-2 fy:text-label-12 fy:break-words fy:text-text-tertiary"
+            >
+              {/* translators: %s: version number of the plugin, e.g. 1.0 */}
+              {sprintf(
+                _x('Version %s', 'sidebar version', 'fyldo'),
+                localizeDigits(brand.version, locale),
+              )}
+            </p>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

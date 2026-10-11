@@ -316,7 +316,7 @@ for (const locale of ['EN', 'FA'] as const) {
   });
 }
 
-// ── Brand (the default: the Fyldo mark · "Fyldo" · version badge), in the Sidebar header ─────────────────────
+// ── Brand (the default: the Fyldo mark · "Fyldo"), in the Sidebar header ─────────────────────
 for (const locale of ['EN', 'FA'] as const) {
   test(`Brand ${locale} · default`, async ({ browser }, testInfo) => {
     const props = { Locale: locale };
@@ -342,7 +342,7 @@ for (const locale of ['EN', 'FA'] as const) {
     expect(Math.round(gapToName), 'gap 10 between the logo and the name').toBe(header.layout?.itemSpacing);
 
     if (locale === 'EN') {
-      // the whole header: logo, name and badge (Geist in both)
+      // the whole header: logo and name (Geist in both)
       await compare({
         page,
         testInfo,

@@ -55,7 +55,9 @@ export function navSpec(root: Node, locale: Locale, item: 'Nav Item' | 'Tab') {
     nodes.find(
       (n) => n.type === 'TEXT' && (n.name === 'Name' || n.name === 'Fyldo' || n.name === 'فیلدو'),
     )?.text?.characters ?? '';
-  const versionNode = nodes.find((n) => n.name === 'Version');
+  // Top Navigation: a Version badge instance. Sidebar: a "Version 1.0" text row in the Footer.
+  const versionNode = nodes.find((n) => n.name === 'Version' && n.instance);
+  const versionText = nodes.find((n) => n.type === 'TEXT' && n.name === 'Version label')?.text?.characters;
   const groups: Array<{
     label?: string;
     items: Array<{ label: string; icon: string; badge?: string; active: boolean }>;
@@ -109,7 +111,7 @@ export function navSpec(root: Node, locale: Locale, item: 'Nav Item' | 'Tab') {
   }
   return {
     brand,
-    version: versionNode ? version(versionNode.instance?.texts?.Label ?? '') : undefined,
+    version: versionNode ? version(versionNode.instance?.texts?.Label ?? '') : versionText ? version(versionText) : undefined,
     groups,
     links,
   };

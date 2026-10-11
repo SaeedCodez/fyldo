@@ -206,6 +206,11 @@ msgctxt "version badge"
 msgid "v%s"
 msgstr "%s"
 
+#. translators: %s: version number of the plugin, e.g. 1.0
+msgctxt "sidebar version"
+msgid "Version %s"
+msgstr "نسخه %s"
+
 msgid "(opens in a new tab)"
 msgstr "(در زبانه‌ی تازه باز می‌شود)"
 

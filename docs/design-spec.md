@@ -320,7 +320,7 @@ Multi Select control: **min height 38 / 46 / 54** (Small / Medium / Large; paddi
 
 Nav Item: 44 high (EN and FA), padding 14/12, gap 12, radius md, 20 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `background/default` (white on the subtle sidebar) + label and icon `brand/text`; **Active** = solid `action/primary` fill + label **Label/14 Strong** and icon `text/inverse`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
 
-Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 76 (padding 28/20, gap 12): 36 px logo + "Fyldo" Heading/20 + version Badge (Medium, 24) at the far end. Navigation (padding top 8, sides 16, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support).
+Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 76 (padding 28/20, gap 12): 36 px logo + "Fyldo" Heading/20 (the version is not here: a long version number used to be cut off). Navigation (padding top 8, sides 16, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support), then a **Version** row (padding 8/14, Label/12 `text/tertiary`, "Version 1.0" / «نسخه ۱٫۰»).
 
 ### 4.10 Tab (18:2506), Tabs (18:2614), Top Navigation (37:4189)
 
