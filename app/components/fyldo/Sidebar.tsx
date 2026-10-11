@@ -107,7 +107,7 @@ export function Sidebar({
       {links.length > 0 || (brand.version && !drawer) ? (
         <div
           data-slot="fy-sidebar-footer"
-          className="fy:shrink-0 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
+          className="fy:flex fy:shrink-0 fy:flex-col fy:gap-0.5 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
         >
           {links.length > 0 ? (
             <nav aria-label={__('Resources', 'fyldo')}>
