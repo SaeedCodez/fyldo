@@ -1,6 +1,7 @@
 /**
  * M5-lite — axe (WCAG 2.0/2.1/2.2 A + AA) on every gallery component and on the full settings page in both layouts
- * (Sidebar, Top Navigation), EN + FA. No allow-list: a violation fails the build (ARCHITECTURE §12).
+ * (Sidebar, Top Navigation), EN + FA. No allow-list: a violation fails the build (ARCHITECTURE §12); the one relaxation is the
+ * text contrast floor (4:1, O17).
  * The gallery renders one component per page, so page-level landmark rules do not apply there; they are best-practice
  * rules and are not in the WCAG tag set used here.
  */
@@ -12,8 +13,19 @@ test.use({ reducedMotion: 'reduce' });
 
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'];
 
+/** The owner relaxed the text contrast floor from 4.5:1 to 4:1 on 2026-10-11 (decision O17; white on the primary fill is 4.34:1). Keep in sync with TEXT_MIN in tests/js/contrast.test.ts. */
+const TEXT_MIN = 4;
+
 async function scan(page: Page, selector = '[data-fyldo-v1]') {
-  const { violations } = await new AxeBuilder({ page }).include(selector).withTags(TAGS).analyze();
+  const result = await new AxeBuilder({ page }).include(selector).withTags(TAGS).analyze();
+  // axe only knows 4.5:1: drop colour-contrast findings that still meet the relaxed floor.
+  const violations = result.violations
+    .map((v) =>
+      v.id === 'color-contrast'
+        ? { ...v, nodes: v.nodes.filter((n) => !n.any.some((c) => typeof c.data?.contrastRatio === 'number' && c.data.contrastRatio >= TEXT_MIN)) }
+        : v,
+    )
+    .filter((v) => v.nodes.length > 0);
   const report = violations.map((v) => `${v.id}: ${v.help}\n${v.nodes.map((n) => `  ${n.target.join(' ')}\n  ${n.failureSummary}`).join('\n')}`);
   expect(report, report.join('\n\n')).toEqual([]);
 }

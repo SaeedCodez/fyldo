@@ -95,7 +95,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -145,7 +145,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "surface/hover"
      }
     ],
@@ -187,7 +187,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -238,7 +238,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#171717",
+       "hex": "#6e62fe",
        "token": "focus/border"
       }
      ],
@@ -283,7 +283,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -341,7 +341,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#171717",
+       "hex": "#6e62fe",
        "token": "focus/ring-neutral"
       }
      ],
@@ -354,14 +354,17 @@
       {
        "type": "DROP_SHADOW",
        "visible": true,
-       "hex": "#000000",
-       "opacity": 0.1,
+       "hex": "#6e62fe",
+       "opacity": 1,
        "offset": {
         "x": 0,
         "y": 0
        },
        "radius": 0,
-       "spread": 3
+       "spread": 0.5,
+       "bound": {
+        "color": "focus/border"
+       }
       }
      ]
     },
@@ -403,7 +406,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -488,7 +491,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],

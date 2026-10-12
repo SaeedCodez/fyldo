@@ -12,9 +12,9 @@ export type ControlSize = ButtonSize;
  */
 export const CONTROL_LOOK = [
   'fy:border fy:bg-background-default fy:text-text-primary',
-  'fy:border-border-input fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:border-border-input fy:motion-base',
   'fy:hover:border-border-input-hover',
-  // keyboard/pointer focus on the control inside: neutral border + Figma's soft halo
+  // keyboard/pointer focus on the control inside: neutral border + Figma's 0.5px halo
   'fy:has-[:focus-visible]:border-focus-border fy:has-[:focus-visible]:shadow-focus-input',
   // popup open (Select): same look as focus
   'fy:data-popup-open:border-focus-border fy:data-popup-open:shadow-focus-input',
@@ -30,7 +30,7 @@ export const CONTROL_LOOK = [
 export const CONTROL_BASE = `fy:flex fy:w-full fy:items-center fy:gap-2 ${CONTROL_LOOK}`;
 
 export const CONTROL_SIZE: Record<ControlSize, string> = {
-  sm: 'fy:h-8 fy:px-3 fy:rounded-sm fy:text-copy-14',
-  md: 'fy:h-10 fy:px-3 fy:rounded-sm fy:text-copy-14',
-  lg: 'fy:h-12 fy:px-3 fy:rounded-md fy:text-copy-16',
+  sm: 'fy:h-9 fy:px-3 fy:rounded-sm fy:text-copy-14',
+  md: 'fy:h-11 fy:px-3 fy:rounded-sm fy:text-copy-14',
+  lg: 'fy:h-13 fy:px-3 fy:rounded-md fy:text-copy-16',
 };

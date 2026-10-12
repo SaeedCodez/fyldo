@@ -28,14 +28,14 @@
     {
       "name": "color.action.primary",
       "type": "color",
-      "value": "{primitives.color.gray.1000}",
+      "value": "{primitives.color.primary.600}",
       "description": "Primary button",
       "css": "--fyldo-action-primary"
     },
     {
       "name": "color.action.primary-hover",
       "type": "color",
-      "value": "{primitives.color.gray.1000-hover}",
+      "value": "{primitives.color.primary.700}",
       "description": "Primary button hover",
       "css": "--fyldo-action-primary-hover"
     },
@@ -76,7 +76,7 @@
     {
       "name": "color.background.overlay",
       "type": "color",
-      "value": "#00000066",
+      "value": "#181a3873",
       "description": "Scrim behind modals"
     },
     {
@@ -120,6 +120,31 @@
       "css": "--fyldo-border-strong"
     },
     {
+      "name": "color.border.subtle",
+      "type": "color",
+      "value": "{primitives.color.gray.200}"
+    },
+    {
+      "name": "color.brand.border",
+      "type": "color",
+      "value": "{primitives.color.primary.200}"
+    },
+    {
+      "name": "color.brand.subtle",
+      "type": "color",
+      "value": "{primitives.color.primary.50}"
+    },
+    {
+      "name": "color.brand.subtle-hover",
+      "type": "color",
+      "value": "{primitives.color.primary.100}"
+    },
+    {
+      "name": "color.brand.text",
+      "type": "color",
+      "value": "{primitives.color.primary.700}"
+    },
+    {
       "name": "color.control.border",
       "type": "color",
       "value": "{primitives.color.gray.700}",
@@ -157,7 +182,7 @@
     {
       "name": "color.control.on",
       "type": "color",
-      "value": "{primitives.color.gray.1000}",
+      "value": "{primitives.color.primary.600}",
       "description": "Toggle track / checked control (on)",
       "css": "--fyldo-control-on"
     },
@@ -171,7 +196,7 @@
     {
       "name": "color.control.on-hover",
       "type": "color",
-      "value": "{primitives.color.gray.1000-hover}",
+      "value": "{primitives.color.primary.700}",
       "description": "Checked control hover",
       "css": "--fyldo-control-on-hover"
     },
@@ -185,20 +210,20 @@
     {
       "name": "color.focus.border",
       "type": "color",
-      "value": "{primitives.color.gray.1000}",
+      "value": "{primitives.color.primary.600}",
       "css": "--fyldo-focus-border"
     },
     {
       "name": "color.focus.ring",
       "type": "color",
-      "value": "{primitives.color.blue.700}",
+      "value": "{primitives.color.primary.500}",
       "description": "Focus ring",
       "css": "--fyldo-focus-ring"
     },
     {
       "name": "color.focus.ring-neutral",
       "type": "color",
-      "value": "{primitives.color.gray.1000}",
+      "value": "{primitives.color.primary.600}",
       "css": "--fyldo-focus-ring-neutral"
     },
     {
@@ -225,7 +250,7 @@
     {
       "name": "color.link.default",
       "type": "color",
-      "value": "{primitives.color.blue.900}",
+      "value": "{primitives.color.primary.700}",
       "description": "Inline links",
       "css": "--fyldo-link-default"
     },
@@ -263,32 +288,32 @@
     {
       "name": "color.status.info.bg",
       "type": "color",
-      "value": "{primitives.color.blue.100}",
+      "value": "{primitives.color.primary.50}",
       "css": "--fyldo-status-info-bg"
     },
     {
       "name": "color.status.info.border",
       "type": "color",
-      "value": "{primitives.color.blue.400}",
+      "value": "{primitives.color.primary.200}",
       "css": "--fyldo-status-info-border"
     },
     {
       "name": "color.status.info.solid",
       "type": "color",
-      "value": "{primitives.color.blue.800}",
+      "value": "{primitives.color.primary.700}",
       "css": "--fyldo-status-info-solid"
     },
     {
       "name": "color.status.info.subtle",
       "type": "color",
-      "value": "{primitives.color.blue.300}",
+      "value": "{primitives.color.primary.100}",
       "description": "Subtle badge background",
       "css": "--fyldo-status-info-subtle"
     },
     {
       "name": "color.status.info.text",
       "type": "color",
-      "value": "{primitives.color.blue.900}",
+      "value": "{primitives.color.primary.800}",
       "css": "--fyldo-status-info-text"
     },
     {
@@ -517,7 +542,7 @@
     {
       "name": "primitives.color.background.200",
       "type": "color",
-      "value": "#fafafa",
+      "value": "#f6f7fc",
       "css": "--fyldo-background-200"
     },
     {
@@ -589,73 +614,73 @@
     {
       "name": "primitives.color.gray.100",
       "type": "color",
-      "value": "#f2f2f2",
+      "value": "#f1f3fa",
       "css": "--fyldo-gray-100"
     },
     {
       "name": "primitives.color.gray.1000",
       "type": "color",
-      "value": "#171717",
+      "value": "#1a1d2c",
       "css": "--fyldo-gray-1000"
     },
     {
       "name": "primitives.color.gray.1000-hover",
       "type": "color",
-      "value": "#383838",
+      "value": "#2f3242",
       "css": "--fyldo-gray-1000-hover"
     },
     {
       "name": "primitives.color.gray.200",
       "type": "color",
-      "value": "#ebebeb",
+      "value": "#eaecf8",
       "css": "--fyldo-gray-200"
     },
     {
       "name": "primitives.color.gray.300",
       "type": "color",
-      "value": "#e5e5e5",
+      "value": "#e2e5f5",
       "css": "--fyldo-gray-300"
     },
     {
       "name": "primitives.color.gray.400",
       "type": "color",
-      "value": "#ebebeb",
+      "value": "#dadef4",
       "css": "--fyldo-gray-400"
     },
     {
       "name": "primitives.color.gray.500",
       "type": "color",
-      "value": "#c9c9c9",
+      "value": "#babfdb",
       "css": "--fyldo-gray-500"
     },
     {
       "name": "primitives.color.gray.600",
       "type": "color",
-      "value": "#a8a8a8",
+      "value": "#9da3c1",
       "css": "--fyldo-gray-600"
     },
     {
       "name": "primitives.color.gray.700",
       "type": "color",
-      "value": "#8f8f8f",
+      "value": "#888b9b",
       "css": "--fyldo-gray-700"
     },
     {
       "name": "primitives.color.gray.800",
       "type": "color",
-      "value": "#7d7d7d",
+      "value": "#76798a",
       "css": "--fyldo-gray-800"
     },
     {
       "name": "primitives.color.gray.850",
       "type": "color",
-      "value": "#737373",
+      "value": "#6c6f80",
       "css": "--fyldo-gray-850"
     },
     {
       "name": "primitives.color.gray.900",
       "type": "color",
-      "value": "#666666",
+      "value": "#5c5f71",
       "css": "--fyldo-gray-900"
     },
     {
@@ -717,6 +742,61 @@
       "type": "color",
       "value": "#297a3a",
       "css": "--fyldo-green-900"
+    },
+    {
+      "name": "primitives.color.primary.100",
+      "type": "color",
+      "value": "#e5e8ff"
+    },
+    {
+      "name": "primitives.color.primary.200",
+      "type": "color",
+      "value": "#d0d5ff"
+    },
+    {
+      "name": "primitives.color.primary.300",
+      "type": "color",
+      "value": "#b5baff"
+    },
+    {
+      "name": "primitives.color.primary.400",
+      "type": "color",
+      "value": "#9899ff"
+    },
+    {
+      "name": "primitives.color.primary.50",
+      "type": "color",
+      "value": "#f2f4ff"
+    },
+    {
+      "name": "primitives.color.primary.500",
+      "type": "color",
+      "value": "#7f78ff"
+    },
+    {
+      "name": "primitives.color.primary.600",
+      "type": "color",
+      "value": "#6e62fe"
+    },
+    {
+      "name": "primitives.color.primary.700",
+      "type": "color",
+      "value": "#5a4fd7"
+    },
+    {
+      "name": "primitives.color.primary.800",
+      "type": "color",
+      "value": "#4940af"
+    },
+    {
+      "name": "primitives.color.primary.900",
+      "type": "color",
+      "value": "#393289"
+    },
+    {
+      "name": "primitives.color.primary.950",
+      "type": "color",
+      "value": "#221f58"
     },
     {
       "name": "primitives.color.red.100",

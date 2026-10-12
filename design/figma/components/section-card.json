@@ -8,8 +8,8 @@
   "id": "18:2913",
   "name": "Section Card",
   "kebab": "section-card",
-  "width": 1712,
-  "height": 1154,
+  "width": 2072,
+  "height": 1022,
   "variantCount": 4,
   "componentPropertyDefinitions": {
    "Title#18:145": {
@@ -74,8 +74,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 389,
+    "width": 960,
+    "height": 437,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -101,7 +101,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#ebebeb",
+       "hex": "#dadef4",
        "token": "border/default"
       }
      ],
@@ -122,14 +122,14 @@
       "opacity": 1,
       "x": 1,
       "y": 1,
-      "width": 798,
-      "height": 80,
+      "width": 958,
+      "height": 88,
       "layout": {
        "layoutMode": "VERTICAL",
-       "paddingTop": 24,
-       "paddingRight": 24,
+       "paddingTop": 32,
+       "paddingRight": 32,
        "paddingBottom": 4,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 6,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -141,14 +141,19 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Title",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 25,
+        "x": 33,
+        "y": 33,
         "width": 113,
         "height": 26,
         "layout": {
@@ -160,7 +165,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -195,9 +200,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 57,
-        "width": 750,
+        "x": 33,
+        "y": 65,
+        "width": 894,
         "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -208,7 +213,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -247,15 +252,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 81,
-      "width": 798,
-      "height": 250,
+      "y": 89,
+      "width": 958,
+      "height": 278,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
-       "paddingRight": 24,
+       "paddingRight": 32,
        "paddingBottom": 4,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 0,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -267,25 +272,29 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Setting Row",
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 81,
-        "width": 750,
-        "height": 82,
+        "x": 33,
+        "y": 89,
+        "width": 894,
+        "height": 92,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "MIN",
          "primaryAxisSizingMode": "FIXED",
          "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
@@ -293,6 +302,10 @@
          "layoutGrow": 0,
          "layoutAlign": "STRETCH",
          "clipsContent": false
+        },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
         },
         "instance": {
          "component": "Setting Row",
@@ -351,19 +364,19 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 163,
-        "width": 750,
-        "height": 82,
+        "x": 33,
+        "y": 181,
+        "width": 894,
+        "height": 92,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "MIN",
          "primaryAxisSizingMode": "FIXED",
          "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
@@ -371,6 +384,10 @@
          "layoutGrow": 0,
          "layoutAlign": "STRETCH",
          "clipsContent": false
+        },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
         },
         "instance": {
          "component": "Setting Row",
@@ -429,15 +446,15 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 245,
-        "width": 750,
-        "height": 82,
+        "x": 33,
+        "y": 273,
+        "width": 894,
+        "height": 90,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
@@ -449,6 +466,10 @@
          "layoutGrow": 0,
          "layoutAlign": "STRETCH",
          "clipsContent": false
+        },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
         },
         "instance": {
          "component": "Setting Row",
@@ -508,15 +529,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 331,
-      "width": 798,
-      "height": 57,
+      "y": 367,
+      "width": 958,
+      "height": 69,
       "layout": {
        "layoutMode": "HORIZONTAL",
-       "paddingTop": 12,
-       "paddingRight": 24,
-       "paddingBottom": 12,
-       "paddingLeft": 24,
+       "paddingTop": 16,
+       "paddingRight": 32,
+       "paddingBottom": 16,
+       "paddingLeft": 32,
        "itemSpacing": 16,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
@@ -531,7 +552,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#fafafa",
+        "hex": "#f6f7fc",
         "token": "background/subtle"
        }
       ],
@@ -539,7 +560,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -551,6 +572,12 @@
        },
        "align": "INSIDE"
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/16",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/16"
+      },
       "propertyReferences": {
        "visible": "Footer#18:170"
       },
@@ -560,9 +587,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 351,
-        "width": 677,
+        "x": 33,
+        "y": 393,
+        "width": 813,
         "height": 18,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -573,7 +600,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -608,16 +635,16 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 718,
-        "y": 344,
-        "width": 57,
-        "height": 32,
+        "x": 862,
+        "y": 384,
+        "width": 65,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -633,14 +660,14 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "action/primary"
          }
         ],
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -1309,8 +1336,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 159,
+    "width": 960,
+    "height": 179,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -1357,14 +1384,14 @@
       "opacity": 1,
       "x": 1,
       "y": 1,
-      "width": 798,
-      "height": 100,
+      "width": 958,
+      "height": 108,
       "layout": {
        "layoutMode": "VERTICAL",
-       "paddingTop": 24,
-       "paddingRight": 24,
+       "paddingTop": 32,
+       "paddingRight": 32,
        "paddingBottom": 24,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 6,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -1376,14 +1403,19 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Title",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 25,
+        "x": 33,
+        "y": 33,
         "width": 113,
         "height": 26,
         "layout": {
@@ -1395,7 +1427,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -1430,9 +1462,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 57,
-        "width": 750,
+        "x": 33,
+        "y": 65,
+        "width": 894,
         "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -1443,7 +1475,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -1482,15 +1514,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 101,
-      "width": 798,
-      "height": 57,
+      "y": 109,
+      "width": 958,
+      "height": 69,
       "layout": {
        "layoutMode": "HORIZONTAL",
-       "paddingTop": 12,
-       "paddingRight": 24,
-       "paddingBottom": 12,
-       "paddingLeft": 24,
+       "paddingTop": 16,
+       "paddingRight": 32,
+       "paddingBottom": 16,
+       "paddingLeft": 32,
        "itemSpacing": 16,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
@@ -1525,6 +1557,12 @@
        },
        "align": "INSIDE"
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/16",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/16"
+      },
       "propertyReferences": {
        "visible": "Footer#18:170"
       },
@@ -1534,9 +1572,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 121,
-        "width": 615,
+        "x": 33,
+        "y": 135,
+        "width": 751,
         "height": 18,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -1582,16 +1620,16 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 656,
-        "y": 114,
-        "width": 119,
-        "height": 32,
+        "x": 800,
+        "y": 126,
+        "width": 127,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -1613,8 +1651,8 @@
         ],
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -2283,8 +2321,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 417,
+    "width": 960,
+    "height": 461,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -2310,7 +2348,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#ebebeb",
+       "hex": "#dadef4",
        "token": "border/default"
       }
      ],
@@ -2331,14 +2369,14 @@
       "opacity": 1,
       "x": 1,
       "y": 1,
-      "width": 798,
-      "height": 90,
+      "width": 958,
+      "height": 98,
       "layout": {
        "layoutMode": "VERTICAL",
-       "paddingTop": 24,
-       "paddingRight": 24,
+       "paddingTop": 32,
+       "paddingRight": 32,
        "paddingBottom": 4,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 6,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MAX",
@@ -2350,14 +2388,19 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Title",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 678,
-        "y": 25,
+        "x": 830,
+        "y": 33,
         "width": 97,
         "height": 32,
         "layout": {
@@ -2369,7 +2412,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -2404,9 +2447,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 63,
-        "width": 750,
+        "x": 33,
+        "y": 71,
+        "width": 894,
         "height": 24,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -2417,7 +2460,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -2456,15 +2499,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 91,
-      "width": 798,
-      "height": 268,
+      "y": 99,
+      "width": 958,
+      "height": 292,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 0,
-       "paddingRight": 24,
+       "paddingRight": 32,
        "paddingBottom": 4,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 0,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MIN",
@@ -2476,25 +2519,29 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Setting Row",
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 91,
-        "width": 750,
-        "height": 88,
+        "x": 33,
+        "y": 99,
+        "width": 894,
+        "height": 96,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
-         "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "CENTER",
+         "primaryAxisAlignItems": "MAX",
+         "counterAxisAlignItems": "MIN",
          "primaryAxisSizingMode": "FIXED",
          "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
@@ -2503,17 +2550,21 @@
          "layoutAlign": "STRETCH",
          "clipsContent": false
         },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
+        },
         "instance": {
          "component": "Setting Row",
          "variant": "Locale=FA, Layout=Field",
          "componentProperties": {
-          "Description#18:120": {
-           "type": "TEXT",
-           "value": "Explain what this option changes and when to use it."
-          },
           "Title#18:110": {
            "type": "TEXT",
            "value": "Setting title"
+          },
+          "Description#18:120": {
+           "type": "TEXT",
+           "value": "Explain what this option changes and when to use it."
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
@@ -2560,19 +2611,19 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 179,
-        "width": 750,
-        "height": 88,
+        "x": 33,
+        "y": 195,
+        "width": 894,
+        "height": 96,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
-         "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "CENTER",
+         "primaryAxisAlignItems": "MAX",
+         "counterAxisAlignItems": "MIN",
          "primaryAxisSizingMode": "FIXED",
          "counterAxisSizingMode": "AUTO",
          "layoutSizingHorizontal": "FILL",
@@ -2581,17 +2632,21 @@
          "layoutAlign": "STRETCH",
          "clipsContent": false
         },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
+        },
         "instance": {
          "component": "Setting Row",
          "variant": "Locale=FA, Layout=Field",
          "componentProperties": {
-          "Description#18:120": {
-           "type": "TEXT",
-           "value": "Explain what this option changes and when to use it."
-          },
           "Title#18:110": {
            "type": "TEXT",
            "value": "Setting title"
+          },
+          "Description#18:120": {
+           "type": "TEXT",
+           "value": "Explain what this option changes and when to use it."
           },
           "Divider#18:140": {
            "type": "BOOLEAN",
@@ -2638,15 +2693,15 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 267,
-        "width": 750,
-        "height": 88,
+        "x": 33,
+        "y": 291,
+        "width": 894,
+        "height": 96,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 20,
+         "paddingTop": 24,
          "paddingRight": 0,
-         "paddingBottom": 20,
+         "paddingBottom": 24,
          "paddingLeft": 0,
          "itemSpacing": 32,
          "primaryAxisAlignItems": "MIN",
@@ -2658,6 +2713,10 @@
          "layoutGrow": 0,
          "layoutAlign": "STRETCH",
          "clipsContent": false
+        },
+        "bound": {
+         "paddingTop": "space/24",
+         "paddingBottom": "space/24"
         },
         "instance": {
          "component": "Setting Row",
@@ -2717,15 +2776,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 359,
-      "width": 798,
-      "height": 57,
+      "y": 391,
+      "width": 958,
+      "height": 69,
       "layout": {
        "layoutMode": "HORIZONTAL",
-       "paddingTop": 12,
-       "paddingRight": 24,
-       "paddingBottom": 12,
-       "paddingLeft": 24,
+       "paddingTop": 16,
+       "paddingRight": 32,
+       "paddingBottom": 16,
+       "paddingLeft": 32,
        "itemSpacing": 16,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
@@ -2740,7 +2799,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#fafafa",
+        "hex": "#f6f7fc",
         "token": "background/subtle"
        }
       ],
@@ -2748,7 +2807,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -2760,6 +2819,12 @@
        },
        "align": "INSIDE"
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/16",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/16"
+      },
       "propertyReferences": {
        "visible": "Footer#18:170"
       },
@@ -2769,16 +2834,16 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 372,
-        "width": 58,
-        "height": 32,
+        "x": 33,
+        "y": 408,
+        "width": 66,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -2794,14 +2859,14 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "action/primary"
          }
         ],
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -3455,9 +3520,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 99,
-        "y": 377,
-        "width": 676,
+        "x": 115,
+        "y": 415,
+        "width": 812,
         "height": 22,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -3468,7 +3533,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -3518,8 +3583,8 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
-    "height": 169,
+    "width": 960,
+    "height": 189,
     "layout": {
      "layoutMode": "VERTICAL",
      "paddingTop": 0,
@@ -3566,14 +3631,14 @@
       "opacity": 1,
       "x": 1,
       "y": 1,
-      "width": 798,
-      "height": 110,
+      "width": 958,
+      "height": 118,
       "layout": {
        "layoutMode": "VERTICAL",
-       "paddingTop": 24,
-       "paddingRight": 24,
+       "paddingTop": 32,
+       "paddingRight": 32,
        "paddingBottom": 24,
-       "paddingLeft": 24,
+       "paddingLeft": 32,
        "itemSpacing": 6,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "MAX",
@@ -3585,14 +3650,19 @@
        "layoutAlign": "STRETCH",
        "clipsContent": true
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/32",
+       "paddingRight": "space/32"
+      },
       "children": [
        {
         "name": "Title",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 678,
-        "y": 25,
+        "x": 830,
+        "y": 33,
         "width": 97,
         "height": 32,
         "layout": {
@@ -3604,7 +3674,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -3639,9 +3709,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 63,
-        "width": 750,
+        "x": 33,
+        "y": 71,
+        "width": 894,
         "height": 24,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -3652,7 +3722,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -3691,15 +3761,15 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 111,
-      "width": 798,
-      "height": 57,
+      "y": 119,
+      "width": 958,
+      "height": 69,
       "layout": {
        "layoutMode": "HORIZONTAL",
-       "paddingTop": 12,
-       "paddingRight": 24,
-       "paddingBottom": 12,
-       "paddingLeft": 24,
+       "paddingTop": 16,
+       "paddingRight": 32,
+       "paddingBottom": 16,
+       "paddingLeft": 32,
        "itemSpacing": 16,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
@@ -3734,6 +3804,12 @@
        },
        "align": "INSIDE"
       },
+      "bound": {
+       "paddingLeft": "space/32",
+       "paddingTop": "space/16",
+       "paddingRight": "space/32",
+       "paddingBottom": "space/16"
+      },
       "propertyReferences": {
        "visible": "Footer#18:170"
       },
@@ -3743,16 +3819,16 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 25,
-        "y": 124,
-        "width": 127,
-        "height": 32,
+        "x": 33,
+        "y": 136,
+        "width": 135,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -3774,8 +3850,8 @@
         ],
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -4429,9 +4505,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 168,
-        "y": 129,
-        "width": 607,
+        "x": 184,
+        "y": 143,
+        "width": 743,
         "height": 22,
         "layout": {
          "layoutSizingHorizontal": "FILL",

@@ -121,10 +121,10 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
               popup.current?.querySelector<HTMLElement>(keyword ? '[data-modal-keyword]' : '[data-modal-cancel]') ?? true
             }
             finalFocus={() => (confirmed.current ? (focusAfterConfirm?.() ?? false) : true)}
-            className="fy:flex fy:w-120 fy:max-w-full fy:flex-col fy:overflow-hidden fy:rounded-lg fy:border fy:border-border-default fy:bg-background-default fy:shadow-large fy:outline-none fy:transition fy:duration-150 fy:ease-out fy:data-starting-style:scale-98 fy:data-starting-style:opacity-0 fy:data-ending-style:scale-98 fy:data-ending-style:opacity-0 fy:motion-reduce:transition-none"
+            className="fy:flex fy:w-140 fy:max-w-full fy:flex-col fy:overflow-hidden fy:rounded-lg fy:border fy:border-border-default fy:bg-background-default fy:shadow-large fy:outline-none fy:transition fy:duration-150 fy:ease-out fy:data-starting-style:scale-98 fy:data-starting-style:opacity-0 fy:data-ending-style:scale-98 fy:data-ending-style:opacity-0 fy:motion-reduce:transition-none"
           >
             <form onSubmit={submit} noValidate className="fy:flex fy:flex-col">
-              <div className={cn('fy:flex fy:items-start fy:gap-4 fy:px-6 fy:pt-6', keyword ? 'fy:pb-4' : 'fy:pb-6')}>
+              <div className={cn('fy:flex fy:items-start fy:gap-4 fy:px-8 fy:pt-8 fy:pb-6')}>
                 <div className="fy:flex fy:min-w-0 fy:flex-1 fy:flex-col fy:gap-2">
                   <D.Title className="fy:text-heading-20 fy:text-text-primary">{title}</D.Title>
                   {description ? <D.Description className="fy:text-copy-14 fy:text-text-secondary">{description}</D.Description> : null}
@@ -133,7 +133,7 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
                 <IconButton icon="close-circle" label={__('Close', 'fyldo')} data-slot="fy-modal-close" disabled={busy} onClick={() => onOpenChange(false)} />
               </div>
               {keyword ? (
-                <div className="fy:px-6 fy:pb-6">
+                <div className="fy:px-8 fy:pb-8">
                   {/* Figma "Confirmation": a labelled Medium Input whose placeholder is the keyword itself. */}
                   <TextField
                     label={sprintf(__('Type %s to confirm', 'fyldo'), keyword)}
@@ -149,7 +149,7 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
                   />
                 </div>
               ) : null}
-              <div className="fy:flex fy:items-center fy:justify-between fy:gap-4 fy:border-t fy:border-border-default fy:bg-background-subtle fy:px-6 fy:py-4">
+              <div className="fy:flex fy:items-center fy:justify-between fy:gap-4 fy:border-t fy:border-border-default fy:bg-background-subtle fy:px-8 fy:py-5">
                 <Button data-modal-cancel type="button" variant="secondary" size="sm" disabled={busy} onClick={() => onOpenChange(false)}>
                   {cancelLabel}
                 </Button>

@@ -80,9 +80,13 @@ export function App({ config, root }: AppProps): ReactElement {
   useEffect(() => {
     if (focusedPage.current === route.page) return;
     focusedPage.current = route.page;
-    if (cause === 'navigate') window.scrollTo({ top: 0, behavior: 'instant' });
+    if (cause === 'navigate') {
+      // The content area scrolls inside the shell on desktop (a custom scrollbar); on phones the document does.
+      root.querySelector<HTMLElement>('[data-slot=fy-main]')?.scrollTo?.({ top: 0, behavior: 'instant' });
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     heading.current?.focus({ preventScroll: true });
-  }, [route.page, cause]);
+  }, [route.page, cause, root]);
 
   // A dismissed notice takes its focused button with it: put focus where the page begins.
   const dismissNotice = useCallback((id: string) => {

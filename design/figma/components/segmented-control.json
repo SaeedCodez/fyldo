@@ -9,7 +9,7 @@
   "name": "Segmented Control",
   "kebab": "segmented-control",
   "width": 666,
-  "height": 74,
+  "height": 76,
   "variantCount": 2,
   "componentPropertyDefinitions": {
    "Locale": {
@@ -38,7 +38,7 @@
     "x": 0,
     "y": 0,
     "width": 279,
-    "height": 40,
+    "height": 44,
     "layout": {
      "layoutMode": "HORIZONTAL",
      "paddingTop": 4,
@@ -56,7 +56,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#f2f2f2",
+      "hex": "#f1f3fa",
       "token": "surface/default"
      }
     ],
@@ -80,7 +80,7 @@
       "x": 4,
       "y": 4,
       "width": 86,
-      "height": 32,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -91,9 +91,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false
@@ -146,7 +146,7 @@
       "x": 92,
       "y": 4,
       "width": 104,
-      "height": 32,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -157,9 +157,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false
@@ -219,7 +219,7 @@
       "x": 198,
       "y": 4,
       "width": 77,
-      "height": 32,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -230,9 +230,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false
@@ -295,7 +295,7 @@
     "x": 0,
     "y": 0,
     "width": 331,
-    "height": 42,
+    "height": 44,
     "layout": {
      "layoutMode": "HORIZONTAL",
      "paddingTop": 4,
@@ -313,7 +313,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#f2f2f2",
+      "hex": "#f1f3fa",
       "token": "surface/default"
      }
     ],
@@ -337,7 +337,7 @@
       "x": 4,
       "y": 4,
       "width": 61,
-      "height": 34,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -348,9 +348,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false
@@ -403,7 +403,7 @@
       "x": 67,
       "y": 4,
       "width": 131,
-      "height": 34,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -414,9 +414,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false
@@ -476,7 +476,7 @@
       "x": 200,
       "y": 4,
       "width": 127,
-      "height": 34,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 6,
@@ -487,9 +487,9 @@
        "primaryAxisAlignItems": "CENTER",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "AUTO",
-       "counterAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "FIXED",
        "layoutSizingHorizontal": "HUG",
-       "layoutSizingVertical": "HUG",
+       "layoutSizingVertical": "FIXED",
        "layoutGrow": 0,
        "layoutAlign": "INHERIT",
        "clipsContent": false

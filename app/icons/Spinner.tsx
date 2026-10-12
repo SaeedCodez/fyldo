@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import { cn } from '../lib/cn';
 
 /** Fyldo's own `Icon/spinner` (Figma: 16×16, one 270° arc, 1.5px round stroke). */
-export function Spinner({ size = 16, className }: { size?: 12 | 16 | 20 | 24; className?: string }): ReactElement {
+export function Spinner({ size = 16, className }: { size?: 12 | 16 | 18 | 20 | 24; className?: string }): ReactElement {
   return (
     <svg
       width={size}

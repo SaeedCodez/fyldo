@@ -1,11 +1,11 @@
 {
- "exportedAt": "2026-10-01",
+ "exportedAt": "2026-10-11",
  "source": {
   "fileName": "Fyldo",
   "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
   "page": "Components"
  },
- "variableCount": 150,
+ "variableCount": 166,
  "componentCount": 40,
  "variantCount": 839,
  "pngScale": {
@@ -1218,7 +1218,7 @@
    "name": "Button · Usage",
    "nodeId": "8:2314",
    "width": 960,
-   "height": 1918,
+   "height": 1946,
    "png": "png/usage/button-usage.png",
    "scale": 1
   },
@@ -1226,7 +1226,7 @@
    "name": "Input · Usage",
    "nodeId": "8:2962",
    "width": 960,
-   "height": 1627,
+   "height": 1655,
    "png": "png/usage/input-usage.png",
    "scale": 1
   },
@@ -1234,7 +1234,7 @@
    "name": "Textarea · Usage",
    "nodeId": "8:3333",
    "width": 960,
-   "height": 1373,
+   "height": 1381,
    "png": "png/usage/textarea-usage.png",
    "scale": 1
   },
@@ -1258,7 +1258,7 @@
    "name": "Select · Usage",
    "nodeId": "8:5160",
    "width": 960,
-   "height": 1375,
+   "height": 1411,
    "png": "png/usage/select-usage.png",
    "scale": 1
   },
@@ -1266,7 +1266,7 @@
    "name": "Badge & Notice · Usage",
    "nodeId": "8:5816",
    "width": 960,
-   "height": 1596,
+   "height": 1632,
    "png": "png/usage/badge-and-notice-usage.png",
    "scale": 1
   },
@@ -1274,7 +1274,7 @@
    "name": "Settings page · EN",
    "nodeId": "20:3143",
    "width": 1440,
-   "height": 1229,
+   "height": 1329,
    "png": "png/usage/settings-page-en.png",
    "scale": 1
   },
@@ -1282,7 +1282,7 @@
    "name": "Settings page · FA",
    "nodeId": "21:3521",
    "width": 1440,
-   "height": 1309,
+   "height": 1401,
    "png": "png/usage/settings-page-fa.png",
    "scale": 1
   },
@@ -1298,7 +1298,7 @@
    "name": "Settings page · Top nav · EN",
    "nodeId": "38:4204",
    "width": 1440,
-   "height": 1325,
+   "height": 1437,
    "png": "png/usage/settings-page-top-nav-en.png",
    "scale": 1
   },
@@ -1306,7 +1306,7 @@
    "name": "Settings page · Top nav · FA",
    "nodeId": "38:4466",
    "width": 1440,
-   "height": 1407,
+   "height": 1511,
    "png": "png/usage/settings-page-top-nav-fa.png",
    "scale": 1
   },
@@ -1330,7 +1330,7 @@
    "name": "Toast · Usage",
    "nodeId": "74:7133",
    "width": 960,
-   "height": 2385.5,
+   "height": 2471.5,
    "png": "png/usage/toast-usage.png",
    "scale": 1
   },
@@ -1338,7 +1338,7 @@
    "name": "Empty State · Usage",
    "nodeId": "75:8203",
    "width": 960,
-   "height": 1882,
+   "height": 1910,
    "png": "png/usage/empty-state-usage.png",
    "scale": 1
   },
@@ -1346,7 +1346,7 @@
    "name": "Slider · Usage",
    "nodeId": "230:9290",
    "width": 960,
-   "height": 1534,
+   "height": 1566,
    "png": "png/usage/slider-usage.png",
    "scale": 1
   },
@@ -1354,7 +1354,7 @@
    "name": "Upload Image · Usage",
    "nodeId": "251:10449",
    "width": 960,
-   "height": 1653,
+   "height": 1689,
    "png": "png/usage/upload-image-usage.png",
    "scale": 1
   },
@@ -1362,7 +1362,7 @@
    "name": "Select File · Usage",
    "nodeId": "251:11058",
    "width": 960,
-   "height": 1589,
+   "height": 1625,
    "png": "png/usage/select-file-usage.png",
    "scale": 1
   },
@@ -1370,7 +1370,7 @@
    "name": "Segmented Control · Usage",
    "nodeId": "252:11283",
    "width": 960,
-   "height": 1062,
+   "height": 1068,
    "png": "png/usage/segmented-control-usage.png",
    "scale": 1
   },
@@ -1378,7 +1378,7 @@
    "name": "Color Picker · Usage",
    "nodeId": "285:11898",
    "width": 960,
-   "height": 1878,
+   "height": 1894,
    "png": "png/usage/color-picker-usage.png",
    "scale": 1
   },
@@ -1394,7 +1394,7 @@
    "name": "Icon Picker · Usage",
    "nodeId": "298:19052",
    "width": 960,
-   "height": 3076,
+   "height": 3100,
    "png": "png/usage/icon-picker-usage.png",
    "scale": 1
   }

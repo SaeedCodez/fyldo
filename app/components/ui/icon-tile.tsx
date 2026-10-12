@@ -13,7 +13,7 @@ export interface IconTileProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
 /*
  * Figma "Icon Tile" (64×64, radius md, a 24px Linear icon in `icon/primary`). Default: 1px `border/default`. Hover:
  * `surface/hover` + `border/strong`. Selected: `background/subtle`, a 2px `focus/border` stroke and a 16px `control/on` check at
- * the top END corner (top-start in Persian). Focus: a 2px `focus/ring-neutral` stroke and the soft 3px halo of the inputs.
+ * the top END corner (top-start in Persian). Focus: a 2px `focus/ring-neutral` stroke and the 0.5px halo of the inputs.
  * Disabled: 40% opacity. An option of the picker's listbox: the name is the icon's name, since the glyph alone says nothing.
  */
 export const IconTile = forwardRef<HTMLButtonElement, IconTileProps>(function IconTile({ icon, selected = false, showIcon = true, className, ...props }, ref) {
@@ -29,7 +29,7 @@ export const IconTile = forwardRef<HTMLButtonElement, IconTileProps>(function Ic
       data-selected={selected ? '' : undefined}
       className={cn(
         'fy:relative fy:box-border fy:flex fy:size-16 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-md fy:p-0 fy:text-icon-primary fy:outline-none',
-        'fy:cursor-pointer fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:cursor-pointer fy:motion-base',
         selected ? 'fy:border-2 fy:border-focus-border fy:bg-background-subtle' : 'fy:border fy:border-border-default fy:bg-background-default fy:hover:border-border-strong fy:hover:bg-surface-hover',
         'fy:focus-visible:border-2 fy:focus-visible:border-focus-ring-neutral fy:focus-visible:shadow-focus-input',
         'fy:disabled:cursor-not-allowed fy:disabled:opacity-40 fy:disabled:hover:border-border-default fy:disabled:hover:bg-background-default',

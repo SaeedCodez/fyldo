@@ -19,9 +19,9 @@ type Type = 'primary' | 'secondary' | 'tertiary' | 'error';
 type State = 'default' | 'hover' | 'focus' | 'disabled' | 'loading';
 
 const BUTTON_SIZE = {
-  sm: { h: 32, padX: 12, gap: 6, radius: 6, font: { size: 14, lh: 20 } },
-  md: { h: 40, padX: 16, gap: 6, radius: 6, font: { size: 14, lh: 20 } },
-  lg: { h: 48, padX: 20, gap: 8, radius: 8, font: { size: 16, lh: 20 } },
+  sm: { h: 36, padX: 16, gap: 6, radius: 6, font: { size: 14, lh: 20 }, icon: 16 },
+  md: { h: 44, padX: 20, gap: 6, radius: 6, font: { size: 14, lh: 20 }, icon: 18 },
+  lg: { h: 52, padX: 24, gap: 8, radius: 8, font: { size: 16, lh: 20 }, icon: 20 },
 } as const;
 
 /** [fill, stroke, text] token names per Figma variant; null = none. */
@@ -86,7 +86,7 @@ test.describe('Button', () => {
       expect(s['column-gap']).toBe(`${spec.gap}px`);
       expect(s['padding-left']).toBe(`${spec.padX}px`);
       const icon = await box(button.locator('svg').first());
-      expect([icon.width, icon.height]).toEqual([16, 16]); // "16px icons"
+      expect([icon.width, icon.height]).toEqual([spec.icon, spec.icon]); // 16 / 18 / 20 px icons
     });
   }
 
@@ -126,7 +126,7 @@ test.describe('Button', () => {
 });
 
 // ── Input ──────────────────────────────────────────────────────────────────────────────────────────────
-const INPUT_SIZE = { sm: { control: 32, radius: 6, size: 14, lh: 20, total: 86 }, md: { control: 40, radius: 6, size: 14, lh: 20, total: 94 }, lg: { control: 48, radius: 8, size: 16, lh: 24, total: 102 } } as const;
+const INPUT_SIZE = { sm: { control: 36, radius: 6, size: 14, lh: 20, total: 90 }, md: { control: 44, radius: 6, size: 14, lh: 20, total: 98 }, lg: { control: 52, radius: 8, size: 16, lh: 24, total: 106 } } as const;
 
 test.describe('Input', () => {
   for (const size of ['sm', 'md', 'lg'] as const) {
@@ -201,11 +201,11 @@ test('Input focus: the approved neutral border (Figma token focus/border) + the 
   const focused = await style(stage.locator('[data-slot=fy-input]'), ['border-top-color', 'box-shadow']);
   // Figma token `focus/border` (decision O5).
   expect(focused['border-top-color']).toBe(token('focus/border'));
-  expect(shadows(focused['box-shadow'] as string)).toEqual([shadow('#0000001a', 0, 0, 0, 3)]); // Focus/Input: 3px rgba(0,0,0,.10)
+  expect(shadows(focused['box-shadow'] as string)).toEqual([shadow('#6e62fe', 0, 0, 0, 0.5)]); // Focus/Input: 0.5px in the border colour
 });
 
 // ── Toggle ─────────────────────────────────────────────────────────────────────────────────────────────
-const TOGGLE = { sm: { w: 28, h: 16, thumb: 12, travel: 12, label: 13, gap: 8 }, md: { w: 36, h: 20, thumb: 16, travel: 16, label: 14, gap: 12 } } as const;
+const TOGGLE = { sm: { w: 32, h: 18, thumb: 14, travel: 14, label: 13, gap: 8 }, md: { w: 44, h: 24, thumb: 20, travel: 20, label: 14, gap: 12 } } as const;
 
 test.describe('Toggle', () => {
   for (const size of ['sm', 'md'] as const) {
@@ -227,7 +227,7 @@ test.describe('Toggle', () => {
         expect(s['border-top-left-radius']).toBe('9999px');
         const ts = await style(thumb, ['background-color', 'box-shadow']);
         expect(ts['background-color']).toBe(token('control/thumb'));
-        expect(shadows(ts['box-shadow'] as string)).toEqual([shadow('#00000029', 0, 1, 2, 0), shadow('#00000014', 0, 0, 0, 0.5)]); // Shadow/Thumb
+        expect(shadows(ts['box-shadow'] as string)).toEqual([shadow('#282a6433', 0, 1, 2, 0), shadow('#282a641a', 0, 0, 0, 0.5)]); // Shadow/Thumb
       });
     }
 
@@ -315,7 +315,7 @@ test.describe('Select', () => {
     await trigger.click();
 
     const open$ = await style(trigger, ['border-top-color', 'box-shadow']);
-    expect(shadows(open$['box-shadow'] as string)).toEqual([shadow('#0000001a', 0, 0, 0, 3)]); // open = the focus look
+    expect(shadows(open$['box-shadow'] as string)).toEqual([shadow('#6e62fe', 0, 0, 0, 0.5)]); // open = the focus look
     expect(open$['border-top-color']).toBe(token('focus/border')); // Open uses focus/border
     await expect(trigger.locator('svg[data-fyldo-icon="arrowup2"]')).toBeVisible();
 
@@ -326,13 +326,13 @@ test.describe('Select', () => {
     near(m.y - (t.y + t.height), 4);
     const ms = await style(menu, ['border-top-left-radius', 'padding-top', 'box-shadow', 'background-color']);
     expect(ms['border-top-left-radius']).toBe('12px');
-    expect(shadows(ms['box-shadow'] as string)).toEqual([shadow('#0000000a', 0, 4, 8, -4), shadow('#0000000f', 0, 16, 24, -8)]); // Shadow/Medium
+    expect(shadows(ms['box-shadow'] as string)).toEqual([shadow('#282a640f', 0, 4, 8, -4), shadow('#282a6417', 0, 16, 24, -8)]); // Shadow/Medium
     expect(ms['padding-top']).toBe('4px');
     expect(ms['background-color']).toBe(token('background/default'));
 
     const item = page.getByRole('option', { name: 'Subscriber' });
     const i = await box(item);
-    expect(i.height).toBe(36);
+    expect(i.height).toBe(40);
     const check = await box(item.locator('svg[data-fyldo-icon="tickcircle"]'));
     expect(check.x + check.width).toBeGreaterThan(i.x + i.width - 12); // at the end
     expect((await style(page.getByRole('option', { name: 'Editor' }), ['border-top-left-radius']))['border-top-left-radius']).toBe('6px');

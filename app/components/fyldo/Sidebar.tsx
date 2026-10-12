@@ -1,5 +1,5 @@
 import { useId, type MouseEvent, type ReactElement } from 'react';
-import { __ } from '../../i18n';
+import { __, _x, localizeDigits, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { BrandMark } from './BrandMark';
 import type { Brand, NavGroup, UtilityLink } from './nav-model';
@@ -23,7 +23,7 @@ export interface SidebarProps {
 
 /*
  * Figma Sidebar (256 wide, background/subtle, 1px end border):
- *   Header      padding 20/20/16/20, gap 10: brand (60 high)
+ *   Header      padding 20/28, gap 12: brand (76 high), version Badge at the far end
  *   Navigation  padding 8/16/0/16, groups 20 apart; a group = Group label (Label/12 text/tertiary, padding 0/8/6/8) +
  *               Nav Items 2 apart
  *   Footer      padding 12/16, gap 2, 1px top border: utility Nav Items
@@ -55,9 +55,9 @@ export function Sidebar({
       {drawer ? null : (
         <div
           data-slot="fy-sidebar-header"
-          className="fy:flex fy:shrink-0 fy:items-center fy:gap-2.5 fy:px-5 fy:pt-5 fy:pb-4"
+          className="fy:flex fy:shrink-0 fy:items-center fy:px-7 fy:py-5"
         >
-          <BrandMark brand={brand} locale={locale} />
+          <BrandMark brand={brand} locale={locale} large />
         </div>
       )}
 
@@ -104,26 +104,41 @@ export function Sidebar({
         })}
       </nav>
 
-      {links.length > 0 ? (
-        <nav
-          aria-label={__('Resources', 'fyldo')}
+      {links.length > 0 || (brand.version && !drawer) ? (
+        <div
           data-slot="fy-sidebar-footer"
-          className="fy:shrink-0 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
+          className="fy:flex fy:shrink-0 fy:flex-col fy:gap-0.5 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
         >
-          <ul className="fy:flex fy:flex-col fy:gap-0.5">
-            {links.map((link) => (
-              <li key={link.href}>
-                <NavItem
-                  label={link.label}
-                  href={link.href}
-                  icon={link.icon}
-                  external={link.external}
-                  locale={locale}
-                />
-              </li>
-            ))}
-          </ul>
-        </nav>
+          {links.length > 0 ? (
+            <nav aria-label={__('Resources', 'fyldo')}>
+              <ul className="fy:flex fy:flex-col fy:gap-0.5">
+                {links.map((link) => (
+                  <li key={link.href}>
+                    <NavItem
+                      label={link.label}
+                      href={link.href}
+                      icon={link.icon}
+                      external={link.external}
+                      locale={locale}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
+          {brand.version && !drawer ? (
+            <p
+              data-slot="fy-sidebar-version"
+              className="fy:px-3.5 fy:pt-2 fy:text-label-12 fy:break-words fy:text-text-tertiary"
+            >
+              {/* translators: %s: version number of the plugin, e.g. 1.0 */}
+              {sprintf(
+                _x('Version %s', 'sidebar version', 'fyldo'),
+                localizeDigits(brand.version, locale),
+              )}
+            </p>
+          ) : null}
+        </div>
       ) : null}
     </div>
   );

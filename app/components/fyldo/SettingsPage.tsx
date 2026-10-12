@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ReactElement, type Ref }
 import { __ } from '../../i18n';
 import { PAGE_SCOPE, scopeState, usePageForm, type FormStore } from '../../lib/page-form';
 import { ApiError, type Api } from '../../lib/api';
+import { cn } from '../../lib/cn';
 import { isValueField, type FieldValue, type NoticeDef, type PageDef, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
@@ -40,7 +41,7 @@ const savesHere = (page: PageDef, section: SectionDef): boolean =>
   page.save === 'section' && section.tone !== 'danger' && section.fields.some(isValueField);
 
 /**
- * Content column (800px, centred, 40px from the top): Page Header → 24 → [conflict Notice → 24] → Tabs (sub-pages) → 24
+ * Content column (960px, centred, 40px from the top): Page Header → 24 → [conflict Notice → 24] → Tabs (sub-pages) → 24
  * → Section Cards (24 apart) → floating Save Bar (global save pattern) — or a Save in each card footer (per-section
  * pattern): one pattern per page, never both. Values and edits belong to the page, so switching tabs keeps them.
  */
@@ -170,8 +171,16 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
     ),
   });
 
+  // The page fades in when it mounts (the shell remounts it per page); a tab switch fades only the cards.
+  const lastTab = useRef(tab);
+  const tabSwitched = useRef(false);
+  if (tab !== lastTab.current) {
+    tabSwitched.current = true;
+    lastTab.current = tab;
+  }
+
   const cards = (current: string) => (
-    <div className="fy:mt-6 fy:flex fy:flex-col fy:gap-6">
+    <div key={current} className={cn('fy:mt-6 fy:flex fy:flex-col fy:gap-6', tabSwitched.current && 'fy:fade-in')}>
       {page.sections
         .filter((section) => onTab(section, current))
         .map((section) => (
@@ -207,7 +216,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
       ref={column}
       data-slot="fy-content"
       data-save={page.save}
-      className="fy:mx-auto fy:flex fy:w-full fy:max-w-208 fy:flex-1 fy:flex-col fy:px-4 fy:pt-10"
+      className="fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
     >
       <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
 

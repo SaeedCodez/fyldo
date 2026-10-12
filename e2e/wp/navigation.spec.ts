@@ -209,25 +209,28 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     await expect(page.locator('#wpfooter')).toBeHidden();
 
     // the utility links sit at the bottom of the column
-    const footer = await page.getByRole('navigation', { name: 'Resources' }).boundingBox();
+    const footer = await page.locator('[data-slot=fy-sidebar-footer]').boundingBox(); // the links and the version line
     expect(Math.round(footer!.y + footer!.height)).toBe(900);
 
-    // sticky: after scrolling the content, the sidebar is still right below the admin bar.
-    // The page may fit the viewport (the `field` layout keeps rows short), so add height to the content column first.
+    // the content area scrolls inside the shell (Fyldo's own scrollbar): the document itself does not, and the sidebar stays
+    // right below the admin bar. The page may fit the viewport (the `field` layout keeps rows short), so add height first.
     await page.locator('[data-slot=fy-section-card]').first().evaluate((card) => {
       const spacer = document.createElement('div');
       spacer.style.height = '1200px';
       card.parentElement?.append(spacer);
     });
+    await page.locator('[data-slot=fy-main]').hover();
     await page.mouse.wheel(0, 600);
-    await expect.poll(async () => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    await expect.poll(async () => page.locator('[data-slot=fy-main]').evaluate((el) => el.scrollTop)).toBeGreaterThan(0);
+    expect(await page.evaluate(() => document.documentElement.scrollHeight - document.documentElement.clientHeight)).toBeLessThanOrEqual(0); // no WordPress window scrollbar
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
     expect(Math.round((await sidebar.boundingBox())!.y)).toBe(Math.round(bar!.height));
 
-    // the content column is 800px, centred in the main area
+    // the content column is 960px, centred in the main area
     const card = await page.locator('[data-slot=fy-section-card]').first().boundingBox();
-    expect(Math.round(card!.width)).toBe(800);
+    expect(Math.round(card!.width)).toBe(960);
     const main = 1440 - (box!.x + box!.width);
-    expect(Math.abs(card!.x - (box!.x + box!.width) - (main - 800) / 2)).toBeLessThanOrEqual(1);
+    expect(Math.abs(card!.x - (box!.x + box!.width) - (main - 960) / 2)).toBeLessThanOrEqual(1);
   });
 
   test('groups, the nav badge and the utility links (opening a new tab, announced)', async ({
@@ -282,7 +285,7 @@ test.describe('top navigation layout', () => {
     const menu = await page.locator('#adminmenuwrap').boundingBox();
     expect(Math.round(box!.y)).toBe(Math.round(bar!.height));
     expect(Math.round(box!.x)).toBe(Math.round(menu!.x + menu!.width));
-    expect(Math.round(box!.height)).toBe(96);
+    expect(Math.round(box!.height)).toBe(108);
     await expect(nav(page, 'Acme Gamma').getByRole('link', { name: 'General' })).toHaveAttribute(
       'aria-current',
       'page',

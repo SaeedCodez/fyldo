@@ -15,14 +15,14 @@ export interface ToggleProps extends Omit<ComponentPropsWithoutRef<typeof Switch
 }
 
 const TRACK: Record<ToggleSize, string> = {
-  sm: 'fy:h-4 fy:w-7',
-  md: 'fy:h-5 fy:w-9',
+  sm: 'fy:h-4.5 fy:w-8',
+  md: 'fy:h-6 fy:w-11',
 };
 
-// Thumb travel = track − 2×2 padding − thumb: 28−4−12 = 12px (`translate-x-3`), 36−4−16 = 16px (`translate-x-4`).
+// Thumb travel = track − 2×2 padding − thumb: 32−4−14 = 14px (`translate-x-3.5`), 44−4−20 = 20px (`translate-x-5`).
 const THUMB: Record<ToggleSize, string> = {
-  sm: 'fy:size-3 fy:data-checked:translate-x-3 fy:rtl:data-checked:-translate-x-3',
-  md: 'fy:size-4 fy:data-checked:translate-x-4 fy:rtl:data-checked:-translate-x-4',
+  sm: 'fy:size-3.5 fy:data-checked:translate-x-3.5 fy:rtl:data-checked:-translate-x-3.5',
+  md: 'fy:size-5 fy:data-checked:translate-x-5 fy:rtl:data-checked:-translate-x-5',
 };
 
 /**
@@ -36,7 +36,7 @@ export function Toggle({ size = 'sm', label, description, className, ...props }:
       data-slot="fy-toggle"
       data-size={size}
       className={cn(
-        'fy:inline-flex fy:shrink-0 fy:items-center fy:rounded-full fy:p-0.5 fy:transition-colors fy:duration-100 fy:ease-out',
+        'fy:inline-flex fy:shrink-0 fy:items-center fy:rounded-full fy:p-0.5 fy:motion-base',
         'fy:bg-control-off fy:hover:bg-control-off-hover fy:data-checked:bg-control-on fy:data-checked:hover:bg-control-on-hover',
         'fy:data-disabled:cursor-not-allowed fy:data-disabled:bg-control-off-disabled fy:data-disabled:hover:bg-control-off-disabled',
         'fy:data-disabled:data-checked:bg-control-on-disabled fy:data-disabled:data-checked:hover:bg-control-on-disabled',
@@ -47,7 +47,7 @@ export function Toggle({ size = 'sm', label, description, className, ...props }:
     >
       <Switch.Thumb
         className={cn(
-          'fy:block fy:rounded-full fy:bg-control-thumb fy:shadow-thumb fy:transition-transform fy:duration-100 fy:ease-out',
+          'fy:block fy:rounded-full fy:bg-control-thumb fy:shadow-thumb fy:transition-transform fy:duration-150 fy:ease-out',
           'fy:data-disabled:shadow-none',
           THUMB[size],
         )}

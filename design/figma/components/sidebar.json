@@ -55,7 +55,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#fafafa",
+      "hex": "#f6f7fc",
       "token": "background/subtle"
      }
     ],
@@ -63,7 +63,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#ebebeb",
+       "hex": "#dadef4",
        "token": "border/default"
       }
      ],
@@ -84,14 +84,14 @@
       "x": 0,
       "y": 0,
       "width": 255,
-      "height": 60,
+      "height": 76,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 20,
-       "paddingRight": 20,
-       "paddingBottom": 16,
-       "paddingLeft": 20,
-       "itemSpacing": 10,
+       "paddingRight": 28,
+       "paddingBottom": 20,
+       "paddingLeft": 28,
+       "itemSpacing": 12,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "FIXED",
@@ -108,10 +108,10 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 20,
+        "x": 28,
         "y": 20,
-        "width": 24,
-        "height": 24,
+        "width": 36,
+        "height": 36,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -125,10 +125,10 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 25.33,
-          "y": 22,
-          "width": 13.35,
-          "height": 20,
+          "x": 35.99,
+          "y": 23,
+          "width": 20.02,
+          "height": 30,
           "fills": [
            {
             "type": "SOLID",
@@ -143,20 +143,20 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 54,
-        "y": 20,
-        "width": 41,
-        "height": 24,
+        "x": 76,
+        "y": 25,
+        "width": 151,
+        "height": 26,
         "layout": {
-         "layoutSizingHorizontal": "HUG",
+         "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
-         "layoutGrow": 0,
+         "layoutGrow": 1,
          "layoutAlign": "INHERIT"
         },
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -165,306 +165,22 @@
         },
         "text": {
          "characters": "Fyldo",
-         "textStyle": "EN/Heading/16",
+         "textStyle": "EN/Heading/20",
          "fontFamily": "Geist",
          "fontStyle": "SemiBold",
-         "fontSize": 16,
+         "fontSize": 20,
          "lineHeight": {
           "unit": "PIXELS",
-          "value": 24
+          "value": 26
          },
          "letterSpacing": {
           "unit": "PIXELS",
-          "value": -0.32
+          "value": -0.4
          },
          "textAlignHorizontal": "LEFT",
          "textAlignVertical": "TOP",
-         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "textAutoResize": "HEIGHT",
          "fillToken": "text/primary"
-        }
-       },
-       {
-        "name": "Version",
-        "type": "INSTANCE",
-        "visible": true,
-        "opacity": 1,
-        "x": 105,
-        "y": 22,
-        "width": 35,
-        "height": 20,
-        "layout": {
-         "layoutMode": "HORIZONTAL",
-         "paddingTop": 0,
-         "paddingRight": 6,
-         "paddingBottom": 0,
-         "paddingLeft": 6,
-         "itemSpacing": 4,
-         "primaryAxisAlignItems": "CENTER",
-         "counterAxisAlignItems": "CENTER",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
-         "layoutSizingHorizontal": "HUG",
-         "layoutSizingVertical": "FIXED",
-         "layoutGrow": 0,
-         "layoutAlign": "INHERIT",
-         "clipsContent": false
-        },
-        "cornerRadius": 9999,
-        "fills": [
-         {
-          "type": "SOLID",
-          "hex": "#ebebeb",
-          "token": "status/neutral/subtle"
-         }
-        ],
-        "bound": {
-         "itemSpacing": "space/4",
-         "paddingLeft": "space/6",
-         "paddingRight": "space/6",
-         "topLeftRadius": "radius/full",
-         "topRightRadius": "radius/full",
-         "bottomLeftRadius": "radius/full",
-         "bottomRightRadius": "radius/full"
-        },
-        "instance": {
-         "component": "Badge",
-         "variant": "Locale=EN, Tone=Gray, Style=Subtle, Size=Small",
-         "componentProperties": {
-          "Icon swap#8:2982": {
-           "type": "INSTANCE_SWAP",
-           "value": "8:31975",
-           "preferredValues": [
-            {
-             "type": "COMPONENT_SET",
-             "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6a162db46aa62798e5a93673d68f2308a904786c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "24628d2b3522273813448485482c2adacdd066b3"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "74c161408f9883a9646c02590ee482517238b215"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "65f94204598c890c12898a924c5acb00f3259632"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
-            }
-           ],
-           "valueName": "tick-circle / Property 1=linear"
-          },
-          "Icon#8:2941": {
-           "type": "BOOLEAN",
-           "value": false
-          },
-          "Label (FA)#8:2900": {
-           "type": "TEXT",
-           "value": "برچسب"
-          },
-          "Label#8:2859": {
-           "type": "TEXT",
-           "value": "v1.0"
-          },
-          "Locale": {
-           "value": "EN",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Tone": {
-           "value": "Gray",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Style": {
-           "value": "Subtle",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Size": {
-           "value": "Small",
-           "type": "VARIANT",
-           "boundVariables": {}
-          }
-         },
-         "texts": {
-          "Label": "v1.0"
-         }
         }
        }
       ]
@@ -475,9 +191,9 @@
       "visible": true,
       "opacity": 1,
       "x": 0,
-      "y": 60,
+      "y": 76,
       "width": 255,
-      "height": 649,
+      "height": 583,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -502,9 +218,9 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 68,
+        "y": 84,
         "width": 223,
-        "height": 226,
+        "height": 298,
         "layout": {
          "layoutMode": "VERTICAL",
          "paddingTop": 0,
@@ -529,7 +245,7 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 68,
+          "y": 84,
           "width": 223,
           "height": 22,
           "layout": {
@@ -556,7 +272,7 @@
             "visible": true,
             "opacity": 1,
             "x": 24,
-            "y": 68,
+            "y": 84,
             "width": 207,
             "height": 16,
             "layout": {
@@ -568,7 +284,7 @@
             "fills": [
              {
               "type": "SOLID",
-              "hex": "#737373",
+              "hex": "#6c6f80",
               "token": "text/tertiary"
              }
             ],
@@ -603,16 +319,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 92,
+          "y": 108,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -627,12 +343,11 @@
           "fills": [
            {
             "type": "SOLID",
-            "hex": "#e5e5e5",
-            "token": "surface/active"
+            "hex": "#6e62fe",
+            "token": "action/primary"
            }
           ],
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -915,16 +630,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 126,
+          "y": 154,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -937,7 +652,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -1220,16 +934,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 160,
+          "y": 200,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -1242,7 +956,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -1525,16 +1238,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 194,
+          "y": 246,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -1547,7 +1260,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -1830,16 +1542,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 228,
+          "y": 292,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -1852,7 +1564,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -2135,16 +1846,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 262,
+          "y": 338,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -2157,7 +1868,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -2442,9 +2152,9 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 314,
+        "y": 402,
         "width": 223,
-        "height": 90,
+        "height": 114,
         "layout": {
          "layoutMode": "VERTICAL",
          "paddingTop": 0,
@@ -2469,7 +2179,7 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 314,
+          "y": 402,
           "width": 223,
           "height": 22,
           "layout": {
@@ -2496,7 +2206,7 @@
             "visible": true,
             "opacity": 1,
             "x": 24,
-            "y": 314,
+            "y": 402,
             "width": 207,
             "height": 16,
             "layout": {
@@ -2508,7 +2218,7 @@
             "fills": [
              {
               "type": "SOLID",
-              "hex": "#737373",
+              "hex": "#6c6f80",
               "token": "text/tertiary"
              }
             ],
@@ -2543,16 +2253,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 338,
+          "y": 426,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -2565,7 +2275,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -2848,16 +2557,16 @@
           "visible": true,
           "opacity": 1,
           "x": 16,
-          "y": 372,
+          "y": 472,
           "width": 223,
-          "height": 32,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 12,
+           "paddingRight": 14,
+           "paddingBottom": 12,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -2870,7 +2579,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -3157,9 +2865,9 @@
       "visible": true,
       "opacity": 1,
       "x": 0,
-      "y": 709,
+      "y": 659,
       "width": 255,
-      "height": 91,
+      "height": 141,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 12,
@@ -3181,7 +2889,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -3200,16 +2908,16 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 722,
+        "y": 672,
         "width": 223,
-        "height": 32,
+        "height": 44,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 6,
-         "paddingRight": 8,
-         "paddingBottom": 6,
-         "paddingLeft": 8,
-         "itemSpacing": 8,
+         "paddingTop": 12,
+         "paddingRight": 14,
+         "paddingBottom": 12,
+         "paddingLeft": 14,
+         "itemSpacing": 12,
          "primaryAxisAlignItems": "MIN",
          "counterAxisAlignItems": "CENTER",
          "primaryAxisSizingMode": "FIXED",
@@ -3222,7 +2930,6 @@
         },
         "cornerRadius": 8,
         "bound": {
-         "itemSpacing": "space/8",
          "topLeftRadius": "radius/md",
          "topRightRadius": "radius/md",
          "bottomLeftRadius": "radius/md",
@@ -3505,16 +3212,16 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 756,
+        "y": 718,
         "width": 223,
-        "height": 32,
+        "height": 44,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 6,
-         "paddingRight": 8,
-         "paddingBottom": 6,
-         "paddingLeft": 8,
-         "itemSpacing": 8,
+         "paddingTop": 12,
+         "paddingRight": 14,
+         "paddingBottom": 12,
+         "paddingLeft": 14,
+         "itemSpacing": 12,
          "primaryAxisAlignItems": "MIN",
          "counterAxisAlignItems": "CENTER",
          "primaryAxisSizingMode": "FIXED",
@@ -3527,7 +3234,6 @@
         },
         "cornerRadius": 8,
         "bound": {
-         "itemSpacing": "space/8",
          "topLeftRadius": "radius/md",
          "topRightRadius": "radius/md",
          "bottomLeftRadius": "radius/md",
@@ -3803,6 +3509,83 @@
           "Label": "3"
          }
         }
+       },
+       {
+        "name": "Version",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 16,
+        "y": 764,
+        "width": 223,
+        "height": 24,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 8,
+         "paddingRight": 14,
+         "paddingBottom": 0,
+         "paddingLeft": 14,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "MIN",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH",
+         "clipsContent": true
+        },
+        "bound": {
+         "paddingTop": "space/8"
+        },
+        "children": [
+         {
+          "name": "Version label",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 30,
+          "y": 772,
+          "width": 195,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FILL",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 1,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#6c6f80",
+            "token": "text/tertiary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "en/font-family/sans"
+          },
+          "text": {
+           "characters": "Version 1.0",
+           "textStyle": "EN/Label/12",
+           "fontFamily": "Geist",
+           "fontStyle": "Regular",
+           "fontSize": 12,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 16
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "LEFT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "HEIGHT",
+           "fillToken": "text/tertiary"
+          }
+         }
+        ]
        }
       ]
      }
@@ -3841,7 +3624,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#fafafa",
+      "hex": "#f6f7fc",
       "token": "background/subtle"
      }
     ],
@@ -3849,7 +3632,7 @@
      "paints": [
       {
        "type": "SOLID",
-       "hex": "#ebebeb",
+       "hex": "#dadef4",
        "token": "border/default"
       }
      ],
@@ -3870,14 +3653,14 @@
       "x": 1,
       "y": 0,
       "width": 255,
-      "height": 62,
+      "height": 76,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 20,
-       "paddingRight": 20,
-       "paddingBottom": 16,
-       "paddingLeft": 20,
-       "itemSpacing": 10,
+       "paddingRight": 28,
+       "paddingBottom": 20,
+       "paddingLeft": 28,
+       "itemSpacing": 12,
        "primaryAxisAlignItems": "MAX",
        "counterAxisAlignItems": "CENTER",
        "primaryAxisSizingMode": "FIXED",
@@ -3890,308 +3673,24 @@
       },
       "children": [
        {
-        "name": "Version",
-        "type": "INSTANCE",
-        "visible": true,
-        "opacity": 1,
-        "x": 128,
-        "y": 23,
-        "width": 26,
-        "height": 20,
-        "layout": {
-         "layoutMode": "HORIZONTAL",
-         "paddingTop": 0,
-         "paddingRight": 6,
-         "paddingBottom": 0,
-         "paddingLeft": 6,
-         "itemSpacing": 4,
-         "primaryAxisAlignItems": "CENTER",
-         "counterAxisAlignItems": "CENTER",
-         "primaryAxisSizingMode": "AUTO",
-         "counterAxisSizingMode": "FIXED",
-         "layoutSizingHorizontal": "HUG",
-         "layoutSizingVertical": "FIXED",
-         "layoutGrow": 0,
-         "layoutAlign": "INHERIT",
-         "clipsContent": false
-        },
-        "cornerRadius": 9999,
-        "fills": [
-         {
-          "type": "SOLID",
-          "hex": "#ebebeb",
-          "token": "status/neutral/subtle"
-         }
-        ],
-        "bound": {
-         "itemSpacing": "space/4",
-         "paddingLeft": "space/6",
-         "paddingRight": "space/6",
-         "topLeftRadius": "radius/full",
-         "topRightRadius": "radius/full",
-         "bottomLeftRadius": "radius/full",
-         "bottomRightRadius": "radius/full"
-        },
-        "instance": {
-         "component": "Badge",
-         "variant": "Locale=FA, Tone=Gray, Style=Subtle, Size=Small",
-         "componentProperties": {
-          "Icon swap#8:2982": {
-           "type": "INSTANCE_SWAP",
-           "value": "8:31975",
-           "preferredValues": [
-            {
-             "type": "COMPONENT_SET",
-             "key": "392be07235ab5c728f3dcc56bc25dcc206da10c9"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "29b1eeb0ef48fe05ac00862d66e7f96ca64c2530"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f85817fad4c21270274f14f45ff2adee9ad8b06e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "3c0818df827900f56ecfaabfef721688c85c44ae"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "e0ce2f227ccdc6ea66d12e67e11e0b078fd6819d"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6a162db46aa62798e5a93673d68f2308a904786c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "32e4c76a02a87fd46807511992a9adbae6bec3c1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6db5ef840387bcd21ff96dbc2de2dbae1fef45df"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "d69723b7ce18c0315093b6f2aad8b21e3dfd24af"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "a446ee0972a7d792e40ec0f6d4ecf23759c31968"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7c95c8ee1e771aedcafdcb7f22d962d7e630dc10"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "01f44e77435bcfbbd143ea4538a3714301db7754"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7b79c833be6e826cf01a6cabe819325e917bd6b2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "7bede71e9921315eb6eb33c9c93ab6f184ca9d64"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "768d2f3edd93b0502d845463cd34e4677d7b45ab"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "dc1e418563ac654a9aab4ca302828d0d63221102"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "24628d2b3522273813448485482c2adacdd066b3"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "90c7428df4db5ef0d89cd89504fd39d7961595af"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "50a82df49a82432dfea791f2cd4847d852e86c0e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "3ce857a78297b5b8738da13a61eac4b6baab3ffb"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "98bf17658ec48ab64f50f1705041150ea8b7f55c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8cc270991cda3da1ffd4225e19ab98f45feed190"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "74c161408f9883a9646c02590ee482517238b215"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "65f94204598c890c12898a924c5acb00f3259632"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "efa17d45fdae66552f2ebea7fe40ac6906c1599b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "eae677054c7ca090181549323edfa2bbfd74b1b9"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "0aaf7d46d70e0880f97bf2ff184441643bfdb954"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f59ba6e58d734242f2da804059e63a8effdae1d1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "df673e16d5673a7363caa3f4f162e92fb2e82b7b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "08e87438a686e9710c6b7d0c0efccccfaeee4f3e"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "1593782eff78809ecdfc79f067b6a42bdf26f3d0"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "ca817cc4346c3f76d2d42e98c7e5fa2258470220"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f8252de2b13b1803cbb27569c2b935b90979acb5"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "17b83662fa4de3ca9b993289ff93e987a151ae60"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "356aa3440c8b0b8fc5a50fd98c8c1a243aaf6811"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "2b6e0be6f872f71eeed5e63bb27689428d10d1e2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "1701c60583e11c6cf86ad05474ab1ce64f3b76d6"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "b92d04100e5dd8b40fb1ca042608e52ec2e084bb"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8d9fd1ae9a3f34910c9ea6e2ca03a3759cecbdd2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "0846c092a29314f25ba7d3c6bba6b7902589f14c"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "768c72ebe6dae8ff42a60b622c1fd338cb00038b"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "648117bf4acf2800abf537179655010f2e1c0cfd"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "236d9600d9b14b8a0f998cf4ab9543ea4bd106e1"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "666c90309011bedd2ff70561daf4a2e3b34e6270"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "6026251471959e5c8c0fba3e47a63b2ec0731f67"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "f402345e3c0a2389065386b3369d443e4f1ab7e2"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "8f90a6e57bac0c8093dd6b21a0e4064e5bd429e4"
-            },
-            {
-             "type": "COMPONENT_SET",
-             "key": "a73fd1d5fa2f14701952c9b41c25ba9af28b067c"
-            }
-           ],
-           "valueName": "tick-circle / Property 1=linear"
-          },
-          "Label#8:2859": {
-           "type": "TEXT",
-           "value": "Badge"
-          },
-          "Icon#8:2941": {
-           "type": "BOOLEAN",
-           "value": false
-          },
-          "Label (FA)#8:2900": {
-           "type": "TEXT",
-           "value": "۱٫۰"
-          },
-          "Locale": {
-           "value": "FA",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Tone": {
-           "value": "Gray",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Style": {
-           "value": "Subtle",
-           "type": "VARIANT",
-           "boundVariables": {}
-          },
-          "Size": {
-           "value": "Small",
-           "type": "VARIANT",
-           "boundVariables": {}
-          }
-         },
-         "texts": {
-          "Label": "۱٫۰"
-         }
-        }
-       },
-       {
         "name": "فیلدو",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 164,
-        "y": 20,
-        "width": 38,
-        "height": 26,
+        "x": 29,
+        "y": 22,
+        "width": 151,
+        "height": 32,
         "layout": {
-         "layoutSizingHorizontal": "HUG",
+         "layoutSizingHorizontal": "FILL",
          "layoutSizingVertical": "HUG",
-         "layoutGrow": 0,
+         "layoutGrow": 1,
          "layoutAlign": "INHERIT"
         },
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -4200,13 +3699,13 @@
         },
         "text": {
          "characters": "فیلدو",
-         "textStyle": "FA/Heading/16",
+         "textStyle": "FA/Heading/20",
          "fontFamily": "IRANYekanX",
          "fontStyle": "DemiBold",
-         "fontSize": 16,
+         "fontSize": 20,
          "lineHeight": {
           "unit": "PIXELS",
-          "value": 26
+          "value": 32
          },
          "letterSpacing": {
           "unit": "PIXELS",
@@ -4214,7 +3713,7 @@
          },
          "textAlignHorizontal": "LEFT",
          "textAlignVertical": "TOP",
-         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "textAutoResize": "HEIGHT",
          "fillToken": "text/primary"
         }
        },
@@ -4223,10 +3722,10 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 212,
-        "y": 21,
-        "width": 24,
-        "height": 24,
+        "x": 192,
+        "y": 20,
+        "width": 36,
+        "height": 36,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -4240,10 +3739,10 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 217.33,
+          "x": 199.99,
           "y": 23,
-          "width": 13.35,
-          "height": 20,
+          "width": 20.02,
+          "height": 30,
           "fills": [
            {
             "type": "SOLID",
@@ -4261,9 +3760,9 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 62,
+      "y": 76,
       "width": 255,
-      "height": 643,
+      "height": 581,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -4288,9 +3787,9 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 70,
+        "y": 84,
         "width": 223,
-        "height": 240,
+        "height": 300,
         "layout": {
          "layoutMode": "VERTICAL",
          "paddingTop": 0,
@@ -4315,7 +3814,7 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 70,
+          "y": 84,
           "width": 223,
           "height": 24,
           "layout": {
@@ -4342,7 +3841,7 @@
             "visible": true,
             "opacity": 1,
             "x": 25,
-            "y": 70,
+            "y": 84,
             "width": 207,
             "height": 18,
             "layout": {
@@ -4354,7 +3853,7 @@
             "fills": [
              {
               "type": "SOLID",
-              "hex": "#737373",
+              "hex": "#6c6f80",
               "token": "text/tertiary"
              }
             ],
@@ -4389,16 +3888,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 96,
+          "y": 110,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -4413,12 +3912,11 @@
           "fills": [
            {
             "type": "SOLID",
-            "hex": "#e5e5e5",
-            "token": "surface/active"
+            "hex": "#6e62fe",
+            "token": "action/primary"
            }
           ],
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -4701,16 +4199,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 132,
+          "y": 156,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -4723,7 +4221,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -5006,16 +4503,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 168,
+          "y": 202,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -5028,7 +4525,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -5311,16 +4807,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 204,
+          "y": 248,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -5333,7 +4829,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -5616,16 +5111,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 240,
+          "y": 294,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -5638,7 +5133,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -5921,16 +5415,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 276,
+          "y": 340,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -5943,7 +5437,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -6228,9 +5721,9 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 330,
+        "y": 404,
         "width": 223,
-        "height": 96,
+        "height": 116,
         "layout": {
          "layoutMode": "VERTICAL",
          "paddingTop": 0,
@@ -6255,7 +5748,7 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 330,
+          "y": 404,
           "width": 223,
           "height": 24,
           "layout": {
@@ -6282,7 +5775,7 @@
             "visible": true,
             "opacity": 1,
             "x": 25,
-            "y": 330,
+            "y": 404,
             "width": 207,
             "height": 18,
             "layout": {
@@ -6294,7 +5787,7 @@
             "fills": [
              {
               "type": "SOLID",
-              "hex": "#737373",
+              "hex": "#6c6f80",
               "token": "text/tertiary"
              }
             ],
@@ -6329,16 +5822,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 356,
+          "y": 430,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -6351,7 +5844,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -6634,16 +6126,16 @@
           "visible": true,
           "opacity": 1,
           "x": 17,
-          "y": 392,
+          "y": 476,
           "width": 223,
-          "height": 34,
+          "height": 44,
           "layout": {
            "layoutMode": "HORIZONTAL",
-           "paddingTop": 6,
-           "paddingRight": 8,
-           "paddingBottom": 6,
-           "paddingLeft": 8,
-           "itemSpacing": 8,
+           "paddingTop": 11,
+           "paddingRight": 14,
+           "paddingBottom": 11,
+           "paddingLeft": 14,
+           "itemSpacing": 12,
            "primaryAxisAlignItems": "MIN",
            "counterAxisAlignItems": "CENTER",
            "primaryAxisSizingMode": "FIXED",
@@ -6656,7 +6148,6 @@
           },
           "cornerRadius": 8,
           "bound": {
-           "itemSpacing": "space/8",
            "topLeftRadius": "radius/md",
            "topRightRadius": "radius/md",
            "bottomLeftRadius": "radius/md",
@@ -6943,9 +6434,9 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 705,
+      "y": 657,
       "width": 255,
-      "height": 95,
+      "height": 143,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 12,
@@ -6967,7 +6458,7 @@
        "paints": [
         {
          "type": "SOLID",
-         "hex": "#ebebeb",
+         "hex": "#dadef4",
          "token": "border/default"
         }
        ],
@@ -6986,16 +6477,16 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 718,
+        "y": 670,
         "width": 223,
-        "height": 34,
+        "height": 44,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 6,
-         "paddingRight": 8,
-         "paddingBottom": 6,
-         "paddingLeft": 8,
-         "itemSpacing": 8,
+         "paddingTop": 11,
+         "paddingRight": 14,
+         "paddingBottom": 11,
+         "paddingLeft": 14,
+         "itemSpacing": 12,
          "primaryAxisAlignItems": "MIN",
          "counterAxisAlignItems": "CENTER",
          "primaryAxisSizingMode": "FIXED",
@@ -7008,7 +6499,6 @@
         },
         "cornerRadius": 8,
         "bound": {
-         "itemSpacing": "space/8",
          "topLeftRadius": "radius/md",
          "topRightRadius": "radius/md",
          "bottomLeftRadius": "radius/md",
@@ -7291,16 +6781,16 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 754,
+        "y": 716,
         "width": 223,
-        "height": 34,
+        "height": 44,
         "layout": {
          "layoutMode": "HORIZONTAL",
-         "paddingTop": 6,
-         "paddingRight": 8,
-         "paddingBottom": 6,
-         "paddingLeft": 8,
-         "itemSpacing": 8,
+         "paddingTop": 11,
+         "paddingRight": 14,
+         "paddingBottom": 11,
+         "paddingLeft": 14,
+         "itemSpacing": 12,
          "primaryAxisAlignItems": "MIN",
          "counterAxisAlignItems": "CENTER",
          "primaryAxisSizingMode": "FIXED",
@@ -7313,7 +6803,6 @@
         },
         "cornerRadius": 8,
         "bound": {
-         "itemSpacing": "space/8",
          "topLeftRadius": "radius/md",
          "topRightRadius": "radius/md",
          "bottomLeftRadius": "radius/md",
@@ -7589,6 +7078,83 @@
           "Label": "راهنما و پشتیبانی"
          }
         }
+       },
+       {
+        "name": "Version",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 762,
+        "width": 223,
+        "height": 26,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 8,
+         "paddingRight": 14,
+         "paddingBottom": 0,
+         "paddingLeft": 14,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "MIN",
+         "counterAxisAlignItems": "MIN",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "AUTO",
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "STRETCH",
+         "clipsContent": true
+        },
+        "bound": {
+         "paddingTop": "space/8"
+        },
+        "children": [
+         {
+          "name": "Version label",
+          "type": "TEXT",
+          "visible": true,
+          "opacity": 1,
+          "x": 31,
+          "y": 770,
+          "width": 195,
+          "height": 18,
+          "layout": {
+           "layoutSizingHorizontal": "FILL",
+           "layoutSizingVertical": "HUG",
+           "layoutGrow": 1,
+           "layoutAlign": "INHERIT"
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "hex": "#6c6f80",
+            "token": "text/tertiary"
+           }
+          ],
+          "bound": {
+           "fontFamily": "fa/font-family/sans"
+          },
+          "text": {
+           "characters": "نسخه ۱٫۰",
+           "textStyle": "FA/Label/12",
+           "fontFamily": "IRANYekanX",
+           "fontStyle": "Regular",
+           "fontSize": 12,
+           "lineHeight": {
+            "unit": "PIXELS",
+            "value": 18
+           },
+           "letterSpacing": {
+            "unit": "PIXELS",
+            "value": 0
+           },
+           "textAlignHorizontal": "RIGHT",
+           "textAlignVertical": "TOP",
+           "textAutoResize": "HEIGHT",
+           "fillToken": "text/tertiary"
+          }
+         }
+        ]
        }
       ]
      }

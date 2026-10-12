@@ -11,13 +11,13 @@ export interface SegmentOption {
 }
 
 /*
- * Figma Segment: 91×32 hug, padding 6/16, gap 6, `radius/md`, Label/14 `text/secondary`.
+ * Figma Segment: 36 high in the control (91×32 as a standalone set), hug width, padding 6/16, gap 6, `radius/md`, Label/14 `text/secondary`.
  * Hover = `surface/hover` + `text/primary`; Selected = `background/default` + Shadow/Small + Label/14 Strong;
  * Focus = the neutral ring (Figma draws a 2px `focus/ring-neutral` stroke); Disabled = `text/disabled`.
  */
 const SEGMENT = [
-  'fy:inline-flex fy:cursor-pointer fy:select-none fy:items-center fy:justify-center fy:gap-1.5 fy:rounded-md fy:px-4 fy:py-1.5',
-  'fy:text-label-14 fy:text-text-secondary fy:transition-colors fy:duration-100 fy:ease-out',
+  'fy:inline-flex fy:cursor-pointer fy:select-none fy:items-center fy:justify-center fy:gap-1.5 fy:min-h-9 fy:rounded-md fy:px-4 fy:py-1.5',
+  'fy:text-label-14 fy:text-text-secondary fy:motion-base',
   'fy:hover:bg-surface-hover fy:hover:text-text-primary',
   'fy:data-checked:bg-background-default fy:data-checked:text-label-14-strong fy:data-checked:text-text-primary fy:data-checked:shadow-small',
   'fy:data-checked:hover:bg-background-default',

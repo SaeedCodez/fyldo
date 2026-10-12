@@ -193,10 +193,10 @@ for (const locale of LOCALES) {
     const ours = await relative(stage, modal);
     expect([ours.width, Math.round(ours.height)]).toEqual([root.width, root.height]);
 
-    // the confirmation Input (label above, 40px control) and the disabled Error confirm button are where the pack puts them
+    // the confirmation Input (label above, 44px control) and the disabled Error confirm button are where the pack puts them
     const field = await relative(stage, modal.locator('[data-slot=fy-input]'));
-    expect(Math.round(field.height)).toBe(40);
-    expect(Math.round(field.width)).toBe(430); // 478 − 24 − 24
+    expect(Math.round(field.height)).toBe(44);
+    expect(Math.round(field.width)).toBe(Math.round(layer(root, 'Body', 'Confirmation').width)); // 558 − 32 − 32
     await expect(modal.getByRole('button', { name: label(button('Confirm'), locale) })).toBeDisabled();
 
     if (locale === 'EN') {

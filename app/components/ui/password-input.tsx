@@ -37,7 +37,7 @@ export function PasswordInput({ hideOn, disabled, ...props }: PasswordInputProps
             aria-pressed={shown}
             disabled={disabled}
             onClick={() => setShown((s) => !s)}
-            className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:transition-colors fy:duration-100 fy:ease-out fy:hover:text-icon-primary fy:focus-ring fy:disabled:cursor-not-allowed fy:disabled:text-text-disabled fy:disabled:hover:text-text-disabled fy:before:absolute fy:before:-inset-1"
+            className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-secondary fy:motion-base fy:hover:text-icon-primary fy:focus-ring fy:disabled:cursor-not-allowed fy:disabled:text-text-disabled fy:disabled:hover:text-text-disabled fy:before:absolute fy:before:-inset-1"
           >
             <Icon name={shown ? 'eye-slash' : 'eye'} size={16} />
           </button>

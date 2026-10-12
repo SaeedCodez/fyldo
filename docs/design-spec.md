@@ -1,8 +1,9 @@
 # Fyldo — Design Spec (extracted from Figma)
 
 > Source: Figma file `Pg3Ni7eqTLQYIG6hfNVPt6` ("Fyldo"), read through the **figma-console MCP** on 2026-09-29.
+> The file was **redesigned and re-exported on 2026-10-11** (primary colour `#6e62fe`, tinted neutrals, bigger controls, a 960 px content column); every number below follows that re-export (`design/figma/`, `tokens/figma.tokens.json`). Section 9 keeps the original findings as history.
 > The "Fyldo – HeroUI" file was ignored, as instructed.
-> Pages: `Foundations`, `Icons`, `Components` (13 sections, 27 component sets, 2 page templates × 2 locales).
+> Pages: `Foundations`, `Icons`, `Components` (40 component sets: the 27 of §3 plus 13 added after the first extraction, see the note under §3; 839 variants; 2 page templates × 2 locales).
 > Everything below was read from the file, not inferred from screenshots. Section 9 lists every place where the design is silent, contradictory or fails WCAG.
 
 **Reading guide**
@@ -17,64 +18,77 @@
 
 Four variable collections. Aliases: `Color/*` → `Primitives/*`. `Spacing`, `Typography` hold raw values.
 
-### 1.1 Primitives (55) — never used directly by components
+### 1.1 Primitives (67) — never used directly by components
 
 | Scale | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 1000 |
 |---|---|---|---|---|---|---|---|---|---|---|
-| `color/gray` | #f2f2f2 | #ebebeb | #e5e5e5 | #ebebeb ⚠ | #c9c9c9 | #a8a8a8 | #8f8f8f | #7d7d7d | #666666 | #171717 |
+| `color/gray` | #f1f3fa | #eaecf8 | #e2e5f5 | #dadef4 | #babfdb | #9da3c1 | #888b9b | #76798a | #5c5f71 | #1a1d2c |
 | `color/blue` | #f0f7ff | #ebf5ff | #e0f0ff | #cce6ff | #99ceff | #52aeff | #0072f5 | #0062d1 | #0068d6 | #00254d |
 | `color/red` | #fff0f0 | #ffebeb | #ffe5e5 | #fdd8d8 | #f8b9b9 | #f87275 | #e5484d | #da2f35 | #cb2a2f | #391417 |
 | `color/amber` | #fff6e5 | #fff4d6 | #fef0cd | #ffdd8f | #ffc96b | #f5b047 | #ffb224 | #ff990a | #a35200 | #4e2009 |
 | `color/green` | #effbef | #ebfaeb | #daf6da | #c6f1c7 | #99e59e | #6cda75 | #45a557 | #398e4a | #297a3a | #1b311e |
 
-Plus: `color/white #fff`, `color/black #000`, `color/background/100 #fff`, `color/background/200 #fafafa`, `color/gray/1000-hover #383838` (off-scale; primary hover).
-⚠ `gray/200` and `gray/400` are the same value (#ebebeb). Kept as-is; the generator preserves both names.
+The brand scale, new in the redesign (11 steps, `600` is the brand colour):
 
-### 1.2 Color (63 semantic tokens, mode `Light`)
+| Scale | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| `color/primary` | #f2f4ff | #e5e8ff | #d0d5ff | #b5baff | #9899ff | #7f78ff | #6e62fe | #5a4fd7 | #4940af | #393289 | #221f58 |
+
+The grays are tinted (a slight blue-violet cast), not neutral. Plus: `color/white #fff`, `color/black #000`, `color/background/100 #fff`, `color/background/200 #f6f7fc`, and two off-scale grays: `color/gray/850 #6c6f80` (`text/tertiary`) and `color/gray/1000-hover #2f3242` (no longer used by any action; actions hover on `primary/700`).
+Count: gray 12 (10 steps + 850 + 1000-hover) + blue, red, amber, green 40 + primary 11 + white, black, background/100, background/200 4 = 67. `gray/200` and `gray/400` are now distinct values (they were both #ebebeb before the redesign).
+
+### 1.2 Color (72 semantic tokens, mode `Light`)
 
 | Group | Token → primitive | Figma description |
 |---|---|---|
 | **Background / surface** | `background/default` → bg/100 | Page & card background |
 | | `background/subtle` → bg/200 | Settings canvas, sidebar, card footer, modal footer |
 | | `background/inverse` → gray/1000 | Tooltips |
-| | `background/overlay` = #000 @ 40 % | Modal scrim (only literal, non-alias colour) |
+| | `background/overlay` = #181a38 @ 45 % | Modal scrim (only literal, non-alias colour; tinted, was #000 @ 40 %) |
 | | `surface/default` → gray/100 | Component background, menu-item hover, tag |
-| | `surface/hover` → gray/200 | Nav-item hover, tag hover |
-| | `surface/active` → gray/300 | Nav-item active / selected |
+| | `surface/hover` → gray/200 | Tab, Tag, Segment, Color Swatch, Icon Tile hover |
+| | `surface/active` → gray/300 | Slider track (the Nav Item active fill is now `action/primary`) |
 | | `surface/disabled` → gray/100 | Disabled field background |
 | **Border** | `border/default` → gray/400 | Default border & divider |
-| | `border/hover` → gray/500 | Field / secondary-button hover |
-| | `border/strong` → gray/600 | Field focus / open |
+| | `border/hover` → gray/500 | Secondary Button / Icon Button hover, Choice Card and Upload Image hover |
+| | `border/strong` → gray/600 | Resize handle, dashed empty swatch / tile, checked or disabled Choice Card |
+| | `border/input` → gray/500 · `border/input-hover` → gray/700 | Border of every field control (Input, Select, Multi Select, Textarea, pickers, Upload Image, Select File) and Choice Card; default / hover |
+| | `border/subtle` → gray/200 | Setting Row divider (new) |
 | **Text** | `text/primary` → gray/1000 | Headings, values |
 | | `text/secondary` → gray/900 | Descriptions, helper |
-| | `text/tertiary` → gray/700 | Placeholder, counter |
-| | `text/disabled` → gray/700 | Disabled text (same value as tertiary) |
-| | `text/inverse` → bg/100 | Text on dark |
+| | `text/tertiary` → gray/850 | Placeholder, counter |
+| | `text/disabled` → gray/700 | Disabled text |
+| | `text/inverse` → bg/100 | Text on dark and on primary fills |
 | **Icon** | `icon/primary` → gray/1000 · `icon/secondary` → gray/900 · `icon/tertiary` → gray/700 (input prefix/suffix) | |
-| **Action** | `action/primary` gray/1000 · `-hover` gray/1000-hover | Primary button |
+| **Action** | `action/primary` → **primary/600** · `-hover` → **primary/700** | Primary button |
 | | `action/secondary` bg/100 · `-hover` gray/100 | Secondary button |
 | | `action/tertiary-hover` gray/100 | Ghost hover |
 | | `action/danger` red/800 · `-hover` red/900 | Destructive |
 | | `action/disabled` gray/100 | Disabled **and** loading button |
-| **Control** | `control/off` gray/500 · `-hover` gray/600 · `-disabled` gray/200 | Switch track off |
-| | `control/on` gray/1000 · `-hover` gray/1000-hover · `-disabled` gray/500 | Switch track / checked box / radio |
+| **Brand** (new) | `brand/subtle` primary/50 · `-hover` primary/100 | `brand/text` is the Nav Item hover label/icon colour (`brand/subtle`, `brand/subtle-hover` and `brand/border` are defined but not used by any variant) |
+| | `brand/border` primary/200 · `brand/text` primary/700 | Nav Item hover label and icon |
+| **Control** | `control/off` gray/700 · `-hover` gray/900 · `-disabled` gray/200 | Switch track off |
+| | `control/on` **primary/600** · `-hover` **primary/700** · `-disabled` gray/500 | Switch track / checked box / radio / slider range |
 | | `control/thumb` white | Switch thumb, check, radio dot |
 | | `control/border` gray/700 · `-hover` gray/900 | Unchecked checkbox / radio border |
-| **Link / focus** | `link/default` blue/900 | Inline links |
-| | `focus/ring` blue/700 | **Unused by any component variant** — see §9 |
-| **Status** (×5 tones: `info`, `success`, `warning`, `error`, `neutral`) | `status/<tone>/bg`, `/border`, `/solid`, `/text`, `/subtle` | `neutral` = gray, `info` = blue, `success` = green, `warning` = amber, `error` = red. `warning/solid` = amber/700, `error/solid` = red/800, others = 700 |
+| **Link / focus** | `link/default` **primary/700** | Inline links (no component variant uses it) |
+| | `focus/ring-neutral` **primary/600** · `focus/border` **primary/600** | The focus colour (field focus border, choice card / swatch / tile selection, the neutral ring) |
+| | `focus/ring` primary/500 | **Unused by any component variant** — see §9 |
+| **Status** (×5 tones: `info`, `success`, `warning`, `error`, `neutral`) | `status/<tone>/bg`, `/border`, `/solid`, `/text`, `/subtle` | `neutral` = gray, `info` = **primary** (indigo), `success` = green, `warning` = amber, `error` = red. Solid: neutral gray/1000, info primary/700, success green/900, warning amber/700, error red/800 |
 
 Full alias table (tone → primitive step):
 
 | Tone | bg | border | solid | text | subtle |
 |---|---|---|---|---|---|
 | neutral | gray/100 | gray/400 | gray/1000 | gray/1000 | gray/200 |
-| info | blue/100 | blue/400 | blue/700 | blue/900 | blue/300 |
-| success | green/100 | green/400 | green/700 | green/900 | green/300 |
+| info | primary/50 | primary/200 | primary/700 | primary/800 | primary/100 |
+| success | green/100 | green/400 | green/900 | green/900 | green/300 |
 | warning | amber/100 | amber/400 | amber/700 | amber/900 | amber/300 |
-| error | red/100 | red/400 | red/800 | red/900 | red/300 |
+| error | red/100 | red/400 | red/800 | red/900 | red/200 |
 
-### 1.3 Spacing / radius / border (21)
+Count: action 8 + background 4 + border 6 + brand 4 + control 9 + focus 3 + icon 3 + link 1 + status 25 + surface 4 + text 5 = 72. With 67 primitives, 21 spacing/radius/border and 6 typography tokens that is the file's **166 variables** (it was 150 before the redesign).
+
+### 1.3 Spacing / radius / border (21; unchanged by the redesign)
 
 `space/`: 0, 2, 4, 6, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80.
 `radius/`: none 0 · xs 4 · sm 6 · md 8 · lg 12 · full 9999.
@@ -119,22 +133,24 @@ Implementation note: the Figma tracking is a fixed px value; in CSS use `em` (�
 
 ### 1.5 Effects (7)
 
+Shadows and halos are tinted: the shadow base is `#282a64` (it was black), the focus halo is the brand colour.
+
 | Style | Definition | Use |
 |---|---|---|
-| `Shadow/Small` | 0 2 2 0 rgba(0,0,0,.04) | Empty State icon box |
-| `Shadow/Medium` | 0 4 8 −4 rgba(0,0,0,.04), 0 16 24 −8 rgba(0,0,0,.06) | Select Menu, Toast, Save Bar |
-| `Shadow/Large` | 0 1 1 0 .02, 0 8 16 −4 .04, 0 24 32 −8 .06 (black) | Modal |
-| `Shadow/Thumb` | 0 1 2 0 rgba(0,0,0,.16), 0 0 0 0.5 rgba(0,0,0,.08) | Switch thumb (enabled only) |
-| `Focus/Input` | 0 0 0 3 rgba(0,0,0,.10) | Text field / select focus & open halo |
+| `Shadow/Small` | 0 2 2 0 rgba(40,42,100,.06) | Empty State icon box |
+| `Shadow/Medium` | 0 4 8 −4 rgba(40,42,100,.06), 0 16 24 −8 rgba(40,42,100,.09) | Select Menu, Toast, Save Bar |
+| `Shadow/Large` | 0 1 1 0 .03, 0 8 16 −4 .06, 0 24 32 −8 .10 (all `#282a64`) | Modal |
+| `Shadow/Thumb` | 0 1 2 0 rgba(40,42,100,.20), 0 0 0 0.5 rgba(40,42,100,.10) | Switch thumb (enabled only) |
+| `Focus/Input` | 0 0 0 0.5 `focus/border` (`primary/600`, opaque) | Text field / select focus & open halo: the 1 px border looks 1.5 px |
 | `Focus/Input Error` | 0 0 0 3 rgba(218,47,53,.16) | Field error halo (always on in Error state) |
-| `Focus/Ring` | 0 0 0 2 #fff, 0 0 0 4 **#006bf5** | Keyboard focus — defined in Foundations ("2 px white gap + 2 px blue-700"), **not applied anywhere** |
+| `Focus/Ring` | 0 0 0 2 #fff, 0 0 0 4 **#7f78ff** (`primary/500`) | Keyboard focus — defined in Foundations ("2 px white gap + 2 px brand"), **not applied anywhere** |
 
 ### 1.6 Icons
 
 - Page `Icons` = the full **Iconsax** set (≈1 000 component sets, variant `Property 1 = linear|bold|outline|…`), grouped by category, plus `Fyldo · Custom icons` (16×16 `Icon/spinner`, single `Vector` layer, 1.5 px stroke bound to `icon/primary`; rule: "Icons Iconsax doesn't provide").
 - Only **Linear** is used. Stroke 1.5 px, colour = surrounding text/icon token (`currentColor` in code).
-- Sizes used: **16** default (Button, Input, Select, Nav Item, Tab, Notice, Toast, Menu Item), **12** (Badge, Tag remove), **20** (Large Icon Button), **24** (Empty State Large; 20 in Small).
-- Icons referenced by the components (Iconsax names): `setting-2` (nav default), `arrow-down-2` / `arrow-up-2` (select chevron closed/open — the Figma kit calls these components `arrow-down` / `arrow-up`, but their geometry is the npm package's `ArrowDown2` / `ArrowUp2`, verified by matching the paths), `tick-circle` (menu-item selected, success notice/toast, badge, "Saved"), `close-circle` (tag remove, notice/toast close, multi-select clear), `info-circle` (error notice / toast / field error / "Save failed"), `information` (neutral+info notice/toast), `danger` (warning notice), `search-normal` (select-menu search), `global` (menu-item leading, language select), `element-plus` (empty state), plus 16×16 `Icon/spinner` (loading Button, Icon Button, Toast, Save Bar "Saving").
+- Sizes used: **16** default (Input, Select, Notice, Toast, Menu Item, Small Button), **18 / 20** (Medium / Large Button), **18 / 20 / 24** (Small / Medium / Large Icon Button), **20** (Nav Item), **18** (Tab), **12** (Badge, Tag remove), **24** (Empty State Large; 20 in Small).
+- Icons referenced by the components (Iconsax names): `setting-2` (nav default), `arrow-down-2` / `arrow-up-2` (select chevron closed/open — the Figma kit calls these components `arrow-down` / `arrow-up`, but their geometry is the npm package's `ArrowDown2` / `ArrowUp2`, verified by matching the paths), `tick-circle` (menu-item selected, success notice/toast, badge, "Saved"), `close-circle` (tag remove, notice/toast close, multi-select clear), `info-circle` (error notice / toast / field error / "Save failed"), `information` (neutral+info notice/toast), `danger` (warning notice), `search-normal` (select-menu search), `global` (menu-item leading, language select), `element-plus` (empty state), plus the `Icon/spinner` (16×16 in a loading Button at every size, Toast and Save Bar "Saving"; 18/20/24 in a loading Icon Button).
 
 ---
 
@@ -156,23 +172,23 @@ These cut across components; the implementation must enforce them where possible
 7. Validation errors: shown **after blur or submit**, describe how to fix, inline under the field (Input Error). Textarea over its limit → Error state, counter turns red, never truncate silently.
 
 **Modal**
-8. Title is a question naming the action ("Reset all settings?"); the confirm button repeats the verb (never OK/Yes). **Cancel at the start, confirm at the end** of the footer (mirrored in RTL). Width 480.
+8. Title is a question naming the action ("Reset all settings?"); the confirm button repeats the verb (never OK/Yes). **Cancel at the start, confirm at the end** of the footer (mirrored in RTL). Width 560.
 9. Default modal closes on Esc / close button / backdrop. **Danger modal closes via Cancel, the close button or Esc (Esc is Cancel: it never confirms), but not on a backdrop click**, and never while the action is running; the confirm button is disabled until the user types the keyword (only for high-impact actions). Focus moves in on open, is trapped, returns to the trigger on close. Page behind is dimmed (`background/overlay`) and inert.
 
 **Icon-only controls / tooltips**
 10. **Every Icon Button has a Tooltip whose text equals its `aria-label`.** Tooltip opens on hover after **300 ms**, immediately on keyboard focus; closes on leave, blur, Esc. No links/buttons inside; sentence case, no final period; default placement Top, flip only to avoid clipping; Start/End follow reading direction. Never hide essential info in a tooltip (touch).
 
 **Buttons**
-11. One Primary per card/view. Sentence case with a verb ("Save changes", not "OK"). Loading keeps label **and width**; the button is disabled while the request runs. Error buttons open a confirmation for irreversible actions. Icons are 16 px (20 in Large Icon Button); leading icons describe the action, trailing icons show direction / external link. In a card footer the actions sit at the end; RTL mirrors the row.
+11. One Primary per card/view. Sentence case with a verb ("Save changes", not "OK"). Loading keeps label **and width**; the button is disabled while the request runs. Error buttons open a confirmation for irreversible actions. Icons are 16 / 18 / 20 px in Small / Medium / Large Buttons (18 / 20 / 24 in Icon Buttons); leading icons describe the action, trailing icons show direction / external link. In a card footer the actions sit at the end; RTL mirrors the row.
 
 **Forms**
-12. Always a visible label except search fields with a clear prefix icon. Labels are short nouns. Placeholders show an example, never the label. Fields stack with **20 px** gaps inside a card. LTR values (URLs, emails, keys, code) stay LTR inside FA fields (`dir="ltr"`), aligned to the right in FA as the Input usage frame draws them. Input/Select/Multi Select heights match the Button size used in the same row (32/40/48).
-13. Textarea: default ~4 rows (104 px); counter only when there is a real limit; code fields use Geist Mono and force LTR.
+12. Always a visible label except search fields with a clear prefix icon. Labels are short nouns. Placeholders show an example, never the label. Fields stack with **20 px** gaps inside a card. LTR values (URLs, emails, keys, code) stay LTR inside FA fields (`dir="ltr"`), aligned to the right in FA as the Input usage frame draws them. Input/Select/Multi Select heights match the Button size used in the same row (36/44/52).
+13. Textarea: default ~4 rows (120 px); counter only when there is a real limit; code fields use Geist Mono and force LTR.
 14. Control choice: Toggle = one independent on/off; Checkbox = any number of options or agreeing to one statement (**not** a single-checkbox instant setting); Radio = exactly one of 2–5 visible options (always with a default selection); Select = exactly one of 6+; searchable combobox for very long lists (countries, time zones). The whole row (control + label) is the click target. Label on/off with the feature ("Enable caching"), not the state. Explain why a toggle is disabled in its description.
 15. Select: menu same width as the field, **4 px** below it, height capped at ~8 items then scroll; disabled options stay visible; selected option shows a check at the end.
 
 **Layout**
-16. Content column **800 px**, centred in the main area; cards separated by 24 px. Navigation is **sidebar (default; 6+ sections or grouped menus) or top navigation (≤ ~8 sections)** — one per plugin, same items/icons/order. Tabs are for sub-pages of one nav item, **never nested**. Utility links (Documentation, Help) go bottom of the sidebar, or top-right of the top nav (then hide the Page Header action). Sidebar group labels 1–2 words; Nav Item badge only for items needing attention. Turn `Divider` off on the last Setting Row of a card. Setting Row layouts: **Inline** (Toggle, Checkbox at the end, vertically centred) / **Stacked** (Input, Select, Multi Select, Textarea under the description).
+16. Content column **960 px**, centred in the main area; cards separated by 24 px. Navigation is **sidebar (default; 6+ sections or grouped menus) or top navigation (≤ ~8 sections)** — one per plugin, same items/icons/order. Tabs are for sub-pages of one nav item, **never nested**. Utility links (Documentation, Help) go bottom of the sidebar, or top-right of the top nav (then hide the Page Header action). Sidebar group labels 1–2 words; Nav Item badge only for items needing attention. Turn `Divider` off on the last Setting Row of a card. Setting Row layouts: **Inline** (Toggle, Checkbox at the end, vertically centred) / **Stacked** (Input, Select, Multi Select, Textarea under the description) / **Field** (a 320 wide control at the end of the row).
 17. Empty State: title names what's missing; one-sentence description; at most one Primary (creates the first item); Secondary is usually a docs link; Large for a whole card/tab/page, Small in tables/lists/narrow panels; for filtered lists say the filter found nothing and offer "Clear search". Loading is not empty (spinner/skeleton).
 18. Badge: 1–2 words, never contains actions, Solid reserved for one high-emphasis label ("Pro").
 19. RTL mirrors the whole layout: sidebar on the right, controls on the left, tab order reversed, brand on the right in top nav, arrows point left, switch "on" = thumb on the left.
@@ -182,7 +198,7 @@ These cut across components; the implementation must enforce them where possible
 
 ## 3. Component inventory
 
-27 component sets. `n` = variants in Figma (all Locale-doubled except Icon Button). Properties are the Figma component properties (`Label (FA)` etc. duplicates omitted — see §7). `▢` = boolean, `T` = text, `⇄` = instance swap.
+27 component sets in the first extraction, 40 now (see the note under the table). `n` = variants in Figma (all Locale-doubled except Icon Button). Properties are the Figma component properties (`Label (FA)` etc. duplicates omitted — see §7). `▢` = boolean, `T` = text, `⇄` = instance swap.
 
 | # | Component | Figma id | n | Variant axes (excl. Locale) | Properties |
 |---|---|---|---|---|---|
@@ -204,7 +220,7 @@ These cut across components; the implementation must enforce them where possible
 | 16 | Sidebar | 18:2391 | 2 | — | (composition: header, groups, footer) |
 | 17 | Tab | 18:2506 | 10 | State (5) | Label T · Icon ▢ + swap ⇄ · Count ▢ |
 | 18 | Tabs | 18:2614 | 2 | — | (composition: divider + Tab instances) |
-| 19 | Setting Row | 18:2719 | 4 | Layout: Inline·Stacked | Title · Description T · Show description ▢ · Badge ▢ · Divider ▢ · exposed Control instance |
+| 19 | Setting Row | 18:2719 | 6 | Layout: Inline·Stacked·**Field** (control at the end, 400 wide) | Title · Description T · Show description ▢ · Badge ▢ · Divider ▢ · exposed Control instance |
 | 20 | Section Card | 18:2913 | 4 | Tone: Default·Danger | Title · Description T · Show description ▢ · Footer ▢ · Footer text ▢ |
 | 21 | Save Bar | 18:3079 | 8 | State: Dirty·Saving·Saved·Error | Discard button ▢ |
 | 22 | Page Header | 20:3127 | 2 | — | Title · Description T · Show description ▢ · Actions ▢ |
@@ -213,6 +229,8 @@ These cut across components; the implementation must enforce them where possible
 | 25 | Tooltip | 72:6535 | 8 | Placement: Top·Bottom·Start·End | Label T · Arrow ▢ |
 | 26 | Toast | 72:6694 | 8 | Tone: Neutral·Success·Error·Loading | Message · Description T · Show description ▢ · Action ▢ · Close button ▢ |
 | 27 | Empty State | 73:6879 | 4 | Size: Large·Small | Title · Description T · Show description ▢ · Icon ⇄ · Primary action ▢ · Secondary action ▢ |
+
+**Added after the first extraction (13 sets, 303 variants, not in the table above):** Slider (48), Upload Image (20), Select File (20), Segment (10), Segmented Control (2), Color Swatch (5), Color Picker Panel (2), Color Picker (42), Choice Card (48), Choice Card Group (54), Icon Picker (36), Icon Picker Modal (6), Icon Tile (10). Their geometry is in `design/figma/components/*.json` and the code mapping in [component-map.md](./component-map.md) §2.11–§2.15; main sizes after the redesign: Slider track 24 / 28 with thumb 28×20 / 32×24 (Small / Medium); Segmented Control 44 high with 36 high segments; Upload Image thumb 72 and Select File tile 48 (control padding 16); Color Picker, Icon Picker and Icon Picker Modal search 36 / 44 / 52 like the Input; Color Picker Panel hex row 36. Choice Card, Choice Card Group, Color Swatch and Icon Tile did not change size.
 
 Templates (frames, not components): `Settings page · EN / FA` and `Settings page · Top nav · EN / FA`, 1 440 wide inside a dark "wp-admin bar (context)" (32 px) and folded admin menu.
 
@@ -226,11 +244,11 @@ Notation: `H 12/0` = horizontal auto-layout, padding-x 12, padding-y 0; `gap 8`.
 
 | Size | Height | Padding-x | Gap | Radius | Text | Icon |
 |---|---|---|---|---|---|---|
-| Small | 32 | 12 | 6 | sm (6) | Button/14 | 16 |
-| Medium | 40 | 16 | 6 | sm (6) | Button/14 | 16 |
-| Large | 48 | 20 | 8 | **md (8)** | **Button/16** | 16 |
+| Small | 36 | 16 | 6 | sm (6) | Button/14 | 16 |
+| Medium | 44 | 20 | 6 | sm (6) | Button/14 | 18 |
+| Large | 52 | 24 | 8 | **md (8)** | **Button/16** | 20 |
 
-Icon Button: square 32/40/48 (no padding), radius sm/sm/md, icon 16/16/**20**.
+Icon Button: square 36/44/52 (no padding), radius sm/sm/md, icon 18/20/**24**.
 
 | Type | Default | Hover | Focus | Disabled / Loading |
 |---|---|---|---|---|
@@ -239,7 +257,7 @@ Icon Button: square 32/40/48 (no padding), radius sm/sm/md, icon 16/16/**20**.
 | Tertiary | transparent, `text/primary` | fill `action/tertiary-hover` | fill `background/default` (invisible on white) | **no fill, no stroke**, `text/disabled` |
 | Error | fill `action/danger`, `text/inverse` | `action/danger-hover` | = Default | as Primary disabled |
 
-Loading = Disabled colours **plus** a 16 px `Icon/spinner` before the label (before the icon in Icon Button, replacing it); label and width unchanged. Persian: spinner sits at the trailing side (order mirrored by `dir`). Clip content true. No focus ring in any variant (§9).
+Loading = Disabled colours **plus** a 16 px `Icon/spinner` before the label at every Button size (in an Icon Button it replaces the icon and is 18/20/24); label and width unchanged. Persian: spinner sits at the trailing side (order mirrored by `dir`). Clip content true. No focus ring in any variant (§9).
 
 Props → code: `variant`, `size`, `loading`, `leadingIcon`, `trailingIcon`, children = label. Icon Button: `label` (required — aria-label + tooltip), `icon`.
 
@@ -248,10 +266,10 @@ Props → code: `variant`, `size`, `loading`, `leadingIcon`, `trailingIcon`, chi
 Vertical stack, gap 8, width fills (Figma 320): `Label` → `Control` → `Helper` (or `Error`).
 
 - **Label**: Label/14 Strong, `text/primary`. **Helper**: Copy/13, `text/secondary`, row gap 6.
-- **Control**: horizontal, padding-x 12, gap 8, fill `background/default`, 1 px stroke `border/default`, radius sm (Large: md). Height 32 / 40 / 48. Text **Copy/14** (Large **Copy/16**). Prefix / suffix icon 16 px `icon/tertiary`; placeholder `text/tertiary`; value `text/primary`.
+- **Control**: horizontal, padding-x 12, gap 8, fill `background/default`, 1 px stroke `border/input`, radius sm (Large: md). Height 36 / 44 / 52. Text **Copy/14** (Large **Copy/16**). Prefix / suffix icon 16 px `icon/tertiary`; placeholder `text/tertiary`; value `text/primary`.
 - **States** (control only unless noted):
-  - Hover: stroke `border/hover`.
-  - Focus: stroke `border/strong` + effect `Focus/Input` (3 px rgba(0,0,0,.10)); a 1×16 `text/primary` caret is drawn (design-only).
+  - Hover: stroke `border/input-hover`.
+  - Focus: stroke `focus/border` (`primary/600`) + effect `Focus/Input` (0.5 px, the border colour); a 1×16 `text/primary` caret is drawn (design-only).
   - Filled: placeholder replaced by value.
   - Error: stroke `status/error/solid` + effect `Focus/Input Error` (halo always on); Helper is **replaced** by an Error row: 16 px `info-circle` + message Copy/13 `status/error/text`.
   - Disabled: label, placeholder, helper → `text/disabled`; fill `surface/disabled`.
@@ -259,67 +277,67 @@ Vertical stack, gap 8, width fills (Figma 320): `Label` → `Control` → `Helpe
 
 ### 4.3 Textarea (8:3307)
 
-Input pattern (label → control → helper row, same tokens and states) but **360 wide** (not Input's 320); control padding `12/8`, inner gap 2, default height 104 (≈4 rows), stretches when resized; 6×6 resize glyph at the bottom-end corner (`border/strong`, `border/default` disabled); helper row = helper text + **counter** (Mono/12, `text/tertiary`, e.g. `104/160`) at the end. Error: counter and message use `status/error/text` ("172/160"). One size only.
+Input pattern (label → control → helper row, same tokens and states) but **360 wide** (not Input's 320); control padding `12/8`, inner gap 2, default height 120 (≈4 rows), stretches when resized; 6×6 resize glyph at the bottom-end corner (`border/strong`, `border/default` disabled); helper row = helper text + **counter** (Mono/12, `text/tertiary`, e.g. `104/160`) at the end. Error: counter and message use `status/error/text` ("172/160"). One size only.
 
 ### 4.4 Toggle (8:3669)
 
 | Size | Track | Thumb | Gap to text | Label style |
 |---|---|---|---|---|
-| Small | 28×16, padding 2, radius full | 12 | 8 | Label/13 |
-| Medium | 36×20, padding 2 | 16 | 12 | Label/14 |
+| Small | 32×18, padding 2, radius full | 14 | 8 | Label/13 |
+| Medium | 44×24, padding 2 | 20 | 12 | Label/14 |
 
 Track `control/off` → hover `control/off-hover` → disabled `control/off-disabled`; on: `control/on` → `control/on-hover` → `control/on-disabled`. Thumb `control/thumb` with `Shadow/Thumb` (none when disabled). Focus = Default. Optional text block (label + description Copy/13 `text/secondary`, gap 2); disabled → both `text/disabled`. The switch aligns with the first line of the label. **RTL: whole control mirrors; "on" thumb sits on the left.**
 
 ### 4.5 Checkbox (8:4351) / Radio (8:4114)
 
-Control 16×16 (in a 16×20 slot so it centres on the first text line); gap 8; label Label/14; description Copy/13.
+Control 20×20 (the slot is one 20 px text line high, so it centres on the first line); gap 8; label Label/14; description Copy/13.
 
 - Checkbox box radius `xs` (4); Radio circle `full`. Unchecked: fill `background/default`, 1 px `control/border`; hover `control/border-hover`; disabled fill `surface/disabled`, stroke `border/default`.
-- Checked: fill `control/on`; check mark 8×5 stroke `control/thumb` 1.75 px. Indeterminate: 7 px dash, same stroke. Radio dot 6 px `control/thumb`.
-- Groups: radios stack with **12 px** gaps; checkbox children indent **24 px** toward reading direction; parent shows Indeterminate. Whole row is the click target.
+- Checked: fill `control/on`; check mark 7.5×5.25 stroke `control/thumb` 1.75 px. Indeterminate: 7 px dash, same stroke. Radio dot 6 px `control/thumb`.
+- Groups: radios stack with **12 px** gaps; checkbox children indent **28 px** toward reading direction; parent shows Indeterminate. Whole row is the click target.
 
 ### 4.6 Select (8:5055), Select Menu (8:5157), Menu Item (8:4601)
 
-Select = Input anatomy with a 16 px chevron (`arrow-down`, `arrow-up` when Open) at the end and optional 16 px prefix icon. Open = Focus styling (border/strong + Focus/Input) **and** the value shown. Error/Disabled as Input.
+Select = Input anatomy (control 36 / 44 / 52, stroke `border/input`) with a 16 px chevron (`arrow-down`, `arrow-up` when Open) at the end and optional 16 px prefix icon. Open = Focus styling (`focus/border` + `Focus/Input`) **and** the value shown. Error/Disabled as Input.
 
-**Select Menu** (Single): vertical, padding 4, gap 2, fill `background/default`, 1 px `border/default`, radius **lg**, `Shadow/Medium`, width = field width, 4 px below it. Contains Menu Items; highlighted item has fill `surface/default`. **Multi**: padding 0 with three regions — `Search` row (padding 12/8, `search-normal` icon + "Search…" Copy/14 `text/tertiary`, bottom border), `Options` (padding 4, gap 2), `Footer` (fill `background/subtle`, top border, padding 12/4/4/4: "n selected" Label/13 `text/secondary` + a Small Secondary "Clear" Button). Search and Footer toggle independently.
+**Select Menu** (Single): vertical, padding 4, gap 2, fill `background/default`, 1 px `border/default`, radius **lg**, `Shadow/Medium`, width = field width, 4 px below it. Contains Menu Items; highlighted item has fill `surface/default`. **Multi**: padding 0 with three regions — `Search` row (padding 12/8, `search-normal` icon + "Search…" Copy/14 `text/tertiary`, bottom border), `Options` (padding 4, gap 2), `Footer` (fill `background/subtle`, top border, padding 12/4/4/4: "n selected" Label/13 `text/secondary` + a Small Tertiary "Clear" Button, 36 high). Search and Footer toggle independently.
 
-**Menu Item**: 36 high, padding 8, gap 8, radius sm. Label Label/14. Default transparent → Hover fill `surface/default` → Selected shows 16 px `tick-circle` at the end → Disabled label `text/disabled`. Optional leading 16 px icon. Multi type replaces the check with a leading Checkbox.
+**Menu Item**: 40 high, padding 8, gap 8, radius sm. Label Label/14. Default transparent → Hover fill `surface/default` → Selected shows 16 px `tick-circle` at the end → Disabled label `text/disabled`. Optional leading 16 px icon. Multi type replaces the check with a leading Checkbox.
 
 ### 4.7 Multi Select (9:5140) and Tag (9:4203)
 
-Multi Select control: **min height 34 / 42 / 50** (Small / Medium / Large; padding-y 6 / 8 / 12 — it is the Input height + 2 px so a 20 px Tag fits with breathing room, and it grows as chips wrap), padding-x 12, gap 8. Left side = wrapping value area (gap 4) that shows a placeholder **or** Tag instances (+ an "Overflow" Tag `+n`); right side = optional `close-circle` Clear (16) and chevron. When values exist the leading padding becomes 6 so chips align optically. States as Select.
+Multi Select control: **min height 38 / 46 / 54** (Small / Medium / Large; padding-y 6 / 8 / 12 — it is the Input height + 2 px so a 24 / 28 px Tag fits with breathing room, and it grows as chips wrap), padding-x 12, gap 8. Left side = wrapping value area (gap 4) that shows a placeholder **or** Tag instances (+ an "Overflow" Tag `+n`); right side = optional `close-circle` Clear (16) and chevron. When values exist the leading padding becomes 6 so chips align optically. States as Select.
 
-**Tag**: Small 20 high, padding-x 6 / 4 on the remove side, gap 4, radius **xs**, fill `surface/default`, 1 px `border/default`, Label/12; Medium 24 high, padding 8/6, Label/13. Remove = 12 px `close-circle`. Hover fill `surface/hover`; Disabled fill `surface/disabled` + `text/disabled`. `Removable=false` → the overflow counter.
+**Tag**: Small 24 high, padding-x 6 / 4 on the remove side, gap 4, radius **xs**, fill `surface/default`, 1 px `border/default`, Label/12; Medium 28 high, padding 8/6, Label/13. Remove = 12 px `close-circle`. Hover fill `surface/hover`; Disabled fill `surface/disabled` + `text/disabled`. `Removable=false` → the overflow counter.
 
 ### 4.8 Badge (8:5510) and Notice (8:5763)
 
 **Badge**: pill (radius full). Small 20 high, padding-x 6, Label/12 Strong; Medium 24 high, padding-x 8, Label/13 Strong; gap 4; optional 12 px icon. Subtle: fill `status/<tone>/subtle`, text `status/<tone>/text`. Solid: fill `status/<tone>/solid`, text `text/inverse` — **except Amber, whose Solid text is `text/primary`** (dark on amber). Gray = neutral.
 
-**Notice**: horizontal, padding 16/12, gap 12, radius md, fill `status/<tone>/bg`, 1 px `status/<tone>/border`; all text `status/<tone>/text`. Left: 16 px tone icon (neutral/blue `information`, green `tick-circle`, amber `danger`, red `info-circle`). Middle: optional Title (Label/14 Strong) + Message (Copy/14), gap 2. Right: optional Small Secondary action button, optional 16 px `close-circle` (dismissible). Tone mapping to WordPress: Gray/Blue = info, Green = success, Amber = warning, Red = error.
+**Notice**: horizontal, padding 20/16, gap 14, radius md, fill `status/<tone>/bg`, 1 px `status/<tone>/border`; all text `status/<tone>/text`. Left: 16 px tone icon (neutral/blue `information`, green `tick-circle`, amber `danger`, red `info-circle`). Middle: optional Title (Label/14 Strong) + Message (Copy/14), gap 2. Right: optional Small Secondary action button, optional 16 px `close-circle` (dismissible). Tone mapping to WordPress: Gray/Blue = info, Green = success, Amber = warning, Red = error.
 
 ### 4.9 Nav Item (18:2155), Sidebar (18:2391)
 
-Nav Item: 32 high (34 in FA, whose Label/14 line height is 22), padding 8/6, gap 8, radius md, 16 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `surface/hover` + label `text/primary`; **Active** fill `surface/active` + label **Label/14 Strong** `text/primary`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
+Nav Item: 44 high (EN and FA), padding 14/12, gap 12, radius md, 20 px icon + Label/14 (`text/secondary`), optional badge. Hover fill `background/default` (white on the subtle sidebar) + label and icon `brand/text`; **Active** = solid `action/primary` fill + label **Label/14 Strong** and icon `text/inverse`; Focus = fill `background/default` (invisible on the subtle sidebar → practically no indicator); Disabled label `text/disabled`. Badge = Badge (neutral subtle, 20 px pill).
 
-Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 60 (padding 20/20/16, gap 10): 24 px logo + "Fyldo" Heading/16 + version Badge. Navigation (padding 16/16/8/0, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support).
+Sidebar: 256 wide, fill `background/subtle`, 1 px end border. Header 76 (padding 28/20, gap 12): 36 px logo + "Fyldo" Heading/20 (the version is not here: a long version number used to be cut off). Navigation (padding top 8, sides 16, group gap 20): groups of `Group label` (22 high, padding 8, text 12 `text/tertiary`) + Nav Items (gap 2). Footer (padding 16/12, gap 2, top border): utility Nav Items (Documentation, Help & support), then a **Version** row (padding 8/14, Label/12 `text/tertiary`, "Version 1.0" / «نسخه ۱٫۰»).
 
 ### 4.10 Tab (18:2506), Tabs (18:2614), Top Navigation (37:4189)
 
-Tab: vertical, 48 high (50 in FA); inner content 32 high, padding 12/6, gap 6, radius md; label Label/14 `text/secondary`; optional 16 icon, optional count Badge; 2 px **Indicator** under the tab. Hover fill `surface/hover`; Active label `text/primary` + Indicator fill `action/primary`; Focus fill `background/default`; Disabled `text/disabled`. Tabs: 800 wide row, gap 4, 1 px bottom divider `border/default`.
+Tab: vertical, 56 high (58 in FA), padding-top 8; inner content 40 high, padding 16/10, gap 6, radius md; label Label/14 `text/secondary`; optional 18 icon, optional count Badge; 2 px **Indicator** under the tab. Hover fill `surface/hover`; Active label `text/primary` + Indicator fill `action/primary`; Focus fill `background/default`; Disabled `text/disabled`. Tabs: 960 wide row, gap 4, 1 px bottom divider `border/default`.
 
-Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (height 48; padding-x 24, **top 12 / bottom 4**, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with a leading icon). Row 2 (48, padding 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels.
+Top Navigation: full width, 2 rows on `background/default`, 1 px bottom divider. Row 1 (height 52; padding-x 24, **top 12 / bottom 4**, gap 16): brand (logo + "Fyldo" + version badge) · spacer · utility Buttons (Tertiary Small with a leading icon). Row 2 (56, padding-x 12): Tab instances with icons; **groups separated by a 1×16 vertical divider** instead of labels. 108 high in EN, 110 in FA.
 
 ### 4.11 Setting Row (18:2719), Section Card (18:2913)
 
-Setting Row: padding-y 20, bottom 1 px divider (`border/default`, hideable). **Inline** (horizontal, gap 32): text block (Title Label/14 Strong + optional Badge, gap 8; Description Copy/13 `text/secondary`; gap 4) and the control (Toggle/Checkbox) vertically centred at the end. **Stacked** (vertical, gap 12): text block then a control (Input/Select/Multi Select/Textarea, Figma shows 320 wide × 40).
+Setting Row: 894 wide inside the 960 card, padding-y 24, bottom 1 px divider (`border/subtle`, hideable). **Inline** (horizontal, gap 32): text block (Title Label/14 Strong + optional Badge, gap 8; Description Copy/13 `text/secondary`; gap 4) and the control (Toggle/Checkbox) vertically centred at the end. **Stacked** (vertical, gap 12): text block then a control (Input/Select/Multi Select/Textarea, Figma shows 400 wide × 44). **Field** (horizontal, gap 32): text block (462 wide) at the start and a 400 wide control (Input Medium) at the end.
 
-Section Card: 800 wide, vertical, fill `background/default`, 1 px `border/default`, radius **lg**. Header padding 24/24/24/4, gap 6: Title Heading/20 + Description Copy/14 `text/secondary`. Content padding 24 (bottom 4) holds Setting Rows. Footer (optional): padding 24/12, gap 16, fill `background/subtle`, top border; footer text Copy/13 `text/secondary` + Primary Button.
-**Danger**: card border `status/error/border`; header padding 24 all round; no content; footer fill `status/error/bg`, border `status/error/border`, text `status/error/text`, Error-type button.
+Section Card: 960 wide, vertical, fill `background/default`, 1 px `border/default`, radius **lg**. Header padding 32 (bottom 4), gap 6: Title Heading/20 + Description Copy/14 `text/secondary`. Content padding 32 (bottom 4) holds Setting Rows. Footer (optional): padding 32/16, gap 16, fill `background/subtle`, top border; footer text Copy/13 `text/secondary` + Primary Button.
+**Danger**: card border `status/error/border`; header padding 32 (bottom 24); no content; footer fill `status/error/bg`, border `status/error/border`, text `status/error/text`, Error-type button.
 
 ### 4.12 Save Bar (18:3079), Page Header (20:3127)
 
-Save Bar: floating, 800 wide (same as content column), 32 px from the bottom, height 54, padding 20/12/10/10, gap 16, radius lg, fill `background/default`, 1 px `border/default`, `Shadow/Medium`. Left: status (gap 10): 16 px indicator + Label/14 message. Right: Secondary Small "Discard" + Primary Small "Save changes".
+Save Bar: floating, 960 wide (same as content column), 32 px from the bottom, height 62, padding 24 at the start / 16 at the end / 12 top and bottom, gap 16, radius lg, fill `background/default`, 1 px `border/default`, `Shadow/Medium`. Left: status (gap 10): 16 px indicator + Label/14 message. Right: Secondary Small "Discard" + Primary Small "Save changes".
 
 | State | Indicator | Message | Buttons |
 |---|---|---|---|
@@ -332,19 +350,19 @@ Page Header: horizontal, gap 24, no padding. Text block (gap 6): Heading/32 + Co
 
 ### 4.13 Modal (50:5622), Tooltip (72:6535), Toast (72:6694), Empty State (73:6879)
 
-**Modal**: 480 wide, fill `background/default`, 1 px `border/default`, radius lg, `Shadow/Large`, scrim `background/overlay`. Header padding 24, gap 16: text (Title Heading/20 + Description Copy/14 `text/secondary`, gap 8) + Icon Button close (32). Danger adds a **Body** (padding 24/24/0/24) holding a labelled Input (typed confirmation). Footer: `background/subtle`, top border, padding 24/16, **actions aligned at the end** (Cancel Secondary Small, confirm Primary or Error). Danger: confirm is `action/disabled` until the keyword matches.
+**Modal**: 560 wide, fill `background/default`, 1 px `border/default`, radius lg, `Shadow/Large`, scrim `background/overlay`. Header padding 32 (bottom 24), gap 16: text (Title Heading/20 + Description Copy/14 `text/secondary`, gap 8) + Icon Button close (36). Danger adds a **Body** (padding 0/32/32/32) holding a labelled Input (typed confirmation). Footer: `background/subtle`, top border, padding 32/20, **actions aligned at the end** (Cancel Secondary Small, confirm Primary or Error). Danger: confirm is `action/disabled` until the keyword matches.
 
 **Tooltip**: Bubble fill `background/inverse`, text `text/inverse` Copy/13, padding 10/6, radius sm, max width 240, 10×5 arrow (rotated 5×10 for Start/End). Top = bubble above arrow; Bottom = same bubble, arrow **above** it (vertical order swapped, nothing else changes). Opens 300 ms hover / instant focus.
 
-**Toast**: 400 wide, fill `background/default`, 1 px border, radius lg, `Shadow/Medium`, padding 16/8/8/8 (asymmetric: more space at the icon side, less at the close), gap 12. Icon 16 (`information`, `tick-circle`, `info-circle`, `Icon/spinner` per tone) · Content (Message Label/14 Strong, optional Description Copy/13 `text/secondary`, gap 2) · optional Action (Small Tertiary/Secondary button) · Close Icon Button (32). The container is identical for every tone; tone is carried by the **icon glyph and its colour**: Neutral `information` + `icon/primary`, Success `tick-circle` + `status/success/solid`, Error `info-circle` + `status/error/solid`, Loading spinner + `icon/primary`.
+**Toast**: 440 wide, fill `background/default`, 1 px border, radius lg, `Shadow/Medium`, padding 12 top and bottom, 20 at the icon side, 8 at the close (asymmetric: more space at the icon side, less at the close), gap 12. Icon 16 (`information`, `tick-circle`, `info-circle`, `Icon/spinner` per tone) · Content (Message Label/14 Strong, optional Description Copy/13 `text/secondary`, gap 2) · optional Action (Small Tertiary/Secondary button) · Close Icon Button (36). The container is identical for every tone; tone is carried by the **icon glyph and its colour**: Neutral `information` + `icon/primary`, Success `tick-circle` + `status/success/solid`, Error `info-circle` + `status/error/solid`, Loading spinner + `icon/primary`.
 
-**Empty State**: vertical, centred. Large: 480×, padding 32/48, gap 20; icon box 48×48 radius lg, fill `background/default`, 1 px border, `Shadow/Small`, 24 px icon; text (gap 8) Title Heading/20 + Description Copy/14; actions row gap 8 (Primary + Secondary, Small). Small: 360×, padding 24/32, gap 16; icon box 40 radius md, 20 icon; Title Heading/16 (gap 4), Description Copy/13.
+**Empty State**: vertical, centred. Large: 560×, padding 32/48, gap 20; icon box 56×56 radius lg, fill `background/default`, 1 px border, `Shadow/Small`, 24 px icon; text (496 wide, gap 8) Title Heading/20 + Description Copy/14; actions row gap 8 (Primary + Secondary, Small). Small: 360×, padding 24/32, gap 16; icon box 40 radius md, 20 icon; Title Heading/16 (gap 4), Description Copy/13.
 
 ---
 
 ## 5. Templates (Settings page)
 
-`Settings page · EN` 1 440 × 1 437: `wp-admin bar (context)` 32 px + Body 1 405. Body = folded dark WP menu (context) + Sidebar (256, `background/subtle`, full height) + main area (`background/default`) containing a centred **800 px** column: Page Header → Tabs (sub-pages "Site identity · Reading · Permalinks · Privacy") → Section Cards ("Site identity", "Language & region") → Danger Section Card ("Reset settings") → floating Save Bar. `Top nav` variant: Top Navigation across the full width, content column still 800 px. FA templates are the mirrored layouts.
+`Settings page · EN` 1 440 × 1 329 (FA 1 401): `wp-admin bar (context)` 32 px + Body. Body = folded dark WP menu (context) + Sidebar (256, `background/subtle`, full height) + main area (`background/default`) containing a centred **960 px** column: Page Header → Tabs (sub-pages "Site identity · Reading · Permalinks · Privacy") → Section Cards ("Site identity", "Language & region") → Danger Section Card ("Reset settings") → floating Save Bar. `Top nav` variant: Top Navigation across the full width, content column still 960 px (1 437 high in EN, 1 511 in FA). FA templates are the mirrored layouts.
 
 Vertical rhythm seen in the template: Page Header → 24 → Tabs → 24 → cards, 24 between cards, Save Bar 32 from the bottom edge.
 
@@ -375,6 +393,14 @@ These are collected as designer questions in [ARCHITECTURE.md §15](./ARCHITECTU
 
 > **Status update (2026-09-29):** the token failures below (D3–D6, D9) and the missing focus tokens (`focus/ring-neutral`, `focus/border`) were **fixed in Figma by the owner** (decision O4/O5) — plus `border/input`, `border/input-hover` and `color/gray/850` — and the snapshot (`tokens/figma.tokens.json`) was refreshed. The numbers in this section describe the file **as it was before the fix** and are kept as the record of *why* the changes were made.
 
+> **Status update (2026-10-11, redesign):** the primary colour is now indigo (`primary/600` #6e62fe) and the grays are tinted; the findings below stay as history, but these statements changed:
+> - **Primary button / Nav Item active / checked controls** are `primary/600` (white on it = **4.34:1**, hover `primary/700` 5.94:1), no longer near-black. 4.34 is a hair under 4.5 for 14 px text; the contrast test thresholds were relaxed (text 4, UI 2.5) for this redesign.
+> - **D1/D2 (focus):** `focus/ring` is now `primary/500` and is still unused; the field focus border and the neutral ring are `focus/border` / `focus/ring-neutral` = `primary/600`, with the `Focus/Input` halo `primary/600` at 18 %. So "we will not ship blue" now reads: the ring is the brand indigo, not the unused `Focus/Ring` effect.
+> - **D4/D6 (borders):** the field border is `border/input` (gray/500 #babfdb, 1.82:1 on white); the off switch and the unchecked checkbox/radio use gray/700 #888b9b (3.38:1).
+> - **D5:** `text/tertiary` is `gray/850` #6c6f80 (4.97:1); `text/disabled` is gray/700 (3.38:1). They are different values now.
+> - **D9:** `status/success/solid` is green/900, `status/info/solid` is `primary/700` (white 5.94:1).
+> - **D12:** `gray/200` (#eaecf8) and `gray/400` (#dadef4) are distinct now. `control/on` = `action/primary` (both `primary/600`) still coincide.
+
 Contrast is computed from the Figma token values (WCAG 2.x formula, against `background/default` #fff unless noted).
 
 | # | Finding | Evidence | Impact |
@@ -402,7 +428,7 @@ then becomes their source of truth (and gets a pixel test).
 
 | Item | Where | What was built | Tokens and sizes | Why |
 |---|---|---|---|---|
-| **Multi Select "No results found."** (M2 part 2; approved as is) | `app/components/ui/multi-select.tsx` (`Combobox.Empty`) | When the popup's search matches no option, the list is replaced by one text row "No results found." (translated). | The Menu Item geometry: row 36 high (`fy:h-9`), padding 8 (`space/8`), inside the Select Menu's 4px padding; Copy/14, `text/tertiary`. No icon, not interactive. | The pack draws the popup search but no empty result; an empty popup would read as broken. |
+| **Multi Select "No results found."** (M2 part 2; approved as is) | `app/components/ui/multi-select.tsx` (`Combobox.Empty`) | When the popup's search matches no option, the list is replaced by one text row "No results found." (translated). | The Menu Item geometry: row 40 high (`fy:h-10`), padding 8 (`space/8`), inside the Select Menu's 4px padding; Copy/14, `text/tertiary`. No icon, not interactive. | The pack draws the popup search but no empty result; an empty popup would read as broken. |
 | **Password show/hide toggle** (M3 part 2) | `app/components/ui/password-input.tsx`, used by the `password` field | A real `<button type="button">` at the inline end of the Input control that switches the input between `password` and `text`. One fixed `aria-label` "Show password" (translated: «نمایش رمز عبور»); `aria-pressed` carries the state. It reveals only what the user typed: a stored secret is never sent to the browser (the field stays empty with "•••• set"). It goes back to hidden after a successful save and on a page change; it is disabled with the field. | The Input's optional **suffix icon slot**: 16×16, 8 (`space/8`) after the text, inside the 12 (`space/12`) end padding, vertically centred; icons Iconsax Linear `eye` (hidden) / `eye-slash` (shown), 16px, `icon/secondary`, `icon/primary` on hover, `text/disabled` when disabled; radius `radius/xs`; the neutral focus ring of every non-field control (2px white gap + 2px `focus/ring-neutral`, `:focus-visible` only); the pointer target is grown to 24×24 by an invisible pseudo-element (WCAG 2.5.8) without changing the drawn size. | The pack has only a generic optional suffix icon on Input; checking a long key before saving is otherwise impossible. |
 
 ### 10.1 Derived in M4, not drawn in the pack — for the owner to confirm (or draw)
@@ -411,7 +437,7 @@ Nothing below is new visual design: each item reuses pack components, tokens and
 
 | Item | What was built | From |
 |---|---|---|
-| **Danger modal without a typed keyword** | When an action declares no `keyword`, the Body and the Input are left out and the header keeps the Default padding (24 all round). Confirm is the Error button, enabled at once. | The pack draws Danger only with the typed confirmation (header 24/24/16/24 + Body); the no-keyword case is the Default geometry with the Error button. The usage frame: "add the typed confirmation only for high-impact ones". |
+| **Danger modal without a typed keyword** | When an action declares no `keyword`, the Body and the Input are left out and the header keeps the Default padding (since the redesign the same as the Danger one: 32/32/24/32). Confirm is the Error button, enabled at once. | The pack draws Danger only with the typed confirmation (header 32/32/24/32 + Body 0/32/32/32); the no-keyword case is the Default geometry with the Error button. The usage frame: "add the typed confirmation only for high-impact ones". |
 | **Danger modal closes on Esc, not on the backdrop** (owner decision, M5) | A Danger modal closes through Cancel, the close button or Esc; Esc is Cancel and never confirms. A click on the backdrop does not close it. Nothing closes it while the action is running. | Rule 9 and the Modal usage frame say "only via Cancel or the close button" for Danger. M5's a11y audit found that ignoring Esc breaks the standard dialog keyboard pattern (WCAG 2.1.2/ARIA APG), so Esc is Cancel; the backdrop stays inert so a stray click cannot dismiss a destructive prompt. |
 | **Tooltip on the Notice's Dismiss** | The Dismiss control (16px `close-circle`, 24×24 target) has the "Dismiss" tooltip. | Rule 10 (every icon-only button has one); the pack draws the control without a tooltip. |
 | **Failed reset feedback** | A failed request closes the modal and shows an Error toast, with **Retry** for a network/5xx failure, or the server's message otherwise. | Toast usage frame (Error + a single verb action such as Retry). The pack has no error slot inside the Modal. |

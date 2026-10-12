@@ -67,7 +67,7 @@ describe('Toast: tones, content, placement', () => {
     const viewport = screen.getByRole('region', { name: 'Notifications' });
     expect(viewport).toHaveAttribute('aria-live', 'polite');
     expect(viewport.style.insetInlineEnd).toBe('24px');
-    expect(viewport).toHaveClass('fy:fixed', 'fy:bottom-6', 'fy:w-100'); // bottom 24px, 400 wide
+    expect(viewport).toHaveClass('fy:fixed', 'fy:bottom-6', 'fy:w-110'); // bottom 24px, 440 wide
     expect(root.contains(viewport)).toBe(true);
   });
 

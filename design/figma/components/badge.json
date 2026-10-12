@@ -105,7 +105,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "status/neutral/subtle"
      }
     ],
@@ -171,7 +171,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "status/neutral/text"
        }
       ],
@@ -240,7 +240,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "status/neutral/subtle"
      }
     ],
@@ -306,7 +306,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "status/neutral/text"
        }
       ],
@@ -375,7 +375,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#171717",
+      "hex": "#1a1d2c",
       "token": "status/neutral/solid"
      }
     ],
@@ -510,7 +510,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#171717",
+      "hex": "#1a1d2c",
       "token": "status/neutral/solid"
      }
     ],
@@ -645,7 +645,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#e0f0ff",
+      "hex": "#e5e8ff",
       "token": "status/info/subtle"
      }
     ],
@@ -711,7 +711,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#0068d6",
+        "hex": "#4940af",
         "token": "status/info/text"
        }
       ],
@@ -780,7 +780,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#e0f0ff",
+      "hex": "#e5e8ff",
       "token": "status/info/subtle"
      }
     ],
@@ -846,7 +846,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#0068d6",
+        "hex": "#4940af",
         "token": "status/info/text"
        }
       ],
@@ -915,7 +915,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#0062d1",
+      "hex": "#5a4fd7",
       "token": "status/info/solid"
      }
     ],
@@ -1050,7 +1050,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#0062d1",
+      "hex": "#5a4fd7",
       "token": "status/info/solid"
      }
     ],
@@ -2061,7 +2061,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -2196,7 +2196,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -2805,7 +2805,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "status/neutral/subtle"
      }
     ],
@@ -2837,7 +2837,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "status/neutral/text"
        }
       ],
@@ -2940,7 +2940,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#ebebeb",
+      "hex": "#eaecf8",
       "token": "status/neutral/subtle"
      }
     ],
@@ -2972,7 +2972,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "status/neutral/text"
        }
       ],
@@ -3075,7 +3075,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#171717",
+      "hex": "#1a1d2c",
       "token": "status/neutral/solid"
      }
     ],
@@ -3210,7 +3210,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#171717",
+      "hex": "#1a1d2c",
       "token": "status/neutral/solid"
      }
     ],
@@ -3345,7 +3345,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#e0f0ff",
+      "hex": "#e5e8ff",
       "token": "status/info/subtle"
      }
     ],
@@ -3377,7 +3377,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#0068d6",
+        "hex": "#4940af",
         "token": "status/info/text"
        }
       ],
@@ -3480,7 +3480,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#e0f0ff",
+      "hex": "#e5e8ff",
       "token": "status/info/subtle"
      }
     ],
@@ -3512,7 +3512,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#0068d6",
+        "hex": "#4940af",
         "token": "status/info/text"
        }
       ],
@@ -3615,7 +3615,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#0062d1",
+      "hex": "#5a4fd7",
       "token": "status/info/solid"
      }
     ],
@@ -3750,7 +3750,7 @@
     "fills": [
      {
       "type": "SOLID",
-      "hex": "#0062d1",
+      "hex": "#5a4fd7",
       "token": "status/info/solid"
      }
     ],
@@ -4727,7 +4727,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],
@@ -4862,7 +4862,7 @@
       "fills": [
        {
         "type": "SOLID",
-        "hex": "#171717",
+        "hex": "#1a1d2c",
         "token": "text/primary"
        }
       ],

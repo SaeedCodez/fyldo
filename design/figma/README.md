@@ -1,18 +1,18 @@
 # Figma reference pack
 
 A read-only export of the Fyldo design (Figma file `Pg3Ni7eqTLQYIG6hfNVPt6`, page **Components**), so that code, tests and
-cloud sessions never need Figma access. Exported 2026-09-29 through the figma-console MCP (Desktop Bridge); nothing in the
-Figma file was modified. The "Fyldo – HeroUI" file, the Foundations page and the Icons page are **not** part of it
+cloud sessions never need Figma access. Exported 2026-10-11 (after the redesign: primary colour, tinted neutrals, bigger controls) through the figma-console MCP
+(Desktop Bridge); nothing in the Figma file was modified. 40 component sets, 839 variants, 23 usage/template frames. The "Fyldo – HeroUI" file, the Foundations page and the Icons page are **not** part of it
 (tokens live in `tokens/figma.tokens.json`, styles in `tokens/figma.styles.json`, the spec in `docs/design-spec.md`).
 
 ## Contents
 
 | Path | What |
 |---|---|
-| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (150 = `tokens/figma.tokens.json`). Start here. |
-| `components/<kebab-name>.json` | One file per COMPONENT_SET (27): property definitions and, per variant, the full node tree. |
-| `png/<kebab-name>/<variant>.png` | Every variant at **2x** (534 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
-| `png/usage/*.png` | The 12 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**. |
+| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (166 = `tokens/figma.tokens.json`), `componentCount` (40), `variantCount` (839). Start here. |
+| `components/<kebab-name>.json` | One file per COMPONENT_SET (40): property definitions and, per variant, the full node tree. |
+| `png/<kebab-name>/<variant>.png` | Every variant at **2x** (839 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
+| `png/usage/*.png` | The 19 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**; 23 in all. |
 
 The existing `tests/visual/figma/*.png` are untouched and independent of this pack.
 
@@ -51,7 +51,7 @@ size, `lineHeight`, `letterSpacing`, alignment, `fillToken`), `children`.
   through `tokens/figma.tokens.json`, not through the `hex` here (the hex is a convenience snapshot).
 - Use the PNGs as **visual references** (2x, transparent outside the component bounds). They come straight from Figma and
   are not pixel baselines: fonts are Geist/IRANYekanX in Figma and Geist/Vazirmatn in code, so compare layout, not pixels.
-- `node tools/figma/spot-check.mjs` re-runs 90 checks of spec numbers (docs/design-spec.md §4) against the JSON.
+- `node tools/figma/spot-check.mjs` re-runs 90 checks of spec numbers (docs/design-spec.md §4, the original 27 sets) against the JSON.
 - Never edit files here by hand; refresh them from Figma (below) so the pack stays a faithful copy.
 
 ## Refreshing
@@ -69,7 +69,7 @@ node tools/figma/pack.mjs index && node tools/figma/pack.mjs verify
 ```
 
 - `code … --start N` continues a batch that stopped at the 30 s cap (large sets can need several calls; every set so far fit in one).
-- `code frames` exports the 16 usage/template frames at scale 1 (`--scale` to change).
+- `code frames` exports the 23 usage/template frames at scale 1 (`--scale` to change).
 - The extractor also installs `globalThis.fp([...])` in the plugin sandbox, which runs several small sets in one call
   (`fp([{mode:'json', setId:'…'}, …])`); results are padded so the harness always saves them to a file the decoder can read.
 - `verify` fails when a set lacks JSON or PNGs, variant counts differ from Figma, a PNG is empty/invalid, or the variable count
@@ -78,7 +78,10 @@ node tools/figma/pack.mjs index && node tools/figma/pack.mjs verify
 ## Differences from docs/design-spec.md
 
 None. Two mismatches found by `tools/figma/spot-check.mjs` (Textarea is 360 wide, not "as Input"; Top Navigation row 1 padding is
-top 12 / bottom 4, height still 48) were fixed in the spec, which now follows Figma; the spot-check reports 0 differences.
+top 12 / bottom 4; row 1 is 52 high since the redesign) were fixed in the spec, which now follows Figma; the spot-check reports 0 differences.
 
-Everything else spot-checked (90 values over all 27 sets, incl. Button S/M/L 32/40/48, Input 320, Toast 400, Modal 480,
-Save Bar 800×54, shadows and radii) matches. The Tooltip's `max width 240` is set on the label text, not on the bubble.
+Everything else spot-checked (90 values over the original 27 sets, incl. Button S/M/L 36/44/52, Input 320, Toast 440, Modal 560,
+Save Bar 960×62, shadows and radii) matches. The 13 sets added later (Slider, Upload Image, Select File, Segment, Segmented
+Control, Color Swatch, Color Picker, Color Picker Panel, Choice Card, Choice Card Group, Icon Picker, Icon Picker Modal, Icon
+Tile) are not in the spot-check. The Tooltip's `max width 240` is set on the
+label text, not on the bubble.

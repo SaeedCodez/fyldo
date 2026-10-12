@@ -8,7 +8,7 @@
   "id": "20:3127",
   "name": "Page Header",
   "kebab": "page-header",
-  "width": 1712,
+  "width": 2072,
   "height": 150,
   "variantCount": 2,
   "componentPropertyDefinitions": {
@@ -61,7 +61,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
+    "width": 960,
     "height": 70,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -84,7 +84,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 627,
+      "width": 779,
       "height": 70,
       "layout": {
        "layoutMode": "VERTICAL",
@@ -122,7 +122,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -159,7 +159,7 @@
         "opacity": 1,
         "x": 0,
         "y": 46,
-        "width": 627,
+        "width": 779,
         "height": 24,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -170,7 +170,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -208,10 +208,10 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 651,
+      "x": 803,
       "y": 0,
-      "width": 149,
-      "height": 32,
+      "width": 157,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -238,16 +238,16 @@
         "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
-        "x": 651,
+        "x": 803,
         "y": 0,
-        "width": 149,
-        "height": 32,
+        "width": 157,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -271,7 +271,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#ebebeb",
+           "hex": "#dadef4",
            "token": "border/default"
           }
          ],
@@ -280,8 +280,8 @@
         },
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -949,7 +949,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 800,
+    "width": 960,
     "height": 82,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -972,8 +972,8 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 104,
-      "height": 32,
+      "width": 112,
+      "height": 36,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -1002,14 +1002,14 @@
         "opacity": 1,
         "x": 0,
         "y": 0,
-        "width": 104,
-        "height": 32,
+        "width": 112,
+        "height": 36,
         "layout": {
          "layoutMode": "HORIZONTAL",
          "paddingTop": 0,
-         "paddingRight": 12,
+         "paddingRight": 16,
          "paddingBottom": 0,
-         "paddingLeft": 12,
+         "paddingLeft": 16,
          "itemSpacing": 6,
          "primaryAxisAlignItems": "CENTER",
          "counterAxisAlignItems": "CENTER",
@@ -1033,7 +1033,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#ebebeb",
+           "hex": "#dadef4",
            "token": "border/default"
           }
          ],
@@ -1042,8 +1042,8 @@
         },
         "bound": {
          "itemSpacing": "space/6",
-         "paddingLeft": "space/12",
-         "paddingRight": "space/12",
+         "paddingLeft": "space/16",
+         "paddingRight": "space/16",
          "topLeftRadius": "radius/sm",
          "topRightRadius": "radius/sm",
          "bottomLeftRadius": "radius/sm",
@@ -1699,9 +1699,9 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 128,
+      "x": 136,
       "y": 0,
-      "width": 672,
+      "width": 824,
       "height": 82,
       "layout": {
        "layoutMode": "VERTICAL",
@@ -1726,7 +1726,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 709,
+        "x": 869,
         "y": 0,
         "width": 91,
         "height": 48,
@@ -1739,7 +1739,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -1774,9 +1774,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 128,
+        "x": 136,
         "y": 54,
-        "width": 672,
+        "width": 824,
         "height": 28,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -1787,7 +1787,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],

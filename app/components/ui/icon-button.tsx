@@ -24,12 +24,15 @@ export interface IconButtonProps extends Omit<ComponentPropsWithoutRef<typeof Ba
   tooltipSide?: TooltipSide;
 }
 
-/** Square sizes 32 / 40 / 48, radius sm / sm / md (Figma Icon Button). No padding: the icon is centred. */
+/** Square sizes 36 / 44 / 52, radius sm / sm / md (Figma Icon Button). No padding: the icon is centred. */
 const SIZE: Record<ButtonSize, string> = {
-  sm: 'fy:size-8 fy:rounded-sm',
-  md: 'fy:size-10 fy:rounded-sm',
-  lg: 'fy:size-12 fy:rounded-md',
+  sm: 'fy:size-9 fy:rounded-sm',
+  md: 'fy:size-11 fy:rounded-sm',
+  lg: 'fy:size-13 fy:rounded-md',
 };
+
+/** Icon sizes by button size (Figma: 18 / 20 / 24). */
+const ICON_BUTTON_ICON: Record<ButtonSize, 18 | 20 | 24> = { sm: 18, md: 20, lg: 24 };
 
 /**
  * Figma "Icon Button". The Tooltip is part of the component and cannot be turned off: an icon alone names nothing, so
@@ -62,7 +65,7 @@ export function IconButton({
         data-loading={loading ? '' : undefined}
         className={cn(BUTTON_BASE, SIZE[size], BUTTON_VARIANT[variant], BUTTON_DISABLED[variant], className as string | undefined)}
       >
-        {loading ? <Spinner /> : <Icon name={icon} size={size === 'lg' ? 20 : 16} />}
+        {loading ? <Spinner size={ICON_BUTTON_ICON[size]} /> : <Icon name={icon} size={ICON_BUTTON_ICON[size]} />}
       </BaseButton>
     </Tooltip>
   );

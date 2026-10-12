@@ -24,8 +24,8 @@ export interface TagProps {
  * a real border, so Small is 20px tall and "Posts" is 59px wide. Hover fills `surface/hover` and darkens the remove icon.
  */
 const SIZE: Record<TagSize, string> = {
-  sm: 'fy:h-5 fy:ps-1.5 fy:pe-1 fy:text-label-12',
-  md: 'fy:h-6 fy:ps-2 fy:pe-1.5 fy:text-label-13',
+  sm: 'fy:h-6 fy:ps-1.5 fy:pe-1 fy:text-label-12',
+  md: 'fy:h-7 fy:ps-2 fy:pe-1.5 fy:text-label-13',
 };
 
 /** Tag / chip: a picked value in a Multi Select, or standalone in a filter row. */
@@ -37,7 +37,7 @@ export function Tag({ label, size = 'sm', onRemove, srLabel, disabled, className
       data-disabled={disabled ? '' : undefined}
       className={cn(
         'fy:group/tag fy:inline-flex fy:max-w-full fy:shrink-0 fy:items-center fy:gap-1 fy:rounded-xs fy:border fy:border-border-default fy:bg-surface-default fy:text-text-primary fy:select-none',
-        'fy:transition-colors fy:duration-100 fy:ease-out fy:hover:bg-surface-hover',
+        'fy:motion-base fy:hover:bg-surface-hover',
         'fy:data-disabled:cursor-not-allowed fy:data-disabled:bg-surface-disabled fy:data-disabled:text-text-disabled fy:data-disabled:hover:bg-surface-disabled',
         SIZE[size],
         className,

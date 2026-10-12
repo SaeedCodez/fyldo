@@ -10,7 +10,7 @@
   "kebab": "checkbox",
   "description": "Selects one or more options from a list, or confirms a single statement. Indeterminate = some children checked.",
   "width": 904,
-  "height": 404,
+  "height": 414,
   "variantCount": 24,
   "componentPropertyDefinitions": {
    "Label#8:2071": {
@@ -83,7 +83,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -109,7 +109,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -135,9 +135,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -157,7 +157,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#8f8f8f",
+           "hex": "#888b9b",
            "token": "control/border"
           }
          ],
@@ -178,7 +178,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -208,7 +208,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -221,7 +221,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -256,7 +256,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -269,7 +269,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -321,7 +321,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -347,7 +347,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -373,9 +373,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -395,7 +395,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#666666",
+           "hex": "#5c5f71",
            "token": "control/border-hover"
           }
          ],
@@ -416,7 +416,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -446,7 +446,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -459,7 +459,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -494,7 +494,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -507,7 +507,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -559,7 +559,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -585,7 +585,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -611,9 +611,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -633,7 +633,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#8f8f8f",
+           "hex": "#888b9b",
            "token": "control/border"
           }
          ],
@@ -654,7 +654,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -684,7 +684,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -697,7 +697,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -732,7 +732,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -745,7 +745,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -797,7 +797,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -823,7 +823,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -849,9 +849,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -863,7 +863,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#f2f2f2",
+          "hex": "#f1f3fa",
           "token": "surface/disabled"
          }
         ],
@@ -871,7 +871,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#ebebeb",
+           "hex": "#dadef4",
            "token": "border/default"
           }
          ],
@@ -892,7 +892,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -922,7 +922,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -935,7 +935,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -970,7 +970,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -983,7 +983,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -1035,7 +1035,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -1061,7 +1061,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -1087,9 +1087,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -1101,7 +1101,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -1117,7 +1117,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.25,
+          "x": 6.25,
           "y": 7.63,
           "width": 7.5,
           "height": 5.25,
@@ -1142,7 +1142,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -1172,7 +1172,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -1185,7 +1185,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -1220,7 +1220,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -1233,7 +1233,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -1285,7 +1285,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -1311,7 +1311,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -1337,9 +1337,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -1351,7 +1351,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#383838",
+          "hex": "#5a4fd7",
           "token": "control/on-hover"
          }
         ],
@@ -1367,7 +1367,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.25,
+          "x": 6.25,
           "y": 7.63,
           "width": 7.5,
           "height": 5.25,
@@ -1392,7 +1392,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -1422,7 +1422,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -1435,7 +1435,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -1470,7 +1470,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -1483,7 +1483,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -1535,7 +1535,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -1561,7 +1561,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -1587,9 +1587,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -1601,7 +1601,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -1617,7 +1617,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.25,
+          "x": 6.25,
           "y": 7.63,
           "width": 7.5,
           "height": 5.25,
@@ -1642,7 +1642,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -1672,7 +1672,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -1685,7 +1685,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -1720,7 +1720,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -1733,7 +1733,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -1785,7 +1785,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -1811,7 +1811,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -1837,9 +1837,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -1851,7 +1851,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#c9c9c9",
+          "hex": "#babfdb",
           "token": "control/on-disabled"
          }
         ],
@@ -1867,7 +1867,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.25,
+          "x": 6.25,
           "y": 7.63,
           "width": 7.5,
           "height": 5.25,
@@ -1892,7 +1892,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -1922,7 +1922,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -1935,7 +1935,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -1970,7 +1970,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -1983,7 +1983,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -2035,7 +2035,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -2061,7 +2061,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -2087,9 +2087,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -2101,7 +2101,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -2117,7 +2117,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.5,
+          "x": 6.5,
           "y": 10,
           "width": 7,
           "height": 0,
@@ -2142,7 +2142,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -2172,7 +2172,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -2185,7 +2185,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -2220,7 +2220,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -2233,7 +2233,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -2285,7 +2285,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -2311,7 +2311,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -2337,9 +2337,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -2351,7 +2351,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#383838",
+          "hex": "#5a4fd7",
           "token": "control/on-hover"
          }
         ],
@@ -2367,7 +2367,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.5,
+          "x": 6.5,
           "y": 10,
           "width": 7,
           "height": 0,
@@ -2392,7 +2392,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -2422,7 +2422,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -2435,7 +2435,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -2470,7 +2470,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -2483,7 +2483,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -2535,7 +2535,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -2561,7 +2561,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -2587,9 +2587,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -2601,7 +2601,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -2617,7 +2617,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.5,
+          "x": 6.5,
           "y": 10,
           "width": 7,
           "height": 0,
@@ -2642,7 +2642,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -2672,7 +2672,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -2685,7 +2685,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -2720,7 +2720,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -2733,7 +2733,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -2785,7 +2785,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 178,
+    "width": 182,
     "height": 20,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -2811,7 +2811,7 @@
       "opacity": 1,
       "x": 0,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 20,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -2837,9 +2837,9 @@
         "visible": true,
         "opacity": 1,
         "x": 0,
-        "y": 2,
-        "width": 16,
-        "height": 16,
+        "y": 0,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -2851,7 +2851,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#c9c9c9",
+          "hex": "#babfdb",
           "token": "control/on-disabled"
          }
         ],
@@ -2867,7 +2867,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 4.5,
+          "x": 6.5,
           "y": 10,
           "width": 7,
           "height": 0,
@@ -2892,7 +2892,7 @@
       "type": "FRAME",
       "visible": true,
       "opacity": 1,
-      "x": 24,
+      "x": 28,
       "y": 0,
       "width": 154,
       "height": 20,
@@ -2922,7 +2922,7 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 154,
         "height": 20,
@@ -2935,7 +2935,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -2970,7 +2970,7 @@
         "type": "TEXT",
         "visible": false,
         "opacity": 1,
-        "x": 24,
+        "x": 28,
         "y": 0,
         "width": 239,
         "height": 18,
@@ -2983,7 +2983,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -3035,7 +3035,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -3102,7 +3102,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -3150,7 +3150,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -3190,7 +3190,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -3216,9 +3216,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -3238,7 +3238,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#8f8f8f",
+           "hex": "#888b9b",
            "token": "control/border"
           }
          ],
@@ -3273,7 +3273,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -3340,7 +3340,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -3388,7 +3388,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -3428,7 +3428,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -3454,9 +3454,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -3476,7 +3476,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#666666",
+           "hex": "#5c5f71",
            "token": "control/border-hover"
           }
          ],
@@ -3511,7 +3511,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -3578,7 +3578,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -3626,7 +3626,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -3666,7 +3666,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -3692,9 +3692,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -3714,7 +3714,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#8f8f8f",
+           "hex": "#888b9b",
            "token": "control/border"
           }
          ],
@@ -3749,7 +3749,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -3816,7 +3816,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -3864,7 +3864,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -3904,7 +3904,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -3930,9 +3930,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -3944,7 +3944,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#f2f2f2",
+          "hex": "#f1f3fa",
           "token": "surface/disabled"
          }
         ],
@@ -3952,7 +3952,7 @@
          "paints": [
           {
            "type": "SOLID",
-           "hex": "#ebebeb",
+           "hex": "#dadef4",
            "token": "border/default"
           }
          ],
@@ -3987,7 +3987,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -4054,7 +4054,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -4102,7 +4102,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -4142,7 +4142,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -4168,9 +4168,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -4182,7 +4182,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -4198,7 +4198,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.25,
+          "x": 117.25,
           "y": 8.63,
           "width": 7.5,
           "height": 5.25,
@@ -4237,7 +4237,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -4304,7 +4304,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -4352,7 +4352,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -4392,7 +4392,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -4418,9 +4418,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -4432,7 +4432,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#383838",
+          "hex": "#5a4fd7",
           "token": "control/on-hover"
          }
         ],
@@ -4448,7 +4448,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.25,
+          "x": 117.25,
           "y": 8.63,
           "width": 7.5,
           "height": 5.25,
@@ -4487,7 +4487,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -4554,7 +4554,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -4602,7 +4602,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -4642,7 +4642,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -4668,9 +4668,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -4682,7 +4682,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -4698,7 +4698,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.25,
+          "x": 117.25,
           "y": 8.63,
           "width": 7.5,
           "height": 5.25,
@@ -4737,7 +4737,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -4804,7 +4804,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -4852,7 +4852,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -4892,7 +4892,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -4918,9 +4918,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -4932,7 +4932,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#c9c9c9",
+          "hex": "#babfdb",
           "token": "control/on-disabled"
          }
         ],
@@ -4948,7 +4948,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.25,
+          "x": 117.25,
           "y": 8.63,
           "width": 7.5,
           "height": 5.25,
@@ -4987,7 +4987,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -5054,7 +5054,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -5102,7 +5102,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -5142,7 +5142,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -5168,9 +5168,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -5182,7 +5182,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -5198,7 +5198,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.5,
+          "x": 117.5,
           "y": 11,
           "width": 7,
           "height": 0,
@@ -5237,7 +5237,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -5304,7 +5304,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -5352,7 +5352,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -5392,7 +5392,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -5418,9 +5418,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -5432,7 +5432,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#383838",
+          "hex": "#5a4fd7",
           "token": "control/on-hover"
          }
         ],
@@ -5448,7 +5448,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.5,
+          "x": 117.5,
           "y": 11,
           "width": 7,
           "height": 0,
@@ -5487,7 +5487,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -5554,7 +5554,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#1a1d2c",
           "token": "text/primary"
          }
         ],
@@ -5602,7 +5602,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#666666",
+          "hex": "#5c5f71",
           "token": "text/secondary"
          }
         ],
@@ -5642,7 +5642,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -5668,9 +5668,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -5682,7 +5682,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#171717",
+          "hex": "#6e62fe",
           "token": "control/on"
          }
         ],
@@ -5698,7 +5698,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.5,
+          "x": 117.5,
           "y": 11,
           "width": 7,
           "height": 0,
@@ -5737,7 +5737,7 @@
     "opacity": 1,
     "x": 0,
     "y": 0,
-    "width": 127,
+    "width": 131,
     "height": 22,
     "layout": {
      "layoutMode": "HORIZONTAL",
@@ -5804,7 +5804,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -5852,7 +5852,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#8f8f8f",
+          "hex": "#888b9b",
           "token": "text/disabled"
          }
         ],
@@ -5892,7 +5892,7 @@
       "opacity": 1,
       "x": 111,
       "y": 0,
-      "width": 16,
+      "width": 20,
       "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
@@ -5918,9 +5918,9 @@
         "visible": true,
         "opacity": 1,
         "x": 111,
-        "y": 3,
-        "width": 16,
-        "height": 16,
+        "y": 1,
+        "width": 20,
+        "height": 20,
         "layout": {
          "layoutSizingHorizontal": "FIXED",
          "layoutSizingVertical": "FIXED",
@@ -5932,7 +5932,7 @@
         "fills": [
          {
           "type": "SOLID",
-          "hex": "#c9c9c9",
+          "hex": "#babfdb",
           "token": "control/on-disabled"
          }
         ],
@@ -5948,7 +5948,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 115.5,
+          "x": 117.5,
           "y": 11,
           "width": 7,
           "height": 0,

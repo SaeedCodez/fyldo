@@ -8,7 +8,7 @@ export interface NavItemProps {
   label: string;
   /** Real URL: works for middle-click, "open in new tab", copy link, and without the client router. */
   href: string;
-  /** Iconsax name (16px), or none. */
+  /** Iconsax name (20px), or none. */
   icon?: string;
   /** The current page: `aria-current="page"`, Figma State=Active. */
   active?: boolean;
@@ -34,10 +34,10 @@ export const isPlainClick = (event: MouseEvent): boolean =>
   !event.defaultPrevented;
 
 /*
- * Figma Nav Item: padding 6/8 (32px tall in EN, 34 in FA: the height follows the line height), gap 8, radius md, 16px icon + Label/14.
+ * Figma Nav Item: padding 12/14, 11/14 in FA (44px tall in both: Label/14 is 20 high in EN, 22 in FA), gap 12, radius md, 20px icon + Label/14.
  *   Default  label text/secondary, icon icon/secondary
- *   Hover    fill surface/hover, label text/primary, icon icon/primary
- *   Active   fill surface/active, Label/14 Strong text/primary, icon icon/primary
+ *   Hover    fill background/default (white on the subtle sidebar), label and icon brand/text
+ *   Active   fill action/primary, Label/14 Strong text/inverse, icon text/inverse
  *   Focus    fill background/default + the neutral ring (O5; Figma draws the fill only)
  *   Disabled label text/disabled, icon icon/tertiary
  */
@@ -57,13 +57,13 @@ export function NavItem({
       {icon ? (
         <Icon
           name={icon}
-          size={16}
+          size={20}
           className={cn(
             disabled
               ? 'fy:text-icon-tertiary'
               : active
-                ? 'fy:text-icon-primary'
-                : 'fy:text-icon-secondary fy:group-hover/nav:text-icon-primary fy:group-focus-visible/nav:text-icon-primary',
+                ? 'fy:text-text-inverse'
+                : 'fy:text-icon-secondary fy:group-hover/nav:text-brand-text fy:group-focus-visible/nav:text-icon-primary',
           )}
         />
       ) : null}
@@ -86,13 +86,13 @@ export function NavItem({
   );
 
   const look = cn(
-    'fy:group/nav fy:flex fy:w-full fy:items-center fy:gap-2 fy:rounded-md fy:px-2 fy:py-1.5 fy:no-underline',
-    'fy:transition-colors fy:duration-100 fy:ease-out',
+    'fy:group/nav fy:flex fy:w-full fy:items-center fy:gap-3 fy:rounded-md fy:px-3.5 fy:py-3 fy:rtl:py-2.75 fy:no-underline',
+    'fy:motion-base',
     disabled
       ? 'fy:cursor-not-allowed fy:text-text-disabled'
       : active
-        ? 'fy:bg-surface-active fy:text-text-primary fy:focus-ring'
-        : 'fy:text-text-secondary fy:hover:bg-surface-hover fy:hover:text-text-primary fy:focus-visible:bg-background-default fy:focus-visible:text-text-primary fy:focus-ring',
+        ? 'fy:bg-action-primary fy:text-text-inverse fy:focus-ring'
+        : 'fy:text-text-secondary fy:hover:bg-background-default fy:hover:text-brand-text fy:focus-visible:bg-background-default fy:focus-visible:text-text-primary fy:focus-ring',
   );
 
   if (disabled) {

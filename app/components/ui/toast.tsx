@@ -69,7 +69,7 @@ function ToastList(): ReactElement {
               zIndex: 'calc(1000 - var(--toast-index))',
             }}
           >
-            <Toast.Content className="fy:flex fy:items-center fy:gap-3 fy:py-2 fy:ps-4 fy:pe-2">
+            <Toast.Content className="fy:flex fy:items-center fy:gap-3 fy:py-3 fy:ps-5 fy:pe-2">
               <span className="fy:flex fy:size-4 fy:shrink-0 fy:items-center fy:justify-center">
                 <ToneIcon tone={tone} />
               </span>
@@ -120,7 +120,7 @@ export function ToastProvider({ toaster, children }: ToastProviderProps): ReactE
           <Toast.Viewport
             aria-label={__('Notifications', 'fyldo')}
             data-slot="fy-toast-viewport"
-            className="fy:fixed fy:bottom-6 fy:z-50 fy:w-100"
+            className="fy:fixed fy:bottom-6 fy:z-50 fy:w-110"
             // 24px from the bottom-end corner: bottom-right in LTR, bottom-left in RTL; never wider than the screen
             style={{ insetInlineEnd: 24, maxWidth: 'calc(100vw - 48px)' }}
           >

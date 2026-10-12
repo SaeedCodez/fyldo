@@ -52,7 +52,7 @@ describe('generator', () => {
       expect(css, t.name).toContain(`  ${cssName(t)}: `);
       expect(css, t.name).toContain(`--color-${t.name.slice('color.'.length).replace(/\./g, '-')}: var(${cssName(t)})`);
     }
-    expect(css).toContain('--fyldo-action-primary: var(--fyldo-gray-1000);');
+    expect(css).toContain('--fyldo-action-primary: var(--fyldo-primary-600);');
   });
 
   it('uses Figma’s own code-syntax names (--fyldo-*) and derives the rest by the same rule', () => {
@@ -127,7 +127,7 @@ describe('generator', () => {
   });
 
   it('resolves aliases to final colours and detects cycles', () => {
-    expect(resolveColor(snapshot, 'color.action.primary')).toBe('#171717');
+    expect(resolveColor(snapshot, 'color.action.primary')).toBe('#6e62fe');
     const cyclic: TokenSnapshot = { ...snapshot, tokens: [{ name: 'a', type: 'color', value: '{b}' }, { name: 'b', type: 'color', value: '{a}' }] };
     expect(() => resolveColor(cyclic, 'a')).toThrow(/cycle/i);
   });

@@ -55,7 +55,7 @@ export function Notice({ tone = 'gray', title, children, action, onDismiss, live
       aria-label={live ? undefined : title ? `${label()}: ${title}` : label()}
       data-slot="fy-notice"
       data-tone={tone}
-      className={cn('fy:flex fy:w-full fy:items-start fy:gap-3 fy:rounded-md fy:border fy:px-4 fy:py-3', look, className)}
+      className={cn('fy:flex fy:w-full fy:items-start fy:gap-3.5 fy:rounded-md fy:border fy:px-5 fy:py-4', look, className)}
     >
       {/* the icon sits in a box as tall as the first text line (20px; 24px in Persian), centred on it */}
       <span className="fy:flex fy:h-5 fy:shrink-0 fy:items-center fy:rtl:h-6">
@@ -83,7 +83,7 @@ export function Notice({ tone = 'gray', title, children, action, onDismiss, live
               data-slot="fy-notice-dismiss"
               aria-label={__('Dismiss', 'fyldo')}
               onClick={onDismiss}
-              className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:cursor-pointer fy:items-center fy:justify-center fy:rounded-xs fy:transition-opacity fy:duration-100 fy:ease-out fy:hover:opacity-70 fy:focus-ring fy:before:absolute fy:before:-inset-1"
+              className="fy:relative fy:inline-flex fy:size-4 fy:shrink-0 fy:cursor-pointer fy:items-center fy:justify-center fy:rounded-xs fy:transition-opacity fy:duration-150 fy:ease-out fy:hover:opacity-70 fy:focus-ring fy:before:absolute fy:before:-inset-1"
             >
               <Icon name="close-circle" size={16} />
             </button>

@@ -70,11 +70,11 @@ describe('Tag', () => {
     expect(screen.getByText('+2')).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('is sized Small 20 / Medium 24 and a disabled tag cannot be removed', () => {
+  it('is sized Small 24 / Medium 28 and a disabled tag cannot be removed', () => {
     const { rerender } = render(<Tag label="A" onRemove={() => undefined} />);
-    expect(screen.getByText('A').closest('[data-slot=fy-tag]')?.className).toContain('h-5');
-    rerender(<Tag label="A" size="md" disabled onRemove={() => undefined} />);
     expect(screen.getByText('A').closest('[data-slot=fy-tag]')?.className).toContain('h-6');
+    rerender(<Tag label="A" size="md" disabled onRemove={() => undefined} />);
+    expect(screen.getByText('A').closest('[data-slot=fy-tag]')?.className).toContain('h-7');
     expect(screen.getByRole('button', { name: 'Remove A' })).toBeDisabled();
   });
 });

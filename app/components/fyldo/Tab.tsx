@@ -40,8 +40,8 @@ export function TabLook({
       <span
         data-slot="fy-tab-content"
         className={cn(
-          'fy:focus-ring-inner fy:flex fy:items-center fy:gap-1.5 fy:rounded-md fy:px-3 fy:py-1.5 fy:text-label-14 fy:whitespace-nowrap',
-          'fy:transition-colors fy:duration-100 fy:ease-out',
+          'fy:focus-ring-inner fy:flex fy:items-center fy:gap-1.5 fy:rounded-md fy:px-4 fy:py-2.5 fy:text-label-14 fy:whitespace-nowrap',
+          'fy:motion-base',
           disabled
             ? 'fy:text-text-disabled'
             : active
@@ -52,7 +52,7 @@ export function TabLook({
         {icon ? (
           <Icon
             name={icon}
-            size={16}
+            size={18}
             className={cn(
               disabled
                 ? 'fy:text-icon-tertiary'
