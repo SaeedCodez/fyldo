@@ -4402,9 +4402,9 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 324,
+        "x": 366.5,
         "y": 171,
-        "width": 246,
+        "width": 161,
         "height": 42,
         "layout": {
          "layoutMode": "VERTICAL",
@@ -4432,9 +4432,9 @@
           "type": "TEXT",
           "visible": true,
           "opacity": 1,
-          "x": 398.5,
+          "x": 405.5,
           "y": 171,
-          "width": 97,
+          "width": 83,
           "height": 20,
           "layout": {
            "layoutSizingHorizontal": "HUG",
@@ -4453,7 +4453,7 @@
            "fontFamily": "en/font-family/sans"
           },
           "text": {
-           "characters": "No buttons yet",
+           "characters": "No items yet",
            "textStyle": "EN/Label/14 Strong",
            "fontFamily": "Geist",
            "fontStyle": "Medium",
@@ -4477,9 +4477,9 @@
           "type": "TEXT",
           "visible": true,
           "opacity": 1,
-          "x": 324,
+          "x": 366.5,
           "y": 195,
-          "width": 246,
+          "width": 161,
           "height": 18,
           "layout": {
            "layoutSizingHorizontal": "HUG",
@@ -4498,7 +4498,7 @@
            "fontFamily": "en/font-family/sans"
           },
           "text": {
-           "characters": "Add a button to show it in the site header.",
+           "characters": "Items you add appear here.",
            "textStyle": "EN/Copy/13",
            "fontFamily": "Geist",
            "fontStyle": "Regular",
@@ -9584,9 +9584,9 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 302.5,
+        "x": 302,
         "y": 177,
-        "width": 289,
+        "width": 290,
         "height": 48,
         "layout": {
          "layoutMode": "VERTICAL",
@@ -9614,9 +9614,9 @@
           "type": "TEXT",
           "visible": true,
           "opacity": 1,
-          "x": 390.5,
+          "x": 361,
           "y": 177,
-          "width": 113,
+          "width": 172,
           "height": 22,
           "layout": {
            "layoutSizingHorizontal": "HUG",
@@ -9635,7 +9635,7 @@
            "fontFamily": "fa/font-family/sans"
           },
           "text": {
-           "characters": "هنوز دکمه‌ای ندارید",
+           "characters": "هنوز موردی اضافه نشده است",
            "textStyle": "FA/Label/14 Strong",
            "fontFamily": "IRANYekanX",
            "fontStyle": "Medium",
@@ -9659,9 +9659,9 @@
           "type": "TEXT",
           "visible": true,
           "opacity": 1,
-          "x": 302.5,
+          "x": 302,
           "y": 203,
-          "width": 289,
+          "width": 290,
           "height": 22,
           "layout": {
            "layoutSizingHorizontal": "HUG",
@@ -9680,7 +9680,7 @@
            "fontFamily": "fa/font-family/sans"
           },
           "text": {
-           "characters": "یک دکمه اضافه کنید تا در هدر سایت نمایش داده شود.",
+           "characters": "موردهایی که اضافه می‌کنید اینجا نمایش داده می‌شوند.",
            "textStyle": "FA/Copy/13",
            "fontFamily": "IRANYekanX",
            "fontStyle": "Regular",
