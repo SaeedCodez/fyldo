@@ -40,6 +40,7 @@ final class FieldFactory {
 			SliderField::class,
 			MultiSelectField::class,
 			GroupField::class,
+			CustomField::class,
 		);
 	}
 

@@ -860,3 +860,63 @@ msgstr "افزودن لینک"
 
 msgid "Groups of fields: fixed header buttons, ones you can reorder, add and remove, and a group that starts empty."
 msgstr "گروه‌هایی از فیلدها: دکمه‌های ثابت هدر، دکمه‌هایی که می‌شود جابه‌جا، اضافه و حذفشان کرد، و گروهی که خالی شروع می‌شود."
+
+msgid "This field could not be loaded."
+msgstr "این فیلد بارگذاری نشد."
+
+msgid "Custom field"
+msgstr "فیلد سفارشی"
+
+msgid "A field Fyldo does not ship: two selects drawn by a small JavaScript module and saved as one value."
+msgstr "فیلدی که در فیلدو نیست: دو فهرست انتخابی که یک ماژول کوچک جاوااسکریپت آن‌ها را می‌سازد و به‌صورت یک مقدار ذخیره می‌شوند."
+
+msgid "Opening hours"
+msgstr "ساعت کاری"
+
+msgid "A custom field: its control comes from a JavaScript module, not from Fyldo."
+msgstr "یک فیلد سفارشی: کنترل آن از یک ماژول جاوااسکریپت می‌آید، نه از خود فیلدو."
+
+msgid "Regular hours"
+msgstr "ساعت‌های عادی"
+
+msgid "Two selects, saved as one value such as 09:00-17:00 and split again when the page loads."
+msgstr "دو فهرست انتخابی که به‌صورت یک مقدار مثل 09:00-17:00 ذخیره می‌شوند و هنگام بارگذاری صفحه دوباره از هم جدا می‌شوند."
+
+msgid "Working hours"
+msgstr "ساعت کار"
+
+msgid "When you open and close on a normal day."
+msgstr "در یک روز عادی چه ساعتی باز می‌کنید و چه ساعتی می‌بندید."
+
+msgid "Special days"
+msgstr "روزهای خاص"
+
+msgid "The same custom field inside a group."
+msgstr "همان فیلد سفارشی، درون یک گروه."
+
+msgid "Days"
+msgstr "روزها"
+
+msgid "Add day"
+msgstr "افزودن روز"
+
+msgid "Day"
+msgstr "روز"
+
+msgid "Hours"
+msgstr "ساعت‌ها"
+
+msgid "New Year’s Eve"
+msgstr "شب سال نو"
+
+msgid "Choose both times."
+msgstr "هر دو ساعت را انتخاب کنید."
+
+msgid "The closing time must be after the opening time."
+msgstr "ساعت بستن باید بعد از ساعت باز کردن باشد."
+
+msgid "Opens"
+msgstr "باز می‌شود"
+
+msgid "Closes"
+msgstr "بسته می‌شود"

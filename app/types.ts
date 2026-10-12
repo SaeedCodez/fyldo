@@ -24,7 +24,10 @@ export interface GroupItemValue {
   [subFieldId: string]: FieldValue;
 }
 
-export type FieldValue = string | boolean | string[] | number | null | GroupItemValue[];
+/** What a `custom` field may hold: any JSON value (PHP cleans it, src/Fields/CustomField.php). */
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue };
+
+export type FieldValue = string | boolean | string[] | number | null | GroupItemValue[] | JsonValue;
 
 /** Fields that own a value. A `notice` does not: it is display only. */
 interface FieldBase {
@@ -203,6 +206,17 @@ export interface FileFieldDef extends MediaFieldBase {
   type: 'file';
 }
 
+/**
+ * Drawn by the developer's own ES module (`module`, loaded before the first render: app/lib/custom-fields.ts). The row's
+ * title names the control as a group: the module gets its ids to put on its control(s).
+ */
+export interface CustomFieldDef extends FieldBase {
+  type: 'custom';
+  module: string;
+  /** Passed to the module as they are (translated labels, option lists…). */
+  props: Record<string, JsonValue>;
+}
+
 /** The fields a group item can hold: every value field except another group, media and password fields. */
 export type SubFieldDef = Exclude<ValueFieldDef, GroupFieldDef | ImageFieldDef | FileFieldDef | PasswordFieldDef>;
 
@@ -245,6 +259,7 @@ export type ValueFieldDef =
   | FileFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef
+  | CustomFieldDef
   | GroupFieldDef;
 
 export type FieldDef = ValueFieldDef | NoticeFieldDef;

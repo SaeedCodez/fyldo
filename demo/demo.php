@@ -96,6 +96,7 @@ final class Demo {
 		$fyldo->add_page( 'content', self::content() );
 		$fyldo->add_page( 'header', self::header() );
 		$fyldo->add_page( 'security', self::security() );
+		$fyldo->add_page( 'hours', self::hours() );
 
 		$fyldo->admin_notice(
 			__( 'This demo is only added when Fyldo is installed as a plugin. Return false from the fyldo/fyldo-demo/enabled filter to hide it.', 'fyldo' ),
@@ -164,6 +165,12 @@ final class Demo {
 							'tone'        => 'amber',
 							'label'       => __( 'Security', 'fyldo' ),
 							'description' => __( 'A write-only password, a disabled field, a server-side rule and a Danger card that resets the page.', 'fyldo' ),
+						),
+						array(
+							'id'          => 'tour_hours',
+							'type'        => 'notice',
+							'label'       => __( 'Custom field', 'fyldo' ),
+							'description' => __( 'A field Fyldo does not ship: two selects drawn by a small JavaScript module and saved as one value.', 'fyldo' ),
 						),
 					),
 				),
@@ -707,6 +714,123 @@ final class Demo {
 					),
 				),
 			),
+		);
+	}
+
+	/** A `custom` field: demo/custom/working-hours.js draws it, on its own and inside a group. */
+	private static function hours(): array {
+		return array(
+			'title'       => __( 'Opening hours', 'fyldo' ),
+			'description' => __( 'A custom field: its control comes from a JavaScript module, not from Fyldo.', 'fyldo' ),
+			'icon'        => 'clock',
+			'group'       => 'tools',
+			'save'        => 'global',
+			'sections'    => array(
+				array(
+					'id'          => 'regular',
+					'title'       => __( 'Regular hours', 'fyldo' ),
+					'description' => __( 'Two selects, saved as one value such as 09:00-17:00 and split again when the page loads.', 'fyldo' ),
+					'fields'      => array(
+						self::hours_field(
+							array(
+								'id'          => 'working_hours',
+								'label'       => __( 'Working hours', 'fyldo' ),
+								'description' => __( 'When you open and close on a normal day.', 'fyldo' ),
+								'validate'    => array( 'required' => true ),
+							)
+						),
+					),
+				),
+				array(
+					'id'          => 'special',
+					'title'       => __( 'Special days', 'fyldo' ),
+					'description' => __( 'The same custom field inside a group.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'         => 'special_days',
+							'type'       => 'group',
+							'label'      => __( 'Days', 'fyldo' ),
+							'item_title' => 'day',
+							'sortable'   => true,
+							'addable'    => true,
+							'add_label'  => __( 'Add day', 'fyldo' ),
+							'fields'     => array(
+								array(
+									'id'       => 'day',
+									'type'     => 'text',
+									'label'    => __( 'Day', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+								self::hours_field(
+									array(
+										'id'    => 'hours',
+										'label' => __( 'Hours', 'fyldo' ),
+									)
+								),
+							),
+							'default'    => array(
+								array(
+									'day'   => __( 'New Year’s Eve', 'fyldo' ),
+									'hours' => '10:00-14:00',
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * The working-hours custom field: the module and its stylesheet, translated texts for it, and the server's check.
+	 *
+	 * @param array<string,mixed> $config Id, label and the rest of the field.
+	 * @return array<string,mixed>
+	 */
+	private static function hours_field( array $config ): array {
+		$times = array();
+		for ( $hour = 6; $hour <= 23; $hour++ ) {
+			$times[] = sprintf( '%02d:00', $hour );
+		}
+		$messages = array(
+			'incomplete' => __( 'Choose both times.', 'fyldo' ),
+			'order'      => __( 'The closing time must be after the opening time.', 'fyldo' ),
+		);
+
+		return array_merge(
+			array(
+				'type'        => 'custom',
+				'module'      => plugins_url( 'demo/custom/working-hours.js', self::$main_file ),
+				'style'       => plugins_url( 'demo/custom/working-hours.css', self::$main_file ),
+				'default'     => '09:00-17:00',
+				'props'       => array_merge(
+					array(
+						'times'  => $times,
+						'opens'  => __( 'Opens', 'fyldo' ),
+						'closes' => __( 'Closes', 'fyldo' ),
+					),
+					$messages
+				),
+				// The module checks the same in the browser; this is the check that counts.
+				'validate_cb' => static function ( $value ) use ( $times, $messages ) {
+					if ( '' === $value || null === $value ) {
+						return true;
+					}
+					if ( ! is_string( $value ) ) {
+						return false;
+					}
+					$parts = explode( '-', $value );
+					if ( 2 !== count( $parts ) || '' === $parts[0] || '' === $parts[1] ) {
+						return $messages['incomplete'];
+					}
+					if ( ! in_array( $parts[0], $times, true ) || ! in_array( $parts[1], $times, true ) ) {
+						return false;
+					}
+
+					return $parts[1] > $parts[0] ? true : $messages['order'];
+				},
+			),
+			$config
 		);
 	}
 }

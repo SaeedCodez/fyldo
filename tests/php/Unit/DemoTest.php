@@ -37,12 +37,12 @@ final class DemoTest extends TestCase {
 		$this->assertCount( 1, $GLOBALS['__fyldo_test_actions']['plugin_action_links'] );
 	}
 
-	public function test_the_demo_is_a_valid_schema_with_the_four_pages(): void {
+	public function test_the_demo_is_a_valid_schema_with_its_pages(): void {
 		Demo::register();
 
 		$this->assertSame( array(), $GLOBALS['__fyldo_test_wrong'], 'a bad page is reported with _doing_it_wrong and skipped' );
 		$instance = Fyldo::instance( Demo::SLUG );
-		$this->assertSame( array( 'overview', 'general', 'content', 'header', 'security' ), array_keys( $instance->pages() ) );
+		$this->assertSame( array( 'overview', 'general', 'content', 'header', 'security', 'hours' ), array_keys( $instance->pages() ) );
 		$this->assertSame( array( 'settings', 'tools' ), array_column( $instance->groups(), 'id' ) );
 		$this->assertSame( 'fyldo-demo_general', $instance->page( 'general' )->option_name() );
 		$this->assertSame( 'global', $instance->page( 'general' )->save_mode() );
@@ -62,7 +62,7 @@ final class DemoTest extends TestCase {
 			}
 		}
 
-		$expected = array( 'text', 'url', 'email', 'password', 'number', 'textarea', 'toggle', 'checkbox', 'checkbox_group', 'radio', 'choice', 'segmented', 'slider', 'color', 'icon', 'image', 'file', 'select', 'multi_select', 'group', 'notice' );
+		$expected = array( 'text', 'url', 'email', 'password', 'number', 'textarea', 'toggle', 'checkbox', 'checkbox_group', 'radio', 'choice', 'segmented', 'slider', 'color', 'icon', 'image', 'file', 'select', 'multi_select', 'group', 'notice', 'custom' );
 		$this->assertSame( array(), array_diff( $expected, array_keys( $types ) ) );
 	}
 
@@ -79,6 +79,26 @@ final class DemoTest extends TestCase {
 		$reserved = $instance->update( 'security', array( 'account_name' => 'Admin' ) );
 		$this->assertSame( 'invalid', $reserved['status'], 'validate_cb runs on the server only' );
 		$this->assertArrayHasKey( 'account_name', $reserved['errors'] );
+	}
+
+	public function test_the_custom_working_hours_field_saves_one_value_and_is_checked_on_the_server(): void {
+		Demo::register();
+		$instance = Fyldo::instance( Demo::SLUG );
+
+		$this->assertSame( '09:00-17:00', $instance->get( 'hours', 'working_hours' ) );
+		$this->assertSame( 'ok', $instance->update( 'hours', array( 'working_hours' => '08:00-18:00' ) )['status'] );
+		$this->assertSame( '08:00-18:00', $instance->get( 'hours', 'working_hours' ) );
+
+		$backwards = $instance->update( 'hours', array( 'working_hours' => '18:00-08:00' ) );
+		$this->assertSame( 'invalid', $backwards['status'] );
+		$this->assertSame( 'The closing time must be after the opening time.', $backwards['errors']['working_hours'] );
+		$this->assertSame( 'invalid', $instance->update( 'hours', array( 'working_hours' => '08:00-' ) )['status'], 'one time missing' );
+		$this->assertSame( 'invalid', $instance->update( 'hours', array( 'working_hours' => '03:00-04:00' ) )['status'], 'not an offered time' );
+		$this->assertSame( 'invalid', $instance->update( 'hours', array( 'working_hours' => array( '08:00', '18:00' ) ) )['status'], 'not text' );
+
+		$days = $instance->update( 'hours', array( 'special_days' => array( array( 'day' => 'Eve', 'hours' => '12:00-10:00' ) ) ) );
+		$this->assertSame( 'invalid', $days['status'], 'inside a group too' );
+		$this->assertArrayHasKey( 'special_days.0.hours', $days['errors'] );
 	}
 
 	private function reset_facade(): void {

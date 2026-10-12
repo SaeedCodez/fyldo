@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './components/fyldo/App';
 import { setLocaleData } from './i18n';
 import { collectIconNames, preloadIcons } from './icons/registry';
+import { collectCustomModules, loadCustomFields } from './lib/custom-fields';
 import type { FyldoConfig } from './types';
 import './styles/app.css';
 
@@ -26,8 +27,8 @@ async function mount(root: HTMLElement): Promise<void> {
   }
 
   setLocaleData(config.i18n);
-  // Import every icon named anywhere in the config in parallel BEFORE the first render: no pop-in.
-  await preloadIcons(collectIconNames(config));
+  // Import every icon and custom field module named anywhere in the config in parallel BEFORE the first render: no pop-in.
+  await Promise.all([preloadIcons(collectIconNames(config)), loadCustomFields(collectCustomModules(config))]);
 
   createRoot(root).render(<App config={config} root={root} />);
 }

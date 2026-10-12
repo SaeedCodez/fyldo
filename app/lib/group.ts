@@ -4,11 +4,12 @@
  * the count is only checked once every item is valid.
  */
 import type { FieldValue, GroupFieldDef, GroupItemValue } from '../types';
+import { customError } from './custom-fields';
 import { check, messageFor, type Failure } from './validation';
 
 export const itemsOf = (value: FieldValue | undefined): GroupItemValue[] =>
   Array.isArray(value)
-    ? value.filter(
+    ? (value as unknown[]).filter(
         (item): item is GroupItemValue =>
           typeof item === 'object' && item !== null && !Array.isArray(item),
       )
@@ -48,8 +49,10 @@ export function groupErrors(
   const items = itemsOf(value);
   items.forEach((item, index) => {
     for (const sub of field.fields) {
-      const failure = check(sub.validate, sub.id in item ? item[sub.id] : sub.default);
-      if (failure) errors[errorKey(field.id, index, sub.id)] = messageFor(failure);
+      const value = sub.id in item ? item[sub.id] : sub.default;
+      const failure = check(sub.validate, value);
+      const message = failure ? messageFor(failure) : sub.type === 'custom' ? customError(sub, value) : null;
+      if (message) errors[errorKey(field.id, index, sub.id)] = message;
     }
   });
   if (Object.keys(errors).length === 0) {
