@@ -10,6 +10,7 @@ namespace Fyldo\Tests\Unit;
 
 use Fyldo\V1\Instance;
 use Fyldo\V1\Rest\Controller;
+use Fyldo\V1\Support\Naming;
 use PHPUnit\Framework\TestCase;
 
 final class DangerActionTest extends TestCase {
@@ -113,6 +114,16 @@ final class DangerActionTest extends TestCase {
 		$this->assertStringEndsWith( '/actions/(?P<action>[a-z0-9_-]+)', $action[1] );
 		$this->assertSame( 'POST', $action[2][0]['methods'] );
 		$this->assertSame( array( $controller, 'authorize' ), $action[2][0]['permission_callback'] );
+	}
+
+	public function test_fresh_nonces_are_the_core_rest_nonce_and_the_instance_nonce(): void {
+		$this->assertSame(
+			array(
+				'nonce'         => 'nonce:wp_rest',
+				'instanceNonce' => 'nonce:' . Naming::nonce_action( $this->instance->slug() ),
+			),
+			( new Controller( $this->instance ) )->nonces()
+		);
 	}
 
 	public function test_authorize_needs_a_session_the_instance_nonce_and_the_capability(): void {

@@ -37,6 +37,7 @@ final class Fyldo {
 		add_action( 'init', array( Textdomain::class, 'load' ), 0 );
 		add_action( 'admin_menu', array( self::class, 'register_screens' ) );
 		add_action( 'rest_api_init', array( self::class, 'register_rest_routes' ) );
+		add_action( 'admin_init', array( self::class, 'register_ajax' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue' ) );
 		add_filter( 'admin_body_class', array( self::class, 'body_class' ) );
 	}
@@ -89,6 +90,16 @@ final class Fyldo {
 	public static function register_rest_routes(): void {
 		foreach ( self::$instances as $instance ) {
 			( new Controller( $instance ) )->register_routes();
+		}
+	}
+
+	/**
+	 * The nonce refresh of every instance (admin-ajax runs `admin_init` before `wp_ajax_{action}`). Logged-in users only.
+	 */
+	public static function register_ajax(): void {
+		foreach ( self::$instances as $instance ) {
+			$controller = new Controller( $instance );
+			add_action( 'wp_ajax_' . Naming::nonce_refresh_action( $instance->slug() ), array( $controller, 'send_nonces' ) );
 		}
 	}
 

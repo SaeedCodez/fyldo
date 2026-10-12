@@ -359,6 +359,13 @@ export interface FyldoConfig {
   dir: 'ltr' | 'rtl';
   locale: string;
   rootId: string;
-  rest: { root: string; nonce: string; instanceNonce: string; nonceHeader: string };
+  rest: {
+    root: string;
+    nonce: string;
+    instanceNonce: string;
+    nonceHeader: string;
+    /** admin-ajax URL that hands out fresh nonces once these have expired. */
+    refresh: string;
+  };
   i18n: JedLocaleData | null;
 }

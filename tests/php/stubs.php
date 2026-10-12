@@ -250,6 +250,11 @@ if ( ! function_exists( 'is_user_logged_in' ) ) {
 		return $GLOBALS['__fyldo_test_logged_in'] ?? true;
 	}
 }
+if ( ! function_exists( 'wp_create_nonce' ) ) {
+	function wp_create_nonce( $action ) {
+		return 'nonce:' . $action;
+	}
+}
 if ( ! function_exists( 'wp_verify_nonce' ) ) {
 	function wp_verify_nonce( $nonce, $action ) {
 		return ( $GLOBALS['__fyldo_test_nonces'][ $action ] ?? null ) === $nonce ? 1 : false;

@@ -920,3 +920,27 @@ msgstr "باز می‌شود"
 
 msgid "Closes"
 msgstr "بسته می‌شود"
+
+msgid "Your login has expired. Log in again, then try again."
+msgstr "ورود شما منقضی شده است. دوباره وارد شوید و سپس دوباره تلاش کنید."
+
+msgid "Couldn’t save: your login has expired. Log in again, then save."
+msgstr "ذخیره نشد: ورود شما منقضی شده است. دوباره وارد شوید و سپس ذخیره کنید."
+
+msgid "Couldn’t save: you are not allowed to change these settings."
+msgstr "ذخیره نشد: اجازه‌ی تغییر این تنظیمات را ندارید."
+
+msgid "Couldn’t save: there is too much to send at once."
+msgstr "ذخیره نشد: حجم داده‌ها برای ارسال یک‌جا بیش از حد است."
+
+msgid "Couldn’t save: the server ran into a problem. Try again in a moment."
+msgstr "ذخیره نشد: سرور با خطا روبه‌رو شد. چند لحظه بعد دوباره تلاش کنید."
+
+msgid "These settings could not be shown"
+msgstr "این تنظیمات نمایش داده نشد"
+
+msgid "Reload page"
+msgstr "بارگذاری دوباره‌ی صفحه"
+
+msgid "Something went wrong on this screen. Reload the page to try again; your saved settings are not affected."
+msgstr "در این صفحه مشکلی پیش آمد. برای تلاش دوباره، صفحه را دوباره بارگذاری کنید؛ تنظیمات ذخیره‌شده‌ی شما دست نمی‌خورند."

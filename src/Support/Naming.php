@@ -80,6 +80,11 @@ final class Naming {
 		return 'fyldo_' . $slug . '_rest';
 	}
 
+	/** admin-ajax action that hands a logged-in user fresh nonces once the page's have expired (`wp_ajax_{action}`). */
+	public static function nonce_refresh_action( string $slug ): string {
+		return 'fyldo_' . $slug . '_nonces';
+	}
+
 	public static function nonce_header(): string {
 		return 'X-Fyldo-Nonce';
 	}

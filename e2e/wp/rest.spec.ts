@@ -45,6 +45,28 @@ test.describe('REST security and validation', () => {
     expect(response.status()).toBe(403);
   });
 
+  test('the nonce refresh hands a logged-in user nonces that open the API, and a visitor nothing', async ({ browser, request }) => {
+    const context = await browser.newContext({ storageState: 'e2e/.auth/admin.json' });
+    const page = await context.newPage();
+    await page.goto(settingsUrl('acme-beta'));
+    const refresh = String((await readConfig(page, 'acme-beta')).rest.refresh);
+    await context.close();
+
+    const response = await request.get(refresh);
+    expect(response.status()).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    const read = await request.get(`/index.php?rest_route=/${ns}/pages/general`, { headers: { 'X-WP-Nonce': body.data.nonce, 'X-Fyldo-Nonce': body.data.instanceNonce } });
+    expect(read.status()).toBe(200);
+
+    // An empty storage state: `use.storageState` from the config applies to browser.newContext() too.
+    const visitor = await browser.newContext({ storageState: { cookies: [], origins: [] } });
+    const anonymous = await visitor.request.get(refresh);
+    expect(anonymous.status()).toBe(400);
+    expect(await anonymous.text()).toBe('0');
+    await visitor.close();
+  });
+
   test('a valid save returns sanitized values and a fresh revision', async ({ request }) => {
     const response = await post(request, ns, { 'X-WP-Nonce': wpNonce, 'X-Fyldo-Nonce': instanceNonce }, { values: { site_title: '  <b>Rest</b> title ', unknown_field: 'dropped' }, revision });
     expect(response.status()).toBe(200);

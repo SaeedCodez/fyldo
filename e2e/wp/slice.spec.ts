@@ -26,6 +26,30 @@ test('the M1 slice renders, edits, saves through REST and persists', async ({ pa
   expect(errors).toEqual([]);
 });
 
+test('an expired nonce is renewed on the fly: the save goes through without a reload, the edits intact', async ({ page }) => {
+  await page.goto(settingsUrl('acme-beta'));
+  // The first save is answered the way core answers an expired X-WP-Nonce; everything after goes to WordPress.
+  let refused = false;
+  await page.route(
+    (url) => decodeURIComponent(url.href).includes('fyldo-acme-beta/v1/pages/general'),
+    async (route) => {
+      if (refused || route.request().method() !== 'POST') return route.continue();
+      refused = true;
+      return route.fulfill({ status: 403, contentType: 'application/json', body: JSON.stringify({ code: 'rest_cookie_invalid_nonce', message: 'Cookie check failed', data: { status: 403 } }) });
+    },
+  );
+
+  await page.getByRole('textbox', { name: 'Site title' }).fill('Renewed');
+  const renewal = page.waitForResponse((r) => r.url().includes('admin-ajax.php') && r.url().includes('fyldo_acme-beta_nonces'));
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  expect((await renewal).status()).toBe(200);
+  await expect(page.getByText('All changes saved')).toBeVisible();
+  expect(refused).toBe(true);
+
+  await page.reload();
+  await expect(page.getByRole('textbox', { name: 'Site title' })).toHaveValue('Renewed');
+});
+
 test('a save based on stale values is refused (409): the edits stay, a notice explains, and Reload shows the latest', async ({ page, context }) => {
   await page.goto(settingsUrl('acme-beta'));
   const other = await context.newPage(); // the same screen in another tab
