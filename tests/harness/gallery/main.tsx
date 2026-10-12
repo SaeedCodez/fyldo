@@ -34,6 +34,8 @@
  *   ?c=icon-button&variant=tertiary&size=sm&icon=more&label=…
  *   ?c=empty-state&size=lg|sm&icon=element-plus&title=…&description=…&primary=…&secondary=…   (560 / 360 wide, as in the pack)
  *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
+ *   ?c=group&title=…&description=…&items=<json>&sortable=1&addable=1&max=5&add=…&names=a,b   (894 wide, the Group field as a Setting
+ *       Row draws it; items = [{label, icon, link}], each collapsed; the sub-fields are Label / Icon / Link)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
@@ -41,6 +43,7 @@ import { Field } from '@base-ui/react/field';
 import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { FieldRenderer } from '../../../app/components/fyldo/FieldRenderer';
 import { NavItem } from '../../../app/components/fyldo/NavItem';
 import { PageHeader } from '../../../app/components/fyldo/PageHeader';
 import { SaveBar, type SaveBarState } from '../../../app/components/fyldo/SaveBar';
@@ -67,6 +70,7 @@ import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel'
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
 import { MediaField } from '../../../app/components/ui/media-field';
 import type { MediaKind } from '../../../app/lib/wp-media';
+import type { FieldValue, GroupFieldDef } from '../../../app/types';
 import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
@@ -302,6 +306,39 @@ function IconPickerDemo() {
         error={state === 'error' ? param('error') : undefined}
         disabled={state === 'disabled'}
       />
+    </div>
+  );
+}
+
+/** The Group field (Figma "Group" / "Group Item"): header buttons with a Label, an Icon and a Link, every item collapsed. */
+function GroupDemo() {
+  const [value, setValue] = useState<FieldValue>(() => JSON.parse(param('items', '[]')) as FieldValue);
+  const sub = { description: '', disabled: false, layout: 'field', validate: {} } as const;
+  const field: GroupFieldDef = {
+    id: 'header_buttons',
+    type: 'group',
+    label: param('title'),
+    description: param('description'),
+    default: [],
+    disabled: false,
+    layout: 'stacked',
+    validate: {},
+    fields: [
+      { ...sub, id: 'label', type: 'text', label: 'Label', default: '', placeholder: '' },
+      { ...sub, id: 'icon', type: 'icon', label: 'Icon', default: '', icons: null },
+      { ...sub, id: 'link', type: 'url', label: 'Link', default: '', placeholder: '' },
+    ],
+    item_title: 'label',
+    item_icon: 'icon',
+    sortable: q.get('sortable') === '1',
+    addable: q.get('addable') === '1',
+    min: null,
+    max: q.get('max') === null ? null : Number(param('max')),
+    add_label: param('add'),
+  };
+  return (
+    <div style={{ width: 894 }}>
+      <FieldRenderer field={field} value={value} divider onChange={(_, next) => setValue(next)} onBlur={() => undefined} locale={locale} />
     </div>
   );
 }
@@ -702,6 +739,8 @@ function Variant() {
       return <IconPickerDemo />;
     case 'icon-picker-modal':
       return <IconPickerModalDemo />;
+    case 'group':
+      return <GroupDemo />;
     case 'upload-image':
       return <MediaDemo kind="image" />;
     case 'select-file':

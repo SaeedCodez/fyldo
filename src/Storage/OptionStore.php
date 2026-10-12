@@ -42,9 +42,8 @@ final class OptionStore {
 				continue;
 			}
 
-			$value = $field->sanitize( $stored[ $id ] );
 			// A stored value that no longer validates (e.g. a removed select option) falls back to the default.
-			$values[ $id ] = null === $field->validate( $value ) ? $value : $field->default_value();
+			$values[ $id ] = $field->stored_value( $stored[ $id ] );
 		}
 
 		return $values;

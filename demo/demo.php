@@ -442,6 +442,55 @@ final class Demo {
 							'default'     => 'home-2',
 						),
 						array(
+							'id'          => 'header_buttons',
+							'type'        => 'group',
+							'label'       => __( 'Header buttons', 'fyldo' ),
+							'description' => __( 'Buttons shown in the site header, in this order.', 'fyldo' ),
+							'item_title'  => 'label',
+							'item_icon'   => 'icon',
+							'sortable'    => true,
+							'addable'     => true,
+							'max'         => 5,
+							'add_label'   => __( 'Add button', 'fyldo' ),
+							'fields'      => array(
+								array(
+									'id'       => 'label',
+									'type'     => 'text',
+									'label'    => __( 'Label', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+								array(
+									'id'      => 'icon',
+									'type'    => 'icon',
+									'label'   => __( 'Icon', 'fyldo' ),
+									'default' => 'star',
+								),
+								array(
+									'id'          => 'link',
+									'type'        => 'url',
+									'label'       => __( 'Link', 'fyldo' ),
+									'description' => __( 'A full URL, like https://example.com/pricing.', 'fyldo' ),
+								),
+							),
+							'default'     => array(
+								array(
+									'label' => __( 'Pricing', 'fyldo' ),
+									'icon'  => 'dollar-circle',
+									'link'  => 'https://example.com/pricing',
+								),
+								array(
+									'label' => __( 'Docs', 'fyldo' ),
+									'icon'  => 'book',
+									'link'  => 'https://example.com/docs',
+								),
+								array(
+									'label' => __( 'Get started', 'fyldo' ),
+									'icon'  => 'flash',
+									'link'  => 'https://example.com/signup',
+								),
+							),
+						),
+						array(
 							'id'          => 'site_logo',
 							'type'        => 'image',
 							'label'       => __( 'Site logo', 'fyldo' ),

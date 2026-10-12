@@ -19,7 +19,12 @@ export interface RuleSet {
   step?: number;
 }
 
-export type FieldValue = string | boolean | string[] | number | null;
+/** One item of a `group` field: the values of its sub-fields, keyed by sub-field id. */
+export interface GroupItemValue {
+  [subFieldId: string]: FieldValue;
+}
+
+export type FieldValue = string | boolean | string[] | number | null | GroupItemValue[];
 
 /** Fields that own a value. A `notice` does not: it is display only. */
 interface FieldBase {
@@ -198,6 +203,30 @@ export interface FileFieldDef extends MediaFieldBase {
   type: 'file';
 }
 
+/** The fields a group item can hold: every value field except another group, media and password fields. */
+export type SubFieldDef = Exclude<ValueFieldDef, GroupFieldDef | ImageFieldDef | FileFieldDef | PasswordFieldDef>;
+
+/**
+ * A list of items that share the same sub-fields. The value is `GroupItemValue[]`; the errors of a sub-field are keyed
+ * `<group>.<index>.<sub-field>` (index from 0), the group's own (count) error by its id.
+ */
+export interface GroupFieldDef extends FieldBase {
+  type: 'group';
+  fields: SubFieldDef[];
+  /** Sub-field whose value names an item in its header; '' = "Item 1", "Item 2"… */
+  item_title: string;
+  /** `icon` sub-field shown as the item's preview tile; '' = none. */
+  item_icon: string;
+  /** Drag handles (and keyboard reordering). */
+  sortable: boolean;
+  /** Add, Duplicate and Remove. Off: the items are the ones of `default`. */
+  addable: boolean;
+  min: number | null;
+  max: number | null;
+  /** The Add button's label; '' = "Add item" (translated). */
+  add_label: string;
+}
+
 export type ValueFieldDef =
   | TextFieldDef
   | NumberFieldDef
@@ -215,7 +244,8 @@ export type ValueFieldDef =
   | ImageFieldDef
   | FileFieldDef
   | SelectFieldDef
-  | MultiSelectFieldDef;
+  | MultiSelectFieldDef
+  | GroupFieldDef;
 
 export type FieldDef = ValueFieldDef | NoticeFieldDef;
 

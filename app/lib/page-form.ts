@@ -7,6 +7,7 @@ import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
 import { isValueField, type FieldValue, type MediaItem, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
 import { ApiError, type Api } from './api';
+import { belongsTo, groupErrors } from './group';
 import { validateValue } from './validation';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
@@ -39,8 +40,11 @@ export interface FormState {
 export const PAGE_SCOPE = 'page';
 
 export type Action =
-  /** `media`: the attachment a media field was just set to (null when cleared); the other fields leave it out. */
-  | { type: 'change'; id: string; value: FieldValue; scope: string; media?: MediaItem | null }
+  /**
+   * `media`: the attachment a media field was just set to (null when cleared); the other fields leave it out.
+   * `clear`: the error keys the edit makes stale; default every error of the field (a group: its sub-fields' too).
+   */
+  | { type: 'change'; id: string; value: FieldValue; scope: string; media?: MediaItem | null; clear?: string[] }
   | { type: 'discard' }
   /** Replace the errors of `ids` with `errors`; with a `scope`, a failed submit: that scope shows the error. */
   | { type: 'invalid'; errors: Record<string, string>; ids: string[]; scope?: string }
@@ -74,8 +78,9 @@ export function initialState(page: Pick<PageDef, 'values' | 'revision' | 'media'
   };
 }
 
+/** `errors` without those of `ids`: a field's own, and a group's sub-field errors (`<group>.<index>.<sub-field>`). */
 const without = (errors: Record<string, string>, ids: string[]): Record<string, string> =>
-  Object.fromEntries(Object.entries(errors).filter(([id]) => !ids.includes(id)));
+  Object.fromEntries(Object.entries(errors).filter(([key]) => !ids.some((id) => belongsTo(key, id))));
 
 const withScope = (state: FormState, scope: string, next: ScopeState): Record<string, ScopeState> => ({ ...state.scopes, [scope]: next });
 
@@ -91,7 +96,7 @@ export function reducer(state: FormState, action: Action): FormState {
       // Editing after a save (or a failed save) starts a new edit session for that scope: "Saved" goes (O15).
       const scopes = current.status === 'saved' || current.status === 'error' ? withScope(state, action.scope, IDLE) : state.scopes;
       const media = action.media === undefined ? state.media : { ...state.media, [action.id]: action.media };
-      return { ...state, values: { ...state.values, [action.id]: action.value }, media, errors: without(state.errors, [action.id]), scopes };
+      return { ...state, values: { ...state.values, [action.id]: action.value }, media, errors: without(state.errors, action.clear ?? [action.id]), scopes };
     }
     case 'discard':
       return {
@@ -206,9 +211,12 @@ export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 're
 /** Fields that hold a value; a `notice` is display only and never part of the form. */
 const valueFields = (page: PageDef): ValueFieldDef[] => page.sections.flatMap((s) => s.fields).filter(isValueField);
 
-/** A stored password the user has not touched is `null` ("keep"): nothing to validate. */
-const validateFieldValue = (field: ValueFieldDef, value: FieldValue | undefined): string | null =>
-  field.type === 'password' && value === null ? null : validateValue(field.validate, value);
+/** Every message of a field's value, keyed like the server's (a group: per sub-field). A stored password the user has not touched is `null` ("keep"): nothing to validate. */
+function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Record<string, string> {
+  if (field.type === 'group') return groupErrors(field, value);
+  const error = field.type === 'password' && value === null ? null : validateValue(field.validate, value);
+  return error ? { [field.id]: error } : {};
+}
 
 /** The save scope a field belongs to: the page, or its section when the page saves per section. */
 export function scopeOf(page: PageDef): Map<string, string> {
@@ -230,23 +238,28 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
   const scopes = useMemo(() => scopeOf(page), [page]);
   const dispatch = useCallback((action: Action) => store.dispatch(page.id, action), [store, page.id]);
 
+  /** `clear`: the error keys the edit makes stale (a group's sub-field edit clears that sub-field only); default all of the field's. */
   const setValue = useCallback(
-    (id: string, value: FieldValue, media?: MediaItem | null) =>
-      dispatch({ type: 'change', id, value, scope: scopes.get(id) ?? PAGE_SCOPE, ...(media === undefined ? {} : { media }) }),
+    (id: string, value: FieldValue, media?: MediaItem | null, clear?: string[]) =>
+      dispatch({ type: 'change', id, value, scope: scopes.get(id) ?? PAGE_SCOPE, ...(media === undefined ? {} : { media }), ...(clear ? { clear } : {}) }),
     [dispatch, scopes],
   );
   /** Show a field's own message (a media field: the chosen file is the wrong type or too large); the value stays as it was. */
   const setError = useCallback((id: string, message: string) => dispatch({ type: 'invalid', errors: { [id]: message }, ids: [id] }), [dispatch]);
   const discard = useCallback(() => dispatch({ type: 'discard' }), [dispatch]);
 
-  /** Validate one field now (used on blur); returns whether it is valid. */
+  /**
+   * Validate one field now (used on blur); returns whether it is valid. `only`: one error key of the field (a group's
+   * sub-field, `<group>.<index>.<sub-field>`): the other items are left alone until they are touched or saved.
+   */
   const validateField = useCallback(
-    (id: string): boolean => {
+    (id: string, only?: string): boolean => {
       const field = fields.get(id);
       if (!field) return true;
-      const error = validateFieldValue(field, store.get(page.id).values[id]);
-      dispatch({ type: 'invalid', errors: error ? { [id]: error } : {}, ids: [id] });
-      return error === null;
+      const all = fieldErrors(field, store.get(page.id).values[id]);
+      const errors = only === undefined ? all : only in all ? { [only]: all[only] as string } : {};
+      dispatch({ type: 'invalid', errors, ids: [only ?? id] });
+      return Object.keys(errors).length === 0;
     },
     [fields, store, page.id, dispatch],
   );
@@ -263,8 +276,7 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
         const errors: Record<string, string> = {};
         for (const id of changed) {
           const field = fields.get(id);
-          const error = field ? validateFieldValue(field, current.values[id]) : null;
-          if (error) errors[id] = error;
+          if (field) Object.assign(errors, fieldErrors(field, current.values[id]));
         }
         if (Object.keys(errors).length > 0) {
           dispatch({ type: 'invalid', errors, ids: changed, scope });

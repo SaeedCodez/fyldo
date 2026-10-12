@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
 import { __, formatNumber } from '../../i18n';
-import type { FieldDef, FieldValue, MediaItem } from '../../types';
+import type { FieldDef, FieldValue, GroupItemValue, MediaItem } from '../../types';
 import { cn } from '../../lib/cn';
 import { sanitizeMediaId } from '../../lib/wp-media';
 import { length } from '../../lib/validation';
@@ -21,6 +21,7 @@ import { Select } from '../ui/select';
 import { Slider } from '../ui/slider';
 import { Textarea, TextareaFooter } from '../ui/textarea';
 import { Toggle } from '../ui/toggle';
+import { FieldGroup } from './FieldGroup';
 import { SettingRow } from './SettingRow';
 
 export interface FieldRendererProps {
@@ -30,7 +31,18 @@ export interface FieldRendererProps {
   divider: boolean;
   /** `media`: the attachment a media field was set to (null when cleared); the other fields never pass it. */
   onChange: (id: string, value: FieldValue, media?: MediaItem | null) => void;
-  onBlur: (id: string) => void;
+  /** `only`: a group validates one sub-field on its blur (`<group>.<index>.<sub-field>`). */
+  onBlur: (id: string, only?: string) => void;
+  /** A group's change; `clear`: the error keys it makes stale (omitted = all of the group's). Default: `onChange`. */
+  onGroupChange?: (id: string, value: GroupItemValue[], clear?: string[]) => void;
+  /** The page's errors: a group shows its sub-fields' (keyed `<group>.<index>.<sub-field>`). */
+  errors?: Record<string, string>;
+  /** `item`: a sub-field inside a Group Item (label → control → helper). */
+  variant?: 'row' | 'item';
+  /** A sub-field's error key, used as its `data-field-id` and name; default the field id. */
+  fieldKey?: string;
+  /** A sub-field of a disabled group (or one disabled itself). */
+  forceDisabled?: boolean;
   /** What an `image` / `file` field draws for its saved attachment (the page's `media[field.id]`). */
   media?: MediaItem | null;
   /** A field shows a message of its own (a chosen file that is the wrong type or too large); its value is left as it was. */
@@ -46,10 +58,26 @@ const leavesGroup = (done: () => void) => (event: FocusEvent<HTMLElement>) => {
   if (!event.currentTarget.contains(event.relatedTarget as Node | null)) done();
 };
 
-const list = (value: FieldValue): string[] => (Array.isArray(value) ? value : []);
+const list = (value: FieldValue): string[] => (Array.isArray(value) ? value.filter((v): v is string => typeof v === 'string') : []);
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
-export function FieldRenderer({ field, value, error, divider, onChange, onBlur, media = null, onError, revision, locale = 'en' }: FieldRendererProps): ReactElement {
+export function FieldRenderer({
+  field,
+  value,
+  error,
+  divider,
+  onChange,
+  onBlur,
+  onGroupChange,
+  errors,
+  variant = 'row',
+  fieldKey,
+  forceDisabled,
+  media = null,
+  onError,
+  revision,
+  locale = 'en',
+}: FieldRendererProps): ReactElement {
   // Display only: no value, no label association, nothing to change, nothing to send.
   if (field.type === 'notice') {
     return (
@@ -61,7 +89,7 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
     );
   }
 
-  const disabled = field.disabled !== false;
+  const disabled = forceDisabled ?? field.disabled !== false;
   const reason = typeof field.disabled === 'string' ? field.disabled : undefined;
   const common = {
     title: field.label,
@@ -71,8 +99,9 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
     divider,
     error,
     disabled,
-    name: field.id,
-    fieldId: field.id,
+    name: fieldKey ?? field.id,
+    fieldId: fieldKey ?? field.id,
+    variant,
   } as const;
 
   switch (field.type) {
@@ -302,6 +331,36 @@ export function FieldRenderer({ field, value, error, divider, onChange, onBlur, 
         </SettingRow>
       );
     }
+
+    case 'group':
+      // A list of items: the title names the group, each sub-field is a field of its own (FieldRenderer, `item` variant).
+      return (
+        <SettingRow {...common} layout="stacked" group full>
+          <FieldGroup
+            field={field}
+            value={value}
+            errors={errors ?? {}}
+            disabled={disabled}
+            locale={locale}
+            onChange={(next, clear) => (onGroupChange ? onGroupChange(field.id, next, clear) : onChange(field.id, next))}
+            onBlur={(key) => onBlur(field.id, key)}
+            renderField={(slot) => (
+              <FieldRenderer
+                field={slot.field}
+                value={slot.value}
+                error={slot.error}
+                divider={false}
+                variant="item"
+                fieldKey={slot.fieldKey}
+                forceDisabled={slot.disabled}
+                onChange={(_, next) => slot.onChange(next)}
+                onBlur={() => slot.onBlur()}
+                locale={locale}
+              />
+            )}
+          />
+        </SettingRow>
+      );
 
     default: {
       // text | url | email — URLs and emails stay LTR (the text; the label keeps the page direction) and read Persian digits as ASCII.

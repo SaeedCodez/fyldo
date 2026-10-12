@@ -306,6 +306,25 @@ Behaviour: the frame is created on first use with `title` = the field label, `bu
 
 PHP: `image` (src/Fields/ImageField.php) and `file` (src/Fields/FileField.php) share `AbstractMediaField`; layout `field`. Config `types` (file extensions or WordPress type groups from `wp_get_ext_types()` such as `image` and `document`; a group expands to its extensions that `wp_get_mime_types()` allows, so `mimes` and the client's `types` stay a plain extension list; an unknown name throws a `ConfigException`; `image` accepts image extensions or the `image` group only; `file` accepts every type, images included, when `types` is not set) and `max_size` (bytes or text such as `2MB`). Sanitize: `abs( (int) )` of a number, otherwise `0` (the shared `media` cases of `tests/fixtures/validation-cases.json`); the implied `media` rule fails a stored value that is not a whole number of 0 or more and makes `required` reject `0`. The attachment checks (exists, `current_user_can( 'read_post' )`, image, `types`, `max_size`) go through ONE protected method, `AbstractMediaField::attachment()`, backed by `Support\Attachments::find()`, which the unit tests override. The saved attachment as the browser draws it (`id`, `filename`, `filesize`, `mime`, `extension`, `width`, `height`, `thumbnail`) is `OptionStore::client_media()`: it is sent as `media` (field id → object or `null`) beside `values` in the page payload and in every REST response (read, save, reset), only for a page that has such a field. `Assets` calls `wp_enqueue_media()` only on a Fyldo screen whose instance has one.
 
+### 2.16 Group + Group Item — Figma `Group` (Locale × Type Fixed | Sortable | Repeatable × State Default | Empty | Max) and `Group Item` (Locale × State Expanded | Collapsed | Dragging | Error)
+
+One field type (`group`) over `FieldGroup` (`app/components/fyldo/FieldGroup.tsx`: the list, dragging, keyboard moving, Add / Duplicate / Remove, Undo, the count) and the presentational `GroupItem` (`app/components/ui/group-item.tsx`). The sub-fields are ordinary `FieldRenderer`s in the `item` variant of the Setting Row (label → control → helper). The drag handle is Fyldo's own `Icon/drag` (`app/icons/DragHandle.tsx`; Iconsax has no grip).
+```ts
+type GroupItemProps = { title: string; summary?: string; mono?: boolean; preview?: string /* '' = dashed tile, undefined = none */; open: boolean; onOpenChange(open: boolean): void; errorCount?: number; dragging?: boolean; handle?: ReactNode; actions?: ReactNode; children: ReactNode };
+```
+| Figma | Code |
+|---|---|
+| Group: Stacked-row look, 894 wide, padding 24, Text (Label/14 Strong + Copy/13, gap 4) → Items (gap 8) → Footer, 16 apart; Divider | The Setting Row in `stacked` + `group` + `full` (the list fills the row, 16 below the title); the list is a `role="group"` named by the title |
+| Footer: Secondary Small "Add …" with `add`, count Copy/13 `text/tertiary` ("3 of 5"; at Max "5 of 5. Remove … to add another.", Add and Duplicate disabled) | `add_label`, the count only when `max` is set; `min` disables Remove |
+| Empty: dashed `border/default` box on `background/subtle`, radius md, padding 32/24, 40px icon box (`element-plus`), "No items yet" / "Items you add appear here.", Add | Shown when an `addable` group has no items |
+| Group Item: `border/default`, radius md, header padding 12/16, gap 12: Handle 20 (`icon/tertiary`), Preview 36 (`background/subtle`, `border/subtle`, radius sm, icon 18), Title Label/14 Strong + Summary Mono/12 `text/tertiary`, Actions (Tertiary Small `copy`, `trash`, chevron 36 with `arrow-down` 18 `icon/secondary`, gap 4) | The header is a disclosure button stretched over the header (`after:inset-0`), so the chevron and the empty space toggle too; the handle and the actions sit above it as their own buttons. The summary is the first text / url / email sub-field after the title (Mono for url / email) |
+| Expanded: Body padding 20, gap 16, top `border/subtle`; sub-fields two to a row, the last of an odd run and wide controls (textarea, choice, checkbox and radio groups) full width | `grid-cols-2` (one column at ≤782px) |
+| Dragging: `brand/border` + Shadow/Medium. Error: `status/error/solid` border + red Badge "1 error" | `dragging` while a pointer or keyboard move is under way; `errorCount` from the page's errors |
+
+Behaviour: pointer dragging moves the item with the pointer while the others make room (150 ms transform, off under reduced motion); keyboard: the handle (a button named "Reorder <title>") takes Space / Enter to pick up and drop, the arrow keys to move, Escape to put the item back; every step is announced in a live region. Add opens a new item at the end and focuses its first sub-field; Duplicate puts a copy below; Remove works at once and the toast offers Undo. A save that fails opens the first item with an error, and the page focuses that sub-field (`data-field-id` = `<group>.<index>.<sub-field>`).
+
+PHP: `src/Fields/GroupField.php`. Value: a list of arrays keyed by sub-field id (sanitized item by item, missing keys get the sub-field default, a fixed group keeps exactly the items of `default`). Errors: `AbstractField::errors()` returns field id → message; a group returns one entry per invalid sub-field (`<group>.<index>.<sub-field>`) and its own count error (`required`, `items_min`, `items_max`) only when every item is valid. Shared cases: `groups` in `tests/fixtures/validation-cases.json`. A stored sub-field value that no longer validates reads as that sub-field's default (`stored_value()`).
+
 ---
 
 ## 3. Feedback / status
@@ -497,7 +516,8 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
-| *later* `repeater`, `media`, `code editor`, `date` | out of scope until designed | | | |
+| `group` | `FieldGroup` + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
+| *later* `media`, `code editor`, `date` | out of scope until designed | | | |
 
 ## 6. Shared gaps summary (design silent — proposals in ARCHITECTURE §15)
 

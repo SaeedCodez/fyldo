@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-11T15:29:44+00:00\n"
+"POT-Creation-Date: 2026-10-12T11:05:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -27,13 +27,82 @@ msgstr ""
 msgid "Keep editing"
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:288
+#: app/components/fyldo/FieldGroup.tsx:150
+msgid "Item %d"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:228
+msgid "“%s” removed"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:229
+msgid "Undo"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:278
+msgid "%1$s moved to position %2$d of %3$d."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:298
+msgid "Position %1$d of %2$d."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:311
+msgid "%1$s dropped. %2$s"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:316
+msgid ""
+"%1$s picked up. %2$s Use the arrow keys to move it, Space to drop it, "
+"Escape to cancel."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:343
+msgid "Move cancelled. %1$s is back at position %2$d of %3$d."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:353
+msgid "Add item"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:401
+#: app/components/fyldo/FieldGroup.tsx:409
+msgid "Reorder %s"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:435
+msgid "Duplicate %s"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:441
+#: app/components/ui/media-field.tsx:219
+#: app/components/ui/tag.tsx:63
+msgid "Remove %s"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:491
+msgid "No items yet"
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:494
+msgid "Items you add appear here."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:526
+msgid "%1$s of %2$s. Remove an item to add another."
+msgstr ""
+
+#: app/components/fyldo/FieldGroup.tsx:531
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: app/components/fyldo/FieldRenderer.tsx:317
 msgid ""
 "A value is already saved. Leave this empty to keep it, or type a new one to "
 "replace it."
 msgstr ""
 
-#: app/components/fyldo/FieldRenderer.tsx:294
+#: app/components/fyldo/FieldRenderer.tsx:323
 msgid "•••• set"
 msgstr ""
 
@@ -57,7 +126,7 @@ msgid "All changes saved"
 msgstr ""
 
 #: app/components/fyldo/SaveBar.tsx:28
-#: app/lib/page-form.ts:83
+#: app/lib/page-form.ts:88
 msgid "Couldn’t save. Check the highlighted fields."
 msgstr ""
 
@@ -73,56 +142,56 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:116
+#: app/components/fyldo/SettingsPage.tsx:120
 msgid "Changes take effect after you save."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:132
+#: app/components/fyldo/SettingsPage.tsx:136
 msgid "Save"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:148
+#: app/components/fyldo/SettingsPage.tsx:152
 msgid "Settings reset to defaults"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:151
+#: app/components/fyldo/SettingsPage.tsx:155
 msgid "Couldn't reset settings. Check your connection and try again."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:152
+#: app/components/fyldo/SettingsPage.tsx:156
 msgid "Retry"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:159
+#: app/components/fyldo/SettingsPage.tsx:163
 msgid "This action can’t be undone."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:232
+#: app/components/fyldo/SettingsPage.tsx:238
 msgid "These settings were changed somewhere else"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:235
+#: app/components/fyldo/SettingsPage.tsx:241
 msgid "Reload latest values"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:239
+#: app/components/fyldo/SettingsPage.tsx:245
 msgid ""
 "They were saved in another tab or by another person after this page was "
 "opened, so your changes were not saved. Reload the latest values to "
 "continue; your unsaved changes on this page will be lost."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:269
+#: app/components/fyldo/SettingsPage.tsx:275
 msgid "Reset all settings?"
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:270
+#: app/components/fyldo/SettingsPage.tsx:276
 msgid ""
 "Every option on this page will return to its default value. This can’t be "
 "undone."
 msgstr ""
 
-#: app/components/fyldo/SettingsPage.tsx:271
+#: app/components/fyldo/SettingsPage.tsx:277
 #: app/components/ui/icon-picker-modal.tsx:289
 msgid "Cancel"
 msgstr ""
@@ -167,6 +236,12 @@ msgstr ""
 #: app/components/ui/color-picker.tsx:98
 msgid "Pick a color…"
 msgstr ""
+
+#: app/components/ui/group-item.tsx:123
+msgid "%d error"
+msgid_plural "%d errors"
+msgstr[0] ""
+msgstr[1] ""
 
 #: app/components/ui/icon-picker-modal.tsx:179
 msgid "%s icon"
@@ -267,11 +342,6 @@ msgstr ""
 msgid "%1$s: %2$s"
 msgstr ""
 
-#: app/components/ui/media-field.tsx:219
-#: app/components/ui/tag.tsx:63
-msgid "Remove %s"
-msgstr ""
-
 #: app/components/ui/modal.tsx:139
 msgid "Type %s to confirm"
 msgstr ""
@@ -359,15 +429,15 @@ msgstr[1] ""
 msgid "Notifications"
 msgstr ""
 
-#: app/lib/page-form.ts:303
+#: app/lib/page-form.ts:315
 msgid "Couldn’t load the latest values. Check your connection and try again."
 msgstr ""
 
-#: app/lib/page-form.ts:84
+#: app/lib/page-form.ts:89
 msgid "Couldn't save. Check your connection and try again."
 msgstr ""
 
-#: app/lib/page-form.ts:85
+#: app/lib/page-form.ts:90
 msgid "Couldn’t save: these settings were changed somewhere else."
 msgstr ""
 
@@ -476,7 +546,7 @@ msgstr ""
 #: build/fyldo/demo/demo.php:157
 #: build/fyldo/demo/demo.php:508
 #: demo/demo.php:157
-#: demo/demo.php:508
+#: demo/demo.php:557
 msgid "Security"
 msgstr ""
 
@@ -782,126 +852,126 @@ msgid "Shown next to the menu item."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:447
-#: demo/demo.php:447
+#: demo/demo.php:496
 msgid "Site logo"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:448
-#: demo/demo.php:448
+#: demo/demo.php:497
 msgid "Shown in the sidebar and on the login screen."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:454
-#: demo/demo.php:454
+#: demo/demo.php:503
 msgid "Brand guidelines"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:455
-#: demo/demo.php:455
+#: demo/demo.php:504
 msgid "Offered as a download on the About tab."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:463
-#: demo/demo.php:463
+#: demo/demo.php:512
 msgid "Amounts"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:464
-#: demo/demo.php:464
+#: demo/demo.php:513
 msgid "Numbers are checked in the browser and again on the server."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:469
-#: demo/demo.php:469
+#: demo/demo.php:518
 msgid "Items per page"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:470
-#: demo/demo.php:470
+#: demo/demo.php:519
 msgid "Between 5 and 100, in steps of 5."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:481
-#: demo/demo.php:481
+#: demo/demo.php:530
 msgid "Excerpt length"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:482
-#: demo/demo.php:482
+#: demo/demo.php:531
 msgid "In words, between 10 and 200."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:492
-#: demo/demo.php:492
+#: demo/demo.php:541
 msgid "Image quality"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:493
-#: demo/demo.php:493
+#: demo/demo.php:542
 msgid "Higher quality creates larger files."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:509
-#: demo/demo.php:509
+#: demo/demo.php:558
 msgid "Keys, accounts and a way back to the defaults."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:516
-#: demo/demo.php:516
+#: demo/demo.php:565
 msgid "Access"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:517
-#: demo/demo.php:517
+#: demo/demo.php:566
 msgid "Nothing you type here leaves this site."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:522
-#: demo/demo.php:522
+#: demo/demo.php:571
 msgid "API key"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:523
-#: demo/demo.php:523
+#: demo/demo.php:572
 msgid "Write-only: once saved, the key is never sent back to the browser."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:530
-#: demo/demo.php:530
+#: demo/demo.php:579
 msgid "Account name"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:531
-#: demo/demo.php:531
+#: demo/demo.php:580
 msgid "Checked by a rule that only runs on the server. Try “admin”."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:533
-#: demo/demo.php:533
+#: demo/demo.php:582
 msgid "“admin” is reserved. Choose another name."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:539
-#: demo/demo.php:539
+#: demo/demo.php:588
 msgid "License key"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:541
-#: demo/demo.php:541
+#: demo/demo.php:590
 msgid "Managed by your hosting provider."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:547
 #: build/fyldo/demo/demo.php:552
-#: demo/demo.php:547
-#: demo/demo.php:552
-#: app/components/fyldo/SettingsPage.tsx:169
-#: app/components/fyldo/SettingsPage.tsx:272
+#: demo/demo.php:596
+#: demo/demo.php:601
+#: app/components/fyldo/SettingsPage.tsx:173
+#: app/components/fyldo/SettingsPage.tsx:278
 msgid "Reset settings"
 msgstr ""
 
 #: build/fyldo/demo/demo.php:548
-#: demo/demo.php:548
+#: demo/demo.php:597
 msgid "Restore every option on this page to its default value."
 msgstr ""
 
@@ -992,13 +1062,13 @@ msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:22
 #: src/Validation/Messages.php:22
-#: app/lib/validation.ts:101
+#: app/lib/validation.ts:102
 msgid "This field is required."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:27
 #: src/Validation/Messages.php:27
-#: app/lib/validation.ts:104
+#: app/lib/validation.ts:105
 #. translators: %d: minimum number of characters.
 #, php-format
 msgid "Use at least %d character."
@@ -1008,7 +1078,7 @@ msgstr[1] ""
 
 #: build/fyldo/src/Validation/Messages.php:32
 #: src/Validation/Messages.php:32
-#: app/lib/validation.ts:108
+#: app/lib/validation.ts:109
 #. translators: %d: maximum number of characters.
 #, php-format
 msgid "Use no more than %d character."
@@ -1018,65 +1088,65 @@ msgstr[1] ""
 
 #: build/fyldo/src/Validation/Messages.php:35
 #: src/Validation/Messages.php:35
-#: app/lib/validation.ts:111
+#: app/lib/validation.ts:112
 msgid "This value is not in the expected format."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:39
 #: src/Validation/Messages.php:39
-#: app/lib/validation.ts:113
+#: app/lib/validation.ts:114
 msgid "Enter a valid URL."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:42
 #: src/Validation/Messages.php:42
-#: app/lib/validation.ts:115
+#: app/lib/validation.ts:116
 msgid "Enter a valid email address."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:45
 #: src/Validation/Messages.php:45
-#: app/lib/validation.ts:117
+#: app/lib/validation.ts:118
 msgid "Enter a number."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:48
 #: src/Validation/Messages.php:48
-#: app/lib/validation.ts:119
+#: app/lib/validation.ts:120
 msgid "Enter a valid color, like #rrggbb."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:51
 #: src/Validation/Messages.php:51
-#: app/lib/validation.ts:121
+#: app/lib/validation.ts:122
 msgid "Choose one of the available options."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:54
-#: src/Validation/Messages.php:54
-#: app/lib/validation.ts:123
+#: src/Validation/Messages.php:64
+#: app/lib/validation.ts:124
 msgid "Choose a file from the media library."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:57
-#: src/Validation/Messages.php:57
+#: src/Validation/Messages.php:67
 msgid "This file is no longer available. Choose another one."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:60
-#: src/Validation/Messages.php:60
+#: src/Validation/Messages.php:70
 #: app/lib/wp-media.ts:120
 msgid "Choose an image."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:63
-#: src/Validation/Messages.php:63
+#: src/Validation/Messages.php:73
 #: app/lib/wp-media.ts:121
 msgid "This file type is not allowed."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:67
-#: src/Validation/Messages.php:67
+#: src/Validation/Messages.php:77
 #: app/lib/wp-media.ts:122
 #. translators: %s: the largest allowed file size, such as 2 MB.
 #, php-format
@@ -1084,8 +1154,8 @@ msgid "Choose a file of %s or less."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:73
-#: src/Validation/Messages.php:73
-#: app/lib/validation.ts:129
+#: src/Validation/Messages.php:83
+#: app/lib/validation.ts:138
 #. translators: %d: minimum number of selected options.
 #, php-format
 msgid "Select at least %d option."
@@ -1094,16 +1164,16 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: build/fyldo/src/Validation/Messages.php:76
-#: src/Validation/Messages.php:76
-#: app/lib/validation.ts:131
+#: src/Validation/Messages.php:86
+#: app/lib/validation.ts:140
 #. translators: %s: minimum allowed number.
 #, php-format
 msgid "Enter a value of at least %s."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:82
-#: src/Validation/Messages.php:82
-#: app/lib/validation.ts:135
+#: src/Validation/Messages.php:92
+#: app/lib/validation.ts:144
 #. translators: %d: maximum number of selected options.
 #, php-format
 msgid "Select no more than %d option."
@@ -1112,25 +1182,65 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: build/fyldo/src/Validation/Messages.php:85
-#: src/Validation/Messages.php:85
-#: app/lib/validation.ts:137
+#: src/Validation/Messages.php:95
+#: app/lib/validation.ts:146
 #. translators: %s: maximum allowed number.
 #, php-format
 msgid "Enter a value of at most %s."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:89
-#: src/Validation/Messages.php:89
-#: app/lib/validation.ts:125
+#: src/Validation/Messages.php:99
+#: app/lib/validation.ts:134
 #. translators: %s: the step, e.g. 5 (the value must be a multiple of it, counted from the minimum).
 #, php-format
 msgid "Enter a value in steps of %s."
 msgstr ""
 
 #: build/fyldo/src/Validation/Messages.php:92
-#: src/Validation/Messages.php:92
-#: app/lib/validation.ts:139
+#: src/Validation/Messages.php:102
+#: app/lib/validation.ts:148
 msgid "This value is not valid."
+msgstr ""
+
+#: demo/demo.php:447
+msgid "Header buttons"
+msgstr ""
+
+#: demo/demo.php:448
+msgid "Buttons shown in the site header, in this order."
+msgstr ""
+
+#: demo/demo.php:454
+msgid "Add button"
+msgstr ""
+
+#: demo/demo.php:459
+msgid "Label"
+msgstr ""
+
+#: demo/demo.php:465
+msgid "Icon"
+msgstr ""
+
+#: demo/demo.php:471
+msgid "Link"
+msgstr ""
+
+#: demo/demo.php:472
+msgid "A full URL, like https://example.com/pricing."
+msgstr ""
+
+#: demo/demo.php:477
+msgid "Pricing"
+msgstr ""
+
+#: demo/demo.php:482
+msgid "Docs"
+msgstr ""
+
+#: demo/demo.php:487
+msgid "Get started"
 msgstr ""
 
 #: fyldo.php
@@ -1148,6 +1258,24 @@ msgstr ""
 #. Author of the plugin
 msgid "Fyldo"
 msgstr ""
+
+#: src/Validation/Messages.php:56
+#: app/lib/validation.ts:127
+#. translators: %d: minimum number of items in a group.
+#, php-format
+msgid "Add at least %d item."
+msgid_plural "Add at least %d items."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:61
+#: app/lib/validation.ts:131
+#. translators: %d: maximum number of items in a group.
+#, php-format
+msgid "Use no more than %d item."
+msgid_plural "Use no more than %d items."
+msgstr[0] ""
+msgstr[1] ""
 
 #: app/components/fyldo/App.tsx:145
 msgctxt "unsaved changes dialog"

@@ -49,11 +49,12 @@ final class Saver {
 				continue;
 			}
 
-			$value = $field->sanitize( $incoming[ $id ] );
-			$error = $field->validate( $value );
+			$value  = $field->sanitize( $incoming[ $id ] );
+			$failed = $field->errors( $value );
 
-			if ( null !== $error ) {
-				$errors[ $id ] = $error;
+			// A group reports each invalid sub-field under `<group>.<index>.<sub-field>`.
+			if ( array() !== $failed ) {
+				$errors += $failed; // Not array_merge: a numeric field id ("2024") would be renumbered.
 				continue;
 			}
 

@@ -3,6 +3,7 @@ import { __ } from '../../i18n';
 import { PAGE_SCOPE, scopeState, usePageForm, type FormStore } from '../../lib/page-form';
 import { ApiError, type Api } from '../../lib/api';
 import { cn } from '../../lib/cn';
+import { firstErrorKey } from '../../lib/group';
 import { isValueField, type FieldValue, type NoticeDef, type PageDef, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
@@ -69,7 +70,10 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
             : null;
 
   // After a failed submit, move focus to the first invalid field — switching to its tab first when it is on another one.
-  const firstInvalid = page.sections.flatMap((s) => s.fields.map((f) => ({ field: f, section: s }))).find(({ field }) => state.errors[field.id]);
+  // A group's errors are its sub-fields' (`<group>.<index>.<sub-field>`): focus the first of those.
+  const firstInvalid = page.sections
+    .flatMap((s) => s.fields.map((f) => ({ field: f, section: s, key: firstErrorKey(state.errors, f.id) })))
+    .find(({ key }) => key !== undefined);
   useEffect(() => {
     if (!focusAfterErrors.current || !firstInvalid) return;
     if (!onTab(firstInvalid.section, tab)) {
@@ -78,7 +82,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
     }
     focusAfterErrors.current = false;
     column.current
-      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.field.id}"] :is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])`)
+      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.key}"] :is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])`)
       ?.focus();
   }, [state.errors, firstInvalid, tab, onTabChange]);
 
@@ -197,8 +201,10 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
                 field={field}
                 value={field.type === 'notice' ? null : field.id in state.values ? (state.values[field.id] as FieldValue) : field.default}
                 error={state.errors[field.id]}
+                errors={state.errors}
                 divider={index < section.fields.length - 1}
                 onChange={setValue}
+                onGroupChange={(id, next, clear) => setValue(id, next, undefined, clear)}
                 onBlur={validateField}
                 media={state.media[field.id] ?? null}
                 onError={setError}
