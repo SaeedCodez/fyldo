@@ -2,14 +2,14 @@
 
 A read-only export of the Fyldo design (Figma file `Pg3Ni7eqTLQYIG6hfNVPt6`, page **Components**), so that code, tests and
 cloud sessions never need Figma access. Exported 2026-10-11 (after the redesign: primary colour, tinted neutrals, bigger controls) through the figma-console MCP
-(Desktop Bridge); nothing in the Figma file was modified. 40 component sets, 839 variants, 23 usage/template frames. The "Fyldo – HeroUI" file, the Foundations page and the Icons page are **not** part of it
+(Desktop Bridge); nothing in the Figma file was modified. 42 component sets, 857 variants, 24 usage/template frames. The "Fyldo – HeroUI" file, the Foundations page and the Icons page are **not** part of it
 (tokens live in `tokens/figma.tokens.json`, styles in `tokens/figma.styles.json`, the spec in `docs/design-spec.md`).
 
 ## Contents
 
 | Path | What |
 |---|---|
-| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (166 = `tokens/figma.tokens.json`), `componentCount` (40), `variantCount` (839). Start here. |
+| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (166 = `tokens/figma.tokens.json`), `componentCount` (42), `variantCount` (857). Start here. |
 | `components/<kebab-name>.json` | One file per COMPONENT_SET (40): property definitions and, per variant, the full node tree. |
 | `png/<kebab-name>/<variant>.png` | Every variant at **2x** (839 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
 | `png/usage/*.png` | The 19 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**; 23 in all. |

@@ -1,13 +1,13 @@
 {
- "exportedAt": "2026-10-11",
+ "exportedAt": "2026-10-12",
  "source": {
   "fileName": "Fyldo",
   "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
   "page": "Components"
  },
  "variableCount": 166,
- "componentCount": 40,
- "variantCount": 839,
+ "componentCount": 42,
+ "variantCount": 857,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1211,6 +1211,42 @@
     "png/icon-tile/locale-fa--state-hover.png",
     "png/icon-tile/locale-fa--state-selected.png"
    ]
+  },
+  {
+   "name": "Group Item",
+   "nodeId": "385:8925",
+   "variantCount": 8,
+   "json": "components/group-item.json",
+   "jsonVariantCount": 8,
+   "png": [
+    "png/group-item/locale-en--state-collapsed.png",
+    "png/group-item/locale-en--state-dragging.png",
+    "png/group-item/locale-en--state-error.png",
+    "png/group-item/locale-en--state-expanded.png",
+    "png/group-item/locale-fa--state-collapsed.png",
+    "png/group-item/locale-fa--state-dragging.png",
+    "png/group-item/locale-fa--state-error.png",
+    "png/group-item/locale-fa--state-expanded.png"
+   ]
+  },
+  {
+   "name": "Group",
+   "nodeId": "385:10430",
+   "variantCount": 10,
+   "json": "components/group.json",
+   "jsonVariantCount": 10,
+   "png": [
+    "png/group/locale-en--type-fixed--state-default.png",
+    "png/group/locale-en--type-repeatable--state-default.png",
+    "png/group/locale-en--type-repeatable--state-empty.png",
+    "png/group/locale-en--type-repeatable--state-max.png",
+    "png/group/locale-en--type-sortable--state-default.png",
+    "png/group/locale-fa--type-fixed--state-default.png",
+    "png/group/locale-fa--type-repeatable--state-default.png",
+    "png/group/locale-fa--type-repeatable--state-empty.png",
+    "png/group/locale-fa--type-repeatable--state-max.png",
+    "png/group/locale-fa--type-sortable--state-default.png"
+   ]
   }
  ],
  "usage": [
@@ -1396,6 +1432,14 @@
    "width": 960,
    "height": 3100,
    "png": "png/usage/icon-picker-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Group · Usage",
+   "nodeId": "385:10545",
+   "width": 960,
+   "height": 6819,
+   "png": "png/usage/group-usage.png",
    "scale": 1
   }
  ]
