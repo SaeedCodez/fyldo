@@ -46,6 +46,14 @@ final class Naming {
 	}
 
 	/**
+	 * Fyldo's own bookkeeping for an instance: `{slug}__fyldo` (the plugin version each page last ran, for
+	 * `default_before`). The double underscore keeps it apart from page options: a page id cannot start with "_".
+	 */
+	public static function state_option( string $slug ): string {
+		return $slug . '__fyldo';
+	}
+
+	/**
 	 * REST namespace `fyldo-{slug}/v{major}`.
 	 *
 	 * @return non-falsy-string

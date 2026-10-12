@@ -54,7 +54,7 @@ Create instances on `init` (by then the winning copy is chosen). Values are stor
 $fyldo = Fyldo::create( 'acme-seo', [                // slug: a-z, 0-9, "-", 3–40 characters, unique per site
 	'title'      => 'Acme SEO',                       // brand name (default "Fyldo")
 	'logo'       => 'chart-2',                        // an Iconsax name or an image URL (default: the Fyldo mark)
-	'version'    => ACME_SEO_VERSION,                 // shown as a badge next to the brand
+	'version'    => ACME_SEO_VERSION,                 // shown in the sidebar; also lets `default_before` keep old defaults
 	'capability' => 'manage_options',                 // default for every page and REST route
 	'navigation' => 'sidebar',                        // 'sidebar' (default) | 'top'
 	'menu'       => [ 'type' => 'submenu', 'parent' => 'options-general.php', 'title' => 'Acme SEO' ], // or 'type' => 'top'
@@ -90,7 +90,7 @@ $fyldo->add_page( 'general', [
 
 ### Fields
 
-Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`true` or a reason string), `icon`, `layout`, `validate`, `sanitize_cb` and `validate_cb`.
+Every field takes `id`, `type`, `label`, `description`, `default`, `default_before`, `disabled` (`true` or a reason string), `icon`, `layout`, `validate`, `sanitize_cb` and `validate_cb`.
 
 `layout` sets where the control sits in its row: `inline` (at the end, for on/off controls), `stacked` (under the description) or `field` (an input at the end of the row, error under it; stacked on narrow screens). The default is `field` for every type except `choice` (`stacked`, its cards are too wide to sit beside the label) and `toggle`/`checkbox` (`inline`). Set it only to override.
 
@@ -113,6 +113,17 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `disabled` (`
 | `notice` | Display only, never stored: `description`, `tone` (`gray` `blue` `green` `amber` `red`). |
 
 `validate` keys: `required`, `min_length`, `max_length`, `pattern`, `min`, `max`, `step`, `schemes`, `allowed`. They run in PHP **and** in the browser. `validate_cb( $value )` (return `true`, `false` or a message) and `sanitize_cb` are PHP-only; the server is authoritative.
+
+### Changing a default
+
+A field nobody saved has nothing stored, so it reads `default` from your code; changing `default` in a release changes every such site. To keep the old value for them, list it in `default_before`, keyed by the version that introduced the new default:
+
+```php
+[ 'id' => 'posts_per_page', 'type' => 'number', 'label' => 'Posts per page',
+  'default' => 30, 'default_before' => [ '2.0.0' => 10, '3.0.0' => 20 ] ],  // needs the instance `version`
+```
+
+Fyldo remembers the version each page last ran (option `{slug}__fyldo`) and, when it moves forward, stores the default each untouched field had in that version. Saved values are never touched; new installs get today's default. Details and edge cases: [docs/default-history.md](docs/default-history.md).
 
 ### Save modes
 
@@ -139,9 +150,24 @@ Call it before the screen loads (`init`, `admin_init`). Fyldo draws it in its ow
 
 A section with `'tone' => 'danger'` has no fields, only an `action`. The only built-in action id is `reset` (restore the page's defaults). A `keyword` in `confirm` makes the user type it before the button enables. The server checks nonce, capability and keyword. `$fyldo->reset( 'general' )` does the same from code.
 
+### Uninstall
+
+Fyldo never deletes your data. In your plugin's `uninstall.php`, load Fyldo, register your instance and pages the same way as on `init` (keep that code in a function you can call), then call `delete_data()`. It deletes every registered page's option and Fyldo's own `{slug}__fyldo`, and fires no hooks.
+
+```php
+// uninstall.php
+defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
+require_once __DIR__ . '/fyldo/fyldo.php';   // or vendor/autoload.php
+require_once __DIR__ . '/includes/settings.php';
+acme_seo_register_settings();                 // the function your plugin hooks on `init`
+\Fyldo\V1\Fyldo::instance( 'acme-seo' )->delete_data();
+```
+
+On multisite, run it for each site (`switch_to_blog()`).
+
 ### Hooks
 
-`fyldo/{slug}/before_save`, `fyldo/{slug}/saved` and `fyldo/{slug}/reset` (actions, `$page_id, $new, $old`), and the filters `fyldo/{slug}/sanitize/{page}` and `fyldo/{slug}/validate/{page}`.
+`fyldo/{slug}/before_save`, `fyldo/{slug}/saved` and `fyldo/{slug}/reset` (actions, `$page_id, $new, $old`), `fyldo/{slug}/upgraded` (`$page_id, $from, $to`, once per page when the instance `version` moves forward), and the filters `fyldo/{slug}/sanitize/{page}` and `fyldo/{slug}/validate/{page}`.
 
 ## Coexistence and Strauss
 
@@ -188,6 +214,8 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 - **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `icon` `image` `file` `select` `multi_select`، `group` (فهرستی از آیتم‌ها با زیرفیلدهای یکسان؛ با `sortable` قابل جابه‌جایی و با `addable` قابل افزودن و حذف) و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP.
 - **صفحه‌ها و ناوبری:** `navigation` برابر `sidebar` (پیش‌فرض) یا `top`؛ گروه‌ها با `add_group`؛ زبانه‌ها با `tabs`؛ نشان عددی با `badge`.
+- **تغییر مقدار پیش‌فرض:** فیلدی که کسی ذخیره‌اش نکرده، `default` را از کد می‌خواند؛ پس تغییر `default` در نسخهٔ جدید روی همهٔ این سایت‌ها اثر می‌گذارد. با `'default_before' => [ '2.0.0' => 10, '3.0.0' => 20 ]` (کلید: نسخه‌ای که پیش‌فرض جدید را آورد؛ مقدار: پیش‌فرض قبل از آن) Fyldo برای سایت‌های قدیمی همان مقدار قبلی را نگه می‌دارد. به `version` در نمونه نیاز دارد. جزئیات در [docs/default-history.md](docs/default-history.md).
+- **حذف افزونه:** Fyldo هیچ‌وقت داده‌ها را خودش پاک نمی‌کند. در `uninstall.php` نمونه و صفحه‌ها را مثل `init` ثبت کنید و `Fyldo::instance( 'acme-seo' )->delete_data()` را صدا بزنید؛ گزینهٔ همهٔ صفحه‌ها و `{slug}__fyldo` پاک می‌شوند.
 - **حالت ذخیره:** `'save' => 'global'` (نوار ذخیره برای کل صفحه) یا `'section'` (دکمهٔ ذخیره در هر کارت)؛ یکی برای هر صفحه.
 - **لوگو و عنوان:** `title` نام برند است و `logo` نام یک آیکون Iconsax یا نشانی تصویر.
 - **اعلان‌ها:** `$fyldo->admin_notice( $message, [ 'tone' => 'amber', 'page' => 'general' ] )` پیش از بارگذاری صفحه (`init` یا `admin_init`).

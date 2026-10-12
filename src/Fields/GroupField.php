@@ -63,6 +63,9 @@ final class GroupField extends AbstractField {
 			if ( in_array( $type, self::EXCLUDED_TYPES, true ) ) {
 				throw new ConfigException( sprintf( 'Group field "%1$s": a sub-field cannot be of type "%2$s".', $id, $type ) );
 			}
+			if ( is_array( $sub_config ) && array_key_exists( 'default_before', $sub_config ) ) {
+				throw new ConfigException( sprintf( 'Group field "%s": a sub-field cannot have `default_before`; put the earlier default items on the group itself.', $id ) );
+			}
 			$sub = FieldFactory::create( (array) $sub_config );
 			if ( isset( $this->subs[ $sub->id() ] ) ) {
 				throw new ConfigException( sprintf( 'Group field "%1$s": duplicate sub-field id "%2$s".', $id, $sub->id() ) );

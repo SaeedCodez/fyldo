@@ -11,8 +11,11 @@ namespace Fyldo\V1;
 use Fyldo\V1\Admin\Notice;
 use Fyldo\V1\Schema\ConfigException;
 use Fyldo\V1\Schema\Page;
+use Fyldo\V1\Storage\DefaultHistory;
 use Fyldo\V1\Storage\OptionStore;
 use Fyldo\V1\Storage\Saver;
+use Fyldo\V1\Support\Naming;
+use Fyldo\V1\Support\Version;
 
 /**
  * Public object returned by Fyldo::create().
@@ -167,16 +170,44 @@ final class Instance {
 				throw new ConfigException( sprintf( 'Page "%s" is already registered.', $id ) );
 			}
 
-			$page               = new Page( $this->slug, $id, $config );
+			$page = new Page( $this->slug, $id, $config );
+			$this->assert_default_history( $page );
+
 			$this->pages[ $id ] = array(
 				'page'  => $page,
 				'group' => isset( $config['group'] ) ? (string) $config['group'] : '',
 			);
 		} catch ( ConfigException $e ) {
 			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
+
+			return $this;
 		}
 
+		// Before anything reads the page: a plugin update keeps the defaults this site already had.
+		( new DefaultHistory( $this ) )->apply( $page );
+
 		return $this;
+	}
+
+	/**
+	 * `default_before` needs the instance `version` (to know which version a site came from), and lists only versions up
+	 * to it.
+	 *
+	 * @throws ConfigException On a history that cannot apply.
+	 */
+	private function assert_default_history( Page $page ): void {
+		$version = (string) $this->config['version'];
+
+		foreach ( $page->fields() as $field ) {
+			foreach ( array_keys( $field->default_before() ) as $before ) {
+				if ( ! Version::is_valid( $version ) ) {
+					throw new ConfigException( sprintf( 'Page "%1$s", field "%2$s": `default_before` needs the instance `version` (your plugin\'s version number, such as "2.0.0").', $page->id(), $field->id() ) );
+				}
+				if ( version_compare( (string) $before, $version, '>' ) ) {
+					throw new ConfigException( sprintf( 'Page "%1$s", field "%2$s": `default_before` lists "%3$s", which is later than the instance version "%4$s".', $page->id(), $field->id(), $before, $version ) );
+				}
+			}
+		}
 	}
 
 	/** @return array<string,Page> */
@@ -269,6 +300,18 @@ final class Instance {
 		}
 
 		return ( new Saver( $this ) )->reset( $page );
+	}
+
+	/**
+	 * Deletes everything this instance stored on the site: the option of every registered page and Fyldo's own
+	 * `{slug}__fyldo`. For the consumer's `uninstall.php`; Fyldo itself never deletes consumer data. Fires no hooks.
+	 */
+	public function delete_data(): void {
+		foreach ( $this->pages() as $page ) {
+			$this->store->delete( $page );
+		}
+
+		delete_option( Naming::state_option( $this->slug ) );
 	}
 
 	/**
