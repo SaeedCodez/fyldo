@@ -153,6 +153,9 @@ if ( ! function_exists( 'delete_option' ) ) {
 if ( ! function_exists( 'update_option' ) ) {
 	function update_option( $name, $value, $autoload = null ) {
 		$GLOBALS['__fyldo_test_options'][ $name ] = $value;
+		if ( null !== $autoload ) {
+			$GLOBALS['__fyldo_test_autoload'][ $name ] = $autoload;
+		}
 		return true;
 	}
 }

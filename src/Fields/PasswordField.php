@@ -32,8 +32,8 @@ final class PasswordField extends AbstractField {
 	}
 
 	protected function normalize_type( array $config ): array {
-		if ( array_key_exists( 'default', $config ) ) {
-			throw new ConfigException( sprintf( 'Password field "%s" cannot have a `default`: it is write-only and never sent to the browser.', $config['id'] ) );
+		if ( array_key_exists( 'default', $config ) || array() !== $config['default_before'] ) {
+			throw new ConfigException( sprintf( 'Password field "%s" cannot have a `default` or `default_before`: it is write-only and never sent to the browser.', $config['id'] ) );
 		}
 
 		// `new-password` keeps browsers from filling the site owner's own login password into an API-key field.

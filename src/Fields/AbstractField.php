@@ -8,6 +8,7 @@
 namespace Fyldo\V1\Fields;
 
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Version;
 use Fyldo\V1\Validation\Messages;
 use Fyldo\V1\Validation\Rules;
 
@@ -23,6 +24,7 @@ abstract class AbstractField {
 		'label',
 		'description',
 		'default',
+		'default_before',
 		'disabled',
 		'layout',
 		'icon',
@@ -139,6 +141,33 @@ abstract class AbstractField {
 	 */
 	public function default_value() {
 		return array_key_exists( 'default', $this->config ) ? $this->config['default'] : $this->fallback_default();
+	}
+
+	/**
+	 * Earlier defaults, keyed by the plugin version that replaced them, oldest first (`'2.0.0' => 10`: "before 2.0.0
+	 * the default was 10"). Server-only: the browser never needs them.
+	 *
+	 * @return array<int|string,mixed> Keys are versions (PHP turns a key such as "2" into an int).
+	 */
+	public function default_before(): array {
+		return $this->config['default_before'];
+	}
+
+	/**
+	 * The default this field had in a given plugin version: the first `default_before` entry for a later version, else
+	 * today's default.
+	 *
+	 * @param string $version A plugin version.
+	 * @return mixed
+	 */
+	public function default_at( string $version ) {
+		foreach ( $this->config['default_before'] as $before => $value ) {
+			if ( version_compare( $version, (string) $before, '<' ) ) {
+				return $value;
+			}
+		}
+
+		return $this->default_value();
 	}
 
 	/**
@@ -309,14 +338,32 @@ abstract class AbstractField {
 			$disabled = '' === trim( $disabled ) ? true : trim( $disabled );
 		}
 
-		$normalized                = $config;
-		$normalized['id']          = $id;
-		$normalized['type']        = (string) ( $config['type'] ?? '' );
-		$normalized['label']       = isset( $config['label'] ) ? (string) $config['label'] : '';
-		$normalized['description'] = isset( $config['description'] ) ? (string) $config['description'] : '';
-		$normalized['layout']      = $layout;
-		$normalized['validate']    = $rules;
-		$normalized['disabled']    = $disabled;
+		$history = $config['default_before'] ?? array();
+		if ( ! is_array( $history ) ) {
+			throw new ConfigException( sprintf( 'Field "%s": `default_before` must be an array of version => earlier default.', $id ) );
+		}
+		foreach ( array_keys( $history ) as $before ) {
+			if ( ! Version::is_valid( (string) $before ) ) {
+				throw new ConfigException( sprintf( 'Field "%1$s": `default_before` keys must be version numbers such as "2.0.0" (got "%2$s").', $id, $before ) );
+			}
+		}
+		// Oldest first: default_at() takes the first version the site had not reached yet.
+		uksort(
+			$history,
+			static function ( $a, $b ): int {
+				return version_compare( (string) $a, (string) $b );
+			}
+		);
+
+		$normalized                   = $config;
+		$normalized['id']             = $id;
+		$normalized['default_before'] = $history;
+		$normalized['type']           = (string) ( $config['type'] ?? '' );
+		$normalized['label']          = isset( $config['label'] ) ? (string) $config['label'] : '';
+		$normalized['description']    = isset( $config['description'] ) ? (string) $config['description'] : '';
+		$normalized['layout']         = $layout;
+		$normalized['validate']       = $rules;
+		$normalized['disabled']       = $disabled;
 
 		$normalized = $this->normalize_type( $normalized );
 

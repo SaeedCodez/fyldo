@@ -6,6 +6,7 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ### Added
 
+- **Fields**: `default_before` keeps the defaults a site already had when a release changes them. List the earlier defaults by the version that replaced them (`'default' => 30, 'default_before' => [ '2.0.0' => 10, '3.0.0' => 20 ]`); when the instance `version` moves forward, Fyldo stores, for each field nobody saved, the default it had in the version the site came from. Saved values are never touched and new installs get today's default. Fyldo now records the version each page last ran in one autoloaded option, `{slug}__fyldo` (only when the instance has a `version`), and fires `fyldo/{slug}/upgraded( $page_id, $from, $to )`. See [docs/default-history.md](docs/default-history.md).
 - **Fields**: `group`, a list of items that share the same sub-fields (Figma "Group" and "Group Item"), e.g. header buttons with a label, an icon and a link. The value is a list of arrays keyed by sub-field id. A fixed group keeps the items of its `default`; `sortable` adds drag handles (and keyboard moving: Space, the arrow keys, Escape), `addable` adds Add, Duplicate and Remove with Undo, limited by `min` / `max`. Items are collapsible cards named by `item_title`, with an optional `item_icon` preview tile. Sub-fields validate as on their own; their errors are keyed `<group>.<index>.<sub-field>` and a failed save opens the first item with an error. Sub-fields cannot be groups, media or password fields.
 
 ### Changed
