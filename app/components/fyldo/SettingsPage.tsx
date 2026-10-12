@@ -202,6 +202,7 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
                 value={field.type === 'notice' ? null : field.id in state.values ? (state.values[field.id] as FieldValue) : field.default}
                 error={state.errors[field.id]}
                 errors={state.errors}
+                reveal={state.reveal}
                 divider={index < section.fields.length - 1}
                 onChange={setValue}
                 onGroupChange={(id, next, clear) => setValue(id, next, undefined, clear)}

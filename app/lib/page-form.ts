@@ -34,6 +34,8 @@ export interface FormState {
   conflict: boolean;
   /** "Reload latest values" is running. */
   reloading: boolean;
+  /** Counts the saves refused for invalid values: a group opens the first item with an error when it changes. */
+  reveal: number;
 }
 
 /** The scope of a page that saves as a whole. */
@@ -75,6 +77,7 @@ export function initialState(page: Pick<PageDef, 'values' | 'revision' | 'media'
     scopes: {},
     conflict: false,
     reloading: false,
+    reveal: 0,
   };
 }
 
@@ -109,7 +112,7 @@ export function reducer(state: FormState, action: Action): FormState {
     case 'invalid': {
       const errors = { ...without(state.errors, action.ids), ...action.errors };
       const scopes = action.scope ? withScope(state, action.scope, { status: 'error', message: invalidMessage() }) : state.scopes;
-      return { ...state, errors, scopes };
+      return { ...state, errors, scopes, reveal: action.scope ? state.reveal + 1 : state.reveal };
     }
     case 'saving':
       return { ...state, errors: without(state.errors, action.ids), scopes: withScope(state, action.scope, { status: 'saving', message: '' }) };

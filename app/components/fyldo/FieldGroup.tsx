@@ -37,6 +37,8 @@ export interface FieldGroupProps {
   value: FieldValue;
   /** The page's errors: the sub-fields' are keyed `<group>.<index>.<sub-field>`. */
   errors: Record<string, string>;
+  /** Changes when a save is refused for invalid values: the first item with an error opens. */
+  reveal: number;
   disabled: boolean;
   /** `clear`: the error keys the edit makes stale; omitted = every error of the group. */
   onChange: (value: GroupItemValue[], clear?: string[]) => void;
@@ -89,6 +91,7 @@ export function FieldGroup({
   field,
   value,
   errors,
+  reveal,
   disabled,
   onChange,
   onBlur,
@@ -122,22 +125,13 @@ export function FieldGroup({
     target?.focus();
   });
 
-  // A failed save opens the first item with an error, so its field can take focus (the page moves focus there).
-  const errorSignature = Object.keys(errors)
-    .filter((key) => key.startsWith(`${field.id}.`))
-    .join('|');
-  const [seenErrors, setSeenErrors] = useState(errorSignature);
-  if (errorSignature !== seenErrors) {
-    setSeenErrors(errorSignature);
-    const first = Number(
-      errorSignature
-        .split('|')[0]
-        ?.slice(field.id.length + 1)
-        .split('.')[0],
-    );
-    const key = synced[first];
-    if (errorSignature !== '' && key !== undefined && !open.has(key))
-      setOpen(new Set(open).add(key));
+  // A refused save opens the first item with an error (in this render, before the page moves focus to its field).
+  const [seenReveal, setSeenReveal] = useState(reveal);
+  if (reveal !== seenReveal) {
+    setSeenReveal(reveal);
+    const firstKey = Object.keys(errors).find((key) => key.startsWith(`${field.id}.`));
+    const key = firstKey === undefined ? undefined : synced[Number(firstKey.slice(field.id.length + 1).split('.')[0])];
+    if (key !== undefined && !open.has(key)) setOpen(new Set(open).add(key));
   }
 
   const count = items.length;

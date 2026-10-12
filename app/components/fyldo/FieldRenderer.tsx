@@ -37,6 +37,8 @@ export interface FieldRendererProps {
   onGroupChange?: (id: string, value: GroupItemValue[], clear?: string[]) => void;
   /** The page's errors: a group shows its sub-fields' (keyed `<group>.<index>.<sub-field>`). */
   errors?: Record<string, string>;
+  /** Changes when a save is refused for invalid values: a group then opens its first item with an error. */
+  reveal?: number;
   /** `item`: a sub-field inside a Group Item (label → control → helper). */
   variant?: 'row' | 'item';
   /** A sub-field's error key, used as its `data-field-id` and name; default the field id. */
@@ -70,6 +72,7 @@ export function FieldRenderer({
   onBlur,
   onGroupChange,
   errors,
+  reveal = 0,
   variant = 'row',
   fieldKey,
   forceDisabled,
@@ -340,6 +343,7 @@ export function FieldRenderer({
             field={field}
             value={value}
             errors={errors ?? {}}
+            reveal={reveal}
             disabled={disabled}
             locale={locale}
             onChange={(next, clear) => (onGroupChange ? onGroupChange(field.id, next, clear) : onChange(field.id, next))}
