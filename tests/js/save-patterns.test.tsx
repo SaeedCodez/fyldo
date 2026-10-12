@@ -137,7 +137,7 @@ function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
     dir: 'ltr',
     locale: 'en',
     rootId: 'fyldo-acme-seo-root',
-    rest: { root: '/rest/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce' },
+    rest: { root: '/rest/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce', refresh: '/wp-admin/admin-ajax.php?action=fyldo_acme_nonces' },
     i18n: null,
     ...overrides,
   };

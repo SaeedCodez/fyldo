@@ -111,6 +111,26 @@ final class Controller {
 		return true;
 	}
 
+	/**
+	 * Fresh nonces for the current user: both expire after a day, and a new login invalidates them. The browser asks for
+	 * them when a request fails on a nonce, then sends it again. Like core's `rest-nonce` action, it is cookie-authenticated
+	 * (logged-in users only) and grants nothing: every REST request still checks the capability.
+	 *
+	 * @return array{nonce:string,instanceNonce:string}
+	 */
+	public function nonces(): array {
+		return array(
+			'nonce'         => wp_create_nonce( 'wp_rest' ),
+			'instanceNonce' => wp_create_nonce( Naming::nonce_action( $this->instance->slug() ) ),
+		);
+	}
+
+	/** admin-ajax handler of nonces(). */
+	public function send_nonces(): void {
+		nocache_headers();
+		wp_send_json_success( $this->nonces() );
+	}
+
 	public function read( \WP_REST_Request $request ): \WP_REST_Response {
 		$page = $this->page( $request );
 

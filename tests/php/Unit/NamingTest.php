@@ -26,12 +26,13 @@ final class NamingTest extends TestCase {
 		$this->assertSame( 'fyldo-acme-seo-fonts-1.4.2', Naming::fonts_handle( 'acme-seo', '1.4.2' ) );
 		$this->assertSame( '__fyldo_acme_seo__', Naming::config_var( 'acme-seo' ) );
 		$this->assertSame( 'fyldo_acme-seo_rest', Naming::nonce_action( 'acme-seo' ) );
+		$this->assertSame( 'fyldo_acme-seo_nonces', Naming::nonce_refresh_action( 'acme-seo' ) );
 		$this->assertSame( 'fyldo/acme-seo/saved', Naming::hook( 'acme-seo', 'saved' ) );
 		$this->assertSame( 'fyldo-acme-seo-root', Naming::dom_id( 'acme-seo' ) );
 	}
 
 	public function test_two_slugs_never_share_an_identifier(): void {
-		$methods = array( 'rest_namespace', 'dom_id', 'config_var', 'nonce_action' );
+		$methods = array( 'rest_namespace', 'dom_id', 'config_var', 'nonce_action', 'nonce_refresh_action' );
 		foreach ( $methods as $method ) {
 			$this->assertNotSame( Naming::$method( 'acme-a' ), Naming::$method( 'acme-b' ), $method );
 		}

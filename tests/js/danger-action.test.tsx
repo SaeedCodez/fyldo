@@ -229,7 +229,7 @@ describe('REST client: runAction', () => {
       calls.push({ url, init });
       return new Response(JSON.stringify({ values: { a: 1 }, revision: 'r9' }), { status: 200 });
     });
-    const api = createApi({ rest: { root: '/wp-json/fyldo-acme/v1/', nonce: 'wp-n', instanceNonce: 'fy-n', nonceHeader: 'X-Fyldo-Nonce' } }, fetchImpl as never);
+    const api = createApi({ rest: { root: '/wp-json/fyldo-acme/v1/', nonce: 'wp-n', instanceNonce: 'fy-n', nonceHeader: 'X-Fyldo-Nonce', refresh: '/wp-admin/admin-ajax.php?action=fyldo_acme_nonces' } }, fetchImpl as never);
 
     await expect(api.runAction('fields', 'reset', 'RESET')).resolves.toEqual({ values: { a: 1 }, revision: 'r9' });
     expect(calls[0]?.url).toBe('/wp-json/fyldo-acme/v1/pages/fields/actions/reset');
@@ -240,7 +240,7 @@ describe('REST client: runAction', () => {
 
   it('a 400 (wrong keyword) rejects with the server message and status', async () => {
     const fetchImpl = vi.fn(async () => new Response(JSON.stringify({ code: 'fyldo_confirmation', message: 'The confirmation text does not match.', data: { status: 400 } }), { status: 400 }));
-    const api = createApi({ rest: { root: '/r/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce' } }, fetchImpl as never);
+    const api = createApi({ rest: { root: '/r/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce', refresh: '/wp-admin/admin-ajax.php?action=fyldo_acme_nonces' } }, fetchImpl as never);
     await expect(api.runAction('fields', 'reset', 'nope')).rejects.toMatchObject({ status: 400, code: 'fyldo_confirmation', message: 'The confirmation text does not match.' });
   });
 });
@@ -261,7 +261,7 @@ function config(notices: NoticeDef[]): FyldoConfig {
     dir: 'ltr',
     locale: 'en',
     rootId: 'fyldo-acme-seo-root',
-    rest: { root: '/rest/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce' },
+    rest: { root: '/rest/', nonce: 'n', instanceNonce: 'i', nonceHeader: 'X-Fyldo-Nonce', refresh: '/wp-admin/admin-ajax.php?action=fyldo_acme_nonces' },
     i18n: null,
   };
 }

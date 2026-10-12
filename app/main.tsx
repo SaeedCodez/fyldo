@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { App } from './components/fyldo/App';
+import { AppBoundary } from './components/fyldo/AppBoundary';
 import { setLocaleData } from './i18n';
 import { collectIconNames, preloadIcons } from './icons/registry';
 import { collectCustomModules, loadCustomFields } from './lib/custom-fields';
@@ -30,7 +31,11 @@ async function mount(root: HTMLElement): Promise<void> {
   // Import every icon and custom field module named anywhere in the config in parallel BEFORE the first render: no pop-in.
   await Promise.all([preloadIcons(collectIconNames(config)), loadCustomFields(collectCustomModules(config))]);
 
-  createRoot(root).render(<App config={config} root={root} />);
+  createRoot(root).render(
+    <AppBoundary>
+      <App config={config} root={root} />
+    </AppBoundary>,
+  );
 }
 
 document.querySelectorAll<HTMLElement>(`[${ROOT_ATTRIBUTE}]`).forEach((root) => void mount(root));

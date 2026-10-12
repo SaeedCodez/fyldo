@@ -53,6 +53,7 @@ final class ClientConfig {
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
 				'instanceNonce' => wp_create_nonce( Naming::nonce_action( $slug ) ),
 				'nonceHeader'   => Naming::nonce_header(),
+				'refresh'       => admin_url( 'admin-ajax.php?action=' . Naming::nonce_refresh_action( $slug ) ),
 			),
 			'i18n'         => Textdomain::jed(),
 		);

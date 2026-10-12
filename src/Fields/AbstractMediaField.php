@@ -21,6 +21,14 @@ use Fyldo\V1\Support\Attachments;
  */
 abstract class AbstractMediaField extends AbstractField {
 
+	/**
+	 * True while a stored value is read: the value then only has to exist, whoever is reading. A logged-out visitor has no
+	 * `read` capability, so checking `read_post` here would hand the front end the default instead of the saved attachment.
+	 *
+	 * @var bool
+	 */
+	private $reading = false;
+
 	/** `image` or `file`. */
 	abstract protected function kind(): string;
 
@@ -37,14 +45,38 @@ abstract class AbstractMediaField extends AbstractField {
 	}
 
 	/**
-	 * The attachment behind an id, or null when it does not exist or the current user may not read it. The one seam to
-	 * WordPress: unit tests override it.
+	 * The attachment behind an id, or null when it does not exist. A seam to WordPress: unit tests override it.
 	 *
 	 * @param int $id Attachment id.
 	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool}|null
 	 */
 	protected function attachment( int $id ): ?array {
 		return Attachments::find( $id );
+	}
+
+	/**
+	 * Whether the current user may read the attachment. A seam to WordPress: unit tests override it.
+	 *
+	 * @param int $id Attachment id.
+	 */
+	protected function readable( int $id ): bool {
+		return Attachments::readable( $id );
+	}
+
+	/**
+	 * A stored value as the page reads it. The attachment must still exist and fit the field, but who reads it does not
+	 * matter: the front end gets the same value as the admin.
+	 *
+	 * @param mixed $raw Stored value.
+	 * @return mixed
+	 */
+	public function stored_value( $raw ) {
+		$this->reading = true;
+		try {
+			return parent::stored_value( $raw );
+		} finally {
+			$this->reading = false;
+		}
 	}
 
 	/** Extension (lower case) → MIME type for everything WordPress allows. */
@@ -166,7 +198,8 @@ abstract class AbstractMediaField extends AbstractField {
 	}
 
 	/**
-	 * The attachment must exist and be readable, be an image (`image`), be one of `types`, and not exceed `max_size`.
+	 * The attachment must exist, be readable by the current user (when saving; not when a stored value is read), be an image
+	 * (`image`), be one of `types`, and not exceed `max_size`.
 	 *
 	 * @param mixed $value Sanitized value.
 	 */
@@ -177,7 +210,7 @@ abstract class AbstractMediaField extends AbstractField {
 		}
 
 		$attachment = $this->attachment( $id );
-		if ( null === $attachment ) {
+		if ( null === $attachment || ( ! $this->reading && ! $this->readable( $id ) ) ) {
 			return array(
 				'rule'   => 'attachment',
 				'params' => array(),
@@ -212,7 +245,7 @@ abstract class AbstractMediaField extends AbstractField {
 
 	/**
 	 * What the browser draws for the saved value: the attachment's name, size, type and dimensions. Null when nothing is
-	 * chosen or the attachment is gone.
+	 * chosen, the attachment is gone or the current user may not read it.
 	 *
 	 * @param mixed $value Stored value.
 	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string}|null
@@ -224,7 +257,7 @@ abstract class AbstractMediaField extends AbstractField {
 		}
 
 		$attachment = $this->attachment( $id );
-		if ( null === $attachment ) {
+		if ( null === $attachment || ! $this->readable( $id ) ) {
 			return null;
 		}
 

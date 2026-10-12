@@ -126,6 +126,29 @@ describe('Settings page (global save pattern)', () => {
     expect(screen.getByRole('button', { name: 'Save changes' })).toBeEnabled(); // retry
   });
 
+  it.each([
+    [new ApiError('Your login has expired. Log in again, then try again.', 401, 'fyldo_logged_out'), 'Couldn’t save: your login has expired. Log in again, then save.'],
+    [new ApiError('You are not allowed to change these settings.', 403, 'fyldo_forbidden'), 'Couldn’t save: you are not allowed to change these settings.'],
+    [new ApiError('The request is too large.', 413, 'fyldo_too_large'), 'Couldn’t save: there is too much to send at once.'],
+    [new ApiError('There has been a critical error on this website.', 500, 'internal_server_error'), 'Couldn’t save: the server ran into a problem. Try again in a moment.'],
+    [new ApiError('Bad Gateway', 502, 'error'), 'Couldn’t save: the server ran into a problem. Try again in a moment.'],
+  ])('a failed save says why (%o) and keeps the edits', async (error, message) => {
+    const logged = vi.spyOn(console, 'error').mockImplementation(() => {});
+    setup({
+      savePage: async () => {
+        throw error;
+      },
+    });
+    const title = screen.getByRole('textbox', { name: 'Site title' });
+    await userEvent.type(title, '!');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(await screen.findByText(message)).toBeVisible();
+    expect(title).toHaveValue('Fyldo!');
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeEnabled();
+    logged.mockRestore();
+  });
+
   it('a conflict (409) keeps the edits, explains it and offers to reload the latest values', async () => {
     const { savePage, readPage } = setup({
       savePage: async () => {

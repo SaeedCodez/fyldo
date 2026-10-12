@@ -6,7 +6,7 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
 import { isValueField, type FieldValue, type MediaItem, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
-import { ApiError, type Api } from './api';
+import { ApiError, LOGGED_OUT, type Api } from './api';
 import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
 import { validateValue } from './validation';
@@ -92,6 +92,20 @@ const withScope = (state: FormState, scope: string, next: ScopeState): Record<st
 export const invalidMessage = (): string => __('Couldn’t save. Check the highlighted fields.', 'fyldo');
 export const networkMessage = (): string => __("Couldn't save. Check your connection and try again.", 'fyldo');
 export const conflictMessage = (): string => __('Couldn’t save: these settings were changed somewhere else.', 'fyldo');
+
+/**
+ * Why a save failed, in words the user can act on. Never the server's own text: a PHP fatal or a proxy's error page says
+ * nothing useful here, so the details go to the console for whoever debugs it.
+ */
+export function saveFailedMessage(error: unknown): string {
+  if (!(error instanceof ApiError) || error.status === 0) return networkMessage();
+  if (error.code === LOGGED_OUT) return __('Couldn’t save: your login has expired. Log in again, then save.', 'fyldo');
+
+  console.error(`Fyldo: saving failed (${error.status} ${error.code}).`, error.message);
+  if (error.status === 403) return __('Couldn’t save: you are not allowed to change these settings.', 'fyldo');
+  if (error.status === 413) return __('Couldn’t save: there is too much to send at once.', 'fyldo');
+  return __('Couldn’t save: the server ran into a problem. Try again in a moment.', 'fyldo');
+}
 
 export function reducer(state: FormState, action: Action): FormState {
   switch (action.type) {
@@ -302,7 +316,7 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
           } else if (e instanceof ApiError && e.status === 409) {
             dispatch({ type: 'conflict', scope, message: conflictMessage() });
           } else {
-            dispatch({ type: 'failed', scope, message: networkMessage() });
+            dispatch({ type: 'failed', scope, message: saveFailedMessage(e) });
           }
           return false;
         }
@@ -318,8 +332,10 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
         try {
           const latest = await api.readPage(page.id);
           dispatch({ type: 'reloaded', values: latest.values, revision: latest.revision, media: latest.media });
-        } catch {
-          dispatch({ type: 'reload-failed', message: __('Couldn’t load the latest values. Check your connection and try again.', 'fyldo') });
+        } catch (e) {
+          const message =
+            e instanceof ApiError && e.code === LOGGED_OUT ? e.message : __('Couldn’t load the latest values. Check your connection and try again.', 'fyldo');
+          dispatch({ type: 'reload-failed', message });
         }
       }),
     [api, store, page.id, dispatch],

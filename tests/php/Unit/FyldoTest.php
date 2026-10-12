@@ -56,9 +56,19 @@ final class FyldoTest extends TestCase {
 		Fyldo::init();
 		Fyldo::init();
 
-		foreach ( array( 'init', 'admin_menu', 'rest_api_init', 'admin_enqueue_scripts', 'admin_body_class' ) as $hook ) {
+		foreach ( array( 'init', 'admin_menu', 'rest_api_init', 'admin_init', 'admin_enqueue_scripts', 'admin_body_class' ) as $hook ) {
 			$this->assertCount( 1, $GLOBALS['__fyldo_test_actions'][ $hook ], $hook );
 		}
+	}
+
+	public function test_every_instance_gets_its_own_nonce_refresh_for_logged_in_users(): void {
+		Fyldo::create( 'acme-seo', array( 'title' => 'Acme SEO' ) );
+		Fyldo::create( 'acme-shop', array( 'title' => 'Acme Shop' ) );
+		Fyldo::register_ajax();
+
+		$this->assertCount( 1, $GLOBALS['__fyldo_test_actions']['wp_ajax_fyldo_acme-seo_nonces'] );
+		$this->assertCount( 1, $GLOBALS['__fyldo_test_actions']['wp_ajax_fyldo_acme-shop_nonces'] );
+		$this->assertArrayNotHasKey( 'wp_ajax_nopriv_fyldo_acme-seo_nonces', $GLOBALS['__fyldo_test_actions'], 'never for logged-out visitors' );
 	}
 
 	public function test_instance_defaults(): void {

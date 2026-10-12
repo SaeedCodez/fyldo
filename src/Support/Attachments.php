@@ -14,7 +14,8 @@ namespace Fyldo\V1\Support;
 final class Attachments {
 
 	/**
-	 * The attachment as the media fields use it, or null when there is no such attachment or the current user may not read it.
+	 * The attachment as the media fields use it, or null when there is no such attachment. Who may read it is a separate
+	 * question (readable()): a stored value must not change with the visitor.
 	 * The name, size, type and dimensions come from the attachment itself, never from its URL.
 	 *
 	 * @param int $id Attachment id.
@@ -22,7 +23,7 @@ final class Attachments {
 	 */
 	public static function find( int $id ): ?array {
 		$post = get_post( $id );
-		if ( ! $post instanceof \WP_Post || 'attachment' !== $post->post_type || ! current_user_can( 'read_post', $id ) ) {
+		if ( ! $post instanceof \WP_Post || 'attachment' !== $post->post_type ) {
 			return null;
 		}
 
@@ -52,5 +53,14 @@ final class Attachments {
 			'thumbnail' => is_string( $thumb ) && '' !== $thumb ? $thumb : null,
 			'image'     => $image,
 		);
+	}
+
+	/**
+	 * Whether the current user may read the attachment (checked when a value is saved or shown in the browser).
+	 *
+	 * @param int $id Attachment id.
+	 */
+	public static function readable( int $id ): bool {
+		return current_user_can( 'read_post', $id );
 	}
 }

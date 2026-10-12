@@ -20,6 +20,13 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 - **Motion**: every hover, focus and selection change uses one quick, soft 150 ms transition, and pages (and the cards of a tab) fade in over 150 ms when you navigate. Both are off under `prefers-reduced-motion`.
 - **Design**: a focused field's halo is a 0.5 px ring in the border colour (was a 3 px, 18 % tint), so the border looks thicker while you type. Sidebar items turn white on hover. Setting Row controls are 400 px wide (the Textarea 448).
 - **Accessibility checks**: the contrast test is less strict than WCAG AA (text 4:1, UI 2.5:1; decision O17). White text on the primary fill is 4.34:1.
+- **Saving**: a failed save says why. Separate Save Bar messages for an expired login, a missing permission (403), a request that is too large (413) and a server error (5xx, a PHP fatal or a proxy's error page); a network failure keeps its message. The edits always stay on the page, and the server's details go to the console.
+- **Saving**: an expired nonce no longer breaks a save. When WordPress or Fyldo refuses a request because a nonce has expired (a tab left open overnight, or a new login), the browser fetches fresh nonces from a new admin-ajax action, `fyldo_{slug}_nonces` (logged-in users only, like core's `rest-nonce`; it grants nothing, every REST request still checks the capability), and sends the request once more. If the user is logged out, the message says to log in again. The client config's `rest` gains `refresh` (that URL).
+
+### Fixed
+
+- **Fields**: `image` and `file` values read on the front end. A stored attachment ID was checked against `current_user_can( 'read_post' )` on every read, and logged-out visitors (no `read` capability) always got the default, `0`, instead of the saved attachment. Reading a stored value now only checks that the attachment still exists and fits the field; the permission check stays where it belongs, on save and in the admin preview.
+- **Admin screen**: a crash while rendering no longer leaves an empty screen. A top-level error boundary shows an error notice with a "Reload page" button (saved settings are untouched) and logs the error to the console. A custom field's crash still stays inside its own row.
 
 ## [1.0.0-beta.3] - 2026-10-02
 

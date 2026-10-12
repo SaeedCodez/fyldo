@@ -19,8 +19,15 @@ final class StubbedImageField extends ImageField {
 	/** @var array<int,array<string,mixed>> */
 	public static $attachments = array();
 
+	/** @var int[] Attachments the current user may not read. */
+	public static $unreadable = array();
+
 	protected function attachment( int $id ): ?array {
 		return self::$attachments[ $id ] ?? null;
+	}
+
+	protected function readable( int $id ): bool {
+		return ! in_array( $id, self::$unreadable, true );
 	}
 }
 
@@ -29,8 +36,15 @@ final class StubbedFileField extends FileField {
 	/** @var array<int,array<string,mixed>> */
 	public static $attachments = array();
 
+	/** @var int[] Attachments the current user may not read. */
+	public static $unreadable = array();
+
 	protected function attachment( int $id ): ?array {
 		return self::$attachments[ $id ] ?? null;
+	}
+
+	protected function readable( int $id ): bool {
+		return ! in_array( $id, self::$unreadable, true );
 	}
 }
 
@@ -43,6 +57,8 @@ final class MediaFieldsTest extends TestCase {
 			9  => array( 'id' => 9, 'filename' => 'guide.pdf', 'filesize' => 1258291, 'mime' => 'application/pdf', 'extension' => 'pdf', 'width' => null, 'height' => null, 'thumbnail' => null, 'image' => false ),
 		);
 		StubbedFileField::$attachments = StubbedImageField::$attachments;
+		StubbedImageField::$unreadable = array();
+		StubbedFileField::$unreadable  = array();
 	}
 
 	private function image( array $extra = array() ): ImageField {
@@ -212,6 +228,30 @@ final class MediaFieldsTest extends TestCase {
 		$image = $this->image();
 		$this->assertSame( 'This file is no longer available. Choose another one.', $image->validate( 99 ) );
 		$this->assertSame( 'This file is no longer available. Choose another one.', $this->file()->validate( 99 ) );
+	}
+
+	public function test_an_attachment_the_user_may_not_read_is_refused_when_saving(): void {
+		StubbedImageField::$unreadable = array( 7 );
+		$this->assertSame( 'This file is no longer available. Choose another one.', $this->image()->validate( 7 ) );
+		$this->assertNull( $this->image()->media( 7 ), 'nor described to that user in the browser' );
+	}
+
+	public function test_a_stored_value_does_not_depend_on_who_reads_it(): void {
+		// A logged-out visitor has no `read` capability, so `read_post` fails for every attachment on the front end.
+		StubbedImageField::$unreadable = array( 7 );
+		StubbedFileField::$unreadable  = array( 9 );
+		$this->assertSame( 7, $this->image()->stored_value( 7 ), 'the saved logo, not the default' );
+		$this->assertSame( 9, $this->file()->stored_value( '9' ) );
+
+		$field = $this->image();
+		$field->stored_value( 7 );
+		$this->assertSame( 'This file is no longer available. Choose another one.', $field->validate( 7 ), 'saving still checks access' );
+	}
+
+	public function test_a_stored_value_still_falls_back_when_the_attachment_is_gone_or_no_longer_fits(): void {
+		$this->assertSame( 0, $this->image()->stored_value( 99 ), 'deleted' );
+		$this->assertSame( 0, $this->image()->stored_value( 9 ), 'not an image' );
+		$this->assertSame( 0, $this->image( array( 'max_size' => '2MB' ) )->stored_value( 8 ), 'too large for the field now' );
 	}
 
 	public function test_an_image_field_wants_an_image(): void {

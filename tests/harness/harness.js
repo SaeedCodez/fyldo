@@ -47,7 +47,7 @@ window.__fyldo_harness__ = {
   dir: rtl ? 'rtl' : 'ltr',
   locale: rtl ? 'fa-IR' : 'en',
   rootId: 'fyldo-harness-root',
-  rest: { root: '/rest/', nonce: 'nonce', instanceNonce: 'inonce', nonceHeader: 'X-Fyldo-Nonce' },
+  rest: { root: '/rest/', nonce: 'nonce', instanceNonce: 'inonce', nonceHeader: 'X-Fyldo-Nonce', refresh: '/wp-admin/admin-ajax.php?action=fyldo_acme_nonces' },
   i18n,
 };
 
