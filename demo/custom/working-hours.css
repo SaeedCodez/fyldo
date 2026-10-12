@@ -1,0 +1,20 @@
+/*
+ * The custom field's layout. Selectors start like Fyldo's own rules (`[data-fyldo-v1][data-fyldo-v1]:not(#\#)`), so
+ * they win over Fyldo's scoped reset and over wp-admin's CSS (docs/custom-fields.md). Colours and spacing are Fyldo's
+ * tokens, so the field follows the theme.
+ */
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-hours {
+	display: flex;
+	align-items: center;
+	gap: var(--fyldo-space-8);
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-hours > button {
+	flex: 1 1 0;
+	min-width: 0;
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-hours-dash {
+	flex: none;
+	color: var(--fyldo-text-tertiary);
+}

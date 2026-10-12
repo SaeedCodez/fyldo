@@ -1,7 +1,7 @@
 <?php
 /**
  * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group, Multi Select,
- * and the input fields (URL, email, password, number, a notice and a disabled field with its reason).
+ * and the input fields (URL, email, password, number, a notice and a disabled field with its reason), and a custom field.
  * Used by: the PHPUnit contract test, tools/dev/dump-slice.php (→ form-fields-page.client.json for the Vitest save
  * flow) and every e2e demo plugin (page id `fields`).
  *
@@ -234,6 +234,27 @@ return array(
 					'label'       => 'Brand guidelines',
 					'description' => 'Offered as a download on the About tab.',
 					'types'       => array( 'pdf', 'zip' ),
+				),
+				// A custom field (M5): demo/custom/working-hours.js, copied next to this file by tools/fixtures/make-demos.ts.
+				array(
+					'id'          => 'opening_hours',
+					'type'        => 'custom',
+					'label'       => 'Opening hours',
+					'description' => 'Saved as one value, like 09:00-17:00.',
+					'module'      => plugins_url( 'working-hours.js', __FILE__ ),
+					'style'       => plugins_url( 'working-hours.css', __FILE__ ),
+					'default'     => '09:00-17:00',
+					'props'       => array(
+						'times'      => array( '08:00', '09:00', '10:00', '12:00', '17:00', '18:00' ),
+						'opens'      => 'Opens',
+						'closes'     => 'Closes',
+						'incomplete' => 'Choose both times.',
+						'order'      => 'The closing time must be after the opening time.',
+					),
+					'validate_cb' => static function ( $value ) {
+						$parts = is_string( $value ) ? explode( '-', $value ) : array();
+						return 2 === count( $parts ) && $parts[1] > $parts[0] ? true : 'The closing time must be after the opening time.';
+					},
 				),
 				array(
 					'id'          => 'license_key',

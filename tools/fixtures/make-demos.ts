@@ -197,6 +197,8 @@ export function makeDemos(): void {
     cpSync(resolve(root, 'tests/fixtures/slice-page.php'), resolve(dir, 'page.php'));
     cpSync(resolve(root, 'tests/fixtures/form-fields-page.php'), resolve(dir, 'fields.php'));
     cpSync(resolve(root, 'tests/fixtures/tabs-page.php'), resolve(dir, 'advanced.php'));
+    // The custom field of the fields page loads the demo's module and stylesheet from the plugin's own folder.
+    for (const file of ['working-hours.js', 'working-hours.css']) cpSync(resolve(root, 'demo/custom', file), resolve(dir, file));
 
     if (demo.kind === 'strauss') {
       strauss(dir, demo.fyldoVersion);

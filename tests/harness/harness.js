@@ -6,6 +6,10 @@ const root = document.getElementById('fyldo-harness-root');
 
 const load = async (name) => (await fetch(`/tests/fixtures/${name}.client.json`)).json();
 const [general, fields, advanced] = await Promise.all([load('slice-page'), load('form-fields-page'), load('tabs-page')]);
+// The custom field's module lives in the plugin folder on WordPress; here it is served from the repository. Its
+// stylesheet is enqueued by PHP there; here it is linked by hand.
+for (const section of fields.sections) for (const field of section.fields) if (field.type === 'custom') field.module = '/demo/custom/working-hours.js';
+document.head.append(Object.assign(document.createElement('link'), { rel: 'stylesheet', href: '/demo/custom/working-hours.css' }));
 const i18n = rtl ? await (await fetch('/languages/fyldo-fa_IR.json')).json() : null;
 
 document.documentElement.lang = rtl ? 'fa-IR' : 'en';

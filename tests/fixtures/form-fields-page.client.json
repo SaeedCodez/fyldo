@@ -520,6 +520,31 @@
                     "max_size": null
                 },
                 {
+                    "id": "opening_hours",
+                    "type": "custom",
+                    "label": "Opening hours",
+                    "description": "Saved as one value, like 09:00-17:00.",
+                    "default": "09:00-17:00",
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {},
+                    "module": "https://example.com/wp-content/plugins/fyldo/working-hours.js",
+                    "props": {
+                        "times": [
+                            "08:00",
+                            "09:00",
+                            "10:00",
+                            "12:00",
+                            "17:00",
+                            "18:00"
+                        ],
+                        "opens": "Opens",
+                        "closes": "Closes",
+                        "incomplete": "Choose both times.",
+                        "order": "The closing time must be after the opening time."
+                    }
+                },
+                {
                     "id": "license_key",
                     "type": "text",
                     "label": "License key",
@@ -586,6 +611,7 @@
         ],
         "site_logo": 0,
         "brand_guidelines": 0,
+        "opening_hours": "09:00-17:00",
         "license_key": "FYLDO-FREE"
     },
     "revision": "rev-1"

@@ -50,7 +50,7 @@ Do **not** use `figma_export_tokens`: it can return a stale cache.
 | `tests/php`, `tests/js`, `e2e/` | PHPUnit, Vitest, Playwright (`e2e/harness` = no WordPress, `e2e/wp` = real WordPress) |
 | `tests/fixtures/validation-cases.json` | Shared validation cases, run by both PHPUnit and Vitest |
 | `tools/` | Token generator, icon codegen, Figma export, release build |
-| `docs/` | `ARCHITECTURE.md` (design, storage contract, decisions), `component-map.md`, `design-spec.md`, `default-history.md` (how `default_before` keeps old defaults across plugin updates) |
+| `docs/` | `ARCHITECTURE.md` (design, storage contract, decisions), `component-map.md`, `design-spec.md`, `default-history.md` (how `default_before` keeps old defaults across plugin updates), `custom-fields.md` (the `custom` field: a developer's own React or JS control) |
 | `.github/workflows/` | `ci.yml` (every PR/push), `release.yml` (on a `v*` tag) |
 
 ## 4. Playbooks

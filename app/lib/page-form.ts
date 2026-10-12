@@ -7,6 +7,7 @@ import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
 import { isValueField, type FieldValue, type MediaItem, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
 import { ApiError, type Api } from './api';
+import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
 import { validateValue } from './validation';
 
@@ -217,7 +218,10 @@ const valueFields = (page: PageDef): ValueFieldDef[] => page.sections.flatMap((s
 /** Every message of a field's value, keyed like the server's (a group: per sub-field). A stored password the user has not touched is `null` ("keep"): nothing to validate. */
 function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Record<string, string> {
   if (field.type === 'group') return groupErrors(field, value);
-  const error = field.type === 'password' && value === null ? null : validateValue(field.validate, value);
+  const error =
+    field.type === 'password' && value === null
+      ? null
+      : (validateValue(field.validate, value) ?? (field.type === 'custom' ? customError(field, value) : null));
   return error ? { [field.id]: error } : {};
 }
 

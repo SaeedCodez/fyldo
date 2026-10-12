@@ -9,6 +9,8 @@ namespace Fyldo\V1\Assets;
 
 use Fyldo\V1\Bootstrap\Loader;
 use Fyldo\V1\Fields\AbstractMediaField;
+use Fyldo\V1\Fields\CustomField;
+use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Support\Naming;
 
@@ -54,6 +56,11 @@ final class Assets {
 		wp_register_style( $handle, $base . '/app.css', array( $fonts_handle ), $cache_bust );
 		wp_enqueue_style( $handle );
 
+		// Custom fields' own stylesheets, after Fyldo's (the developer versions them in the URL if they want to).
+		foreach ( self::custom_styles( $instance ) as $style ) {
+			wp_enqueue_style( $handle . '-custom-' . substr( md5( $style ), 0, 8 ), $style, array( $handle ), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the URL is the developer's.
+		}
+
 		// The native media modal (wp.media) for the `image` and `file` fields: only on a screen that has one.
 		if ( self::has_media_field( $instance ) && function_exists( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
@@ -87,6 +94,27 @@ final class Assets {
 		}
 
 		return false;
+	}
+
+	/**
+	 * The `style` URLs of the instance's custom fields (a group's too), each once.
+	 *
+	 * @return array<int,string>
+	 */
+	private static function custom_styles( Instance $instance ): array {
+		$styles = array();
+		foreach ( $instance->pages() as $page ) {
+			foreach ( $page->fields() as $field ) {
+				$fields = $field instanceof GroupField ? array_values( $field->sub_fields() ) : array( $field );
+				foreach ( $fields as $one ) {
+					if ( $one instanceof CustomField && '' !== $one->style() ) {
+						$styles[ $one->style() ] = true;
+					}
+				}
+			}
+		}
+
+		return array_keys( $styles );
 	}
 
 	/** Development builds (`-dev`) bust the cache with the file time. */

@@ -3,7 +3,7 @@
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
  * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), and the Upload Image
  * and Select File fields (the native media modal is stubbed; the attachments are real), and a Group (header buttons: reordered
- * with the keyboard, one added).
+ * with the keyboard, one added) and a custom field (the demo's working-hours module: two selects, one stored value).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -154,6 +154,14 @@ test.describe('English', () => {
     await page.keyboard.type('Blog');
     await buttons.getByRole('textbox', { name: 'Link' }).fill('https://example.com/blog');
     await expect(buttonTitles).toHaveText(['Get started', 'Docs', 'Blog']);
+
+    // Custom field: the demo's own module (loaded from the plugin folder) draws two selects saved as one value
+    await expect(page.locator('link[href*="working-hours.css"]')).toHaveCount(1); // its `style`, enqueued by PHP
+    const hours = page.getByRole('group', { name: 'Opening hours' });
+    await expect(hours.getByRole('combobox', { name: 'Opens' })).toHaveText('09:00');
+    await hours.getByRole('combobox', { name: 'Closes' }).click();
+    await page.getByRole('option', { name: '18:00' }).click();
+    await expect(hours.getByRole('combobox', { name: 'Closes' })).toHaveText('18:00');
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
@@ -177,6 +185,8 @@ test.describe('English', () => {
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
     await expect(page.getByRole('group', { name: 'Header buttons' }).locator('[data-slot=fy-group-item-title]')).toHaveText(['Get started', 'Docs', 'Blog']);
+    await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Opens' })).toHaveText('09:00');
+    await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Closes' })).toHaveText('18:00');
     // after a reload the preview comes from the server's initial payload
     await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(logo.name);
     await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(/1 × 1 · \d+ B/);

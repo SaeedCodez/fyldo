@@ -21,6 +21,7 @@ import { Select } from '../ui/select';
 import { Slider } from '../ui/slider';
 import { Textarea, TextareaFooter } from '../ui/textarea';
 import { Toggle } from '../ui/toggle';
+import { CustomControl } from './CustomControl';
 import { FieldGroup } from './FieldGroup';
 import { SettingRow } from './SettingRow';
 
@@ -60,7 +61,7 @@ const leavesGroup = (done: () => void) => (event: FocusEvent<HTMLElement>) => {
   if (!event.currentTarget.contains(event.relatedTarget as Node | null)) done();
 };
 
-const list = (value: FieldValue): string[] => (Array.isArray(value) ? value.filter((v): v is string => typeof v === 'string') : []);
+const list = (value: FieldValue): string[] => (Array.isArray(value) ? (value as unknown[]).filter((v): v is string => typeof v === 'string') : []);
 
 /** Maps a PHP field `type` to its control inside a Setting Row. */
 export function FieldRenderer({
@@ -362,6 +363,22 @@ export function FieldRenderer({
                 locale={locale}
               />
             )}
+          />
+        </SettingRow>
+      );
+
+    case 'custom':
+      // The developer's module draws the control; the row names it as a group, so one control or several work alike.
+      return (
+        <SettingRow {...common} group>
+          <CustomControl
+            field={field}
+            value={value}
+            disabled={disabled}
+            invalid={Boolean(error)}
+            locale={locale}
+            onChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
           />
         </SettingRow>
       );
