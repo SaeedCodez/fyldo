@@ -89,7 +89,7 @@ the first request after the update is the front end, wp-admin, REST or cron.
   ran the update. Prefer language-independent values in `default_before`.
 - **Not allowed on:** `password` (it has no default), `notice` (it stores nothing) and sub-fields of a `group`. Put
   the earlier list of items on the group itself: `'default_before' => [ '2.0.0' => [ [ 'label' => 'Docs' ] ] ]`.
-- **Uninstall:** remove `{slug}__fyldo` along with the page options in your plugin's `uninstall.php`.
+- **Uninstall:** `Instance::delete_data()` in your plugin's `uninstall.php` removes `{slug}__fyldo` along with the page options (see the README).
 
 ## Your own migrations: `fyldo/{slug}/upgraded`
 

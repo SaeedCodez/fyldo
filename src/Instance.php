@@ -14,6 +14,7 @@ use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Storage\DefaultHistory;
 use Fyldo\V1\Storage\OptionStore;
 use Fyldo\V1\Storage\Saver;
+use Fyldo\V1\Support\Naming;
 use Fyldo\V1\Support\Version;
 
 /**
@@ -299,6 +300,18 @@ final class Instance {
 		}
 
 		return ( new Saver( $this ) )->reset( $page );
+	}
+
+	/**
+	 * Deletes everything this instance stored on the site: the option of every registered page and Fyldo's own
+	 * `{slug}__fyldo`. For the consumer's `uninstall.php`; Fyldo itself never deletes consumer data. Fires no hooks.
+	 */
+	public function delete_data(): void {
+		foreach ( $this->pages() as $page ) {
+			$this->store->delete( $page );
+		}
+
+		delete_option( Naming::state_option( $this->slug ) );
 	}
 
 	/**
