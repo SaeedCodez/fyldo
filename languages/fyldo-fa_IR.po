@@ -812,3 +812,51 @@ msgstr "مستندات"
 
 msgid "Get started"
 msgstr "شروع کنید"
+
+msgid "Header"
+msgstr "هدر"
+
+msgid "Buttons and links of the site header, set up as groups of fields."
+msgstr "دکمه‌ها و لینک‌های هدر سایت، به شکل گروه‌هایی از فیلدها."
+
+msgid "Fixed group"
+msgstr "گروه ثابت"
+
+msgid "The plugin sets the three buttons. You can change what is inside each one, but not how many there are or their order."
+msgstr "افزونه این سه دکمه را تعیین می‌کند. محتوای هر دکمه را می‌توانید تغییر دهید، اما تعداد و ترتیبشان ثابت است."
+
+msgid "Editable group"
+msgstr "گروه قابل ویرایش"
+
+msgid "Reorder the buttons with their handles, add up to five, duplicate or remove them. At least one has to stay."
+msgstr "ترتیب دکمه‌ها را با دستگیره‌شان عوض کنید، تا پنج دکمه اضافه کنید، از آن‌ها کپی بگیرید یا حذفشان کنید. دست‌کم یک دکمه باید بماند."
+
+msgid "Reorder only"
+msgstr "فقط جابه‌جایی"
+
+msgid "The same three buttons in the mobile menu: you can change their order, but not add or remove any."
+msgstr "همان سه دکمه در منوی موبایل: ترتیبشان را می‌توانید عوض کنید، اما نمی‌توانید دکمه‌ای اضافه یا حذف کنید."
+
+msgid "Mobile menu buttons"
+msgstr "دکمه‌های منوی موبایل"
+
+msgid "Shown in this order in the mobile menu."
+msgstr "به همین ترتیب در منوی موبایل نمایش داده می‌شوند."
+
+msgid "Starts empty"
+msgstr "شروع خالی"
+
+msgid "A group without default items shows an empty state with the Add button."
+msgstr "گروهی که آیتم پیش‌فرض ندارد، حالت خالی را با دکمه‌ی افزودن نشان می‌دهد."
+
+msgid "Social links"
+msgstr "شبکه‌های اجتماعی"
+
+msgid "Shown as icons in the site footer."
+msgstr "به‌صورت آیکن در فوتر سایت نمایش داده می‌شوند."
+
+msgid "Add link"
+msgstr "افزودن لینک"
+
+msgid "Groups of fields: fixed header buttons, ones you can reorder, add and remove, and a group that starts empty."
+msgstr "گروه‌هایی از فیلدها: دکمه‌های ثابت هدر، دکمه‌هایی که می‌شود جابه‌جا، اضافه و حذفشان کرد، و گروهی که خالی شروع می‌شود."

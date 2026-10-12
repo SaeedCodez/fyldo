@@ -94,6 +94,7 @@ final class Demo {
 		$fyldo->add_page( 'overview', self::overview() );
 		$fyldo->add_page( 'general', self::general() );
 		$fyldo->add_page( 'content', self::content() );
+		$fyldo->add_page( 'header', self::header() );
 		$fyldo->add_page( 'security', self::security() );
 
 		$fyldo->admin_notice(
@@ -149,6 +150,13 @@ final class Demo {
 							'tone'        => 'green',
 							'label'       => __( 'Content', 'fyldo' ),
 							'description' => __( 'Tabs, checkbox groups, multi select and number fields, saved card by card.', 'fyldo' ),
+						),
+						array(
+							'id'          => 'tour_header',
+							'type'        => 'notice',
+							'tone'        => 'green',
+							'label'       => __( 'Header', 'fyldo' ),
+							'description' => __( 'Groups of fields: fixed header buttons, ones you can reorder, add and remove, and a group that starts empty.', 'fyldo' ),
 						),
 						array(
 							'id'          => 'tour_security',
@@ -442,55 +450,6 @@ final class Demo {
 							'default'     => 'home-2',
 						),
 						array(
-							'id'          => 'header_buttons',
-							'type'        => 'group',
-							'label'       => __( 'Header buttons', 'fyldo' ),
-							'description' => __( 'Buttons shown in the site header, in this order.', 'fyldo' ),
-							'item_title'  => 'label',
-							'item_icon'   => 'icon',
-							'sortable'    => true,
-							'addable'     => true,
-							'max'         => 5,
-							'add_label'   => __( 'Add button', 'fyldo' ),
-							'fields'      => array(
-								array(
-									'id'       => 'label',
-									'type'     => 'text',
-									'label'    => __( 'Label', 'fyldo' ),
-									'validate' => array( 'required' => true ),
-								),
-								array(
-									'id'      => 'icon',
-									'type'    => 'icon',
-									'label'   => __( 'Icon', 'fyldo' ),
-									'default' => 'star',
-								),
-								array(
-									'id'          => 'link',
-									'type'        => 'url',
-									'label'       => __( 'Link', 'fyldo' ),
-									'description' => __( 'A full URL, like https://example.com/pricing.', 'fyldo' ),
-								),
-							),
-							'default'     => array(
-								array(
-									'label' => __( 'Pricing', 'fyldo' ),
-									'icon'  => 'dollar-circle',
-									'link'  => 'https://example.com/pricing',
-								),
-								array(
-									'label' => __( 'Docs', 'fyldo' ),
-									'icon'  => 'book',
-									'link'  => 'https://example.com/docs',
-								),
-								array(
-									'label' => __( 'Get started', 'fyldo' ),
-									'icon'  => 'flash',
-									'link'  => 'https://example.com/signup',
-								),
-							),
-						),
-						array(
 							'id'          => 'site_logo',
 							'type'        => 'image',
 							'label'       => __( 'Site logo', 'fyldo' ),
@@ -544,6 +503,151 @@ final class Demo {
 							'min'         => 0,
 							'max'         => 100,
 							'step'        => 5,
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * The Group field, as in the Figma "Group · Usage" frame: a fixed group, an editable one (reorder, add, duplicate,
+	 * remove, 1 to 5 items), one that can only be reordered, and one that starts empty.
+	 */
+	private static function header(): array {
+		$buttons = array(
+			array(
+				'label' => __( 'Pricing', 'fyldo' ),
+				'icon'  => 'dollar-circle',
+				'link'  => 'https://example.com/pricing',
+			),
+			array(
+				'label' => __( 'Docs', 'fyldo' ),
+				'icon'  => 'book',
+				'link'  => 'https://example.com/docs',
+			),
+			array(
+				'label' => __( 'Get started', 'fyldo' ),
+				'icon'  => 'flash',
+				'link'  => 'https://example.com/signup',
+			),
+		);
+		$button  = array(
+			'type'        => 'group',
+			'label'       => __( 'Header buttons', 'fyldo' ),
+			'description' => __( 'Buttons shown in the site header, in this order.', 'fyldo' ),
+			'item_title'  => 'label',
+			'item_icon'   => 'icon',
+			'fields'      => array(
+				array(
+					'id'       => 'label',
+					'type'     => 'text',
+					'label'    => __( 'Label', 'fyldo' ),
+					'validate' => array( 'required' => true ),
+				),
+				array(
+					'id'      => 'icon',
+					'type'    => 'icon',
+					'label'   => __( 'Icon', 'fyldo' ),
+					'default' => 'star',
+				),
+				array(
+					'id'          => 'link',
+					'type'        => 'url',
+					'label'       => __( 'Link', 'fyldo' ),
+					'description' => __( 'A full URL, like https://example.com/pricing.', 'fyldo' ),
+					'validate'    => array( 'required' => true ),
+				),
+			),
+			'default'     => $buttons,
+		);
+
+		return array(
+			'title'       => __( 'Header', 'fyldo' ),
+			'description' => __( 'Buttons and links of the site header, set up as groups of fields.', 'fyldo' ),
+			'icon'        => 'element-3',
+			'group'       => 'settings',
+			'save'        => 'global',
+			'sections'    => array(
+				array(
+					'id'          => 'fixed',
+					'title'       => __( 'Fixed group', 'fyldo' ),
+					'description' => __( 'The plugin sets the three buttons. You can change what is inside each one, but not how many there are or their order.', 'fyldo' ),
+					'fields'      => array(
+						array_merge( $button, array( 'id' => 'fixed_buttons' ) ),
+					),
+				),
+				array(
+					'id'          => 'editable',
+					'title'       => __( 'Editable group', 'fyldo' ),
+					'description' => __( 'Reorder the buttons with their handles, add up to five, duplicate or remove them. At least one has to stay.', 'fyldo' ),
+					'fields'      => array(
+						array_merge(
+							$button,
+							array(
+								'id'        => 'header_buttons',
+								'sortable'  => true,
+								'addable'   => true,
+								'min'       => 1,
+								'max'       => 5,
+								'add_label' => __( 'Add button', 'fyldo' ),
+							)
+						),
+					),
+				),
+				array(
+					'id'          => 'reorder',
+					'title'       => __( 'Reorder only', 'fyldo' ),
+					'description' => __( 'The same three buttons in the mobile menu: you can change their order, but not add or remove any.', 'fyldo' ),
+					'fields'      => array(
+						array_merge(
+							$button,
+							array(
+								'id'          => 'mobile_buttons',
+								'label'       => __( 'Mobile menu buttons', 'fyldo' ),
+								'description' => __( 'Shown in this order in the mobile menu.', 'fyldo' ),
+								'sortable'    => true,
+							)
+						),
+					),
+				),
+				array(
+					'id'          => 'empty',
+					'title'       => __( 'Starts empty', 'fyldo' ),
+					'description' => __( 'A group without default items shows an empty state with the Add button.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'social_links',
+							'type'        => 'group',
+							'label'       => __( 'Social links', 'fyldo' ),
+							'description' => __( 'Shown as icons in the site footer.', 'fyldo' ),
+							'item_title'  => 'label',
+							'item_icon'   => 'icon',
+							'sortable'    => true,
+							'addable'     => true,
+							'max'         => 4,
+							'add_label'   => __( 'Add link', 'fyldo' ),
+							'fields'      => array(
+								array(
+									'id'       => 'label',
+									'type'     => 'text',
+									'label'    => __( 'Label', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+								array(
+									'id'      => 'icon',
+									'type'    => 'icon',
+									'label'   => __( 'Icon', 'fyldo' ),
+									'icons'   => array( 'instagram', 'youtube', 'whatsapp', 'global' ),
+									'default' => 'global',
+								),
+								array(
+									'id'       => 'link',
+									'type'     => 'url',
+									'label'    => __( 'Link', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+							),
 						),
 					),
 				),
