@@ -399,6 +399,91 @@
                     ]
                 },
                 {
+                    "id": "header_buttons",
+                    "type": "group",
+                    "label": "Header buttons",
+                    "description": "Buttons shown in the site header, in this order.",
+                    "default": [
+                        {
+                            "label": "Docs",
+                            "icon": "book",
+                            "link": "https://example.com/docs"
+                        },
+                        {
+                            "label": "Get started",
+                            "icon": "flash",
+                            "link": "https://example.com/signup"
+                        }
+                    ],
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {},
+                    "fields": [
+                        {
+                            "id": "label",
+                            "type": "text",
+                            "label": "Label",
+                            "description": "",
+                            "default": "",
+                            "disabled": false,
+                            "layout": "field",
+                            "validate": {
+                                "required": true,
+                                "max_length": 20
+                            },
+                            "placeholder": ""
+                        },
+                        {
+                            "id": "icon",
+                            "type": "icon",
+                            "label": "Icon",
+                            "description": "",
+                            "default": "star",
+                            "disabled": false,
+                            "layout": "field",
+                            "validate": {
+                                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+                                "allowed": [
+                                    "home-2",
+                                    "book",
+                                    "flash",
+                                    "star"
+                                ]
+                            },
+                            "icons": [
+                                "home-2",
+                                "book",
+                                "flash",
+                                "star"
+                            ]
+                        },
+                        {
+                            "id": "link",
+                            "type": "url",
+                            "label": "Link",
+                            "description": "A full URL, like https://example.com/pricing.",
+                            "default": "",
+                            "disabled": false,
+                            "layout": "field",
+                            "validate": {
+                                "required": true,
+                                "schemes": [
+                                    "http",
+                                    "https"
+                                ]
+                            },
+                            "placeholder": ""
+                        }
+                    ],
+                    "item_title": "label",
+                    "item_icon": "icon",
+                    "sortable": true,
+                    "addable": true,
+                    "min": 1,
+                    "max": 4,
+                    "add_label": "Add button"
+                },
+                {
                     "id": "site_logo",
                     "type": "image",
                     "label": "Site logo",
@@ -487,6 +572,18 @@
         "image_quality": 75,
         "accent_color": "#2271b1",
         "menu_icon": "home-2",
+        "header_buttons": [
+            {
+                "label": "Docs",
+                "icon": "book",
+                "link": "https://example.com/docs"
+            },
+            {
+                "label": "Get started",
+                "icon": "flash",
+                "link": "https://example.com/signup"
+            }
+        ],
         "site_logo": 0,
         "brand_guidelines": 0,
         "license_key": "FYLDO-FREE"

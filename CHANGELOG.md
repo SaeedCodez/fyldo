@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Added
+
+- **Fields**: `group`, a list of items that share the same sub-fields (Figma "Group" and "Group Item"), e.g. header buttons with a label, an icon and a link. The value is a list of arrays keyed by sub-field id. A fixed group keeps the items of its `default`; `sortable` adds drag handles (and keyboard moving: Space, the arrow keys, Escape), `addable` adds Add, Duplicate and Remove with Undo, limited by `min` / `max`. Items are collapsible cards named by `item_title`, with an optional `item_icon` preview tile. Sub-fields validate as on their own; their errors are keyed `<group>.<index>.<sub-field>` and a failed save opens the first item with an error. Sub-fields cannot be groups, media or password fields.
+
 ### Changed
 
 - **Design (redesign pass)**: a brand colour and softer neutrals. Primary is `#6e62fe` (buttons, the active navigation item, toggles and checked controls, focus, links, info tones); grays, borders, shadows and the page background are tinted toward `#f6f7fc` instead of pure gray/black; dividers between settings are lighter (`border/subtle`).

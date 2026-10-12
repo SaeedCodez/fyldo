@@ -29,6 +29,13 @@ export interface SettingRowProps {
   wide?: boolean;
   /** Figma Choice Card Group is 576 wide. Like every stacked control it shrinks (`max-w-full`) on narrow containers. */
   cards?: boolean;
+  /** The control takes the whole width of the row (a Group field's list of items). */
+  full?: boolean;
+  /**
+   * `row`: a Setting Row of a Section Card. `item`: a sub-field inside a Group Item (Figma "Input" anatomy: label →
+   * control → helper, no padding or divider; `field` reads as `stacked`, the control fills the column).
+   */
+  variant?: 'row' | 'item';
   disabled?: boolean;
   name?: string;
   /** Field id, exposed for focusing the first invalid field. */
@@ -46,20 +53,26 @@ export function SettingRow({
   disabledReason,
   srNote,
   badge,
-  layout = 'stacked',
+  layout: requested = 'stacked',
   divider = true,
   error,
   errorInControl = false,
   group = false,
   wide = false,
   cards = false,
+  full = false,
+  variant = 'row',
   disabled,
   name,
   fieldId,
   children,
 }: SettingRowProps): ReactElement {
+  const item = variant === 'item';
+  const layout = item && requested === 'field' ? 'stacked' : requested;
   const inline = layout === 'inline';
   const beside = inline || layout === 'field';
+  // In an item the description is the helper under the control (and an error takes its place), as in Figma "Input".
+  const helperBelow = item && !inline;
   const titleId = useId();
   const descriptionId = useId();
   const reasonId = useId();
@@ -74,11 +87,13 @@ export function SettingRow({
       data-slot="fy-setting-row"
       data-field-id={fieldId}
       className={cn(
-        'fy:group/field fy:flex fy:py-6',
-        layout === 'stacked' && 'fy:flex-col fy:gap-3',
-        inline && 'fy:items-center fy:gap-8',
+        'fy:group/field fy:flex',
+        !item && 'fy:py-6',
+        // A full-width control (a Group's items) sits 16 below the title, as in Figma "Group"; other stacked controls 12.
+        layout === 'stacked' && (item ? 'fy:flex-col fy:gap-2' : full ? 'fy:flex-col fy:gap-4' : 'fy:flex-col fy:gap-3'),
+        inline && (item ? 'fy:items-center fy:gap-4' : 'fy:items-center fy:gap-8'),
         layout === 'field' && 'fy:items-center fy:gap-8 fy:wp-mobile:flex-col fy:wp-mobile:items-stretch fy:wp-mobile:gap-3',
-        divider && 'fy:border-b fy:border-border-subtle',
+        divider && !item && 'fy:border-b fy:border-border-subtle',
       )}
     >
       <div className={cn('fy:flex fy:min-w-0 fy:flex-col fy:gap-1', beside && 'fy:flex-1', layout === 'field' && 'fy:wp-mobile:flex-none')}>
@@ -92,7 +107,7 @@ export function SettingRow({
           )}
           {badge}
         </div>
-        {description ? (
+        {description && !helperBelow ? (
           group ? (
             // A group's description belongs to the group, not to each of its options: plain text, linked by aria-describedby.
             <p id={descriptionId} className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
@@ -117,7 +132,12 @@ export function SettingRow({
         {srNote && !group ? <Field.Description className="fy:sr-only">{srNote}</Field.Description> : null}
       </div>
 
-      <div className={cn('fy:flex fy:flex-col fy:gap-2', inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', wide ? 'fy:w-112' : cards ? 'fy:w-144' : 'fy:w-100', 'fy:max-w-full'))}>
+      <div
+        className={cn(
+          'fy:flex fy:flex-col fy:gap-2',
+          inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item || full ? 'fy:w-full' : wide ? 'fy:w-112' : cards ? 'fy:w-144' : 'fy:w-100', 'fy:max-w-full'),
+        )}
+      >
         {group ? (
           <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
             {children}
@@ -126,6 +146,15 @@ export function SettingRow({
           children
         )}
         {error && !inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
+        {helperBelow && description && !error ? (
+          group ? (
+            <p id={descriptionId} className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
+              {description}
+            </p>
+          ) : (
+            <Field.Description className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">{description}</Field.Description>
+          )
+        ) : null}
       </div>
       {error && inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
     </Field.Root>

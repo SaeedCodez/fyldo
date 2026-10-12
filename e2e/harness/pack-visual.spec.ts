@@ -623,3 +623,91 @@ for (const locale of ['EN', 'FA'] as const) {
     await close();
   });
 }
+
+// ── Group Item / Group ───────────────────────────────────────────────────────────────────────────────────────
+// Group Item, Collapsed: the first of two header buttons (the handle shows from two items on), with its icon tile, the
+// title, the link in Mono/12, Duplicate, Remove and the chevron. Group, Empty: the field's title and description over
+// the dashed empty box with its Add button. EN compares the whole item / group. FA is set in a different font, so it
+// compares the text-free parts: the item's handle + preview tile, and the empty box's icon tile.
+const buttonsOf = (title: string, link: string, icon: string) => JSON.stringify([{ label: title, icon, link }, { label: 'Docs', icon: 'book', link: '/docs' }]);
+
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Group Item ${locale} · collapsed`, async ({ browser }, testInfo) => {
+    const v = variant('group-item', { Locale: locale, State: 'Collapsed' });
+    const root = v.node;
+    const preview = layer(root, 'Preview', 'Icon').icon?.name ?? 'dollar-circle';
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'group',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      sortable: '1',
+      addable: '1',
+      items: buttonsOf(layer(root, 'Title').text?.characters ?? '', layer(root, 'Summary').text?.characters ?? '', preview),
+      names: [preview, 'book', 'copy', 'trash', 'arrow-down-2', 'add'].join(','),
+    });
+    await still(page);
+    const item = stage.locator('[data-slot=fy-group-item]').first();
+    await expect(item.locator('svg[data-fyldo-icon]')).toHaveCount(5); // handle, preview, duplicate, remove, chevron
+    const b = await box(item);
+    expect([Math.round(b.width), Math.round(b.height)]).toEqual([root.width, root.height]);
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('group-item', v), scale: SCALE, stage: item, maxDiffRatio: 0.08 });
+    } else {
+      for (const [name, locator] of [
+        ['Handle', item.locator('[data-slot=fy-group-item-handle]')],
+        ['Preview', item.locator('[data-slot=fy-group-item-preview]')],
+      ] as const) {
+        const region = rect(layer(root, name), root);
+        const at = await box(locator);
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('group-item', v),
+          scale: SCALE,
+          stage: item,
+          referenceRegion: region,
+          actualRegion: { x: at.x - b.x, y: at.y - b.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+    }
+    await close();
+  });
+
+  test(`Group ${locale} · empty`, async ({ browser }, testInfo) => {
+    const v = variant('group', { Locale: locale, Type: 'Repeatable', State: 'Empty' });
+    const root = v.node;
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'group',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      addable: '1',
+      items: '[]',
+      title: layer(root, 'Title').text?.characters ?? '',
+      description: layer(root, 'Description').text?.characters ?? '',
+      add: layer(root, 'Add button').instance?.texts?.Label ?? '',
+      names: 'element-plus,add',
+    });
+    await still(page);
+    const empty = stage.locator('[data-slot=fy-group-empty]');
+    await expect(empty).toContainText(layer(root, 'Empty title').text?.characters ?? '');
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('group', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const s = await box(stage);
+      const region = rect(layer(root, 'Icon box'), root);
+      const at = await box(empty.locator('span').first());
+      await comparePixels({
+        page,
+        testInfo,
+        reference: pngPath('group', v),
+        scale: SCALE,
+        stage,
+        referenceRegion: region,
+        actualRegion: { x: at.x - s.x, y: at.y - s.y, width: region.width, height: region.height },
+        maxDiffRatio: 0.1,
+      });
+    }
+    await close();
+  });
+}

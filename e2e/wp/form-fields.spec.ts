@@ -2,7 +2,8 @@
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
  * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), and the Upload Image
- * and Select File fields (the native media modal is stubbed; the attachments are real).
+ * and Select File fields (the native media modal is stubbed; the attachments are real), and a Group (header buttons: reordered
+ * with the keyboard, one added).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -138,6 +139,21 @@ test.describe('English', () => {
     await expect(logoField.getByRole('button', { name: 'Replace: Site logo' })).toBeFocused();
     await guideField.getByRole('button', { name: 'Select file: Brand guidelines' }).click();
     await expect(guideField).toContainText('picked-in-modal.pdf');
+
+    // Group (header buttons): move "Docs" down with the keyboard, then add a button with a label and a link
+    const buttons = page.getByRole('group', { name: 'Header buttons' });
+    const buttonTitles = buttons.locator('[data-slot=fy-group-item-title]');
+    await expect(buttonTitles).toHaveText(['Docs', 'Get started']);
+    await buttons.getByRole('button', { name: 'Reorder Docs' }).focus();
+    await page.keyboard.press('Space');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Space');
+    await expect(buttonTitles).toHaveText(['Get started', 'Docs']);
+    await buttons.getByRole('button', { name: 'Add button' }).click();
+    await expect(buttons.getByRole('textbox', { name: 'Label' })).toBeFocused();
+    await page.keyboard.type('Blog');
+    await buttons.getByRole('textbox', { name: 'Link' }).fill('https://example.com/blog');
+    await expect(buttonTitles).toHaveText(['Get started', 'Docs', 'Blog']);
     await expect(page.getByText('You have unsaved changes')).toBeVisible();
     await page.screenshot({ path: 'test-results/wp-fields-en.png' });
 
@@ -160,6 +176,7 @@ test.describe('English', () => {
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
+    await expect(page.getByRole('group', { name: 'Header buttons' }).locator('[data-slot=fy-group-item-title]')).toHaveText(['Get started', 'Docs', 'Blog']);
     // after a reload the preview comes from the server's initial payload
     await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(logo.name);
     await expect(page.getByRole('group', { name: 'Site logo' })).toContainText(/1 × 1 · \d+ B/);

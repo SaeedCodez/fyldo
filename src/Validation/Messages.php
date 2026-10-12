@@ -50,6 +50,16 @@ final class Messages {
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
 
+			case 'items_min':
+				$min = (int) ( $params['min'] ?? 0 );
+				/* translators: %d: minimum number of items in a group. */
+				return sprintf( _n( 'Add at least %d item.', 'Add at least %d items.', $min, 'fyldo' ), $min );
+
+			case 'items_max':
+				$max = (int) ( $params['max'] ?? 0 );
+				/* translators: %d: maximum number of items in a group. */
+				return sprintf( _n( 'Use no more than %d item.', 'Use no more than %d items.', $max, 'fyldo' ), $max );
+
 			case 'media':
 				return __( 'Choose a file from the media library.', 'fyldo' );
 

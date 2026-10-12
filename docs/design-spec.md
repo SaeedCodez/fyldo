@@ -3,7 +3,7 @@
 > Source: Figma file `Pg3Ni7eqTLQYIG6hfNVPt6` ("Fyldo"), read through the **figma-console MCP** on 2026-09-29.
 > The file was **redesigned and re-exported on 2026-10-11** (primary colour `#6e62fe`, tinted neutrals, bigger controls, a 960 px content column); every number below follows that re-export (`design/figma/`, `tokens/figma.tokens.json`). Section 9 keeps the original findings as history.
 > The "Fyldo – HeroUI" file was ignored, as instructed.
-> Pages: `Foundations`, `Icons`, `Components` (40 component sets: the 27 of §3 plus 13 added after the first extraction, see the note under §3; 839 variants; 2 page templates × 2 locales).
+> Pages: `Foundations`, `Icons`, `Components` (42 component sets: the 27 of §3 plus 15 added after the first extraction, see the note under §3; 857 variants; 2 page templates × 2 locales).
 > Everything below was read from the file, not inferred from screenshots. Section 9 lists every place where the design is silent, contradictory or fails WCAG.
 
 **Reading guide**

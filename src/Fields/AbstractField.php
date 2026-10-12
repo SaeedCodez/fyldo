@@ -192,6 +192,31 @@ abstract class AbstractField {
 	}
 
 	/**
+	 * Every message of a sanitized value, keyed by where it is shown: the field id for a single field. A group adds its
+	 * sub-fields' messages under `<group>.<index>.<sub-field>`.
+	 *
+	 * @param mixed $value Sanitized value.
+	 * @return array<string,string>
+	 */
+	public function errors( $value ): array {
+		$message = $this->validate( $value );
+
+		return null === $message ? array() : array( $this->id() => $message );
+	}
+
+	/**
+	 * A stored value as the page reads it: sanitized, and the default when it no longer validates (e.g. a removed select option).
+	 *
+	 * @param mixed $raw Stored value.
+	 * @return mixed
+	 */
+	public function stored_value( $raw ) {
+		$value = $this->sanitize( $raw );
+
+		return null === $this->validate( $value ) ? $value : $this->default_value();
+	}
+
+	/**
 	 * Rule id of the first failing declarative rule (used by tests and the shared fixture suite).
 	 *
 	 * @param mixed $value Sanitized value.

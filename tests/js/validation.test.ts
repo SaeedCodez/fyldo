@@ -3,9 +3,10 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { sanitizeColor } from '../../app/lib/color';
 import { normalizeTyped, sanitizeNumber, toAsciiDigits } from '../../app/lib/digits';
+import { groupErrors } from '../../app/lib/group';
 import { check, length, messageFor, validateValue } from '../../app/lib/validation';
 import { sanitizeMediaId } from '../../app/lib/wp-media';
-import type { RuleSet } from '../../app/types';
+import type { GroupFieldDef, GroupItemValue, RuleSet, SubFieldDef } from '../../app/types';
 
 interface Case {
   name: string;
@@ -15,13 +16,35 @@ interface Case {
 }
 
 // The SAME file PHPUnit runs (tests/php/Unit/RulesTest.php): client and server cannot drift silently.
-const { cases, digits, numbers, colors, media } = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/validation-cases.json'), 'utf8')) as {
+const { cases, digits, numbers, colors, media, groupFields, groups } = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/validation-cases.json'), 'utf8')) as {
   cases: Case[];
   digits: { name: string; type: string; input: string; expect: string }[];
   numbers: { name: string; input: unknown; expect: number | string }[];
   colors: { name: string; input: unknown; expect: string }[];
   media: { name: string; input: unknown; expect: number }[];
+  groupFields: { id: string; type: 'text' | 'url'; label: string; validate: RuleSet }[];
+  groups: { name: string; group: { required?: boolean; min?: number; max?: number }; items: GroupItemValue[]; expect: Record<string, string> }[];
 };
+
+/** A `group` field as PHP would describe it to the browser, with the fixture's sub-fields. */
+const groupField = (own: { required?: boolean; min?: number; max?: number }): GroupFieldDef => ({
+  id: 'g',
+  type: 'group',
+  label: 'Group',
+  description: '',
+  default: [],
+  disabled: false,
+  layout: 'stacked',
+  validate: own.required ? { required: true } : {},
+  fields: groupFields.map((f) => ({ ...f, description: '', default: '', disabled: false, layout: 'field', placeholder: '' }) as SubFieldDef),
+  item_title: '',
+  item_icon: '',
+  sortable: false,
+  addable: true,
+  min: own.min ?? null,
+  max: own.max ?? null,
+  add_label: '',
+});
 
 describe('validation rules (shared fixture with PHP)', () => {
   it.each(cases.map((c) => [c.name, c] as const))('%s', (_name, c) => {
@@ -32,6 +55,15 @@ describe('validation rules (shared fixture with PHP)', () => {
     const used = new Set(cases.flatMap((c) => Object.keys(c.rules)));
     const known = ['required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'allowed', 'min', 'max', 'step'];
     expect(known.filter((r) => !used.has(r))).toEqual([]);
+  });
+});
+
+describe('group fields (shared fixture with PHP)', () => {
+  it.each(groups.map((c) => [c.name, c] as const))('%s', (_name, c) => {
+    const errors = groupErrors(groupField(c.group), c.items);
+    expect(errors).toEqual(c.expect);
+    // the same keys in the same order as PHP reports them
+    expect(Object.keys(errors)).toEqual(Object.keys(c.expect));
   });
 });
 

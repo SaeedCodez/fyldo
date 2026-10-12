@@ -83,6 +83,18 @@
   }
 }
 
+/* A button stretched over a whole row (`after:absolute after:inset-0`, the Group Item header): the ring is drawn inside
+   that box, so the card's rounded, clipped edge does not cut it off. */
+@utility focus-ring-cover {
+  &:focus-visible {
+    outline: 0;
+  }
+
+  &:focus-visible::after {
+    box-shadow: inset 0 0 0 2px var(--fyldo-focus-ring-color);
+  }
+}
+
 /* The same ring on a box that contains the focused control (the Slider thumb's box around its hidden input). */
 @utility focus-ring-within {
   &:has(:focus-visible) {

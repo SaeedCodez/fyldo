@@ -9,7 +9,8 @@ import type { RuleSet } from '../types';
 import { isHexColor } from './color';
 
 export interface Failure {
-  rule: keyof RuleSet;
+  /** A declarative rule, or a `group` field's item count (`items_min`, `items_max`: src/Fields/GroupField.php). */
+  rule: keyof RuleSet | 'items_min' | 'items_max';
   params: Record<string, unknown>;
 }
 
@@ -19,7 +20,7 @@ export const isEmpty = (value: unknown): boolean =>
 /** Length in code points — the same measure as PHP `mb_strlen( $s, 'UTF-8' )`. */
 export const length = (value: string): number => [...value].length;
 
-const fail = (rule: keyof RuleSet, params: Record<string, unknown> = {}): Failure => ({ rule, params });
+const fail = (rule: Failure['rule'], params: Record<string, unknown> = {}): Failure => ({ rule, params });
 
 function matches(source: string, value: string): boolean {
   try {
@@ -121,6 +122,14 @@ export function messageFor(failure: Failure): string {
       return __('Choose one of the available options.', 'fyldo');
     case 'media':
       return __('Choose a file from the media library.', 'fyldo');
+    case 'items_min': {
+      const min = Number(failure.params.min ?? 0);
+      return sprintf(_n('Add at least %d item.', 'Add at least %d items.', min, 'fyldo'), min);
+    }
+    case 'items_max': {
+      const max = Number(failure.params.max ?? 0);
+      return sprintf(_n('Use no more than %d item.', 'Use no more than %d items.', max, 'fyldo'), max);
+    }
     case 'step':
       return sprintf(__('Enter a value in steps of %s.', 'fyldo'), String(failure.params.step ?? ''));
     case 'min':

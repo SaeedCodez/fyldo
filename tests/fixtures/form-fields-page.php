@@ -173,6 +173,54 @@ return array(
 					'icons'       => array( 'home-2', 'setting-2', 'star', 'user' ),
 					'default'     => 'home-2',
 				),
+				// Group: header buttons that can be reordered, added (up to 4) and removed (at least 1).
+				array(
+					'id'          => 'header_buttons',
+					'type'        => 'group',
+					'label'       => 'Header buttons',
+					'description' => 'Buttons shown in the site header, in this order.',
+					'item_title'  => 'label',
+					'item_icon'   => 'icon',
+					'sortable'    => true,
+					'addable'     => true,
+					'min'         => 1,
+					'max'         => 4,
+					'add_label'   => 'Add button',
+					'fields'      => array(
+						array(
+							'id'       => 'label',
+							'type'     => 'text',
+							'label'    => 'Label',
+							'validate' => array( 'required' => true, 'max_length' => 20 ),
+						),
+						array(
+							'id'      => 'icon',
+							'type'    => 'icon',
+							'label'   => 'Icon',
+							'icons'   => array( 'home-2', 'book', 'flash', 'star' ),
+							'default' => 'star',
+						),
+						array(
+							'id'          => 'link',
+							'type'        => 'url',
+							'label'       => 'Link',
+							'description' => 'A full URL, like https://example.com/pricing.',
+							'validate'    => array( 'required' => true ),
+						),
+					),
+					'default'     => array(
+						array(
+							'label' => 'Docs',
+							'icon'  => 'book',
+							'link'  => 'https://example.com/docs',
+						),
+						array(
+							'label' => 'Get started',
+							'icon'  => 'flash',
+							'link'  => 'https://example.com/signup',
+						),
+					),
+				),
 				array(
 					'id'          => 'site_logo',
 					'type'        => 'image',
