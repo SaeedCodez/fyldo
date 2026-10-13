@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type ReactElement, type Ref } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement, type Ref } from 'react';
 import { __ } from '../../i18n';
 import { PAGE_SCOPE, scopeState, usePageForm, type FormStore } from '../../lib/page-form';
 import { ApiError, type Api } from '../../lib/api';
 import { cn } from '../../lib/cn';
 import { firstErrorKey } from '../../lib/group';
+import { RelationSearchContext, type RelationSearch } from '../../lib/relation';
 import { isValueField, type FieldValue, type NoticeDef, type PageDef, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
 import { Modal } from '../ui/modal';
@@ -49,6 +50,11 @@ const savesHere = (page: PageDef, section: SectionDef): boolean =>
 export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
   const { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction } = usePageForm(page, api, store);
   const toaster = useOptionalToaster();
+  // The post, term and user fields search through the page's REST route.
+  const relationSearch = useMemo<RelationSearch | null>(() => {
+    const searchItems = api.searchItems;
+    return searchItems ? (path, query, signal) => searchItems(page.id, path, query, signal) : null;
+  }, [api, page.id]);
   // The Danger card whose confirmation is open; kept after it closes so the dialog can fade out with its text.
   const [danger, setDanger] = useState<SectionDef | null>(null);
   const lastDanger = useRef<SectionDef | null>(null);
@@ -219,72 +225,74 @@ export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLi
   );
 
   return (
-    <div
-      ref={column}
-      data-slot="fy-content"
-      data-save={page.save}
-      className="fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
-    >
-      <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
+    <RelationSearchContext.Provider value={relationSearch}>
+      <div
+        ref={column}
+        data-slot="fy-content"
+        data-save={page.save}
+        className="fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-256 fy:flex-1 fy:flex-col fy:px-8 fy:pt-10 fy:wp-mobile:px-4"
+      >
+        <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
 
-      <Notices notices={notices} onDismiss={(id) => onDismissNotice?.(id)} />
+        <Notices notices={notices} onDismiss={(id) => onDismissNotice?.(id)} />
 
-      {state.conflict ? (
-        // 409: the stored values changed after this page read them. The edits stay until the user reloads. It appears
-        // after the page loaded, so it is announced (role="alert": amber).
-        <Notice
-          className="fy:mt-6"
-          tone="amber"
-          live
-          title={__('These settings were changed somewhere else', 'fyldo')}
-          action={
-            <Button variant="secondary" size="sm" loading={state.reloading} onClick={() => void reload()}>
-              {__('Reload latest values', 'fyldo')}
-            </Button>
-          }
-        >
-          {__('They were saved in another tab or by another person after this page was opened, so your changes were not saved. Reload the latest values to continue; your unsaved changes on this page will be lost.', 'fyldo')}
-        </Notice>
-      ) : null}
+        {state.conflict ? (
+          // 409: the stored values changed after this page read them. The edits stay until the user reloads. It appears
+          // after the page loaded, so it is announced (role="alert": amber).
+          <Notice
+            className="fy:mt-6"
+            tone="amber"
+            live
+            title={__('These settings were changed somewhere else', 'fyldo')}
+            action={
+              <Button variant="secondary" size="sm" loading={state.reloading} onClick={() => void reload()}>
+                {__('Reload latest values', 'fyldo')}
+              </Button>
+            }
+          >
+            {__('They were saved in another tab or by another person after this page was opened, so your changes were not saved. Reload the latest values to continue; your unsaved changes on this page will be lost.', 'fyldo')}
+          </Notice>
+        ) : null}
 
-      {page.tabs.length > 0 ? (
-        <Tabs
-          className="fy:mt-6"
-          label={page.title}
-          locale={locale}
-          value={tab || (page.tabs[0]?.id ?? '')}
-          onValueChange={(next) => onTabChange?.(next)}
-          tabs={page.tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
-        >
-          {cards}
-        </Tabs>
-      ) : (
-        cards('')
-      )}
+        {page.tabs.length > 0 ? (
+          <Tabs
+            className="fy:mt-6"
+            label={page.title}
+            locale={locale}
+            value={tab || (page.tabs[0]?.id ?? '')}
+            onValueChange={(next) => onTabChange?.(next)}
+            tabs={page.tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
+          >
+            {cards}
+          </Tabs>
+        ) : (
+          cards('')
+        )}
 
-      {page.save === 'global' ? (
-        <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
-      ) : null}
-      {page.save !== 'global' || bar === null ? <div className="fy:pb-10" /> : null}
+        {page.save === 'global' ? (
+          <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
+        ) : null}
+        {page.save !== 'global' || bar === null ? <div className="fy:pb-10" /> : null}
 
-      <Modal
-        open={danger !== null}
-        onOpenChange={(open) => {
-          if (!open) setDanger(null);
-        }}
-        type="danger"
-        title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
-        description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
-        cancelLabel={__('Cancel', 'fyldo')}
-        confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
-        confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
-        onConfirm={async () => {
-          if (danger) await attempt(danger);
-          setDanger(null);
-        }}
-        // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
-        focusAfterConfirm={() => dangerTrigger.current}
-      />
-    </div>
+        <Modal
+          open={danger !== null}
+          onOpenChange={(open) => {
+            if (!open) setDanger(null);
+          }}
+          type="danger"
+          title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
+          description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
+          cancelLabel={__('Cancel', 'fyldo')}
+          confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
+          confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
+          onConfirm={async () => {
+            if (danger) await attempt(danger);
+            setDanger(null);
+          }}
+          // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
+          focusAfterConfirm={() => dangerTrigger.current}
+        />
+      </div>
+    </RelationSearchContext.Provider>
   );
 }

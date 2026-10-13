@@ -13,6 +13,8 @@ export interface RuleSet {
   color?: boolean;
   /** Implied by the `image` and `file` fields: the value is an attachment ID, a whole number of 0 or more (0 = nothing chosen). */
   media?: boolean;
+  /** Implied by the `post`, `term` and `user` fields: the value is an ID (0 = nothing chosen), or with `multiple` a list of IDs. */
+  relation?: boolean;
   allowed?: string[];
   min?: number;
   max?: number;
@@ -185,8 +187,22 @@ export interface MediaItem {
   thumbnail: string | null;
 }
 
-/** The attachment ID of each media field of a page, drawn from this. `null` = nothing chosen. */
-export type MediaMap = Record<string, MediaItem | null>;
+/** One post, term or user as a relation field draws it (PHP: src/Support/Relations.php). */
+export interface RelationItem {
+  value: number;
+  label: string;
+  /** Tells equal titles apart (the post type or taxonomy, a user's login); '' = none. */
+  hint: string;
+}
+
+/**
+ * What the page draws for the IDs it stores, keyed by field id: a media field's attachment (`null` = nothing chosen), a
+ * post, term or user field's items (in value order; empty = nothing chosen).
+ */
+export type MediaMap = Record<string, MediaItem | RelationItem[] | null>;
+
+/** A media field's entry of the page's `media` (a relation field's list is not one). */
+export const mediaItem = (entry: MediaItem | RelationItem[] | null | undefined): MediaItem | null => (entry && !Array.isArray(entry) ? entry : null);
 
 interface MediaFieldBase extends FieldBase {
   /** The extensions the field is narrowed to; `null` = every image (`image`) or every type WordPress allows (`file`). */
@@ -204,6 +220,16 @@ export interface ImageFieldDef extends MediaFieldBase {
 
 export interface FileFieldDef extends MediaFieldBase {
   type: 'file';
+}
+
+/**
+ * Picks posts (`post`), terms (`term`) or users (`user`) found by searching on the server
+ * (`…/pages/{page}/fields/{field}/items`). The value is the item's ID (0 = none), or with `multiple` a list of IDs in pick order.
+ */
+export interface RelationFieldDef extends FieldBase {
+  type: 'post' | 'term' | 'user';
+  multiple: boolean;
+  placeholder: string;
 }
 
 /**
@@ -259,6 +285,7 @@ export type ValueFieldDef =
   | FileFieldDef
   | SelectFieldDef
   | MultiSelectFieldDef
+  | RelationFieldDef
   | CustomFieldDef
   | GroupFieldDef;
 
@@ -313,7 +340,7 @@ export interface PageDef {
   tabs: TabDef[];
   sections: SectionDef[];
   values: Record<string, FieldValue>;
-  /** The saved attachments of the page's `image` and `file` fields; absent when it has none. */
+  /** The saved attachments of the page's `image` and `file` fields and the saved items of its `post`, `term` and `user` fields; absent when it has none. */
   media?: MediaMap;
   revision: string;
 }

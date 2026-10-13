@@ -3,7 +3,8 @@
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
  * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), and the Upload Image
  * and Select File fields (the native media modal is stubbed; the attachments are real), and a Group (header buttons: reordered
- * with the keyboard, one added) and a custom field (the demo's working-hours module: two selects, one stored value).
+ * with the keyboard, one added), a custom field (the demo's working-hours module: two selects, one stored value) and a post
+ * field (pages found by searching the site, several picked; the pages are real).
  * The page is tests/fixtures/form-fields-page.php, registered by every demo plugin as page `fields` (route `#/fields`).
  */
 import { expect, test, type APIRequestContext, type Page } from '@playwright/test';
@@ -30,6 +31,19 @@ async function createAttachment(request: APIRequestContext, filename: string, mi
   const json = (await response.json()) as { id: number; source_url: string };
   return { id: json.id, name: decodeURIComponent(new URL(json.source_url).pathname.split('/').pop() ?? '') };
 }
+
+/** Publishes a page or post through WordPress's own REST API and returns its ID. */
+async function createPost(request: APIRequestContext, type: 'pages' | 'posts', title: string): Promise<number> {
+  const response = await request.post(`/index.php?rest_route=/wp/v2/${type}`, {
+    headers: { 'X-WP-Nonce': await restNonce(request) },
+    data: { title, status: 'publish' },
+  });
+  expect(response.ok(), await response.text()).toBe(true);
+  return ((await response.json()) as { id: number }).id;
+}
+
+/** A word no other page has, so a search finds only this test's pages. */
+const uniqueWord = () => `Zq${Date.now().toString(36)}${Math.floor(Math.random() * 1e4)}`;
 
 /**
  * The real media modal is WordPress chrome and is not driven here: once the page has loaded (call it after `goto`, so WordPress's own
@@ -260,6 +274,39 @@ test.describe('English', () => {
 
     await page.reload();
     await expect(page.getByRole('combobox', { name: 'Include in sitemap' })).toContainText('PostsPagesAuthors');
+    expect(errors).toEqual([]);
+  });
+
+  test('Post field: search the site’s pages, pick two, save through REST; the titles come back after a reload', async ({ page, request }) => {
+    const word = uniqueWord();
+    await createPost(request, 'pages', `${word} About`);
+    await createPost(request, 'pages', `${word} Contact`);
+    await createPost(request, 'posts', `${word} News`); // a post, not a page: never offered
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.goto(EN);
+
+    const field = page.getByRole('combobox', { name: 'Related pages' });
+    await expect(field).toContainText('Select pages…');
+    await field.click();
+    const popup = page.getByRole('dialog');
+    const search = popup.getByRole('combobox', { name: 'Search options' });
+    await expect(search).toBeFocused();
+    await search.fill(word);
+    await expect(popup.getByRole('option')).toHaveCount(2);
+    await popup.getByRole('option', { name: `${word} Contact` }).click();
+    await popup.getByRole('option', { name: `${word} About` }).click();
+    await expect(popup.getByText('2 selected')).toBeVisible();
+    await page.screenshot({ path: 'test-results/wp-post-field-en-open.png' });
+    await page.keyboard.press('Escape');
+    await expect(popup).toBeHidden();
+    await expect(field).toContainText(`${word} Contact${word} About`); // pick order
+
+    await save(page);
+    await expect(page.getByText('All changes saved')).toBeVisible();
+
+    await page.reload();
+    await expect(page.getByRole('combobox', { name: 'Related pages' })).toContainText(`${word} Contact${word} About`);
     expect(errors).toEqual([]);
   });
 
@@ -506,6 +553,35 @@ test.describe('REST (server is authoritative)', () => {
     expect(response.status()).toBe(200);
     expect((await response.json()).values).toMatchObject({ post_types: ['post', 'page'], agree: true, layout: 'boxed', meta_description: 'Bold\nnext' });
   });
+  test('post: only published pages are kept, in pick order, with their titles; `max` counts them; the items route searches', async ({ request }) => {
+    const word = uniqueWord();
+    const [one, two, three, four] = [await createPost(request, 'pages', `${word} One`), await createPost(request, 'pages', `${word} Two`), await createPost(request, 'pages', `${word} Three`), await createPost(request, 'pages', `${word} Four`)];
+    const post = await createPost(request, 'posts', `${word} Post`);
+
+    let response = await patch(request, { related_pages: [one, two, three, four] });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors.related_pages).toBe('Select no more than 3 options.');
+
+    // a post (not a page), an ID that does not exist and a repeat drop out; the rest keep their order
+    response = await patch(request, { related_pages: [two, post, 999999, one, two] });
+    expect(response.status()).toBe(200);
+    const saved = await response.json();
+    expect(saved.values.related_pages).toEqual([two, one]);
+    expect(saved.media.related_pages).toEqual([
+      { value: two, label: `${word} Two`, hint: '' },
+      { value: one, label: `${word} One`, hint: '' },
+    ]);
+
+    const items = (query: string) => request.get(`/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields/fields/related_pages/items&${query}`, { headers });
+    let found = await items(`search=${word}`);
+    expect(found.ok(), await found.text()).toBe(true);
+    expect(((await found.json()).items as { label: string }[]).map((i) => i.label).sort()).toEqual([`${word} Four`, `${word} One`, `${word} Three`, `${word} Two`]);
+    found = await items(`include=${three},${post}`);
+    expect((await found.json()).items).toEqual([{ value: three, label: `${word} Three`, hint: '' }]);
+    expect((await items('search=x').then((r) => r.status()))).toBe(200);
+    expect((await request.get('/index.php?rest_route=/fyldo-acme-beta/v1/pages/fields/fields/sitemap_types/items', { headers })).status()).toBe(404);
+  });
+
   test('multi_select: only enabled options, the count rules, stored in option order', async ({ request }) => {
     let response = await patch(request, { sitemap_types: ['post', 'comment'] }); // Comments is a disabled option
     expect(response.status()).toBe(422);

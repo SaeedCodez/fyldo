@@ -1,5 +1,5 @@
 import { __ } from '../i18n';
-import type { FieldValue, FyldoConfig, MediaMap } from '../types';
+import type { FieldValue, FyldoConfig, MediaMap, RelationItem } from '../types';
 
 export class ApiError extends Error {
   constructor(
@@ -21,6 +21,20 @@ export interface SaveResult {
   media?: MediaMap;
 }
 
+/** One page of a post, term or user field's options. */
+export interface ItemsResult {
+  items: RelationItem[];
+  /** Another page follows. */
+  more: boolean;
+}
+
+/** `include`: only these IDs (the titles of a value the page has none for); otherwise one page of `search` results. */
+export interface ItemsQuery {
+  search?: string;
+  page?: number;
+  include?: number[];
+}
+
 export interface Api {
   savePage(pageId: string, values: Record<string, FieldValue>, revision: string): Promise<SaveResult>;
   /** The stored values and revision right now (conflict recovery: "Reload latest values"). */
@@ -30,6 +44,11 @@ export interface Api {
    * checks it again. Resolves with the page's new values and revision.
    */
   runAction(pageId: string, actionId: string, keyword: string): Promise<SaveResult>;
+  /**
+   * Options of a post, term or user field (`GET …/pages/{page}/fields/{field}/items`); `fieldPath` is the field id, or
+   * `<group>.<sub-field>` for one inside a group. Optional: a test double for a page without such fields leaves it out.
+   */
+  searchItems?(pageId: string, fieldPath: string, query: ItemsQuery, signal?: AbortSignal): Promise<ItemsResult>;
 }
 
 /** The error codes of a nonce WordPress (`X-WP-Nonce`) or Fyldo (instance nonce) no longer accepts. */
@@ -85,7 +104,8 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
     }
   };
 
-  const request = async (pageId: string, init: RequestInit, suffix = ''): Promise<SaveResult> => {
+  /** The JSON body of a request to the page's routes; refreshes the nonces once when they have expired. */
+  const call = async (pageId: string, init: RequestInit, suffix: string): Promise<Body> => {
     const url = `${root}pages/${encodeURIComponent(pageId)}${suffix}`;
     let response = await send(url, init);
     let body = await read(response);
@@ -109,6 +129,12 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
       });
     }
 
+    return body;
+  };
+
+  const request = async (pageId: string, init: RequestInit, suffix = ''): Promise<SaveResult> => {
+    const body = await call(pageId, init, suffix);
+
     return { values: body.values as Record<string, FieldValue>, revision: String(body.revision), ...(body.media ? { media: body.media as MediaMap } : {}) };
   };
 
@@ -122,6 +148,18 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
     readPage: (pageId) => request(pageId, { method: 'GET', cache: 'no-store' }),
     runAction: (pageId, actionId, keyword) =>
       request(pageId, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword }) }, `/actions/${encodeURIComponent(actionId)}`),
+    searchItems: async (pageId, fieldPath, query, signal) => {
+      const params = new URLSearchParams();
+      if (query.include?.length) params.set('include', query.include.join(','));
+      else {
+        if (query.search) params.set('search', query.search);
+        if (query.page && query.page > 1) params.set('paged', String(query.page));
+      }
+      const qs = params.toString();
+      const body = await call(pageId, { method: 'GET', signal }, `/fields/${encodeURIComponent(fieldPath)}/items${qs ? `?${qs}` : ''}`);
+
+      return { items: Array.isArray(body.items) ? (body.items as RelationItem[]) : [], more: body.more === true };
+    },
   };
 }
 

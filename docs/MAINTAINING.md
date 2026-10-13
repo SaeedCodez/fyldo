@@ -112,7 +112,7 @@ report briefly and stop." Collect several fixes, then release a new beta (playbo
 ### E. Move code-only designs into Figma
 
 Some UI was built in code because Figma had no design for it. They are listed in `docs/design-spec.md` §10, §10.1 and §10.2
-(password toggle, Multi Select "No results found.", derived M4 pieces, disabled helper colour). To bring Figma back in sync:
+(password toggle, derived M4 pieces, disabled helper colour; the Multi Select's "No results found." is now the Figma Menu Message `Kind=Empty`). To bring Figma back in sync:
 draw them in Figma, export the affected components (playbook A step 2), delete the item from the §10 list.
 
 ## 5. Working with agent sessions

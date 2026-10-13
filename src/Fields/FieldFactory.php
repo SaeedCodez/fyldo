@@ -39,6 +39,9 @@ final class FieldFactory {
 			SelectField::class,
 			SliderField::class,
 			MultiSelectField::class,
+			PostField::class,
+			TermField::class,
+			UserField::class,
 			GroupField::class,
 			CustomField::class,
 		);

@@ -183,6 +183,20 @@
     { "name": "media: a fraction is not an attachment", "rules": { "media": true }, "value": 1.5, "expect": "media" },
     { "name": "media: text is not an attachment id", "rules": { "media": true }, "value": "12", "expect": "media" },
 
+    { "name": "relation: nothing chosen is optional", "rules": { "relation": true }, "value": 0, "expect": null },
+    { "name": "relation: an id passes", "rules": { "relation": true }, "value": 42, "expect": null },
+    { "name": "relation: required rejects 0 (nothing chosen)", "rules": { "required": true, "relation": true }, "value": 0, "expect": "required" },
+    { "name": "relation: required rejects an empty list", "rules": { "required": true, "relation": true }, "value": [], "expect": "required" },
+    { "name": "relation: a list of ids passes", "rules": { "relation": true }, "value": [3, 9, 4], "expect": null },
+    { "name": "relation: a negative id fails", "rules": { "relation": true }, "value": -2, "expect": "relation" },
+    { "name": "relation: a fraction is not an id", "rules": { "relation": true }, "value": 1.5, "expect": "relation" },
+    { "name": "relation: text is not an id", "rules": { "relation": true }, "value": "12", "expect": "relation" },
+    { "name": "relation: a list with 0 fails", "rules": { "relation": true }, "value": [3, 0], "expect": "relation" },
+    { "name": "relation: a list with text fails", "rules": { "relation": true }, "value": [3, "x"], "expect": "relation" },
+    { "name": "relation: min counts the items", "rules": { "relation": true, "min": 2 }, "value": [3], "expect": "min" },
+    { "name": "relation: max counts the items", "rules": { "relation": true, "max": 2 }, "value": [3, 4, 5], "expect": "max" },
+    { "name": "relation: within min and max", "rules": { "relation": true, "min": 1, "max": 3 }, "value": [3, 4], "expect": null },
+
     { "name": "combination: first failing rule wins", "rules": { "required": true, "min_length": 3, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "min_length" },
     { "name": "combination: pattern after length", "rules": { "required": true, "min_length": 2, "pattern": "^[a-z]+$" }, "value": "A1", "expect": "pattern" }
   ],
