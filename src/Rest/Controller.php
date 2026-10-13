@@ -91,6 +91,9 @@ final class Controller {
 
 	/**
 	 * Registered by register_routes(): search results of a relation field.
+	 *
+	 * @param non-falsy-string $rest_namespace The instance's REST namespace.
+	 * @param string           $route          The page route.
 	 */
 	private function register_items_route( string $rest_namespace, string $route ): void {
 		register_rest_route(
