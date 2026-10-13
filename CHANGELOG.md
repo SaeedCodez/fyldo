@@ -25,6 +25,7 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ### Fixed
 
+- **Admin screen**: nothing but Fyldo below the admin bar. WordPress admin notices (core's update nag, other plugins' notices) are no longer printed on a Fyldo screen, and what still lands above the app (notices added by JavaScript, settings errors, the Screen Options and Help tabs, another plugin's banner) is hidden. They pushed the full-height shell down and cut off its bottom. Other admin screens are unchanged; your own messages go through `Instance::admin_notice()`.
 - **Fields**: `image` and `file` values read on the front end. A stored attachment ID was checked against `current_user_can( 'read_post' )` on every read, and logged-out visitors (no `read` capability) always got the default, `0`, instead of the saved attachment. Reading a stored value now only checks that the attachment still exists and fits the field; the permission check stays where it belongs, on save and in the admin preview.
 - **Admin screen**: a crash while rendering no longer leaves an empty screen. A top-level error boundary shows an error notice with a "Reload page" button (saved settings are untouched) and logs the error to the console. A custom field's crash still stays inside its own row.
 

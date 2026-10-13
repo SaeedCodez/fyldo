@@ -15,6 +15,9 @@ use Fyldo\V1\Support\Naming;
  */
 final class Screen {
 
+	/** The hooks admin-header.php prints notices on, inside `#wpbody-content` and above the root. */
+	const NOTICE_HOOKS = array( 'admin_notices', 'network_admin_notices', 'user_admin_notices', 'all_admin_notices' );
+
 	public static function register( Instance $instance ): void {
 		$config   = $instance->config();
 		$menu     = $config['menu'];
@@ -69,21 +72,48 @@ final class Screen {
 	/**
 	 * Adds a body class on Fyldo screens (used to hide the WP footer and remove the content padding).
 	 *
-	 * @param string    $classes Space-separated body classes.
+	 * @param string     $classes   Space-separated body classes.
 	 * @param Instance[] $instances All instances.
 	 */
 	public static function body_class( string $classes, array $instances ): string {
+		return self::is_current( $instances ) ? $classes . ' fyldo-screen' : $classes;
+	}
+
+	/**
+	 * A Fyldo screen is the app's alone: no admin notice from core (update nag, recovery mode, …) or another plugin is
+	 * printed above it. Runs last on `in_admin_header`, just before admin-header.php fires the notice hooks, so it
+	 * also catches callbacks added late. The app's own notices go through `Instance::admin_notice()`; app.css hides
+	 * whatever still lands next to the root (notices added by JavaScript, the Screen Options and Help tabs).
+	 *
+	 * @param Instance[] $instances All instances.
+	 */
+	public static function clear_admin_notices( array $instances ): void {
+		if ( ! self::is_current( $instances ) ) {
+			return;
+		}
+
+		foreach ( self::NOTICE_HOOKS as $hook ) {
+			remove_all_actions( $hook );
+		}
+	}
+
+	/**
+	 * Whether the current admin screen belongs to one of the instances.
+	 *
+	 * @param Instance[] $instances All instances.
+	 */
+	private static function is_current( array $instances ): bool {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		if ( null === $screen ) {
-			return $classes;
+			return false;
 		}
 
 		foreach ( $instances as $instance ) {
 			if ( '' !== $instance->hook_suffix() && $screen->id === $instance->hook_suffix() ) {
-				return $classes . ' fyldo-screen';
+				return true;
 			}
 		}
 
-		return $classes;
+		return false;
 	}
 }

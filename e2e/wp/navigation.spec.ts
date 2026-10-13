@@ -233,6 +233,36 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     expect(Math.abs(card!.x - (box!.x + box!.width) - (main - 960) / 2)).toBeLessThanOrEqual(1);
   });
 
+  test('nothing but Fyldo below the admin bar: no admin notice from core or another plugin, no banner, no Help tab', async ({
+    page,
+  }) => {
+    // e2e/mu-plugins/foreign-notices.php plays another plugin; on any other screen everything it adds is shown
+    const foreign = page.locator('[data-foreign]').locator('visible=true');
+    await page.goto('/wp-admin/index.php?fyldo_foreign=1');
+    await expect(foreign).toHaveCount(5);
+    await expect(page.locator('#contextual-help-link')).toBeVisible();
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto(settingsUrl('acme-beta', '&fyldo_foreign=1'));
+    await expect(h1(page)).toHaveText('General');
+    // the notice hooks print nothing, even a callback added on in_admin_header
+    await expect(page.locator('[data-foreign=admin_notices], [data-foreign=all_admin_notices], [data-foreign=late]')).toHaveCount(0);
+    // what is still printed or added by JavaScript is hidden
+    await expect(page.locator('[data-foreign=banner]')).toBeAttached();
+    await expect(page.locator('[data-foreign=js]')).toBeAttached();
+    await expect(page.locator('#setting-error-foreign')).toBeAttached();
+    await expect(page.locator('#contextual-help-link')).toBeAttached();
+    await expect(foreign).toHaveCount(0);
+    await expect(page.locator('#setting-error-foreign')).toBeHidden();
+    await expect(page.locator('#screen-meta-links')).toBeHidden();
+    await expect(page.locator('#wpadminbar')).toBeVisible();
+
+    const bar = await page.locator('#wpadminbar').boundingBox();
+    const box = await page.locator('[data-slot=fy-sidebar]').boundingBox();
+    expect(Math.round(box!.y)).toBe(Math.round(bar!.height));
+    expect(Math.round(box!.height)).toBe(900 - Math.round(bar!.height));
+  });
+
   test('groups, the nav badge and the utility links (opening a new tab, announced)', async ({
     page,
   }) => {

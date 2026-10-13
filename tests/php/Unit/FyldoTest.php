@@ -56,9 +56,10 @@ final class FyldoTest extends TestCase {
 		Fyldo::init();
 		Fyldo::init();
 
-		foreach ( array( 'init', 'admin_menu', 'rest_api_init', 'admin_init', 'admin_enqueue_scripts', 'admin_body_class' ) as $hook ) {
+		foreach ( array( 'init', 'admin_menu', 'rest_api_init', 'admin_init', 'admin_enqueue_scripts', 'admin_body_class', 'in_admin_header' ) as $hook ) {
 			$this->assertCount( 1, $GLOBALS['__fyldo_test_actions'][ $hook ], $hook );
 		}
+		$this->assertSame( PHP_INT_MAX, $GLOBALS['__fyldo_test_actions']['in_admin_header'][0][1], 'notices are cleared after every other callback' );
 	}
 
 	public function test_every_instance_gets_its_own_nonce_refresh_for_logged_in_users(): void {

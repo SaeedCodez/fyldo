@@ -40,6 +40,7 @@ final class Fyldo {
 		add_action( 'admin_init', array( self::class, 'register_ajax' ) );
 		add_action( 'admin_enqueue_scripts', array( self::class, 'enqueue' ) );
 		add_filter( 'admin_body_class', array( self::class, 'body_class' ) );
+		add_action( 'in_admin_header', array( self::class, 'clear_admin_notices' ), PHP_INT_MAX );
 	}
 
 	/**
@@ -115,5 +116,12 @@ final class Fyldo {
 	 */
 	public static function body_class( $classes ): string {
 		return Screen::body_class( (string) $classes, array_values( self::$instances ) );
+	}
+
+	/**
+	 * No WordPress admin notice on a Fyldo screen.
+	 */
+	public static function clear_admin_notices(): void {
+		Screen::clear_admin_notices( array_values( self::$instances ) );
 	}
 }
