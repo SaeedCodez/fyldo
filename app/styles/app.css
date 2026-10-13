@@ -128,6 +128,17 @@ body.fyldo-screen #wpfooter {
 }
 
 /*
+ * Nothing but Fyldo below the admin bar. PHP removes the admin notice callbacks (Screen::clear_admin_notices()); this
+ * hides what still lands around the root: notices added by JavaScript, the Screen Options and Help tabs, settings
+ * errors, another plugin's banner on `in_admin_header`. `!important` beats the inline display of jQuery's show().
+ */
+body.fyldo-screen #wpcontent > :not(#wpadminbar, #wpbody),
+body.fyldo-screen #wpbody > :not(#wpbody-content),
+body.fyldo-screen #wpbody-content > :not(.fyldo-root, noscript) {
+  display: none !important;
+}
+
+/*
  * The shell fills the screen below the admin bar (wp-admin's own variable: 32px, 46px at ≤782px), and the Sidebar
  * column stays in view while the content scrolls.
  */

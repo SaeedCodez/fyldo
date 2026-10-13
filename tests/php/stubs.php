@@ -20,6 +20,19 @@ if ( ! function_exists( 'add_filter' ) ) {
 	}
 }
 
+if ( ! function_exists( 'remove_all_actions' ) ) {
+	function remove_all_actions( $hook, $priority = false ) {
+		unset( $GLOBALS['__fyldo_test_actions'][ $hook ] );
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_current_screen' ) ) {
+	function get_current_screen() {
+		return $GLOBALS['__fyldo_test_screen'] ?? null;
+	}
+}
+
 if ( ! function_exists( 'did_action' ) ) {
 	function did_action( $hook ) {
 		return $GLOBALS['__fyldo_test_did'][ $hook ] ?? 0;
