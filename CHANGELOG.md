@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.4] - 2026-10-13
+
 ### Added
 
 - **Fields**: `post`, `term` and `user`, a searchable select whose options are the site's posts (any post type), terms (any taxonomy) or users, loaded from the server while the user types (Figma Select Menu `Type=Search` and the new Menu Message row for searching, no results and errors). Name the source with `post_type` / `post_status`, `taxonomy` or `role`; `multiple` turns it into a Multi Select whose tags keep the pick order. The value is the ID (`0` = none) or a list of IDs; only items the current user may read are offered and saved, and deleted ones drop out when the value is read. `query_args` narrows the search; `min` / `max` count the items. A new REST route, `GET …/pages/{page}/fields/{field}/items`, serves the results (20 a page); the saved items' titles travel with the page's `media`. Works inside a `group`, and a group's `item_title` may name such a sub-field: each item is then named after the post, term or user chosen in it. The demo has a "Links" page with every variant.
@@ -73,6 +75,7 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.4]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.1
