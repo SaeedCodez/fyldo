@@ -44,23 +44,23 @@ export interface MultiSelectProps {
 }
 
 /** Figma: the tags are Small (20) in a Small field and Medium (24) in Medium and Large ones. */
-const TAG_SIZE: Record<ControlSize, TagSize> = { sm: 'sm', md: 'md', lg: 'md' };
+export const TAG_SIZE: Record<ControlSize, TagSize> = { sm: 'sm', md: 'md', lg: 'md' };
 
 /** Start padding once there are tags (the tag's own 1px stroke + this = a 6/8/12 inset): Small 6, Medium 8, Large stays 12. */
-const START_WITH_TAGS: Record<ControlSize, string> = { sm: 'fy:ps-1.5', md: 'fy:ps-2', lg: 'fy:ps-3' };
+export const START_WITH_TAGS: Record<ControlSize, string> = { sm: 'fy:ps-1.5', md: 'fy:ps-2', lg: 'fy:ps-3' };
 
 /*
  * Multi Select control. Figma counts the stroke in the layout, so a Small field is 34 = 1 + 6 + 20 + 6 + 1 and its
  * padding is 6/12 (Medium 8/12, Large 12/12); once there are tags the start padding drops (Small 6, Medium 8, Large unchanged). Tags wrap (4px gaps).
  * The chevron column is one line tall and stays beside the first line.
  */
-const FIELD: Record<ControlSize, string> = {
+export const FIELD: Record<ControlSize, string> = {
   sm: 'fy:py-1.5 fy:rounded-sm fy:text-copy-14',
   md: 'fy:py-2 fy:rounded-sm fy:text-copy-14',
   lg: 'fy:py-3 fy:rounded-md fy:text-copy-16',
 };
-const LINE: Record<ControlSize, string> = { sm: 'fy:min-h-6', md: 'fy:min-h-7', lg: 'fy:min-h-7' };
-const ICONS: Record<ControlSize, string> = { sm: 'fy:h-6', md: 'fy:h-7', lg: 'fy:h-7' };
+export const LINE: Record<ControlSize, string> = { sm: 'fy:min-h-6', md: 'fy:min-h-7', lg: 'fy:min-h-7' };
+export const ICONS: Record<ControlSize, string> = { sm: 'fy:h-6', md: 'fy:h-7', lg: 'fy:h-7' };
 
 /**
  * Many-of-many field. Base UI Combobox with `multiple`, the search input INSIDE the popup (ARCHITECTURE O14): the field is
@@ -294,7 +294,7 @@ export function MultiSelect({
 }
 
 /** Menu Item Multi: the 16px checkbox in a 20px (22 in Persian) slot, centred on the row. */
-function OptionBox({ option, selected }: { option: MultiSelectOption; selected: boolean }): ReactElement {
+export function OptionBox({ option, selected }: { option: Pick<MultiSelectOption, 'disabled'>; selected: boolean }): ReactElement {
   return (
     <span className="fy:flex fy:h-(--fyldo-leading-label-14) fy:shrink-0 fy:items-center">
       <CheckboxMark checked={selected} disabled={option.disabled} />

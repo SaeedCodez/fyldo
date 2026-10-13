@@ -139,6 +139,21 @@
                     ]
                 },
                 {
+                    "id": "related_pages",
+                    "type": "post",
+                    "label": "Related pages",
+                    "description": "Pages linked under each post.",
+                    "default": [],
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "max": 3,
+                        "relation": true
+                    },
+                    "multiple": true,
+                    "placeholder": "Select pages…"
+                },
+                {
                     "id": "layout",
                     "type": "radio",
                     "label": "Layout",
@@ -586,6 +601,7 @@
             "post",
             "page"
         ],
+        "related_pages": [],
         "layout": "full",
         "agree": false,
         "canonical_base": "",

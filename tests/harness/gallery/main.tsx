@@ -36,12 +36,15 @@
  *   ?c=icons&names=a,b,c   a 20px grid of 16px icons (geometry matching of pack icons; not a component)
  *   ?c=group&title=…&description=…&items=<json>&sortable=1&addable=1&max=5&add=…&names=a,b   (894 wide, the Group field as a Setting
  *       Row draws it; items = [{label, icon, link}], each collapsed; the sub-fields are Label / Icon / Link)
+ *   ?c=menu-message&kind=loading|empty|error   (the 310px status row of a Select Menu whose options load from the server)
+ *   ?c=relation-select&multiple=0|1&label=…&placeholder=…&helper=…&items=3:Home|7:About us:Page&value=3   (320 wide; a post, term or
+ *       user field searching `items` instead of a server; a hint after the second colon)
  * `dir=rtl` and `lang=fa` switch the direction like the real app does. Hover/focus are forced by the test (CDP).
  */
 import { DirectionProvider } from '@base-ui/react/direction-provider';
 import { Field } from '@base-ui/react/field';
 import { RadioGroup as BaseRadioGroup } from '@base-ui/react/radio-group';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FieldRenderer } from '../../../app/components/fyldo/FieldRenderer';
 import { NavItem } from '../../../app/components/fyldo/NavItem';
@@ -70,11 +73,14 @@ import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel'
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
 import { MediaField } from '../../../app/components/ui/media-field';
 import type { MediaKind } from '../../../app/lib/wp-media';
-import type { FieldValue, GroupFieldDef } from '../../../app/types';
+import type { FieldValue, GroupFieldDef, RelationItem } from '../../../app/types';
 import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
 import { MultiSelectField } from '../../../app/components/ui/multi-select-field';
+import { MenuMessage, type MenuMessageKind } from '../../../app/components/ui/menu-message';
+import { RelationSelect } from '../../../app/components/ui/relation-select';
+import type { RelationSearch } from '../../../app/lib/relation';
 import { EmptyState } from '../../../app/components/ui/empty-state';
 import { IconButton } from '../../../app/components/ui/icon-button';
 import { Modal } from '../../../app/components/ui/modal';
@@ -416,6 +422,49 @@ function MultiSelectDemo() {
   );
 }
 
+/** `items=3:Home|7:About us:Page` → relation items (value:label:hint). */
+function relationItems(): RelationItem[] {
+  return param('items')
+    .split('|')
+    .filter(Boolean)
+    .map((entry) => {
+      const [value = '0', label = '', hint = ''] = entry.split(':');
+      return { value: Number(value), label, hint };
+    });
+}
+
+function RelationSelectDemo() {
+  const multiple = q.get('multiple') === '1';
+  const [value, setValue] = useState<number | number[]>(() => {
+    const ids = param('value').split(',').filter(Boolean).map(Number);
+    return multiple ? ids : (ids[0] ?? 0);
+  });
+  // A "server" that knows `items`: every one before anything is typed, the matching ones after.
+  const search = useMemo<RelationSearch>(() => {
+    const items = relationItems();
+    return async (_path, query) => ({
+      items: query.include ? items.filter((i) => query.include!.includes(i.value)) : items.filter((i) => i.label.toLowerCase().includes((query.search ?? '').toLowerCase())),
+      more: false,
+    });
+  }, []);
+  return (
+    <div style={{ width: 320 }}>
+      <FieldShell label={param('label')} description={param('helper') || undefined}>
+        <RelationSelect
+          value={value}
+          multiple={multiple}
+          search={search}
+          path="gallery"
+          placeholder={param('placeholder')}
+          size={size}
+          aria-label={param('label')}
+          onValueChange={(next) => setValue(next)}
+        />
+      </FieldShell>
+    </div>
+  );
+}
+
 interface NavSpec {
   brand: string;
   version?: string;
@@ -721,6 +770,14 @@ function Variant() {
           onRemove={q.get('removable') === '0' ? undefined : () => undefined}
         />
       );
+    case 'menu-message':
+      return (
+        <div style={{ width: 310 }}>
+          <MenuMessage kind={(q.get('kind') ?? 'loading') as MenuMessageKind} />
+        </div>
+      );
+    case 'relation-select':
+      return <RelationSelectDemo />;
     case 'multi-select':
       return <MultiSelectDemo />;
     case 'segmented-control':

@@ -9,7 +9,7 @@ import { UploadImageField } from '../../app/components/ui/upload-image-field';
 import { setLocaleData } from '../../app/i18n';
 import { resetIconCache, setIconLoader } from '../../app/icons/registry';
 import { checkChoice, describeItem, formatBytes, itemFromAttachment, type WpAttachment } from '../../app/lib/wp-media';
-import type { FieldValue, ImageFieldDef, MediaItem } from '../../app/types';
+import type { FieldValue, ImageFieldDef, MediaItem, MediaMap } from '../../app/types';
 
 const PNG: WpAttachment = { id: 7, type: 'image', mime: 'image/png', filename: 'logo-mark.png', filesizeInBytes: 38912, width: 512, height: 512, sizes: { thumbnail: { url: 'https://example.com/logo-150x150.png' } } };
 const PDF: WpAttachment = { id: 9, type: 'application', mime: 'application/pdf', filename: 'brand-guidelines.pdf', filesizeInBytes: 1258291 };
@@ -389,7 +389,7 @@ describe('inside a Setting Row', () => {
     max_size: null,
   };
 
-  function Row({ onChange, onError }: { onChange: (id: string, value: FieldValue, media?: MediaItem | null) => void; onError: (id: string, message: string) => void }) {
+  function Row({ onChange, onError }: { onChange: (id: string, value: FieldValue, media?: MediaMap[string]) => void; onError: (id: string, message: string) => void }) {
     return <FieldRenderer field={field} value={0} media={null} divider={false} onChange={onChange} onBlur={() => undefined} onError={onError} />;
   }
 

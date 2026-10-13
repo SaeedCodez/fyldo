@@ -1,9 +1,10 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
 import { __, formatNumber } from '../../i18n';
-import type { FieldDef, FieldValue, GroupItemValue, MediaItem } from '../../types';
+import { mediaItem, type FieldDef, type FieldValue, type GroupItemValue, type MediaItem, type MediaMap, type RelationItem } from '../../types';
 import { cn } from '../../lib/cn';
 import { sanitizeMediaId } from '../../lib/wp-media';
+import { useRelationSearch } from '../../lib/relation';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { ColorPicker } from '../ui/color-picker';
@@ -16,6 +17,7 @@ import { NumberInput } from '../ui/number-input';
 import { PasswordInput } from '../ui/password-input';
 import { ChoiceCards } from '../ui/choice-card';
 import { RadioGroup } from '../ui/radio';
+import { RelationSelect } from '../ui/relation-select';
 import { SegmentedControl } from '../ui/segmented-control';
 import { Select } from '../ui/select';
 import { Slider } from '../ui/slider';
@@ -30,8 +32,11 @@ export interface FieldRendererProps {
   value: FieldValue;
   error?: string;
   divider: boolean;
-  /** `media`: the attachment a media field was set to (null when cleared); the other fields never pass it. */
-  onChange: (id: string, value: FieldValue, media?: MediaItem | null) => void;
+  /**
+   * `media`: the attachment a media field was set to (null when cleared), or the items behind a post, term or user field's
+   * new value (their titles); the other fields never pass it.
+   */
+  onChange: (id: string, value: FieldValue, media?: MediaItem | RelationItem[] | null) => void;
   /** `only`: a group validates one sub-field on its blur (`<group>.<index>.<sub-field>`). */
   onBlur: (id: string, only?: string) => void;
   /** A group's change; `clear`: the error keys it makes stale (omitted = all of the group's). Default: `onChange`. */
@@ -46,14 +51,16 @@ export interface FieldRendererProps {
   fieldKey?: string;
   /** A sub-field of a disabled group (or one disabled itself). */
   forceDisabled?: boolean;
-  /** What an `image` / `file` field draws for its saved attachment (the page's `media[field.id]`). */
-  media?: MediaItem | null;
+  /** What an `image` / `file` field draws for its saved attachment, a post, term or user field for its items (the page's `media[field.id]`). */
+  media?: MediaMap[string];
   /** A field shows a message of its own (a chosen file that is the wrong type or too large); its value is left as it was. */
   onError?: (id: string, message: string) => void;
   /** The page's stored revision: a password shown in clear is hidden again when it changes (a successful save). */
   revision?: string;
   /** The page's locale: a Slider's value is written in its numerals (۷۵ in Persian). */
   locale?: string;
+  /** A post, term or user field's search route: its id, or `<group>.<sub-field>` inside a group. Default: the field id. */
+  searchPath?: string;
 }
 
 /** `onBlur` for a group: only when focus leaves the group, not when it moves between its options. */
@@ -81,7 +88,10 @@ export function FieldRenderer({
   onError,
   revision,
   locale = 'en',
+  searchPath,
 }: FieldRendererProps): ReactElement {
+  const search = useRelationSearch();
+
   // Display only: no value, no label association, nothing to change, nothing to send.
   if (field.type === 'notice') {
     return (
@@ -235,7 +245,7 @@ export function FieldRenderer({
             kind={field.type}
             label={field.label}
             value={sanitizeMediaId(value)}
-            media={media}
+            media={mediaItem(media)}
             mimes={field.mimes}
             maxSize={field.max_size}
             disabled={disabled}
@@ -295,6 +305,27 @@ export function FieldRenderer({
             disabled={disabled}
             aria-label={field.label}
             onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+
+    case 'post':
+    case 'term':
+    case 'user':
+      return (
+        <SettingRow {...common}>
+          <RelationSelect
+            size="md"
+            value={typeof value === 'number' || Array.isArray(value) ? (value as number | number[]) : 0}
+            multiple={field.multiple}
+            known={Array.isArray(media) ? media : []}
+            search={search}
+            path={searchPath ?? field.id}
+            placeholder={field.placeholder}
+            disabled={disabled}
+            aria-label={field.label}
+            onValueChange={(next, items) => onChange(field.id, next, items)}
             onBlur={() => onBlur(field.id)}
           />
         </SettingRow>
@@ -361,6 +392,7 @@ export function FieldRenderer({
                 onChange={(_, next) => slot.onChange(next)}
                 onBlur={() => slot.onBlur()}
                 locale={locale}
+                searchPath={`${field.id}.${slot.field.id}`}
               />
             )}
           />

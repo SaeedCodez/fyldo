@@ -196,6 +196,12 @@ type TagProps = { label: string; size?: 'sm'|'md'; onRemove?: () => void /* abse
 - **Code-only design, approved by the owner (design-spec §10):** the pack draws no *empty result* state. "No results found." reuses the Menu Item geometry (40px row, 8px padding, Copy/14 `text/tertiary`) — nothing new was invented, but it is not Figma.
 - Screen readers: the field is a `combobox` named by its label; the tags are text in it; removals and Clear are announced in a polite status region.
 
+### 2.9.1 Select Menu (Search) + Menu Message — the `post`, `term` and `user` fields
+
+Figma `Select Menu` Type=Search (the Single menu with the Search row on top, no footer) and the `Menu Message` set (386:11707; Kind Loading / Empty / Error, 310×40, the Menu Item geometry: padding `space/8`, Copy/14 `text/tertiary`; Loading leads with `Icon/spinner` in `icon/tertiary`; Error is `text/secondary` with a Tertiary Small "Retry", padding 4 around it). Usage frame: "Search Select · Usage".
+
+*Implemented:* `RelationSelect` (`app/components/ui/relation-select.tsx`) — Base UI `Combobox` with `filter={null}` (the server filters), the search input inside the popup as in 2.9. One value: the trigger is the Select control (value text + chevron), the chosen row has the end check; Backspace / Delete on the closed field clears it. `multiple`: the Multi Select field and footer (it reuses `FIELD`, `LINE`, `ICONS`, `TAG_SIZE`, `START_WITH_TAGS` and `OptionBox` from `multi-select.tsx`), tags in pick order. `MenuMessage` (`menu-message.tsx`) replaces the options while nothing has arrived (Loading), nothing matched (Empty) or the request failed (Error), and sits under the list while the next page loads. Results come from `app/lib/relation.ts` (`useRelationResults`: the first page on open, a new search 250 ms after typing stops, late answers ignored, old results kept while loading; `useKnownItems`: titles for saved IDs, from the page's `media` or fetched once with `include` inside a group). The page provides the search through `RelationSearchContext`. Pixel tests `Select Menu Search EN/FA`, `Menu Message EN/FA`.
+
 ### 2.10 Tag — see 2.9. Also usable standalone (filters). Radius `xs`, fill `surface/default`, hover `surface/hover`.
 
 ### 2.11 Segmented Control — Figma `Segment` (set, 10 variants) + `Segmented Control` (2)
@@ -515,6 +521,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `icon` | `IconPicker` | field | trim; a non-text value is nothing | pattern (name shape), allowed (`icons`), required |
 | `select` | `SelectField` | stacked | one of allowed keys (else default) | allowed |
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
+| `post` `term` `user` | `RelationSelect` (one value: Select + Select Menu `Type=Search`; `multiple`: Multi Select tags + Select Menu `Type=Multi`; status rows: `MenuMessage`) | field | IDs of existing items that fit the source (`post_type`/`post_status`, `taxonomy`, `role`), readable by the current user when saving; one ID or a list in pick order | relation, required, min/max items |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
 | `group` | `FieldGroup` + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
 | *later* `media`, `code editor`, `date` | out of scope until designed | | | |

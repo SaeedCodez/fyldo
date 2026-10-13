@@ -944,3 +944,96 @@ msgstr "بارگذاری دوباره‌ی صفحه"
 
 msgid "Something went wrong on this screen. Reload the page to try again; your saved settings are not affected."
 msgstr "در این صفحه مشکلی پیش آمد. برای تلاش دوباره، صفحه را دوباره بارگذاری کنید؛ تنظیمات ذخیره‌شده‌ی شما دست نمی‌خورند."
+
+msgid "Choose an item from the list."
+msgstr "یک مورد از فهرست انتخاب کنید."
+
+msgid "(no title)"
+msgstr "(بدون عنوان)"
+
+msgid "This field does not exist."
+msgstr "این فیلد وجود ندارد."
+
+msgid "Searching…"
+msgstr "در حال جستجو…"
+
+msgid "Couldn’t load results."
+msgstr "بارگذاری نشد."
+
+msgid "Links"
+msgstr "پیوندها"
+
+msgid "Post, term and user fields: search the site’s pages, posts, categories, tags and users, and pick one or several."
+msgstr "فیلدهای نوشته، واژه و کاربر: در برگه‌ها، نوشته‌ها، دسته‌ها، برچسب‌ها و کاربران سایت جستجو کنید و یکی یا چندتا را انتخاب کنید."
+
+msgid "Point to the site’s own pages, posts, categories and people."
+msgstr "به برگه‌ها، نوشته‌ها، دسته‌ها و افراد خود سایت اشاره کنید."
+
+msgid "Pages and posts"
+msgstr "برگه‌ها و نوشته‌ها"
+
+msgid "Open a field and type to search; before you type it lists the most recent items."
+msgstr "فیلد را باز کنید و برای جستجو تایپ کنید؛ پیش از تایپ، تازه‌ترین موارد فهرست می‌شوند."
+
+msgid "Homepage link"
+msgstr "پیوند صفحه‌ی اصلی"
+
+msgid "The page the logo links to."
+msgstr "برگه‌ای که لوگو به آن پیوند می‌دهد."
+
+msgid "Select a page…"
+msgstr "یک برگه انتخاب کنید…"
+
+msgid "Featured content"
+msgstr "محتوای ویژه"
+
+msgid "Posts and pages shown at the top of the blog, up to four. Each result names its type."
+msgstr "نوشته‌ها و برگه‌هایی که بالای وبلاگ نمایش داده می‌شوند، حداکثر چهار مورد. هر نتیجه نوع خود را نشان می‌دهد."
+
+msgid "Select posts or pages…"
+msgstr "نوشته‌ها یا برگه‌ها را انتخاب کنید…"
+
+msgid "Categories, tags and people"
+msgstr "دسته‌ها، برچسب‌ها و افراد"
+
+msgid "The same field for terms of any taxonomy and for users."
+msgstr "همین فیلد برای واژه‌های هر طبقه‌بندی و برای کاربران."
+
+msgid "Featured category"
+msgstr "دسته‌ی ویژه"
+
+msgid "Select a category…"
+msgstr "یک دسته انتخاب کنید…"
+
+msgid "Tags to highlight"
+msgstr "برچسب‌های برجسته"
+
+msgid "Select tags…"
+msgstr "برچسب‌ها را انتخاب کنید…"
+
+msgid "Support contact"
+msgstr "مسئول پشتیبانی"
+
+msgid "Only administrators and editors are listed."
+msgstr "فقط مدیران و ویرایشگران فهرست می‌شوند."
+
+msgid "Select a user…"
+msgstr "یک کاربر انتخاب کنید…"
+
+msgid "In a group"
+msgstr "در یک گروه"
+
+msgid "A post field works inside a group too, and can name its items: pick a page and the item takes its title."
+msgstr "فیلد نوشته درون گروه هم کار می‌کند و می‌تواند نام آیتم‌ها باشد: یک برگه انتخاب کنید تا آیتم عنوان آن را بگیرد."
+
+msgid "Promotions"
+msgstr "پیشنهادهای ویژه"
+
+msgid "Add promotion"
+msgstr "افزودن پیشنهاد ویژه"
+
+msgid "Button text"
+msgstr "متن دکمه"
+
+msgid "Links to"
+msgstr "پیوند به"

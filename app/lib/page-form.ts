@@ -5,7 +5,7 @@
  */
 import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
-import { isValueField, type FieldValue, type MediaItem, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
+import { isValueField, type FieldValue, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
 import { ApiError, LOGGED_OUT, type Api } from './api';
 import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
@@ -23,7 +23,7 @@ export interface FormState {
   values: Record<string, FieldValue>;
   /** Last values known to be stored. */
   saved: Record<string, FieldValue>;
-  /** What the media fields (`image`, `file`) draw for their attachment IDs: the saved ones, and what was chosen since. */
+  /** What the media fields (`image`, `file`) and the post, term and user fields draw for their IDs: the saved ones, and what was chosen since. */
   media: MediaMap;
   /** `media` as the server last sent it. */
   savedMedia: MediaMap;
@@ -44,10 +44,11 @@ export const PAGE_SCOPE = 'page';
 
 export type Action =
   /**
-   * `media`: the attachment a media field was just set to (null when cleared); the other fields leave it out.
+   * `media`: the attachment a media field was just set to (null when cleared), or a post, term or user field's items; the
+   * other fields leave it out.
    * `clear`: the error keys the edit makes stale; default every error of the field (a group: its sub-fields' too).
    */
-  | { type: 'change'; id: string; value: FieldValue; scope: string; media?: MediaItem | null; clear?: string[] }
+  | { type: 'change'; id: string; value: FieldValue; scope: string; media?: MediaMap[string]; clear?: string[] }
   | { type: 'discard' }
   /** Replace the errors of `ids` with `errors`; with a `scope`, a failed submit: that scope shows the error. */
   | { type: 'invalid'; errors: Record<string, string>; ids: string[]; scope?: string }
@@ -261,7 +262,7 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
 
   /** `clear`: the error keys the edit makes stale (a group's sub-field edit clears that sub-field only); default all of the field's. */
   const setValue = useCallback(
-    (id: string, value: FieldValue, media?: MediaItem | null, clear?: string[]) =>
+    (id: string, value: FieldValue, media?: MediaMap[string], clear?: string[]) =>
       dispatch({ type: 'change', id, value, scope: scopes.get(id) ?? PAGE_SCOPE, ...(media === undefined ? {} : { media }), ...(clear ? { clear } : {}) }),
     [dispatch, scopes],
   );

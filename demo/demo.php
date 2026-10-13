@@ -95,6 +95,7 @@ final class Demo {
 		$fyldo->add_page( 'general', self::general() );
 		$fyldo->add_page( 'content', self::content() );
 		$fyldo->add_page( 'header', self::header() );
+		$fyldo->add_page( 'links', self::links() );
 		$fyldo->add_page( 'security', self::security() );
 		$fyldo->add_page( 'hours', self::hours() );
 
@@ -158,6 +159,13 @@ final class Demo {
 							'tone'        => 'green',
 							'label'       => __( 'Header', 'fyldo' ),
 							'description' => __( 'Groups of fields: fixed header buttons, ones you can reorder, add and remove, and a group that starts empty.', 'fyldo' ),
+						),
+						array(
+							'id'          => 'tour_links',
+							'type'        => 'notice',
+							'tone'        => 'green',
+							'label'       => __( 'Links', 'fyldo' ),
+							'description' => __( 'Post, term and user fields: search the site’s pages, posts, categories, tags and users, and pick one or several.', 'fyldo' ),
 						),
 						array(
 							'id'          => 'tour_security',
@@ -772,6 +780,106 @@ final class Demo {
 								array(
 									'day'   => __( 'New Year’s Eve', 'fyldo' ),
 									'hours' => '10:00-14:00',
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/** Post, term and user fields: options found by searching the site, one value or several. */
+	private static function links(): array {
+		return array(
+			'title'       => __( 'Links', 'fyldo' ),
+			'description' => __( 'Point to the site’s own pages, posts, categories and people.', 'fyldo' ),
+			'icon'        => 'link-21',
+			'group'       => 'settings',
+			'sections'    => array(
+				array(
+					'id'          => 'pages',
+					'title'       => __( 'Pages and posts', 'fyldo' ),
+					'description' => __( 'Open a field and type to search; before you type it lists the most recent items.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'homepage_link',
+							'type'        => 'post',
+							'label'       => __( 'Homepage link', 'fyldo' ),
+							'description' => __( 'The page the logo links to.', 'fyldo' ),
+							'placeholder' => __( 'Select a page…', 'fyldo' ),
+							'post_type'   => 'page',
+						),
+						array(
+							'id'          => 'featured_posts',
+							'type'        => 'post',
+							'label'       => __( 'Featured content', 'fyldo' ),
+							'description' => __( 'Posts and pages shown at the top of the blog, up to four. Each result names its type.', 'fyldo' ),
+							'placeholder' => __( 'Select posts or pages…', 'fyldo' ),
+							'post_type'   => array( 'post', 'page' ),
+							'multiple'    => true,
+							'validate'    => array( 'max' => 4 ),
+						),
+					),
+				),
+				array(
+					'id'          => 'people',
+					'title'       => __( 'Categories, tags and people', 'fyldo' ),
+					'description' => __( 'The same field for terms of any taxonomy and for users.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'featured_category',
+							'type'        => 'term',
+							'label'       => __( 'Featured category', 'fyldo' ),
+							'placeholder' => __( 'Select a category…', 'fyldo' ),
+							'taxonomy'    => 'category',
+						),
+						array(
+							'id'          => 'highlight_tags',
+							'type'        => 'term',
+							'label'       => __( 'Tags to highlight', 'fyldo' ),
+							'placeholder' => __( 'Select tags…', 'fyldo' ),
+							'taxonomy'    => 'post_tag',
+							'multiple'    => true,
+						),
+						array(
+							'id'          => 'support_contact',
+							'type'        => 'user',
+							'label'       => __( 'Support contact', 'fyldo' ),
+							'description' => __( 'Only administrators and editors are listed.', 'fyldo' ),
+							'placeholder' => __( 'Select a user…', 'fyldo' ),
+							'role'        => array( 'administrator', 'editor' ),
+							'validate'    => array( 'required' => true ),
+						),
+					),
+				),
+				array(
+					'id'          => 'promos',
+					'title'       => __( 'In a group', 'fyldo' ),
+					'description' => __( 'A post field works inside a group too, and can name its items: pick a page and the item takes its title.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'         => 'promo_links',
+							'type'       => 'group',
+							'label'      => __( 'Promotions', 'fyldo' ),
+							'item_title' => 'target',
+							'addable'    => true,
+							'sortable'   => true,
+							'max'        => 5,
+							'add_label'  => __( 'Add promotion', 'fyldo' ),
+							'fields'     => array(
+								array(
+									'id'          => 'target',
+									'type'        => 'post',
+									'label'       => __( 'Links to', 'fyldo' ),
+									'placeholder' => __( 'Select a page…', 'fyldo' ),
+									'post_type'   => 'page',
+									'validate'    => array( 'required' => true ),
+								),
+								array(
+									'id'    => 'button',
+									'type'  => 'text',
+									'label' => __( 'Button text', 'fyldo' ),
 								),
 							),
 						),

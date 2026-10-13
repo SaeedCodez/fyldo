@@ -1,6 +1,7 @@
 /**
- * Pixel comparison of Tag, Multi Select and the Select Menu (Multi) against the Figma pack (design/figma/png), at
- * deviceScaleFactor 2 — the scale the component PNGs were exported at.
+ * Pixel comparison of Tag, Multi Select, the Select Menu (Multi and Search) and the Menu Message row against the Figma pack
+ * (design/figma/png), at deviceScaleFactor 2 — the scale the component PNGs were exported at. Search and Menu Message are
+ * the post, term and user fields (one test each, EN + FA).
  *
  * Fonts: EN is Geist in Figma and in code, so the whole component is compared. FA is IRANYekanX in Figma and Vazirmatn in
  * code (docs/design-spec.md D11) — glyph shapes differ by design — so FA compares the text-free part (the chevron column, the
@@ -10,9 +11,9 @@
  * allowed; failures attach actual / expected / diff. The pack's PNGs are read-only.
  */
 import { readFileSync } from 'node:fs';
-import { test, type Browser, type Page } from '@playwright/test';
+import { expect, test, type Browser, type Page } from '@playwright/test';
 import { box, open } from './support/figma';
-import { LOCALES, openMenu, paramsFor, SIZES, STATES } from './support/multi-select';
+import { LABEL_OF, LOCALES, openMenu, paramsFor, SIZES, STATES } from './support/multi-select';
 import { layer, pngPath, pngSize, variant, type Node } from './support/pack';
 import { comparePixels, type Rect } from './support/pixels';
 
@@ -155,6 +156,84 @@ for (const locale of LOCALES) {
       actualRegion: { x: at.x + strip.x, y: at.y + strip.y, width: strip.width, height: strip.height },
       maxDiffRatio: 0.04,
     });
+    await close();
+  });
+}
+
+// ── Select Menu · Search (a post, term or user field with one value: Search, five Menu Items, the first one chosen) ──────
+for (const locale of LOCALES) {
+  test(`Select Menu Search ${locale.name}`, async ({ browser }, testInfo) => {
+    const v = variant('select-menu', { Locale: locale.name, Type: 'Search' });
+    const root = v.node;
+    const items = Array.from({ length: 5 }, (_, i) => layer(root, `Item ${i + 1}`));
+    const { page, close } = await newPage(browser);
+    const stage = await open(page, {
+      c: 'relation-select',
+      dir: locale.dir,
+      label: 'Homepage link',
+      items: items.map((item, i) => `${i + 1}:${LABEL_OF(item)}`).join('|'),
+      value: '1',
+    });
+    await stage.getByRole('combobox').click();
+    const popup = page.locator('[data-slot=fy-relation-menu]');
+    await popup.waitFor();
+    await expect(popup.locator('[role=option]')).toHaveCount(5);
+    await still(page);
+    await popup.locator('[role=option]').nth(1).hover(); // Item 2 is drawn in its Hover state
+    const reference = pngPath('select-menu', v);
+    const p = await box(popup);
+    const s = await box(stage);
+    const at = { x: p.x - s.x, y: p.y - s.y };
+    expect([p.width, p.height]).toEqual([root.width, root.height]);
+    const margin = shadowMargin(root);
+    const popupInPng: Rect = { x: margin.left, y: margin.top, width: root.width, height: root.height };
+    if (locale.name === 'EN') {
+      const whole = await comparePixels({ page, testInfo, reference, scale: SCALE, stage, referenceRegion: popupInPng, actualRegion: { ...at, width: root.width, height: root.height }, maxDiffRatio: 0.03 });
+      console.log(`Select Menu Search EN: ${(whole.ratio * 100).toFixed(2)}% differ`);
+    }
+    // Both locales, text-free: the search icon, and the chosen item's check at the row's end
+    const icon = layer(root, 'Search icon');
+    const item = items[0]!;
+    const checkX = locale.name === 'EN' ? item.x + item.width - 8 - 16 : item.x + 8;
+    for (const region of [
+      { x: icon.x - 2, y: icon.y - 2, width: icon.width + 4, height: icon.height + 4 },
+      { x: checkX - 2, y: item.y + 10, width: 20, height: 20 },
+    ]) {
+      await comparePixels({
+        page,
+        testInfo,
+        reference,
+        scale: SCALE,
+        stage,
+        referenceRegion: { ...region, x: region.x + margin.left, y: region.y + margin.top },
+        actualRegion: { ...region, x: at.x + region.x, y: at.y + region.y },
+        maxDiffRatio: 0.05,
+      });
+    }
+    await close();
+  });
+}
+
+// ── Menu Message (Kind=Loading, the row a Select Menu shows while a search runs) ───────────────────────────────────
+for (const locale of LOCALES) {
+  test(`Menu Message ${locale.name}`, async ({ browser }, testInfo) => {
+    const v = variant('menu-message', { Locale: locale.name, Kind: 'Loading' });
+    const root = v.node;
+    const { page, close } = await newPage(browser);
+    const stage = await open(page, { c: 'menu-message', dir: locale.dir, kind: 'loading' });
+    const row = page.locator('[data-slot=fy-menu-message]');
+    const r = await box(row);
+    const s = await box(stage);
+    expect([r.width, r.height]).toEqual([root.width, root.height]);
+    const at = { x: r.x - s.x, y: r.y - s.y };
+    const reference = pngPath('menu-message', v);
+    if (locale.name === 'EN') {
+      await comparePixels({ page, testInfo, reference, scale: SCALE, stage, referenceRegion: whole(reference), actualRegion: { ...at, width: root.width, height: root.height }, maxDiffRatio: 0.05 });
+    }
+    // Both locales, text-free: the spinner at the row's start (left in EN, right in FA)
+    const spinner = layer(root, 'Spinner');
+    const region = { x: spinner.x - 2, y: spinner.y - 2, width: spinner.width + 4, height: spinner.height + 4 };
+    await comparePixels({ page, testInfo, reference, scale: SCALE, stage, referenceRegion: region, actualRegion: { ...region, x: at.x + region.x, y: at.y + region.y }, maxDiffRatio: 0.05 });
     await close();
   });
 }

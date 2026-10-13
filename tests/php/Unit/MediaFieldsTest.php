@@ -330,9 +330,10 @@ final class MediaFieldsTest extends TestCase {
 		$page  = $with->page( 'fields' );
 		$media = $with->store()->client_media( $page );
 
-		$this->assertSame( array( 'site_logo' => null, 'brand_guidelines' => null ), $media, 'nothing chosen: one entry per field, each null' );
+		// A post, term or user field is listed too: its saved items, an empty list when nothing is chosen.
+		$this->assertSame( array( 'related_pages' => array(), 'site_logo' => null, 'brand_guidelines' => null ), $media, 'nothing chosen: one entry per field, null or no items' );
 		$client = $page->to_client( array(), 'rev-1', $media );
-		$this->assertEquals( (object) array( 'site_logo' => null, 'brand_guidelines' => null ), $client['media'] );
+		$this->assertEquals( (object) array( 'related_pages' => array(), 'site_logo' => null, 'brand_guidelines' => null ), $client['media'] );
 
 		$without = new Instance( 'acme-plain', array( 'title' => 'Acme' ) );
 		$without->add_page( 'general', require dirname( __DIR__, 2 ) . '/fixtures/slice-page.php' );

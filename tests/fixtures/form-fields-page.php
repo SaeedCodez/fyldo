@@ -63,6 +63,16 @@ return array(
 					),
 				),
 				array(
+					'id'          => 'related_pages',
+					'type'        => 'post',
+					'label'       => 'Related pages',
+					'description' => 'Pages linked under each post.',
+					'placeholder' => 'Select pages…',
+					'post_type'   => 'page',
+					'multiple'    => true,
+					'validate'    => array( 'max' => 3 ),
+				),
+				array(
 					'id'          => 'layout',
 					'type'        => 'radio',
 					'label'       => 'Layout',

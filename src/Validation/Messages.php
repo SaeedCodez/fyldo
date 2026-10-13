@@ -63,6 +63,9 @@ final class Messages {
 			case 'media':
 				return __( 'Choose a file from the media library.', 'fyldo' );
 
+			case 'relation':
+				return __( 'Choose an item from the list.', 'fyldo' );
+
 			case 'attachment':
 				return __( 'This file is no longer available. Choose another one.', 'fyldo' );
 

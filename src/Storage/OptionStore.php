@@ -8,6 +8,7 @@
 namespace Fyldo\V1\Storage;
 
 use Fyldo\V1\Fields\AbstractMediaField;
+use Fyldo\V1\Fields\AbstractRelationField;
 use Fyldo\V1\Schema\Page;
 
 /**
@@ -65,23 +66,24 @@ final class OptionStore {
 	}
 
 	/**
-	 * What the browser draws for the media fields (`image`, `file`) of a page: field id → the saved attachment's name, size,
-	 * type, dimensions and thumbnail, or null when nothing is chosen. Null when the page has no media field at all.
+	 * What the browser draws for the IDs a page stores: for a media field (`image`, `file`) the saved attachment's name,
+	 * size, type, dimensions and thumbnail, or null when nothing is chosen; for a post, term or user field the titles of
+	 * the saved items (a list, empty when nothing is chosen). Keyed by field id; null when the page has no such field.
 	 *
-	 * @return array<string,array<string,mixed>|null>|null
+	 * @return array<string,mixed>|null
 	 */
 	public function client_media( Page $page ): ?array {
 		$media  = null;
 		$values = null;
 
 		foreach ( $page->fields() as $id => $field ) {
-			if ( ! $field instanceof AbstractMediaField ) {
+			if ( ! $field instanceof AbstractMediaField && ! $field instanceof AbstractRelationField ) {
 				continue;
 			}
 			$values = $values ?? $this->values( $page );
 			$media  = $media ?? array();
 
-			$media[ $id ] = $field->media( $values[ $id ] );
+			$media[ $id ] = $field instanceof AbstractMediaField ? $field->media( $values[ $id ] ) : $field->items( $values[ $id ] );
 		}
 
 		return $media;

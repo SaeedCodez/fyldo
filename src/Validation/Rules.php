@@ -16,10 +16,11 @@ namespace Fyldo\V1\Validation;
 final class Rules {
 
 	/**
-	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number` and `color` are implied by the
-	 * field type (the value must be an address / a number / `#rrggbb` / an attachment ID); the others are declared by the developer.
+	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number`, `color`, `media` and `relation` are
+	 * implied by the field type (the value must be an address / a number / `#rrggbb` / an attachment ID / a post, term or user
+	 * ID or a list of them); the others are declared by the developer.
 	 */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'allowed', 'min', 'max', 'step' );
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
 
 	/**
 	 * @param array<string,mixed> $rules Field `validate` array.
@@ -27,8 +28,10 @@ final class Rules {
 	 * @return array{rule:string,params:array<string,mixed>}|null
 	 */
 	public static function check( array $rules, $value ): ?array {
-		// A media field stores the attachment ID: 0 means nothing is chosen, which `required` does not accept.
-		if ( ! empty( $rules['required'] ) && ( self::is_empty( $value ) || ( ! empty( $rules['media'] ) && 0 === $value ) ) ) {
+		// A media field stores the attachment ID, a post, term or user field the item's ID: 0 means nothing is chosen, which
+		// `required` does not accept.
+		$by_id = ! empty( $rules['media'] ) || ! empty( $rules['relation'] );
+		if ( ! empty( $rules['required'] ) && ( self::is_empty( $value ) || ( $by_id && 0 === $value ) ) ) {
 			return array(
 				'rule'   => 'required',
 				'params' => array(),
@@ -38,6 +41,11 @@ final class Rules {
 		// An attachment ID is a whole number, 0 or more (the field's sanitizer guarantees it; a stored value may not be).
 		if ( ! empty( $rules['media'] ) && ! self::is_empty( $value ) ) {
 			return is_int( $value ) && $value >= 0 ? null : self::fail( 'media', array() );
+		}
+
+		// A post, term or user ID (0 = nothing chosen), or with `multiple` a list of IDs. `min` / `max` then count the list.
+		if ( ! empty( $rules['relation'] ) && ! self::is_empty( $value ) && ! self::is_relation( $value ) ) {
+			return self::fail( 'relation', array() );
 		}
 
 		if ( self::is_empty( $value ) && ! is_array( $value ) ) {
@@ -166,6 +174,27 @@ final class Rules {
 	 */
 	public static function is_empty( $value ): bool {
 		return null === $value || '' === $value || array() === $value;
+	}
+
+	/**
+	 * An ID of 0 or more, or a list of IDs above 0.
+	 *
+	 * @param mixed $value Value.
+	 */
+	private static function is_relation( $value ): bool {
+		if ( is_int( $value ) ) {
+			return $value >= 0;
+		}
+		if ( ! is_array( $value ) || array_values( $value ) !== $value ) {
+			return false;
+		}
+		foreach ( $value as $id ) {
+			if ( ! is_int( $id ) || $id <= 0 ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/** Length in characters (code points), the same measure as JS `[...str].length`. */

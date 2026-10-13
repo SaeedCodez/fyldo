@@ -10,18 +10,25 @@
 
 namespace Fyldo\V1\Rest;
 
+use Fyldo\V1\Fields\AbstractRelationField;
+use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Storage\Saver;
 use Fyldo\V1\Support\Naming;
 
 /**
- * Routes: GET/PATCH `/pages/{page}`; POST `/pages/{page}/actions/{action}` (a Danger Section Card's action).
+ * Routes: GET/PATCH `/pages/{page}`; POST `/pages/{page}/actions/{action}` (a Danger Section Card's action); GET
+ * `/pages/{page}/fields/{field}/items` (search results of a post, term or user field; `{field}` is `<group>.<sub-field>`
+ * for one inside a group).
  */
 final class Controller {
 
 	/** Maximum accepted request body, in bytes. */
 	const MAX_BODY = 524288;
+
+	/** Most IDs one `include` lookup may ask for. */
+	const MAX_INCLUDE = 100;
 
 	/** @var Instance */
 	private $instance;
@@ -78,6 +85,44 @@ final class Controller {
 				),
 			)
 		);
+
+		$this->register_items_route( $namespace, $route );
+	}
+
+	/**
+	 * Registered by register_routes(): search results of a relation field.
+	 *
+	 * @param non-falsy-string $rest_namespace The instance's REST namespace.
+	 * @param string           $route          The page route.
+	 */
+	private function register_items_route( string $rest_namespace, string $route ): void {
+		register_rest_route(
+			$rest_namespace,
+			$route . '/fields/(?P<field>[a-z0-9][a-z0-9_-]{0,63}(?:\.[a-z0-9][a-z0-9_-]{0,63})?)/items',
+			array(
+				array(
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'items' ),
+					'permission_callback' => array( $this, 'authorize' ),
+					'args'                => array(
+						'search'  => array(
+							'type'     => 'string',
+							'required' => false,
+						),
+						// Not `page`: that is the settings page in the route.
+						'paged'   => array(
+							'type'     => 'integer',
+							'required' => false,
+							'minimum'  => 1,
+						),
+						'include' => array(
+							'type'     => 'string',
+							'required' => false,
+						),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -109,6 +154,45 @@ final class Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * One page of a post, term or user field's options: `search` (words), `paged` (from 1), or `include` (comma-separated
+	 * IDs: the titles of a value the browser has none for). Only items the current user may read are returned.
+	 *
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function items( \WP_REST_Request $request ) {
+		$field = $this->relation_field( $this->page( $request ), (string) $request['field'] );
+		if ( null === $field ) {
+			return new \WP_Error( 'fyldo_not_found', __( 'This field does not exist.', 'fyldo' ), array( 'status' => 404 ) );
+		}
+
+		$include = array();
+		foreach ( explode( ',', (string) $request['include'] ) as $id ) {
+			if ( 1 === preg_match( '/^\d+$/', trim( $id ) ) && (int) $id > 0 ) {
+				$include[ (int) $id ] = (int) $id;
+			}
+		}
+
+		$search = function_exists( 'mb_substr' ) ? mb_substr( (string) $request['search'], 0, 100 ) : substr( (string) $request['search'], 0, 100 );
+		$result = $field->search( sanitize_text_field( $search ), max( 1, (int) $request['paged'] ), array_slice( array_values( $include ), 0, self::MAX_INCLUDE ) );
+
+		return new \WP_REST_Response( $result );
+	}
+
+	/**
+	 * A post, term or user field of the page by its id, or `<group>.<sub-field>` for one inside a group.
+	 */
+	private function relation_field( Page $page, string $path ): ?AbstractRelationField {
+		$parts = explode( '.', $path, 2 );
+		$field = $page->field( $parts[0] );
+
+		if ( isset( $parts[1] ) ) {
+			$field = $field instanceof GroupField ? ( $field->sub_fields()[ $parts[1] ] ?? null ) : null;
+		}
+
+		return $field instanceof AbstractRelationField ? $field : null;
 	}
 
 	/**
