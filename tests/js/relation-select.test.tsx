@@ -2,11 +2,14 @@ import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { describe, expect, it, vi } from 'vitest';
+import { FieldRenderer } from '../../app/components/fyldo/FieldRenderer';
 import { FieldShell } from '../../app/components/ui/field-shell';
+import { TooltipProvider } from '../../app/components/ui/tooltip';
 import { RelationSelect } from '../../app/components/ui/relation-select';
 import type { ItemsQuery, ItemsResult } from '../../app/lib/api';
 import { PortalContainerContext } from '../../app/lib/portal';
-import type { RelationItem } from '../../app/types';
+import { RelationSearchContext } from '../../app/lib/relation';
+import type { FieldValue, GroupFieldDef, GroupItemValue, RelationItem } from '../../app/types';
 
 const PAGES: RelationItem[] = [
   { value: 3, label: 'Home', hint: '' },
@@ -114,7 +117,7 @@ describe('RelationSelect', () => {
     const { field } = setup({ initial: [7, 3], multiple: true, search });
 
     await waitFor(() => expect([...field().querySelectorAll('[data-slot=fy-tag]')].map((t) => t.textContent)).toEqual(['About us', 'Home']));
-    expect(search).toHaveBeenCalledWith('homepage', { include: [7, 3] }, expect.any(AbortSignal));
+    expect(search).toHaveBeenCalledWith('homepage', { include: [7, 3] });
   });
 
   it('with multiple, toggles items in pick order and removes the last tag with Backspace', async () => {
@@ -130,5 +133,57 @@ describe('RelationSelect', () => {
     box.focus();
     await userEvent.keyboard('{Backspace}');
     expect(onChange).toHaveBeenLastCalledWith([9], [PAGES[2]]);
+  });
+
+  it('in a group whose `item_title` is a post sub-field, each item is named after its chosen post, without typing', async () => {
+    const search = server();
+    const group: GroupFieldDef = {
+      id: 'promos',
+      type: 'group',
+      label: 'Promotions',
+      description: '',
+      default: [],
+      disabled: false,
+      layout: 'stacked',
+      validate: {},
+      item_title: 'target',
+      item_icon: '',
+      sortable: false,
+      addable: true,
+      min: null,
+      max: null,
+      add_label: '',
+      fields: [
+        { id: 'target', type: 'post', label: 'Links to', description: '', default: 0, disabled: false, layout: 'field', validate: { relation: true }, multiple: false, placeholder: 'Select a page…' },
+      ],
+    };
+    function Page() {
+      const [value, setValue] = useState<FieldValue>([{ target: 7 }, { target: 0 }]);
+      return <FieldRenderer field={group} value={value} divider={false} onChange={(_id, next) => setValue(next)} onGroupChange={(_id, next: GroupItemValue[]) => setValue(next)} onBlur={() => undefined} />;
+    }
+    const root = document.createElement('div');
+    document.body.append(root);
+    render(
+      <PortalContainerContext.Provider value={root}>
+        <TooltipProvider>
+          <RelationSearchContext.Provider value={search}>
+            <Page />
+          </RelationSearchContext.Provider>
+        </TooltipProvider>
+      </PortalContainerContext.Provider>,
+    );
+    const titles = () => [...document.querySelectorAll('[data-slot=fy-group-item-title]')].map((t) => t.textContent);
+
+    // the saved item is collapsed: its title is looked up by ID; the empty one keeps "Item 2"
+    await waitFor(() => expect(titles()).toEqual(['About us', 'Item 2']));
+    expect(search).toHaveBeenCalledWith('promos.target', { include: [7] });
+    expect(search.mock.calls.filter(([, q]) => q.include).length, 'one lookup for the header and the select together').toBe(1);
+
+    // picking a page in the second item names it at once
+    await userEvent.click(screen.getAllByRole('button', { name: /Item 2/ })[0]!);
+    const { dialog, search: box } = await openPopup(screen.getByRole('combobox', { name: 'Links to' }));
+    await userEvent.type(box, 'sale');
+    await userEvent.click(await within(dialog).findByRole('option', { name: 'Summer sale · Page' }));
+    await waitFor(() => expect(titles()).toEqual(['About us', 'Summer sale · Page']));
   });
 });

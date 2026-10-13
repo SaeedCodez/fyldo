@@ -12,6 +12,7 @@ import { DragHandle } from '../../icons/DragHandle';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 import { blankItem, errorKey, itemsOf, move } from '../../lib/group';
+import { itemText, relationIds, useKnownItems, useRelationSearch } from '../../lib/relation';
 import type { FieldValue, GroupFieldDef, GroupItemValue, SubFieldDef } from '../../types';
 import { Button } from '../ui/button';
 import { GroupItem } from '../ui/group-item';
@@ -100,6 +101,14 @@ export function FieldGroup({
 }: FieldGroupProps): ReactElement {
   const items = itemsOf(value);
   const labels = useGroupLabels();
+  // `item_title` may name a post, term or user sub-field: the header then shows the chosen item's title (several, as a list).
+  const titleField = field.fields.find((sub) => sub.id === field.item_title);
+  const byId = titleField && (titleField.type === 'post' || titleField.type === 'term' || titleField.type === 'user');
+  const titles = useKnownItems(
+    useRelationSearch(),
+    `${field.id}.${field.item_title}`,
+    byId ? items.flatMap((item) => relationIds(item[field.item_title])) : [],
+  );
   const toaster = useOptionalToaster();
 
   // Stable React keys for the items (the value is plain data): kept in step with every add, move and remove.
@@ -138,7 +147,15 @@ export function FieldGroup({
   const atMax = field.max !== null && count >= field.max;
   const atMin = field.min !== null && count <= field.min;
   const titleOf = (item: GroupItemValue, index: number): string => {
-    const title = field.item_title ? item[field.item_title] : '';
+    const raw = field.item_title ? item[field.item_title] : '';
+    const title = byId
+      ? new Intl.ListFormat(locale, { style: 'narrow', type: 'unit' }).format(
+          relationIds(raw).flatMap((id) => {
+            const found = titles.get(id);
+            return found ? [itemText(found)] : [];
+          }),
+        )
+      : raw;
     return typeof title === 'string' && title.trim() !== ''
       ? title
       : sprintf(__('Item %d', 'fyldo'), index + 1);

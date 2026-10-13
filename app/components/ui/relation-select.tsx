@@ -1,10 +1,10 @@
 import { Combobox } from '@base-ui/react/combobox';
-import { useId, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent, type ReactElement, type ReactNode, type UIEvent } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type FocusEvent, type KeyboardEvent, type ReactElement, type ReactNode, type UIEvent } from 'react';
 import { Icon } from '../../icons/Icon';
 import { __, _n, formatNumber, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { usePortalContainer } from '../../lib/portal';
-import { itemText, relationIds, useKnownItems, useRelationResults, type RelationResults, type RelationSearch } from '../../lib/relation';
+import { itemText, rememberItems, relationIds, useKnownItems, useRelationResults, type RelationResults, type RelationSearch } from '../../lib/relation';
 import type { RelationItem } from '../../types';
 import { Button } from './button';
 import { CONTROL_BASE, CONTROL_LOOK, CONTROL_SIZE, type ControlSize } from './control';
@@ -81,9 +81,10 @@ export function RelationSelect({
   const ids = multiple ? relationIds(value) : relationIds(value).slice(0, 1);
   const results = useRelationResults(search, path, query, open);
   const titles = useKnownItems(search, path, ids, known);
-  // Every item seen in a result, so a pick always has its title.
+  // Every item seen in a result, so a pick always has its title (and a group's header shows it at once).
   const seen = useRef(new Map<number, RelationItem>());
   for (const item of results.items) seen.current.set(item.value, item);
+  useEffect(() => rememberItems(search, path, results.items), [search, path, results.items]);
   const itemOf = (itemId: number): RelationItem | undefined => titles.get(itemId) ?? seen.current.get(itemId);
   // An ID whose title has not arrived yet shows an ellipsis.
   const selected = ids.map((itemId) => itemOf(itemId) ?? { value: itemId, label: '…', hint: '' });

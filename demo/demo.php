@@ -856,30 +856,30 @@ final class Demo {
 				array(
 					'id'          => 'promos',
 					'title'       => __( 'In a group', 'fyldo' ),
-					'description' => __( 'A post field works inside a group too.', 'fyldo' ),
+					'description' => __( 'A post field works inside a group too, and can name its items: pick a page and the item takes its title.', 'fyldo' ),
 					'fields'      => array(
 						array(
 							'id'         => 'promo_links',
 							'type'       => 'group',
 							'label'      => __( 'Promotions', 'fyldo' ),
-							'item_title' => 'title',
+							'item_title' => 'target',
 							'addable'    => true,
 							'sortable'   => true,
 							'max'        => 5,
 							'add_label'  => __( 'Add promotion', 'fyldo' ),
 							'fields'     => array(
 								array(
-									'id'       => 'title',
-									'type'     => 'text',
-									'label'    => __( 'Title', 'fyldo' ),
-									'validate' => array( 'required' => true ),
-								),
-								array(
 									'id'          => 'target',
 									'type'        => 'post',
 									'label'       => __( 'Links to', 'fyldo' ),
 									'placeholder' => __( 'Select a page…', 'fyldo' ),
 									'post_type'   => 'page',
+									'validate'    => array( 'required' => true ),
+								),
+								array(
+									'id'    => 'button',
+									'type'  => 'text',
+									'label' => __( 'Button text', 'fyldo' ),
 								),
 							),
 						),

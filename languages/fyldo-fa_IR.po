@@ -1023,8 +1023,8 @@ msgstr "یک کاربر انتخاب کنید…"
 msgid "In a group"
 msgstr "در یک گروه"
 
-msgid "A post field works inside a group too."
-msgstr "فیلد نوشته درون گروه هم کار می‌کند."
+msgid "A post field works inside a group too, and can name its items: pick a page and the item takes its title."
+msgstr "فیلد نوشته درون گروه هم کار می‌کند و می‌تواند نام آیتم‌ها باشد: یک برگه انتخاب کنید تا آیتم عنوان آن را بگیرد."
 
 msgid "Promotions"
 msgstr "پیشنهادهای ویژه"
@@ -1032,8 +1032,8 @@ msgstr "پیشنهادهای ویژه"
 msgid "Add promotion"
 msgstr "افزودن پیشنهاد ویژه"
 
-msgid "Title"
-msgstr "عنوان"
+msgid "Button text"
+msgstr "متن دکمه"
 
 msgid "Links to"
 msgstr "پیوند به"

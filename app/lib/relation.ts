@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import type { RelationItem } from '../types';
 import type { ItemsQuery, ItemsResult } from './api';
 
@@ -105,30 +105,96 @@ export function useRelationResults(search: RelationSearch | null, path: string, 
   return { items, status, loaded, more, loadMore, retry };
 }
 
+/** The titles one page's search has seen, per field path: what the selects picked or fetched, shared with a group's headers. */
+interface TitleStore {
+  titles: Map<string, Map<number, RelationItem>>;
+  /** IDs a lookup (`include`) is running or done for, per path: asked once. */
+  asked: Map<string, Set<number>>;
+  version: number;
+  listeners: Set<() => void>;
+}
+
+const stores = new WeakMap<object, TitleStore>();
+/** The store of a page without a search (tests, the gallery without one). */
+const NO_SEARCH = {};
+
+function storeOf(search: RelationSearch | null): TitleStore {
+  const key = search ?? NO_SEARCH;
+  let store = stores.get(key);
+  if (!store) {
+    store = { titles: new Map(), asked: new Map(), version: 0, listeners: new Set() };
+    stores.set(key, store);
+  }
+  return store;
+}
+
+const bucket = <T>(map: Map<string, T>, path: string, make: () => T): T => {
+  let value = map.get(path);
+  if (value === undefined) {
+    value = make();
+    map.set(path, value);
+  }
+  return value;
+};
+
+/** Remember items' titles for a field; listeners hear about it only when something new or changed arrived. */
+export function rememberItems(search: RelationSearch | null, path: string, items: RelationItem[]): void {
+  const store = storeOf(search);
+  const titles = bucket(store.titles, path, () => new Map<number, RelationItem>());
+  let changed = false;
+  for (const item of items) {
+    const before = titles.get(item.value);
+    if (!before || before.label !== item.label || before.hint !== item.hint) {
+      titles.set(item.value, item);
+      changed = true;
+    }
+  }
+  if (!changed) return;
+  store.version++;
+  store.listeners.forEach((listener) => listener());
+}
+
 /**
- * Titles for the IDs of a value: the ones the page already has (`known`), plus the missing ones fetched once with
- * `include` (a relation field inside a group, whose titles are not in the page's `media`).
+ * Titles for the IDs of a value: the ones the page already has (`known`, from its `media`), the ones seen since (picked
+ * in a select, or a group header's lookup), and the missing ones fetched once with `include` (a field inside a group,
+ * whose titles are not in the page's `media`). Re-renders when a title arrives.
  */
-export function useKnownItems(search: RelationSearch | null, path: string, ids: number[], known: RelationItem[]): Map<number, RelationItem> {
-  const [fetched, setFetched] = useState<RelationItem[]>([]);
-  const asked = useRef(new Set<number>());
+export function useKnownItems(search: RelationSearch | null, path: string, ids: number[], known: RelationItem[] = []): Map<number, RelationItem> {
+  const store = storeOf(search);
+  useSyncExternalStore(
+    useCallback(
+      (listener: () => void) => {
+        store.listeners.add(listener);
+        return () => store.listeners.delete(listener);
+      },
+      [store],
+    ),
+    () => store.version,
+  );
 
+  useEffect(() => rememberItems(search, path, known), [search, path, known]);
+
+  const titles = store.titles.get(path);
   const map = new Map<number, RelationItem>();
-  for (const item of [...fetched, ...known]) map.set(item.value, item);
-  const missing = ids.filter((id) => !map.has(id) && !asked.current.has(id));
-  const key = missing.join(',');
+  for (const item of known) map.set(item.value, item);
+  for (const id of ids) {
+    const item = titles?.get(id);
+    if (item && !map.has(id)) map.set(id, item);
+  }
+  const asked = bucket(store.asked, path, () => new Set<number>());
+  const key = ids.filter((id) => !map.has(id) && !asked.has(id)).join(',');
 
+  // Not aborted when the component re-renders or goes away: marking the IDs as asked changes `key` at once, and the
+  // titles belong to the page's store anyway. `asked` keeps a lookup from being sent twice.
   useEffect(() => {
-    if (!search || key === '') return undefined;
+    if (!search || key === '') return;
     const want = key.split(',').map(Number);
-    want.forEach((id) => asked.current.add(id));
-    const abort = new AbortController();
-    search(path, { include: want }, abort.signal).then(
-      (result) => setFetched((previous) => [...previous, ...result.items]),
-      () => want.forEach((id) => asked.current.delete(id)),
+    want.forEach((id) => asked.add(id));
+    search(path, { include: want }).then(
+      (result) => rememberItems(search, path, result.items),
+      () => want.forEach((id) => asked.delete(id)),
     );
-    return () => abort.abort();
-  }, [search, path, key]);
+  }, [search, path, key, asked]);
 
   return map;
 }
