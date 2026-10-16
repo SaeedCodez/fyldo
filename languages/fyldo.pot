@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-16T22:33:51+00:00\n"
+"POT-Creation-Date: 2026-10-16T22:47:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -228,39 +228,39 @@ msgstr ""
 msgid "Resources"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:173
+#: app/components/ui/calendar-panel.tsx:174
 msgid "Next month"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:173
+#: app/components/ui/calendar-panel.tsx:174
 msgid "Previous month"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:175
+#: app/components/ui/calendar-panel.tsx:176
 msgid "Next year"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:175
+#: app/components/ui/calendar-panel.tsx:176
 msgid "Previous year"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:176
+#: app/components/ui/calendar-panel.tsx:177
 msgid "Next years"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:176
+#: app/components/ui/calendar-panel.tsx:177
 msgid "Previous years"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:267
+#: app/components/ui/calendar-panel.tsx:271
 msgid "Calendar"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:415
+#: app/components/ui/calendar-panel.tsx:420
 msgid "Today"
 msgstr ""
 
-#: app/components/ui/calendar-panel.tsx:425
+#: app/components/ui/calendar-panel.tsx:430
 msgid "Clear"
 msgstr ""
 
@@ -308,9 +308,9 @@ msgstr ""
 msgid "Choose a date and time"
 msgstr ""
 
-#: app/components/ui/date-picker.tsx:292
-#: app/components/ui/date-picker.tsx:297
-#: app/components/ui/date-picker.tsx:311
+#: app/components/ui/date-picker.tsx:290
+#: app/components/ui/date-picker.tsx:298
+#: app/components/ui/date-picker.tsx:312
 msgid "Choose a time"
 msgstr ""
 

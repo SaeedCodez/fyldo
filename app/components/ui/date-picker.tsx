@@ -272,8 +272,6 @@ export function TimePicker({
         autoComplete="off"
         spellCheck={false}
         placeholder={placeholder || '--:--'}
-        aria-haspopup="dialog"
-        aria-expanded={open}
         value={text}
         onValueChange={(next) => setText(String(next))}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
@@ -294,6 +292,9 @@ export function TimePicker({
           type="button"
           tabIndex={-1}
           disabled={disabled}
+          // A text box cannot carry aria-expanded: the button that opens the panel does (Alt+Down opens it from the box).
+          aria-haspopup="dialog"
+          aria-expanded={open}
           aria-label={__('Choose a time', 'fyldo')}
           onClick={() => (open ? close() : show())}
           className="fy:flex fy:cursor-pointer fy:outline-none fy:disabled:cursor-not-allowed"

@@ -1,4 +1,5 @@
 import { useDirection } from '@base-ui/react/direction-provider';
+import { Field } from '@base-ui/react/field';
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactElement } from 'react';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
@@ -262,13 +263,17 @@ export function CalendarPanel({
       )}
     >
       {switchable ? (
-        <SegmentedControl
-          fill
-          aria-label={__('Calendar', 'fyldo')}
-          options={switchOrder.map((c) => ({ value: c, label: calendarName(c) }))}
-          value={calendar}
-          onValueChange={(next) => setCalendar(next as CalendarKind)}
-        />
+        // Its own Field: the popup is portalled but still inside the date field's Field, whose label would otherwise name
+        // (and whose value this view-only switch would join) the radio group.
+        <Field.Root>
+          <SegmentedControl
+            fill
+            aria-label={__('Calendar', 'fyldo')}
+            options={switchOrder.map((c) => ({ value: c, label: calendarName(c) }))}
+            value={calendar}
+            onValueChange={(next) => setCalendar(next as CalendarKind)}
+          />
+        </Field.Root>
       ) : null}
 
       <div className="fy:flex fy:gap-3">
