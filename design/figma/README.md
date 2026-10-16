@@ -2,7 +2,7 @@
 
 A read-only export of the Fyldo design (Figma file `Pg3Ni7eqTLQYIG6hfNVPt6`, page **Components**), so that code, tests and
 cloud sessions never need Figma access. Exported 2026-10-11 (after the redesign: primary colour, tinted neutrals, bigger controls) through the figma-console MCP
-(Desktop Bridge); nothing in the Figma file was modified. 42 component sets, 857 variants, 24 usage/template frames. The "Fyldo – HeroUI" file, the Foundations page and the Icons page are **not** part of it
+(Desktop Bridge); nothing in the Figma file was modified. 42 component sets, 857 variants, 24 usage/template frames. The "Fyldo – HeroUI" file, the Foundations page and the icon sets themselves are **not** part of it (Iconsax is a published team library since 2026-10-16; icon instances are recorded by name, size and colour token)
 (tokens live in `tokens/figma.tokens.json`, styles in `tokens/figma.styles.json`, the spec in `docs/design-spec.md`).
 
 ## Contents

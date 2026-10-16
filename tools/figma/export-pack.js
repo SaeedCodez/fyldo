@@ -13,8 +13,9 @@
  *   png     → every variant of params.setId as a base64 PNG (params.scale, default 2), batched by params.maxChars.
  *   frames  → params.ids (frame node ids) as base64 PNGs at params.scale (default 1), named by kebab(frame name).
  *
- * Variable ids are always resolved to variable NAMES ("border/input"); ids never reach the output. Iconsax icon
- * instances (main component on the Icons page) are recorded as { name, size, colour token } and not walked.
+ * Variable ids are always resolved to variable NAMES ("border/input"); ids never reach the output. Icon instances
+ * (the Iconsax library, or Fyldo's `Icon/*` components in the "Custom icons" section) are recorded as
+ * { name, size, colour token } and not walked.
  */
 globalThis.fyldoPack = async function fyldoPack(P) {
   const t0 = Date.now();
@@ -58,12 +59,6 @@ globalThis.fyldoPack = async function fyldoPack(P) {
     }
     return nodeNames.get(id);
   };
-  const pageOf = (n) => {
-    let p = n;
-    while (p && p.type !== 'PAGE') p = p.parent;
-    return p;
-  };
-
   // ── serializers ──────────────────────────────────────────────────────────────────────────────────────────────────
   const boundNames = async (bv) => {
     const out = {};
@@ -230,8 +225,8 @@ globalThis.fyldoPack = async function fyldoPack(P) {
     if (node.type === 'INSTANCE') {
       const mc = await node.getMainComponentAsync();
       const set = mc && mc.parent && mc.parent.type === 'COMPONENT_SET' ? mc.parent : null;
-      const page = mc ? pageOf(mc) : null;
-      const isIcon = !!(page && page.name === 'Icons');
+      // Icons: the Iconsax library (remote sets with "Property 1=<style>" variants) or Fyldo's own `Icon/*` components.
+      const isIcon = !!mc && ((mc.remote && !!set && mc.name.startsWith('Property 1=')) || mc.name.startsWith('Icon/'));
       if (isIcon) {
         o.icon = { name: set ? set.name : mc.name, size: r2(node.width) };
         if (set) o.icon.variant = mc.name;
