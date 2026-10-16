@@ -2,15 +2,20 @@
  * Client mirror of src/Validation/Rules.php. The server is authoritative; this exists for instant feedback.
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
- * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, media, relation, allowed, min, max, step.
+ * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, date, time, datetime, media, relation, allowed,
+ * min, max, step. `date`, `time` and `datetime` check the format, then their own `min`, `max` and minute `step`.
  */
 import { __, _n, sprintf } from '../i18n';
-import type { RuleSet } from '../types';
+import type { MomentRule, RuleSet } from '../types';
 import { isHexColor } from './color';
+import { dateSettings, formatBound, isValid, minuteOfDay, resolveBound, type MomentKind } from './datetime';
 
 export interface Failure {
-  /** A declarative rule, or a `group` field's item count (`items_min`, `items_max`: src/Fields/GroupField.php). */
-  rule: keyof RuleSet | 'items_min' | 'items_max';
+  /**
+   * A declarative rule, a `group` field's item count (`items_min`, `items_max`: src/Fields/GroupField.php), or a date /
+   * time bound (`too_early`, `too_late`: params `bound` in the stored format and `kind`) or minute step (`minute_step`).
+   */
+  rule: keyof RuleSet | 'items_min' | 'items_max' | 'too_early' | 'too_late' | 'minute_step';
   params: Record<string, unknown>;
 }
 
@@ -60,6 +65,30 @@ const isId = (value: unknown): value is number => typeof value === 'number' && N
 const isRelation = (value: unknown): boolean =>
   Array.isArray(value) ? value.every((id) => isId(id) && id > 0) : isId(value) && value >= 0;
 
+const MOMENTS: MomentKind[] = ['date', 'time', 'datetime'];
+
+/**
+ * A `date`, `time` or `datetime` value: the strict stored format (a real day, 00:00–23:59), then `min` / `max` (`today` and
+ * `now` resolved in the site's time zone), then the minute step (a datetime's counted on the site's clock).
+ */
+function momentFailure(kind: MomentKind, rule: MomentRule, value: unknown): Failure | null {
+  if (typeof value !== 'string' || !isValid(kind, value)) return fail(kind);
+  if (rule.min !== undefined) {
+    const min = resolveBound(kind, rule.min);
+    if (value < min) return fail('too_early', { bound: min, kind });
+  }
+  if (rule.max !== undefined) {
+    const max = resolveBound(kind, rule.max);
+    if (value > max) return fail('too_late', { bound: max, kind });
+  }
+  if (kind !== 'date') {
+    const step = rule.step ?? 1;
+    const minute = minuteOfDay(kind, value);
+    if (minute < 0 || minute % step !== 0) return fail('minute_step', { step });
+  }
+  return null;
+}
+
 export function check(rules: RuleSet, value: unknown): Failure | null {
   // A media field stores the attachment ID, a post, term or user field the item's ID: 0 means nothing is chosen, which
   // `required` does not accept.
@@ -81,6 +110,13 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
     if (rules.number) return fail('number');
     // A color field stores `#rrggbb`; anything else the server could not read stays text and lands here.
     if (rules.color && !isHexColor(value)) return fail('color');
+  }
+
+  for (const kind of MOMENTS) {
+    const rule = rules[kind];
+    if (!rule) continue;
+    const failure = momentFailure(kind, rule === true ? {} : rule, value);
+    if (failure) return failure;
   }
 
   if (rules.allowed !== undefined) {
@@ -127,6 +163,22 @@ export function messageFor(failure: Failure): string {
       return __('Enter a number.', 'fyldo');
     case 'color':
       return __('Enter a valid color, like #rrggbb.', 'fyldo');
+    case 'date':
+      return __('Enter a valid date.', 'fyldo');
+    case 'time':
+      return __('Enter a valid time between 00:00 and 23:59.', 'fyldo');
+    case 'datetime':
+      return __('Enter a valid date and time.', 'fyldo');
+    case 'too_early':
+      /* translators: %s: the earliest date or time allowed. */
+      return sprintf(__('Choose %s or later.', 'fyldo'), formatBound(failure.params.kind as MomentKind, String(failure.params.bound ?? ''), dateSettings().locale));
+    case 'too_late':
+      /* translators: %s: the latest date or time allowed. */
+      return sprintf(__('Choose %s or earlier.', 'fyldo'), formatBound(failure.params.kind as MomentKind, String(failure.params.bound ?? ''), dateSettings().locale));
+    case 'minute_step': {
+      const step = Number(failure.params.step ?? 1);
+      return sprintf(_n('Choose a time in steps of %d minute.', 'Choose a time in steps of %d minutes.', step, 'fyldo'), step);
+    }
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
     case 'media':

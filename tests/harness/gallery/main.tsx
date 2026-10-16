@@ -13,6 +13,12 @@
  *   ?c=slider&size=sm|md&state=default|disabled&label=…&helper=…&value=75&suffix=%   (320 wide; the value is formatted in the page's numerals)
  *   ?c=color-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=#2271b1&helper=…&error=…   (320 wide; empty = the dashed swatch)
  *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
+ *   ?c=date-field&kind=date|datetime|time&size=sm|md|lg&state=default|error|disabled&calendar=auto|jalali|gregorian&label=…&placeholder=…&value=2026-10-20&helper=…&error=…
+ *       (320 wide; preload names=calendar,arrow-down-2)
+ *   ?c=calendar-cell&kind=day|wide&state=default|hover|selected|today|outside|disabled&label=17
+ *   ?c=calendar-panel&kind=date|datetime&calendar=gregorian|jalali&switch=1|0&value=2026-10-20   (the panel on its own; a datetime value is UTC)
+ *   ?c=time-panel&type=popup|embedded&value=14:30&step=5
+ *       the date and time sets pin the clock with today=2026-10-17 and the week start with start=0…6 (default 1, Monday)
  *   ?c=icon-picker&size=sm|md|lg&state=default|filled|error|disabled&label=…&placeholder=…&value=home-2&helper=…&error=…   (320 wide; empty = the dashed tile; preload its icons with names=)
  *   ?c=icon-picker-modal&value=star&icons=a,b,c&names=a,b,c   (the open modal on its own; icons = the names to offer, none = every Iconsax icon)
  *   ?c=upload-image|select-file&preview=empty|filled&state=default|error|disabled&label=…&helper=…&error=…&filename=…&filesize=38912&mime=…&ext=…&width=512&height=512&thumb=<url>&names=gallery-add,trash   (360 wide; the texts are Fyldo's own strings)
@@ -70,6 +76,11 @@ import { ChoiceCardGroup } from '../../../app/components/ui/choice-card-group';
 import { SegmentedControl } from '../../../app/components/ui/segmented-control';
 import { ColorPickerField } from '../../../app/components/ui/color-picker-field';
 import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel';
+import { CalendarCell, type CalendarCellKind } from '../../../app/components/ui/calendar-cell';
+import { CalendarPanel } from '../../../app/components/ui/calendar-panel';
+import { DateField, TimeField } from '../../../app/components/ui/date-field';
+import { TimePanel } from '../../../app/components/ui/time-panel';
+import { parseTime, setClock, setDateSettings, type CalendarKind } from '../../../app/lib/datetime';
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
 import { MediaField } from '../../../app/components/ui/media-field';
 import type { MediaKind } from '../../../app/lib/wp-media';
@@ -396,6 +407,76 @@ function IconPickerModalDemo() {
 function ColorPickerPanelDemo() {
   const [value, setValue] = useState(param('value', '#2271b1'));
   return <ColorPickerPanel value={value} onValueChange={setValue} locale={locale} />;
+}
+
+function DateFieldDemo() {
+  const [value, setValue] = useState(param('value'));
+  const kind = param('kind', 'date');
+  const common = {
+    label: param('label'),
+    description: param('helper') || undefined,
+    placeholder: param('placeholder') || undefined,
+    size,
+    value,
+    onValueChange: setValue,
+    locale,
+    error: state === 'error' ? param('error') : undefined,
+    disabled: state === 'disabled',
+  };
+  return (
+    <div style={{ width: 320 }}>
+      {kind === 'time' ? (
+        <TimeField {...common} step={Number(param('step', '1'))} />
+      ) : (
+        <DateField {...common} kind={kind === 'datetime' ? 'datetime' : 'date'} calendar={param('calendar', 'auto') as CalendarKind | 'auto'} />
+      )}
+    </div>
+  );
+}
+
+function CalendarCellDemo() {
+  const look = param('state', 'default');
+  return (
+    <CalendarCell
+      kind={param('kind', 'day') as CalendarCellKind}
+      selected={look === 'selected'}
+      today={look === 'today'}
+      outside={look === 'outside'}
+      disabled={look === 'disabled'}
+      className={look === 'hover' ? 'fy:bg-brand-subtle fy:text-brand-text' : param('kind') === 'wide' ? 'fy:w-22' : undefined}
+    >
+      {param('label', rtl ? '۲۵' : '17')}
+    </CalendarCell>
+  );
+}
+
+function CalendarPanelDemo() {
+  const [value, setValue] = useState(param('value', '2026-10-20'));
+  return (
+    <CalendarPanel
+      kind={param('kind', 'date') === 'datetime' ? 'datetime' : 'date'}
+      value={value}
+      onValueChange={setValue}
+      calendar={param('calendar', 'gregorian') as CalendarKind}
+      switchable={param('switch', '1') !== '0'}
+      step={Number(param('step', '5'))}
+      locale={locale}
+    />
+  );
+}
+
+function TimePanelDemo() {
+  const [value, setValue] = useState(parseTime(param('value', '14:30')));
+  return (
+    <TimePanel
+      value={value}
+      onValueChange={setValue}
+      step={Number(param('step', '5'))}
+      type={param('type', 'popup') === 'embedded' ? 'embedded' : 'popup'}
+      locale={locale}
+      onNow={() => undefined}
+    />
+  );
 }
 
 function MultiSelectDemo() {
@@ -792,6 +873,14 @@ function Variant() {
       return <ColorPickerDemo />;
     case 'color-picker-panel':
       return <ColorPickerPanelDemo />;
+    case 'date-field':
+      return <DateFieldDemo />;
+    case 'calendar-cell':
+      return <CalendarCellDemo />;
+    case 'calendar-panel':
+      return <CalendarPanelDemo />;
+    case 'time-panel':
+      return <TimePanelDemo />;
     case 'icon-picker':
       return <IconPickerDemo />;
     case 'icon-picker-modal':
@@ -912,6 +1001,10 @@ function Variant() {
       );
   }
 }
+
+// The date and time sets: a fixed "today" (the pack shows 17 October 2026) and the site's week start.
+if (q.get('today')) setClock(() => new Date(`${param('today')}T12:00:00Z`));
+setDateSettings({ timezone: 'UTC', startOfWeek: Number(param('start', '1')), calendar: rtl ? 'jalali' : 'gregorian', locale });
 
 (async () => {
   if (rtl) {

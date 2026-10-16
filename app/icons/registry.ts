@@ -85,6 +85,9 @@ export function collectIconNames(config: unknown): string[] {
     else if (value && typeof value === 'object') {
       for (const [k, v] of Object.entries(value)) {
         if (k === 'icon' && typeof v === 'string' && v !== '') names.push(v);
+        // The date and time fields draw their own glyph in the closed field.
+        else if (k === 'type' && (v === 'date' || v === 'datetime')) names.push('calendar');
+        else if (k === 'type' && v === 'time') names.push('clock');
         else walk(v);
       }
     }

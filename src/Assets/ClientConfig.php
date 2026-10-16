@@ -10,6 +10,7 @@ namespace Fyldo\V1\Assets;
 use Fyldo\V1\Bootstrap\Loader;
 use Fyldo\V1\I18n\Textdomain;
 use Fyldo\V1\Instance;
+use Fyldo\V1\Support\Dates;
 use Fyldo\V1\Support\Naming;
 
 /**
@@ -56,6 +57,12 @@ final class ClientConfig {
 				'refresh'       => admin_url( 'admin-ajax.php?action=' . Naming::nonce_refresh_action( $slug ) ),
 			),
 			'i18n'         => Textdomain::jed(),
+			// The date and time fields: the zone comes from WordPress (never from a request); `auto` shows Jalali on a Persian site.
+			'dates'        => array(
+				'timezone'    => Dates::timezone_name(),
+				'startOfWeek' => (int) get_option( 'start_of_week', 1 ),
+				'calendar'    => 0 === strpos( (string) get_locale(), 'fa' ) ? 'jalali' : 'gregorian',
+			),
 		);
 
 		/**

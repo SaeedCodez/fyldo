@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Added
+
+- **Fields**: `date`, `time` and `datetime` (Figma Date Field, Calendar Cell, Calendar Panel and Time Panel). Dates show in the **Jalali (Shamsi) or the Gregorian calendar**: `calendar` is `auto` (Jalali on a site whose locale starts with `fa`, else Gregorian, with a switch in the panel), `jalali` or `gregorian`; the switch changes only the view. Under a filled field the same value is shown in the other calendar. The panel has Days, Months and Years views, Today and Clear, the WAI-ARIA date picker keyboard (arrows, Page Up / Down, Home / End, Enter, Escape), Persian numerals and month names, Saturday weeks in Jalali and the site's "Week starts on" in Gregorian. A time is typed as HH:MM (Persian digits too) or picked from hour and minute columns; a datetime has the columns beside the calendar. **What is saved is always Gregorian**: `Y-m-d`, `H:i` (24-hour) and, for a datetime, `Y-m-d H:i:s` in UTC (shown and picked in the site's time zone). `min` / `max` take a stored-format value or `today` / `now`; `step` is minutes. The server checks every value again (strict format, a real day, 00:00–23:59, `min`, `max`, the step) and never trusts the browser's conversion; the time zone always comes from WordPress. `Fyldo\V1\Support\Dates::to_site( $utc )` reads a stored datetime in the site's time zone. The panels are a lazily loaded chunk. The demo has a "Dates and times" page (also inside a group). The client config gains `dates` (`timezone`, `startOfWeek`, `calendar`).
+
 ## [1.0.0-beta.4] - 2026-10-13
 
 ### Added

@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { sanitizeColor } from '../../app/lib/color';
+import { setClock, setDateSettings } from '../../app/lib/datetime';
 import { normalizeTyped, sanitizeNumber, toAsciiDigits } from '../../app/lib/digits';
 import { groupErrors } from '../../app/lib/group';
 import { check, length, messageFor, validateValue } from '../../app/lib/validation';
@@ -10,6 +11,10 @@ import type { GroupFieldDef, GroupItemValue, RuleSet, SubFieldDef } from '../../
 
 interface Case {
   name: string;
+  /** The pinned clock (UTC, `Y-m-d H:i:s`) for `today` / `now`. */
+  now?: string;
+  /** The site's time zone; UTC when absent. */
+  timezone?: string;
   rules: RuleSet;
   value: unknown;
   expect: string | null;
@@ -47,13 +52,20 @@ const groupField = (own: { required?: boolean; min?: number; max?: number }): Gr
 });
 
 describe('validation rules (shared fixture with PHP)', () => {
+  afterEach(() => {
+    setClock(null);
+    setDateSettings({ timezone: 'UTC' });
+  });
+
   it.each(cases.map((c) => [c.name, c] as const))('%s', (_name, c) => {
+    setDateSettings({ timezone: c.timezone ?? 'UTC' });
+    setClock(c.now ? () => new Date(`${c.now?.replace(' ', 'T')}Z`) : null);
     expect(check(c.rules, c.value)?.rule ?? null).toBe(c.expect);
   });
 
   it('exercises every rule the PHP side knows', () => {
     const used = new Set(cases.flatMap((c) => Object.keys(c.rules)));
-    const known = ['required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'allowed', 'min', 'max', 'step'];
+    const known = ['required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'date', 'time', 'datetime', 'media', 'allowed', 'min', 'max', 'step'];
     expect(known.filter((r) => !used.has(r))).toEqual([]);
   });
 });

@@ -1037,3 +1037,383 @@ msgstr "متن دکمه"
 
 msgid "Links to"
 msgstr "پیوند به"
+
+# Date, time and datetime fields
+msgid "Jalali"
+msgstr "شمسی"
+
+msgid "Gregorian"
+msgstr "میلادی"
+
+msgid "Hour"
+msgstr "ساعت"
+
+msgid "Minute"
+msgstr "دقیقه"
+
+msgid "Now"
+msgstr "اکنون"
+
+msgid "Today"
+msgstr "امروز"
+
+msgid "Clear"
+msgstr "پاک کردن"
+
+msgid "Calendar"
+msgstr "تقویم"
+
+msgid "Previous month"
+msgstr "ماه قبل"
+
+msgid "Next month"
+msgstr "ماه بعد"
+
+msgid "Previous year"
+msgstr "سال قبل"
+
+msgid "Next year"
+msgstr "سال بعد"
+
+msgid "Previous years"
+msgstr "سال‌های قبل"
+
+msgid "Next years"
+msgstr "سال‌های بعد"
+
+msgid "Pick a date…"
+msgstr "یک تاریخ انتخاب کنید…"
+
+msgid "Pick a date and time…"
+msgstr "یک تاریخ و زمان انتخاب کنید…"
+
+msgid "Choose a date"
+msgstr "انتخاب تاریخ"
+
+msgid "Choose a date and time"
+msgstr "انتخاب تاریخ و زمان"
+
+msgid "Choose a time"
+msgstr "انتخاب زمان"
+
+msgid "Enter a valid date."
+msgstr "یک تاریخ معتبر وارد کنید."
+
+msgid "Enter a valid time between 00:00 and 23:59."
+msgstr "یک زمان معتبر بین ۰۰:۰۰ و ۲۳:۵۹ وارد کنید."
+
+msgid "Enter a valid date and time."
+msgstr "یک تاریخ و زمان معتبر وارد کنید."
+
+msgid "Choose %s or later."
+msgstr "%s یا پس از آن را انتخاب کنید."
+
+msgid "Choose %s or earlier."
+msgstr "%s یا پیش از آن را انتخاب کنید."
+
+msgid "Dates and times"
+msgstr "تاریخ و زمان"
+
+msgid "Dates show in the Jalali or the Gregorian calendar; what is saved is always Gregorian, a datetime in UTC."
+msgstr "تاریخ‌ها با تقویم شمسی یا میلادی نمایش داده می‌شوند؛ آنچه ذخیره می‌شود همیشه میلادی است و تاریخ و زمان به وقت UTC."
+
+msgid "Sale"
+msgstr "فروش ویژه"
+
+msgid "When the next sale starts and ends, in the site’s time zone."
+msgstr "زمان شروع و پایان فروش ویژه‌ی بعدی، به منطقه‌ی زمانی سایت."
+
+msgid "Launch date"
+msgstr "تاریخ عرضه"
+
+msgid "Today or later."
+msgstr "امروز یا پس از آن."
+
+msgid "Sale starts"
+msgstr "شروع فروش"
+
+msgid "In steps of 5 minutes. Saved in UTC."
+msgstr "با گام‌های ۵ دقیقه‌ای. به وقت UTC ذخیره می‌شود."
+
+msgid "Sale ends"
+msgstr "پایان فروش"
+
+msgid "Leave empty to keep the sale running."
+msgstr "برای ادامه‌ی فروش، خالی بگذارید."
+
+msgid "Calendars"
+msgstr "تقویم‌ها"
+
+msgid "A field can follow the site language (with a switch) or be locked to one calendar."
+msgstr "یک فیلد می‌تواند از زبان سایت پیروی کند (با امکان تغییر تقویم) یا روی یک تقویم ثابت بماند."
+
+msgid "Birthday"
+msgstr "تاریخ تولد"
+
+msgid "Always in the Jalali calendar."
+msgstr "همیشه با تقویم شمسی."
+
+msgid "Invoice date"
+msgstr "تاریخ فاکتور"
+
+msgid "Always in the Gregorian calendar."
+msgstr "همیشه با تقویم میلادی."
+
+msgid "Next holiday"
+msgstr "تعطیلی بعدی"
+
+msgid "Follows the site language; switch the calendar in the panel."
+msgstr "از زبان سایت پیروی می‌کند؛ تقویم را در پنل تغییر دهید."
+
+msgid "Times"
+msgstr "زمان‌ها"
+
+msgid "Type a time (24-hour) or pick it from the hour and minute columns."
+msgstr "زمان را (۲۴ ساعته) تایپ کنید یا از ستون‌های ساعت و دقیقه انتخاب کنید."
+
+msgid "Send the daily report at"
+msgstr "ساعت ارسال گزارش روزانه"
+
+msgid "In steps of 15 minutes."
+msgstr "با گام‌های ۱۵ دقیقه‌ای."
+
+msgid "Quiet hours start at"
+msgstr "شروع ساعات سکوت"
+
+msgid "No notifications are sent after this time."
+msgstr "پس از این ساعت هیچ اعلانی ارسال نمی‌شود."
+
+msgid "Events"
+msgstr "رویدادها"
+
+msgid "Date and time fields work inside a group too."
+msgstr "فیلدهای تاریخ و زمان درون یک گروه هم کار می‌کنند."
+
+msgid "Shown on the events page, in this order."
+msgstr "به همین ترتیب در صفحه‌ی رویدادها نمایش داده می‌شوند."
+
+msgid "Add event"
+msgstr "افزودن رویداد"
+
+msgid "Title"
+msgstr "عنوان"
+
+msgid "Time"
+msgstr "زمان"
+
+msgctxt "Jalali month"
+msgid "Farvardin"
+msgstr "فروردین"
+
+msgctxt "Jalali month"
+msgid "Ordibehesht"
+msgstr "اردیبهشت"
+
+msgctxt "Jalali month"
+msgid "Khordad"
+msgstr "خرداد"
+
+msgctxt "Jalali month"
+msgid "Tir"
+msgstr "تیر"
+
+msgctxt "Jalali month"
+msgid "Mordad"
+msgstr "مرداد"
+
+msgctxt "Jalali month"
+msgid "Shahrivar"
+msgstr "شهریور"
+
+msgctxt "Jalali month"
+msgid "Mehr"
+msgstr "مهر"
+
+msgctxt "Jalali month"
+msgid "Aban"
+msgstr "آبان"
+
+msgctxt "Jalali month"
+msgid "Azar"
+msgstr "آذر"
+
+msgctxt "Jalali month"
+msgid "Dey"
+msgstr "دی"
+
+msgctxt "Jalali month"
+msgid "Bahman"
+msgstr "بهمن"
+
+msgctxt "Jalali month"
+msgid "Esfand"
+msgstr "اسفند"
+
+msgctxt "Gregorian month"
+msgid "January"
+msgstr "ژانویه"
+
+msgctxt "Gregorian month"
+msgid "February"
+msgstr "فوریه"
+
+msgctxt "Gregorian month"
+msgid "March"
+msgstr "مارس"
+
+msgctxt "Gregorian month"
+msgid "April"
+msgstr "آوریل"
+
+msgctxt "Gregorian month"
+msgid "May"
+msgstr "مه"
+
+msgctxt "Gregorian month"
+msgid "June"
+msgstr "ژوئن"
+
+msgctxt "Gregorian month"
+msgid "July"
+msgstr "ژوئیه"
+
+msgctxt "Gregorian month"
+msgid "August"
+msgstr "اوت"
+
+msgctxt "Gregorian month"
+msgid "September"
+msgstr "سپتامبر"
+
+msgctxt "Gregorian month"
+msgid "October"
+msgstr "اکتبر"
+
+msgctxt "Gregorian month"
+msgid "November"
+msgstr "نوامبر"
+
+msgctxt "Gregorian month"
+msgid "December"
+msgstr "دسامبر"
+
+msgctxt "short Gregorian month"
+msgid "Jan"
+msgstr "ژانویه"
+
+msgctxt "short Gregorian month"
+msgid "Feb"
+msgstr "فوریه"
+
+msgctxt "short Gregorian month"
+msgid "Mar"
+msgstr "مارس"
+
+msgctxt "short Gregorian month"
+msgid "Apr"
+msgstr "آوریل"
+
+msgctxt "short Gregorian month"
+msgid "May"
+msgstr "مه"
+
+msgctxt "short Gregorian month"
+msgid "Jun"
+msgstr "ژوئن"
+
+msgctxt "short Gregorian month"
+msgid "Jul"
+msgstr "ژوئیه"
+
+msgctxt "short Gregorian month"
+msgid "Aug"
+msgstr "اوت"
+
+msgctxt "short Gregorian month"
+msgid "Sep"
+msgstr "سپتامبر"
+
+msgctxt "short Gregorian month"
+msgid "Oct"
+msgstr "اکتبر"
+
+msgctxt "short Gregorian month"
+msgid "Nov"
+msgstr "نوامبر"
+
+msgctxt "short Gregorian month"
+msgid "Dec"
+msgstr "دسامبر"
+
+msgctxt "weekday, two letters"
+msgid "Su"
+msgstr "ی"
+
+msgctxt "weekday, two letters"
+msgid "Mo"
+msgstr "د"
+
+msgctxt "weekday, two letters"
+msgid "Tu"
+msgstr "س"
+
+msgctxt "weekday, two letters"
+msgid "We"
+msgstr "چ"
+
+msgctxt "weekday, two letters"
+msgid "Th"
+msgstr "پ"
+
+msgctxt "weekday, two letters"
+msgid "Fr"
+msgstr "ج"
+
+msgctxt "weekday, two letters"
+msgid "Sa"
+msgstr "ش"
+
+msgctxt "weekday"
+msgid "Sunday"
+msgstr "یکشنبه"
+
+msgctxt "weekday"
+msgid "Monday"
+msgstr "دوشنبه"
+
+msgctxt "weekday"
+msgid "Tuesday"
+msgstr "سه‌شنبه"
+
+msgctxt "weekday"
+msgid "Wednesday"
+msgstr "چهارشنبه"
+
+msgctxt "weekday"
+msgid "Thursday"
+msgstr "پنجشنبه"
+
+msgctxt "weekday"
+msgid "Friday"
+msgstr "جمعه"
+
+msgctxt "weekday"
+msgid "Saturday"
+msgstr "شنبه"
+
+msgctxt "Gregorian date"
+msgid "%1$s %2$s, %3$s"
+msgstr "%2$s %1$s %3$s"
+
+msgctxt "a date and a time"
+msgid "%1$s, %2$s"
+msgstr "%1$s، %2$s"
+
+msgctxt "a date in the other calendar"
+msgid "%1$s · %2$s"
+msgstr "%1$s · %2$s"
+
+msgid "Choose a time in steps of %d minute."
+msgid_plural "Choose a time in steps of %d minutes."
+msgstr[0] "زمانی با گام‌های %d دقیقه‌ای انتخاب کنید."
+msgstr[1] "زمانی با گام‌های %d دقیقه‌ای انتخاب کنید."

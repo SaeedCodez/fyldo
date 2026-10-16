@@ -1,7 +1,8 @@
 /**
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
- * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), and the Upload Image
+ * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), a date, a time
+ * and a datetime (Calendar Panel and Time Panel, also lazily loaded), and the Upload Image
  * and Select File fields (the native media modal is stubbed; the attachments are real), and a Group (header buttons: reordered
  * with the keyboard, one added), a custom field (the demo's working-hours module: two selects, one stored value) and a post
  * field (pages found by searching the site, several picked; the pages are real).
@@ -143,6 +144,41 @@ test.describe('English', () => {
     await expect(menuIcon).toBeFocused();
     await expect(menuIcon).toHaveText('star');
 
+    // Date, time and datetime (their panels are a lazily loaded chunk): a day picked with the keyboard, a typed time, and a
+    // moment picked through the Years and Months views (the site's time zone is UTC, so it is stored as picked)
+    const start = page.getByRole('button', { name: 'Start date' });
+    await expect(start).toHaveText('Oct 20, 2026');
+    await expect(page.getByText('28 Mehr 1405 · Jalali')).toBeVisible();
+    await start.click();
+    const calendar = page.getByRole('dialog', { name: 'Choose a date' });
+    await expect(calendar.getByRole('gridcell', { name: 'Tuesday, Oct 20, 2026' })).toBeFocused();
+    await expect(calendar.getByRole('radiogroup', { name: 'Calendar' })).toHaveCount(0); // locked to Gregorian
+    await page.keyboard.press('ArrowRight');
+    await page.keyboard.press('Enter');
+    await expect(calendar).toBeHidden();
+    await expect(start).toBeFocused();
+    await expect(start).toHaveText('Oct 21, 2026');
+    const report = page.getByRole('textbox', { name: 'Send the report at' });
+    await expect(report).toHaveValue('09:00');
+    await report.fill('1745');
+    await report.blur();
+    await expect(report).toHaveValue('17:45');
+    const publish = page.getByRole('button', { name: 'Publish at' });
+    await expect(publish).toHaveText('Pick a date and time…');
+    await publish.click();
+    const picker = page.getByRole('dialog', { name: 'Choose a date and time' });
+    await expect(picker.getByRole('radiogroup', { name: 'Calendar' })).toBeVisible(); // `auto`: the switch
+    await picker.locator('[data-slot=fy-calendar-title]').click(); // Months
+    await picker.locator('[data-slot=fy-calendar-title]').click(); // Years
+    await picker.getByRole('gridcell', { name: '2026', exact: true }).click();
+    await picker.getByRole('gridcell', { name: 'November' }).click();
+    await picker.getByRole('gridcell', { name: 'Tuesday, Nov 3, 2026' }).click();
+    await picker.getByRole('listbox', { name: 'Hour' }).getByRole('option', { name: '08' }).click();
+    await picker.getByRole('listbox', { name: 'Minute' }).getByRole('option', { name: '05' }).click();
+    await page.keyboard.press('Escape');
+    await expect(picker).toBeHidden();
+    await expect(publish).toHaveText('Nov 3, 2026, 08:05');
+
     // Upload Image and Select File: empty, then "Select …" takes what the (stubbed) media modal hands over
     const logoField = page.getByRole('group', { name: 'Site logo' });
     const guideField = page.getByRole('group', { name: 'Brand guidelines' });
@@ -198,6 +234,14 @@ test.describe('English', () => {
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
+    await expect(page.getByRole('button', { name: 'Start date' })).toHaveText('Oct 21, 2026');
+    await expect(page.getByRole('textbox', { name: 'Send the report at' })).toHaveValue('17:45');
+    await expect(page.getByRole('button', { name: 'Publish at' })).toHaveText('Nov 3, 2026, 08:05');
+    expect((await readConfig(page, 'acme-beta')).pages.find((p: { id: string }) => p.id === 'fields').values).toMatchObject({
+      start_date: '2026-10-21',
+      report_at: '17:45',
+      publish_at: '2026-11-03 08:05:00',
+    });
     await expect(page.getByRole('group', { name: 'Header buttons' }).locator('[data-slot=fy-group-item-title]')).toHaveText(['Get started', 'Docs', 'Blog']);
     await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Opens' })).toHaveText('09:00');
     await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Closes' })).toHaveText('18:00');
@@ -615,6 +659,27 @@ test.describe('REST (server is authoritative)', () => {
     response = await patch(request, { per_page: '۵۵' });
     expect(response.status()).toBe(200);
     expect((await response.json()).values.per_page).toBe(55);
+  });
+
+  test('date, time and datetime: only Gregorian stored formats, real days, 00:00–23:59 and the minute step are stored', async ({ request }) => {
+    let response = await patch(request, { start_date: '2026-02-30', report_at: '24:00', publish_at: '2026-10-20T11:00:00Z' });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors).toEqual({
+      start_date: 'Enter a valid date.',
+      report_at: 'Enter a valid time between 00:00 and 23:59.',
+      publish_at: 'Enter a valid date and time.',
+    });
+
+    response = await patch(request, { start_date: '2025-02-29', report_at: '09:10', publish_at: '2026-10-20 11:02:00' });
+    expect((await response.json()).data.errors).toEqual({
+      start_date: 'Enter a valid date.',
+      report_at: 'Choose a time in steps of 15 minutes.',
+      publish_at: 'Choose a time in steps of 5 minutes.',
+    });
+
+    response = await patch(request, { start_date: '۲۰۲۴-۰۲-۲۹', report_at: '17:45', publish_at: '2026-11-03 08:05:00' });
+    expect(response.status()).toBe(200);
+    expect((await response.json()).values).toMatchObject({ start_date: '2024-02-29', report_at: '17:45', publish_at: '2026-11-03 08:05:00' });
   });
 
   test('url and email: digits are read as ASCII; the https-only rule and email format are enforced', async ({ request }) => {

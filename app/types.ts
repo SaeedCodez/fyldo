@@ -15,9 +15,23 @@ export interface RuleSet {
   media?: boolean;
   /** Implied by the `post`, `term` and `user` fields: the value is an ID (0 = nothing chosen), or with `multiple` a list of IDs. */
   relation?: boolean;
+  /** Implied by the `date` field: the value is a real day, `Y-m-d`; `min` / `max` are days or `today`. */
+  date?: true | MomentRule;
+  /** Implied by the `time` field: the value is `H:i` (00:00–23:59); `step` is minutes. */
+  time?: true | MomentRule;
+  /** Implied by the `datetime` field: the value is `Y-m-d H:i:s` in UTC; `min` / `max` are datetimes or `now`; `step` counts site-time minutes. */
+  datetime?: true | MomentRule;
   allowed?: string[];
   min?: number;
   max?: number;
+  step?: number;
+}
+
+/** The bounds and minute step of a `date`, `time` or `datetime` field, in the stored format (or `today` / `now`). */
+export interface MomentRule {
+  min?: string;
+  max?: string;
+  /** Minutes (time, datetime); 1 when absent. */
   step?: number;
 }
 
@@ -172,6 +186,17 @@ export interface IconFieldDef extends FieldBase {
   icons: string[] | null;
 }
 
+/**
+ * `date` (`Y-m-d`), `time` (`H:i`, 24-hour) or `datetime` (`Y-m-d H:i:s` in UTC); '' = nothing. Always Gregorian: the
+ * Jalali calendar is only drawn. `min`, `max` and `step` are in `validate` (the `date` / `time` / `datetime` rule).
+ */
+export interface DateTimeFieldDef extends FieldBase {
+  type: 'date' | 'time' | 'datetime';
+  /** `auto`: the site's calendar first, with the switch; a locked calendar has no switch. Time fields have none. */
+  calendar: 'auto' | 'jalali' | 'gregorian';
+  placeholder: string;
+}
+
 /** What the browser draws for a saved attachment (PHP: AbstractMediaField::media). The name, size and type come from the attachment, never from its URL. */
 export interface MediaItem {
   id: number;
@@ -281,6 +306,7 @@ export type ValueFieldDef =
   | SliderFieldDef
   | ColorFieldDef
   | IconFieldDef
+  | DateTimeFieldDef
   | ImageFieldDef
   | FileFieldDef
   | SelectFieldDef
@@ -395,4 +421,10 @@ export interface FyldoConfig {
     refresh: string;
   };
   i18n: JedLocaleData | null;
+  /** For the `date`, `time` and `datetime` fields: the site's time zone (wp_timezone_string()), "Week starts on" and calendar. */
+  dates?: {
+    timezone: string;
+    startOfWeek: number;
+    calendar: 'jalali' | 'gregorian';
+  };
 }

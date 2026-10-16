@@ -1,7 +1,8 @@
 <?php
 /**
  * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group, Multi Select,
- * and the input fields (URL, email, password, number, a notice and a disabled field with its reason), and a custom field.
+ * and the input fields (URL, email, password, number, a notice and a disabled field with its reason), a date, a time and a
+ * datetime, and a custom field.
  * Used by: the PHPUnit contract test, tools/dev/dump-slice.php (→ form-fields-page.client.json for the Vitest save
  * flow) and every e2e demo plugin (page id `fields`).
  *
@@ -182,6 +183,28 @@ return array(
 					'description' => 'Shown next to the menu item.',
 					'icons'       => array( 'home-2', 'setting-2', 'star', 'user' ),
 					'default'     => 'home-2',
+				),
+				// Date and time: stored Gregorian (`Y-m-d`, `H:i`) and a datetime in UTC (`Y-m-d H:i:s`); wp-env's site time zone is UTC.
+				array(
+					'id'          => 'start_date',
+					'type'        => 'date',
+					'label'       => 'Start date',
+					'description' => 'The first day the offer runs.',
+					'calendar'    => 'gregorian',
+					'default'     => '2026-10-20',
+				),
+				array(
+					'id'      => 'report_at',
+					'type'    => 'time',
+					'label'   => 'Send the report at',
+					'step'    => 15,
+					'default' => '09:00',
+				),
+				array(
+					'id'    => 'publish_at',
+					'type'  => 'datetime',
+					'label' => 'Publish at',
+					'step'  => 5,
 				),
 				// Group: header buttons that can be reordered, added (up to 4) and removed (at least 1).
 				array(

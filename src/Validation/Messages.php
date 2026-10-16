@@ -7,6 +7,8 @@
 
 namespace Fyldo\V1\Validation;
 
+use Fyldo\V1\Support\Dates;
+
 /**
  * Rule id → message. Literal strings so `wp i18n make-pot` can extract them.
  */
@@ -46,6 +48,28 @@ final class Messages {
 
 			case 'color':
 				return __( 'Enter a valid color, like #rrggbb.', 'fyldo' );
+
+			case 'date':
+				return __( 'Enter a valid date.', 'fyldo' );
+
+			case 'time':
+				return __( 'Enter a valid time between 00:00 and 23:59.', 'fyldo' );
+
+			case 'datetime':
+				return __( 'Enter a valid date and time.', 'fyldo' );
+
+			case 'too_early':
+				/* translators: %s: the earliest date or time allowed. */
+				return sprintf( __( 'Choose %s or later.', 'fyldo' ), Dates::display( (string) ( $params['kind'] ?? 'date' ), (string) ( $params['bound'] ?? '' ) ) );
+
+			case 'too_late':
+				/* translators: %s: the latest date or time allowed. */
+				return sprintf( __( 'Choose %s or earlier.', 'fyldo' ), Dates::display( (string) ( $params['kind'] ?? 'date' ), (string) ( $params['bound'] ?? '' ) ) );
+
+			case 'minute_step':
+				$step = (int) ( $params['step'] ?? 1 );
+				/* translators: %d: minutes between the times that can be chosen. */
+				return sprintf( _n( 'Choose a time in steps of %d minute.', 'Choose a time in steps of %d minutes.', $step, 'fyldo' ), $step );
 
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
