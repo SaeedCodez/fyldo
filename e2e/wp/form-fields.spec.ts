@@ -168,8 +168,8 @@ test.describe('English', () => {
     await publish.click();
     const picker = page.getByRole('dialog', { name: 'Choose a date and time' });
     await expect(picker.getByRole('radiogroup', { name: 'Calendar' })).toBeVisible(); // `auto`: the switch
-    await picker.locator('[data-slot=fy-calendar-title]').click(); // Months
-    await picker.locator('[data-slot=fy-calendar-title]').click(); // Years
+    await picker.locator('[data-calendar-title]').click(); // Months
+    await picker.locator('[data-calendar-title]').click(); // Years
     await picker.getByRole('gridcell', { name: '2026', exact: true }).click();
     await picker.getByRole('gridcell', { name: 'November' }).click();
     await picker.getByRole('gridcell', { name: 'Tuesday, Nov 3, 2026' }).click();

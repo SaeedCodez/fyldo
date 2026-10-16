@@ -285,7 +285,7 @@ export function CalendarPanel({
               trailingIcon="arrow-down-2"
               aria-live="polite"
               id={titleId}
-              data-slot="fy-calendar-title"
+              data-calendar-title=""
               onClick={() => openView(view === 'days' ? 'months' : view === 'months' ? 'years' : 'days')}
             >
               {title}
