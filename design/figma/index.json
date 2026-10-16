@@ -1,13 +1,13 @@
 {
- "exportedAt": "2026-10-13",
+ "exportedAt": "2026-10-16",
  "source": {
   "fileName": "Fyldo",
   "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
   "page": "Components"
  },
  "variableCount": 166,
- "componentCount": 43,
- "variantCount": 865,
+ "componentCount": 47,
+ "variantCount": 947,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1264,6 +1264,124 @@
     "png/group/locale-fa--type-repeatable--state-max.png",
     "png/group/locale-fa--type-sortable--state-default.png"
    ]
+  },
+  {
+   "name": "Date Field",
+   "nodeId": "423:11892",
+   "variantCount": 42,
+   "json": "components/date-field.json",
+   "jsonVariantCount": 42,
+   "png": [
+    "png/date-field/locale-en--size-large--state-default.png",
+    "png/date-field/locale-en--size-large--state-disabled.png",
+    "png/date-field/locale-en--size-large--state-error.png",
+    "png/date-field/locale-en--size-large--state-filled.png",
+    "png/date-field/locale-en--size-large--state-focus.png",
+    "png/date-field/locale-en--size-large--state-hover.png",
+    "png/date-field/locale-en--size-large--state-open.png",
+    "png/date-field/locale-en--size-medium--state-default.png",
+    "png/date-field/locale-en--size-medium--state-disabled.png",
+    "png/date-field/locale-en--size-medium--state-error.png",
+    "png/date-field/locale-en--size-medium--state-filled.png",
+    "png/date-field/locale-en--size-medium--state-focus.png",
+    "png/date-field/locale-en--size-medium--state-hover.png",
+    "png/date-field/locale-en--size-medium--state-open.png",
+    "png/date-field/locale-en--size-small--state-default.png",
+    "png/date-field/locale-en--size-small--state-disabled.png",
+    "png/date-field/locale-en--size-small--state-error.png",
+    "png/date-field/locale-en--size-small--state-filled.png",
+    "png/date-field/locale-en--size-small--state-focus.png",
+    "png/date-field/locale-en--size-small--state-hover.png",
+    "png/date-field/locale-en--size-small--state-open.png",
+    "png/date-field/locale-fa--size-large--state-default.png",
+    "png/date-field/locale-fa--size-large--state-disabled.png",
+    "png/date-field/locale-fa--size-large--state-error.png",
+    "png/date-field/locale-fa--size-large--state-filled.png",
+    "png/date-field/locale-fa--size-large--state-focus.png",
+    "png/date-field/locale-fa--size-large--state-hover.png",
+    "png/date-field/locale-fa--size-large--state-open.png",
+    "png/date-field/locale-fa--size-medium--state-default.png",
+    "png/date-field/locale-fa--size-medium--state-disabled.png",
+    "png/date-field/locale-fa--size-medium--state-error.png",
+    "png/date-field/locale-fa--size-medium--state-filled.png",
+    "png/date-field/locale-fa--size-medium--state-focus.png",
+    "png/date-field/locale-fa--size-medium--state-hover.png",
+    "png/date-field/locale-fa--size-medium--state-open.png",
+    "png/date-field/locale-fa--size-small--state-default.png",
+    "png/date-field/locale-fa--size-small--state-disabled.png",
+    "png/date-field/locale-fa--size-small--state-error.png",
+    "png/date-field/locale-fa--size-small--state-filled.png",
+    "png/date-field/locale-fa--size-small--state-focus.png",
+    "png/date-field/locale-fa--size-small--state-hover.png",
+    "png/date-field/locale-fa--size-small--state-open.png"
+   ]
+  },
+  {
+   "name": "Calendar Cell",
+   "nodeId": "423:12433",
+   "variantCount": 24,
+   "json": "components/calendar-cell.json",
+   "jsonVariantCount": 24,
+   "png": [
+    "png/calendar-cell/locale-en--kind-day--state-default.png",
+    "png/calendar-cell/locale-en--kind-day--state-disabled.png",
+    "png/calendar-cell/locale-en--kind-day--state-hover.png",
+    "png/calendar-cell/locale-en--kind-day--state-outside.png",
+    "png/calendar-cell/locale-en--kind-day--state-selected.png",
+    "png/calendar-cell/locale-en--kind-day--state-today.png",
+    "png/calendar-cell/locale-en--kind-wide--state-default.png",
+    "png/calendar-cell/locale-en--kind-wide--state-disabled.png",
+    "png/calendar-cell/locale-en--kind-wide--state-hover.png",
+    "png/calendar-cell/locale-en--kind-wide--state-outside.png",
+    "png/calendar-cell/locale-en--kind-wide--state-selected.png",
+    "png/calendar-cell/locale-en--kind-wide--state-today.png",
+    "png/calendar-cell/locale-fa--kind-day--state-default.png",
+    "png/calendar-cell/locale-fa--kind-day--state-disabled.png",
+    "png/calendar-cell/locale-fa--kind-day--state-hover.png",
+    "png/calendar-cell/locale-fa--kind-day--state-outside.png",
+    "png/calendar-cell/locale-fa--kind-day--state-selected.png",
+    "png/calendar-cell/locale-fa--kind-day--state-today.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-default.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-disabled.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-hover.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-outside.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-selected.png",
+    "png/calendar-cell/locale-fa--kind-wide--state-today.png"
+   ]
+  },
+  {
+   "name": "Calendar Panel",
+   "nodeId": "424:14117",
+   "variantCount": 12,
+   "json": "components/calendar-panel.json",
+   "jsonVariantCount": 12,
+   "png": [
+    "png/calendar-panel/locale-en--calendar-gregorian--view-days.png",
+    "png/calendar-panel/locale-en--calendar-gregorian--view-months.png",
+    "png/calendar-panel/locale-en--calendar-gregorian--view-years.png",
+    "png/calendar-panel/locale-en--calendar-jalali--view-days.png",
+    "png/calendar-panel/locale-en--calendar-jalali--view-months.png",
+    "png/calendar-panel/locale-en--calendar-jalali--view-years.png",
+    "png/calendar-panel/locale-fa--calendar-gregorian--view-days.png",
+    "png/calendar-panel/locale-fa--calendar-gregorian--view-months.png",
+    "png/calendar-panel/locale-fa--calendar-gregorian--view-years.png",
+    "png/calendar-panel/locale-fa--calendar-jalali--view-days.png",
+    "png/calendar-panel/locale-fa--calendar-jalali--view-months.png",
+    "png/calendar-panel/locale-fa--calendar-jalali--view-years.png"
+   ]
+  },
+  {
+   "name": "Time Panel",
+   "nodeId": "423:12580",
+   "variantCount": 4,
+   "json": "components/time-panel.json",
+   "jsonVariantCount": 4,
+   "png": [
+    "png/time-panel/locale-en--type-embedded.png",
+    "png/time-panel/locale-en--type-popup.png",
+    "png/time-panel/locale-fa--type-embedded.png",
+    "png/time-panel/locale-fa--type-popup.png"
+   ]
   }
  ],
  "usage": [
@@ -1465,6 +1583,14 @@
    "width": 960,
    "height": 6819,
    "png": "png/usage/group-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Date & Time Picker · Usage",
+   "nodeId": "424:14445",
+   "width": 960,
+   "height": 5350,
+   "png": "png/usage/date-and-time-picker-usage.png",
    "scale": 1
   }
  ]
