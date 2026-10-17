@@ -108,10 +108,21 @@ Icons are Iconsax names (`ui.Icon`, and the `icon`, `leadingIcon`… props). Dir
 
 #### Styling
 
+The page lives inside Fyldo's root, behind a scoped reset whose selectors are raised to ID level so wp-admin's CSS
+cannot reach in (docs/ARCHITECTURE.md §8.2). The reset sets `margin`, `padding`, `border`, `color` and `font` on every
+element, so **start each selector of your stylesheet the way Fyldo's rules start**, or those properties are ignored
+(`display`, `gap` and grid still work, which makes the mistake easy to miss):
+
+```css
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .acme-stories-grid { display: grid; gap: var(--fyldo-space-24); padding-block-start: var(--fyldo-space-24); }
+```
+
 Fyldo's tokens are CSS custom properties on the Fyldo root: `var(--fyldo-space-24)`, `var(--fyldo-radius-lg)`,
 `var(--fyldo-text-secondary)`, `var(--fyldo-border-default)` (the full list is `app/styles/tokens.generated.css`). Use
-them in the page's own stylesheet, with logical properties (`padding-inline-start`, `inset-inline-end`) so the page
-mirrors in RTL. Fyldo's own utility classes are not an API: they only exist for what Fyldo itself uses.
+them, with logical properties (`padding-inline-start`, `inset-inline-end`) so the page mirrors in RTL. Size the layout
+with container queries (`container-type: inline-size`) rather than media queries: wp-admin's menu and Fyldo's sidebar
+take a varying share of the window. Fyldo's own utility classes are not an API: they only exist for what Fyldo itself
+uses.
 
 ## Forms
 

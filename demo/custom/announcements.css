@@ -1,9 +1,10 @@
 /*
  * Layout of the demo's custom page (demo/custom/announcements.js). Fyldo draws every component; this file only places
  * them, with Fyldo's tokens (`--fyldo-*` custom properties on the Fyldo root) so the page follows the design system.
- * Logical properties only: the page mirrors in RTL by itself.
+ * Selectors start like Fyldo's own rules (`[data-fyldo-v1][data-fyldo-v1]:not(#\#)`), or the scoped reset wins over
+ * their margin, padding, border, colour and font (docs/custom-pages.md). Logical properties only: the page mirrors in RTL.
  */
-.fyldo-demo-ann {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann {
   /* The column's width, not the window's, decides the grid: wp-admin's menu and Fyldo's sidebar take a varying share. */
   container-type: inline-size;
   display: flex;
@@ -12,13 +13,13 @@
   padding-block-end: var(--fyldo-space-40);
 }
 
-.fyldo-demo-ann-stats {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--fyldo-space-16);
 }
 
-.fyldo-demo-ann-list {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-list {
   display: flex;
   flex-direction: column;
   gap: var(--fyldo-space-16);
@@ -27,38 +28,38 @@
 }
 
 /* Kept on screen while the next page loads, dimmed, so nothing jumps. */
-.fyldo-demo-ann-list[aria-busy='true'] {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-list[aria-busy='true'] {
   opacity: 0.6;
 }
 
-.fyldo-demo-ann-toolbar {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--fyldo-space-12);
 }
 
-.fyldo-demo-ann-search {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-search {
   flex: 0 1 320px;
 }
 
-.fyldo-demo-ann-sort {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-sort {
   flex: 0 0 180px;
 }
 
-.fyldo-demo-ann-grid {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--fyldo-space-24);
 }
 
-.fyldo-demo-ann-image {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-image {
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
 }
 
-.fyldo-demo-ann-placeholder {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-placeholder {
   display: grid;
   place-items: center;
   inline-size: 56px;
@@ -70,7 +71,7 @@
 }
 
 /* Read by screen readers only (the words around a number the design shows bare). */
-.fyldo-demo-ann-sr {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-sr {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
@@ -79,7 +80,7 @@
   white-space: nowrap;
 }
 
-.fyldo-demo-ann-status {
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-status {
   margin: 0;
   padding-block: var(--fyldo-space-48);
   text-align: center;
@@ -87,24 +88,24 @@
 }
 
 @container (max-width: 760px) {
-  .fyldo-demo-ann-stats,
-  .fyldo-demo-ann-grid {
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-stats,
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @container (max-width: 480px) {
-  .fyldo-demo-ann-stats,
-  .fyldo-demo-ann-grid {
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-stats,
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .fyldo-demo-ann-toolbar {
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-toolbar {
     flex-wrap: wrap;
   }
 
-  .fyldo-demo-ann-search,
-  .fyldo-demo-ann-sort {
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-search,
+  [data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-ann-sort {
     flex: 1 1 100%;
   }
 }
