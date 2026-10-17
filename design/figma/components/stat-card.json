@@ -48,6 +48,11 @@
     "type": "BOOLEAN",
     "defaultValue": true
    },
+   "Icon swap#431:1761": {
+    "type": "INSTANCE_SWAP",
+    "defaultValue": "408:3259",
+    "defaultValueName": "chart / Property 1=linear"
+   },
    "Locale": {
     "type": "VARIANT",
     "defaultValue": "EN",
@@ -282,6 +287,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,
@@ -926,6 +934,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,
@@ -1570,6 +1581,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,
@@ -2166,6 +2180,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,
@@ -2810,6 +2827,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,
@@ -3454,6 +3474,9 @@
             "hex": "#ffffff"
            }
           ],
+          "propertyReferences": {
+           "mainComponent": "Icon swap#431:1761"
+          },
           "icon": {
            "name": "chart",
            "size": 16,

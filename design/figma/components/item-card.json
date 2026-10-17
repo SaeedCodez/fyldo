@@ -38,11 +38,11 @@
    },
    "Meta 1#431:1513": {
     "type": "TEXT",
-    "defaultValue": "Ends in 23 hours"
+    "defaultValue": "Until Oct 25"
    },
    "Meta 1 (FA)#431:1522": {
     "type": "TEXT",
-    "defaultValue": "۲۳ ساعت دیگر"
+    "defaultValue": "تا ۳ آبان"
    },
    "Meta 2#431:1531": {
     "type": "TEXT",
@@ -103,6 +103,21 @@
    "Show add description#431:1657": {
     "type": "BOOLEAN",
     "defaultValue": true
+   },
+   "Media content#431:1734": {
+    "type": "INSTANCE_SWAP",
+    "defaultValue": "431:22058",
+    "defaultValueName": "Item Card / Media placeholder"
+   },
+   "Meta 1 icon#431:1743": {
+    "type": "INSTANCE_SWAP",
+    "defaultValue": "408:2098",
+    "defaultValueName": "clock / Property 1=linear"
+   },
+   "Meta 2 icon#431:1752": {
+    "type": "INSTANCE_SWAP",
+    "defaultValue": "408:3259",
+    "defaultValueName": "chart / Property 1=linear"
    },
    "Locale": {
     "type": "VARIANT",
@@ -226,8 +241,8 @@
       },
       "children": [
        {
-        "name": "Placeholder",
-        "type": "FRAME",
+        "name": "Media content",
+        "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
         "x": 124,
@@ -276,38 +291,13 @@
          "bottomLeftRadius": "radius/lg",
          "bottomRightRadius": "radius/lg"
         },
-        "children": [
-         {
-          "name": "gallery",
-          "type": "INSTANCE",
-          "visible": true,
-          "opacity": 1,
-          "x": 140,
-          "y": 57,
-          "width": 24,
-          "height": 24,
-          "layout": {
-           "layoutSizingHorizontal": "FIXED",
-           "layoutSizingVertical": "FIXED",
-           "layoutGrow": 0,
-           "layoutAlign": "INHERIT",
-           "clipsContent": false
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "visible": false,
-            "hex": "#ffffff"
-           }
-          ],
-          "icon": {
-           "name": "gallery",
-           "size": 24,
-           "variant": "Property 1=linear",
-           "colour": "icon/tertiary"
-          }
-         }
-        ]
+        "propertyReferences": {
+         "mainComponent": "Media content#431:1734"
+        },
+        "instance": {
+         "component": "Item Card / Media placeholder",
+         "componentProperties": {}
+        }
        },
        {
         "name": "Badges",
@@ -1441,7 +1431,7 @@
           "opacity": 1,
           "x": 17,
           "y": 244,
-          "width": 112,
+          "width": 87,
           "height": 16,
           "layout": {
            "layoutMode": "HORIZONTAL",
@@ -1487,6 +1477,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 1 icon#431:1743"
+            },
             "icon": {
              "name": "clock",
              "size": 16,
@@ -1501,7 +1494,7 @@
             "opacity": 1,
             "x": 37,
             "y": 244,
-            "width": 92,
+            "width": 67,
             "height": 16,
             "layout": {
              "layoutSizingHorizontal": "HUG",
@@ -1523,7 +1516,7 @@
              "characters": "Meta 1#431:1513"
             },
             "text": {
-             "characters": "Ends in 23 hours",
+             "characters": "Until Oct 25",
              "textStyle": "EN/Label/12",
              "fontFamily": "Geist",
              "fontStyle": "Regular",
@@ -1549,7 +1542,7 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 141,
+          "x": 116,
           "y": 244,
           "width": 50,
           "height": 16,
@@ -1579,7 +1572,7 @@
             "type": "INSTANCE",
             "visible": true,
             "opacity": 1,
-            "x": 141,
+            "x": 116,
             "y": 244,
             "width": 16,
             "height": 16,
@@ -1597,6 +1590,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 2 icon#431:1752"
+            },
             "icon": {
              "name": "chart",
              "size": 16,
@@ -1609,7 +1605,7 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 161,
+            "x": 136,
             "y": 244,
             "width": 30,
             "height": 16,
@@ -2570,8 +2566,8 @@
       },
       "children": [
        {
-        "name": "Placeholder",
-        "type": "FRAME",
+        "name": "Media content",
+        "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
         "x": 124,
@@ -2620,38 +2616,13 @@
          "bottomLeftRadius": "radius/lg",
          "bottomRightRadius": "radius/lg"
         },
-        "children": [
-         {
-          "name": "gallery",
-          "type": "INSTANCE",
-          "visible": true,
-          "opacity": 1,
-          "x": 140,
-          "y": 57,
-          "width": 24,
-          "height": 24,
-          "layout": {
-           "layoutSizingHorizontal": "FIXED",
-           "layoutSizingVertical": "FIXED",
-           "layoutGrow": 0,
-           "layoutAlign": "INHERIT",
-           "clipsContent": false
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "visible": false,
-            "hex": "#ffffff"
-           }
-          ],
-          "icon": {
-           "name": "gallery",
-           "size": 24,
-           "variant": "Property 1=linear",
-           "colour": "icon/tertiary"
-          }
-         }
-        ]
+        "propertyReferences": {
+         "mainComponent": "Media content#431:1734"
+        },
+        "instance": {
+         "component": "Item Card / Media placeholder",
+         "componentProperties": {}
+        }
        },
        {
         "name": "Badges",
@@ -3785,7 +3756,7 @@
           "opacity": 1,
           "x": 17,
           "y": 244,
-          "width": 112,
+          "width": 87,
           "height": 16,
           "layout": {
            "layoutMode": "HORIZONTAL",
@@ -3831,6 +3802,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 1 icon#431:1743"
+            },
             "icon": {
              "name": "clock",
              "size": 16,
@@ -3845,7 +3819,7 @@
             "opacity": 1,
             "x": 37,
             "y": 244,
-            "width": 92,
+            "width": 67,
             "height": 16,
             "layout": {
              "layoutSizingHorizontal": "HUG",
@@ -3867,7 +3841,7 @@
              "characters": "Meta 1#431:1513"
             },
             "text": {
-             "characters": "Ends in 23 hours",
+             "characters": "Until Oct 25",
              "textStyle": "EN/Label/12",
              "fontFamily": "Geist",
              "fontStyle": "Regular",
@@ -3893,7 +3867,7 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 141,
+          "x": 116,
           "y": 244,
           "width": 50,
           "height": 16,
@@ -3923,7 +3897,7 @@
             "type": "INSTANCE",
             "visible": true,
             "opacity": 1,
-            "x": 141,
+            "x": 116,
             "y": 244,
             "width": 16,
             "height": 16,
@@ -3941,6 +3915,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 2 icon#431:1752"
+            },
             "icon": {
              "name": "chart",
              "size": 16,
@@ -3953,7 +3930,7 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 161,
+            "x": 136,
             "y": 244,
             "width": 30,
             "height": 16,
@@ -5439,8 +5416,8 @@
       },
       "children": [
        {
-        "name": "Placeholder",
-        "type": "FRAME",
+        "name": "Media content",
+        "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
         "x": 124,
@@ -5489,38 +5466,13 @@
          "bottomLeftRadius": "radius/lg",
          "bottomRightRadius": "radius/lg"
         },
-        "children": [
-         {
-          "name": "gallery",
-          "type": "INSTANCE",
-          "visible": true,
-          "opacity": 1,
-          "x": 140,
-          "y": 57,
-          "width": 24,
-          "height": 24,
-          "layout": {
-           "layoutSizingHorizontal": "FIXED",
-           "layoutSizingVertical": "FIXED",
-           "layoutGrow": 0,
-           "layoutAlign": "INHERIT",
-           "clipsContent": false
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "visible": false,
-            "hex": "#ffffff"
-           }
-          ],
-          "icon": {
-           "name": "gallery",
-           "size": 24,
-           "variant": "Property 1=linear",
-           "colour": "icon/tertiary"
-          }
-         }
-        ]
+        "propertyReferences": {
+         "mainComponent": "Media content#431:1734"
+        },
+        "instance": {
+         "component": "Item Card / Media placeholder",
+         "componentProperties": {}
+        }
        },
        {
         "name": "Badges",
@@ -7449,7 +7401,7 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 140,
+          "x": 172,
           "y": 245,
           "width": 44,
           "height": 18,
@@ -7479,7 +7431,7 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 140,
+            "x": 172,
             "y": 245,
             "width": 24,
             "height": 18,
@@ -7527,7 +7479,7 @@
             "type": "INSTANCE",
             "visible": true,
             "opacity": 1,
-            "x": 168,
+            "x": 200,
             "y": 246,
             "width": 16,
             "height": 16,
@@ -7545,6 +7497,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 2 icon#431:1752"
+            },
             "icon": {
              "name": "chart",
              "size": 16,
@@ -7559,9 +7514,9 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 196,
+          "x": 228,
           "y": 245,
-          "width": 91,
+          "width": 59,
           "height": 18,
           "layout": {
            "layoutMode": "HORIZONTAL",
@@ -7589,9 +7544,9 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 196,
+            "x": 228,
             "y": 245,
-            "width": 71,
+            "width": 39,
             "height": 18,
             "layout": {
              "layoutSizingHorizontal": "HUG",
@@ -7613,7 +7568,7 @@
              "characters": "Meta 1 (FA)#431:1522"
             },
             "text": {
-             "characters": "۲۳ ساعت دیگر",
+             "characters": "تا ۳ آبان",
              "textStyle": "FA/Label/12",
              "fontFamily": "IRANYekanX",
              "fontStyle": "Regular",
@@ -7655,6 +7610,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 1 icon#431:1743"
+            },
             "icon": {
              "name": "clock",
              "size": 16,
@@ -7783,8 +7741,8 @@
       },
       "children": [
        {
-        "name": "Placeholder",
-        "type": "FRAME",
+        "name": "Media content",
+        "type": "INSTANCE",
         "visible": true,
         "opacity": 1,
         "x": 124,
@@ -7833,38 +7791,13 @@
          "bottomLeftRadius": "radius/lg",
          "bottomRightRadius": "radius/lg"
         },
-        "children": [
-         {
-          "name": "gallery",
-          "type": "INSTANCE",
-          "visible": true,
-          "opacity": 1,
-          "x": 140,
-          "y": 57,
-          "width": 24,
-          "height": 24,
-          "layout": {
-           "layoutSizingHorizontal": "FIXED",
-           "layoutSizingVertical": "FIXED",
-           "layoutGrow": 0,
-           "layoutAlign": "INHERIT",
-           "clipsContent": false
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "visible": false,
-            "hex": "#ffffff"
-           }
-          ],
-          "icon": {
-           "name": "gallery",
-           "size": 24,
-           "variant": "Property 1=linear",
-           "colour": "icon/tertiary"
-          }
-         }
-        ]
+        "propertyReferences": {
+         "mainComponent": "Media content#431:1734"
+        },
+        "instance": {
+         "component": "Item Card / Media placeholder",
+         "componentProperties": {}
+        }
        },
        {
         "name": "Badges",
@@ -9793,7 +9726,7 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 140,
+          "x": 172,
           "y": 245,
           "width": 44,
           "height": 18,
@@ -9823,7 +9756,7 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 140,
+            "x": 172,
             "y": 245,
             "width": 24,
             "height": 18,
@@ -9871,7 +9804,7 @@
             "type": "INSTANCE",
             "visible": true,
             "opacity": 1,
-            "x": 168,
+            "x": 200,
             "y": 246,
             "width": 16,
             "height": 16,
@@ -9889,6 +9822,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 2 icon#431:1752"
+            },
             "icon": {
              "name": "chart",
              "size": 16,
@@ -9903,9 +9839,9 @@
           "type": "FRAME",
           "visible": true,
           "opacity": 1,
-          "x": 196,
+          "x": 228,
           "y": 245,
-          "width": 91,
+          "width": 59,
           "height": 18,
           "layout": {
            "layoutMode": "HORIZONTAL",
@@ -9933,9 +9869,9 @@
             "type": "TEXT",
             "visible": true,
             "opacity": 1,
-            "x": 196,
+            "x": 228,
             "y": 245,
-            "width": 71,
+            "width": 39,
             "height": 18,
             "layout": {
              "layoutSizingHorizontal": "HUG",
@@ -9957,7 +9893,7 @@
              "characters": "Meta 1 (FA)#431:1522"
             },
             "text": {
-             "characters": "۲۳ ساعت دیگر",
+             "characters": "تا ۳ آبان",
              "textStyle": "FA/Label/12",
              "fontFamily": "IRANYekanX",
              "fontStyle": "Regular",
@@ -9999,6 +9935,9 @@
               "hex": "#ffffff"
              }
             ],
+            "propertyReferences": {
+             "mainComponent": "Meta 1 icon#431:1743"
+            },
             "icon": {
              "name": "clock",
              "size": 16,
