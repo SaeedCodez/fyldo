@@ -71,13 +71,13 @@
    },
    "Prefix icon swap#8:1365": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:24298",
+    "defaultValue": "409:8339",
     "defaultValueName": "search-normal / Property 1=linear",
     "preferredValueCount": 48
    },
    "Suffix icon swap#8:1402": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:32092",
+    "defaultValue": "409:8373",
     "defaultValueName": "close-circle / Property 1=linear",
     "preferredValueCount": 48
    },

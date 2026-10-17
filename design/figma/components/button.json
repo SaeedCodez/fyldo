@@ -27,13 +27,13 @@
    },
    "Leading icon swap#8:363": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:32262",
+    "defaultValue": "409:8146",
     "defaultValueName": "add / Property 1=linear",
     "preferredValueCount": 48
    },
    "Trailing icon swap#8:484": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:14290",
+    "defaultValue": "409:8180",
     "defaultValueName": "arrow-right / Property 1=linear",
     "preferredValueCount": 48
    },
@@ -43,7 +43,7 @@
    },
    "Trailing icon swap (FA)#8:726": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:14253",
+    "defaultValue": "409:8217",
     "defaultValueName": "arrow-left / Property 1=linear",
     "preferredValueCount": 48
    },

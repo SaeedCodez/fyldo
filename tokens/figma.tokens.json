@@ -288,32 +288,32 @@
     {
       "name": "color.status.info.bg",
       "type": "color",
-      "value": "{primitives.color.primary.50}",
+      "value": "{primitives.color.blue.100}",
       "css": "--fyldo-status-info-bg"
     },
     {
       "name": "color.status.info.border",
       "type": "color",
-      "value": "{primitives.color.primary.200}",
+      "value": "{primitives.color.blue.400}",
       "css": "--fyldo-status-info-border"
     },
     {
       "name": "color.status.info.solid",
       "type": "color",
-      "value": "{primitives.color.primary.700}",
+      "value": "{primitives.color.blue.700}",
       "css": "--fyldo-status-info-solid"
     },
     {
       "name": "color.status.info.subtle",
       "type": "color",
-      "value": "{primitives.color.primary.100}",
+      "value": "{primitives.color.blue.300}",
       "description": "Subtle badge background",
       "css": "--fyldo-status-info-subtle"
     },
     {
       "name": "color.status.info.text",
       "type": "color",
-      "value": "{primitives.color.primary.800}",
+      "value": "{primitives.color.blue.800}",
       "css": "--fyldo-status-info-text"
     },
     {
