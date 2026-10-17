@@ -1,0 +1,3936 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "431:21496"
+ },
+ "set": {
+  "id": "431:21496",
+  "name": "Stat Card",
+  "kebab": "stat-card",
+  "width": 762,
+  "height": 324,
+  "variantCount": 6,
+  "componentPropertyDefinitions": {
+   "Label#431:1666": {
+    "type": "TEXT",
+    "defaultValue": "Views"
+   },
+   "Label (FA)#431:1673": {
+    "type": "TEXT",
+    "defaultValue": "بازدید"
+   },
+   "Value#431:1680": {
+    "type": "TEXT",
+    "defaultValue": "4,820"
+   },
+   "Value (FA)#431:1687": {
+    "type": "TEXT",
+    "defaultValue": "۴٬۸۲۰"
+   },
+   "Comparison#431:1694": {
+    "type": "TEXT",
+    "defaultValue": "vs previous 30 days"
+   },
+   "Comparison (FA)#431:1701": {
+    "type": "TEXT",
+    "defaultValue": "نسبت به ۳۰ روز قبل"
+   },
+   "Icon#431:1708": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Footer#431:1715": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Show comparison#431:1722": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   },
+   "Trend": {
+    "type": "VARIANT",
+    "defaultValue": "Up",
+    "variantOptions": [
+     "Up",
+     "Down",
+     "Neutral"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "431:21414",
+   "name": "Locale=EN, Trend=Up",
+   "file": "locale-en--trend-up",
+   "variantProperties": {
+    "Locale": "EN",
+    "Trend": "Up"
+   },
+   "node": {
+    "name": "Locale=EN, Trend=Up",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 130,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 23,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label#431:1666"
+        },
+        "text": {
+         "characters": "Views",
+         "textStyle": "EN/Label/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 177,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 183,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 53,
+      "width": 65,
+      "height": 32,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value#431:1680"
+      },
+      "text": {
+       "characters": "4,820",
+       "textStyle": "EN/Heading/24",
+       "fontFamily": "Geist",
+       "fontStyle": "SemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.96
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 93,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 93,
+        "width": 51,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#daf6da",
+          "token": "status/success/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=EN, Tone=Green, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "برچسب"
+          },
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8557",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-up / Property 1=linear"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": true
+          },
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "12%"
+          },
+          "Locale": {
+           "value": "EN",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Green",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "12%"
+         }
+        }
+       },
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 74,
+        "y": 95,
+        "width": 131,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison#431:1694"
+        },
+        "text": {
+         "characters": "vs previous 30 days",
+         "textStyle": "EN/Label/12",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21428",
+   "name": "Locale=EN, Trend=Down",
+   "file": "locale-en--trend-down",
+   "variantProperties": {
+    "Locale": "EN",
+    "Trend": "Down"
+   },
+   "node": {
+    "name": "Locale=EN, Trend=Down",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 130,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 23,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label#431:1666"
+        },
+        "text": {
+         "characters": "Views",
+         "textStyle": "EN/Label/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 177,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 183,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 53,
+      "width": 65,
+      "height": 32,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value#431:1680"
+      },
+      "text": {
+       "characters": "4,820",
+       "textStyle": "EN/Heading/24",
+       "fontFamily": "Geist",
+       "fontStyle": "SemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.96
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 93,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 93,
+        "width": 46,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffebeb",
+          "token": "status/error/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=EN, Tone=Red, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8524",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-down / Property 1=linear"
+          },
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "برچسب"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": true
+          },
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "3%"
+          },
+          "Locale": {
+           "value": "EN",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Red",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "3%"
+         }
+        }
+       },
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 69,
+        "y": 95,
+        "width": 136,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison#431:1694"
+        },
+        "text": {
+         "characters": "vs previous 30 days",
+         "textStyle": "EN/Label/12",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21442",
+   "name": "Locale=EN, Trend=Neutral",
+   "file": "locale-en--trend-neutral",
+   "variantProperties": {
+    "Locale": "EN",
+    "Trend": "Neutral"
+   },
+   "node": {
+    "name": "Locale=EN, Trend=Neutral",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 130,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MIN",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 23,
+        "width": 36,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label#431:1666"
+        },
+        "text": {
+         "characters": "Views",
+         "textStyle": "EN/Label/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 177,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 183,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 53,
+      "width": 65,
+      "height": 32,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value#431:1680"
+      },
+      "text": {
+       "characters": "4,820",
+       "textStyle": "EN/Heading/24",
+       "fontFamily": "Geist",
+       "fontStyle": "SemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 32
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": -0.96
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 93,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 93,
+        "width": 30,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#eaecf8",
+          "token": "status/neutral/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=EN, Tone=Gray, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8652",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "tick-circle / Property 1=linear"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": false
+          },
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "برچسب"
+          },
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "0%"
+          },
+          "Locale": {
+           "value": "EN",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Gray",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "0%"
+         }
+        }
+       },
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 53,
+        "y": 95,
+        "width": 152,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison#431:1694"
+        },
+        "text": {
+         "characters": "vs previous 30 days",
+         "textStyle": "EN/Label/12",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21455",
+   "name": "Locale=FA, Trend=Up",
+   "file": "locale-fa--trend-up",
+   "variantProperties": {
+    "Locale": "FA",
+    "Trend": "Up"
+   },
+   "node": {
+    "name": "Locale=FA, Trend=Up",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 134,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 23,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       },
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 175,
+        "y": 21,
+        "width": 30,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label (FA)#431:1673"
+        },
+        "text": {
+         "characters": "بازدید",
+         "textStyle": "FA/Label/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 145,
+      "y": 53,
+      "width": 60,
+      "height": 36,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value (FA)#431:1687"
+      },
+      "text": {
+       "characters": "۴٬۸۲۰",
+       "textStyle": "FA/Heading/24",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "DemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 36
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 97,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 98,
+        "width": 138,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison (FA)#431:1701"
+        },
+        "text": {
+         "characters": "نسبت به ۳۰ روز قبل",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 161,
+        "y": 97,
+        "width": 44,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#daf6da",
+          "token": "status/success/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=FA, Tone=Green, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "Badge"
+          },
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8557",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-up / Property 1=linear"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": true
+          },
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "۱۲٪"
+          },
+          "Locale": {
+           "value": "FA",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Green",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "۱۲٪"
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21469",
+   "name": "Locale=FA, Trend=Down",
+   "file": "locale-fa--trend-down",
+   "variantProperties": {
+    "Locale": "FA",
+    "Trend": "Down"
+   },
+   "node": {
+    "name": "Locale=FA, Trend=Down",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 134,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 23,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       },
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 175,
+        "y": 21,
+        "width": 30,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label (FA)#431:1673"
+        },
+        "text": {
+         "characters": "بازدید",
+         "textStyle": "FA/Label/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 145,
+      "y": 53,
+      "width": 60,
+      "height": 36,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value (FA)#431:1687"
+      },
+      "text": {
+       "characters": "۴٬۸۲۰",
+       "textStyle": "FA/Heading/24",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "DemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 36
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 97,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 98,
+        "width": 139,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison (FA)#431:1701"
+        },
+        "text": {
+         "characters": "نسبت به ۳۰ روز قبل",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 162,
+        "y": 97,
+        "width": 43,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffebeb",
+          "token": "status/error/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=FA, Tone=Red, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "Badge"
+          },
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8524",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-down / Property 1=linear"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": true
+          },
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "۳٪"
+          },
+          "Locale": {
+           "value": "FA",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Red",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "۳٪"
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21483",
+   "name": "Locale=FA, Trend=Neutral",
+   "file": "locale-fa--trend-neutral",
+   "variantProperties": {
+    "Locale": "FA",
+    "Trend": "Neutral"
+   },
+   "node": {
+    "name": "Locale=FA, Trend=Neutral",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 222,
+    "height": 134,
+    "layout": {
+     "layoutMode": "VERTICAL",
+     "paddingTop": 16,
+     "paddingRight": 16,
+     "paddingBottom": 16,
+     "paddingLeft": 16,
+     "itemSpacing": 8,
+     "primaryAxisAlignItems": "MIN",
+     "counterAxisAlignItems": "MAX",
+     "primaryAxisSizingMode": "AUTO",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "cornerRadius": 12,
+    "fills": [
+     {
+      "type": "SOLID",
+      "hex": "#ffffff",
+      "token": "background/default"
+     }
+    ],
+    "strokes": {
+     "paints": [
+      {
+       "type": "SOLID",
+       "hex": "#dadef4",
+       "token": "border/default"
+      }
+     ],
+     "weight": 1,
+     "align": "INSIDE"
+    },
+    "bound": {
+     "itemSpacing": "space/8",
+     "paddingLeft": "space/16",
+     "paddingTop": "space/16",
+     "paddingRight": "space/16",
+     "paddingBottom": "space/16",
+     "topLeftRadius": "radius/lg",
+     "topRightRadius": "radius/lg",
+     "bottomLeftRadius": "radius/lg",
+     "bottomRightRadius": "radius/lg"
+    },
+    "children": [
+     {
+      "name": "Header",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 17,
+      "width": 188,
+      "height": 28,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 0,
+       "primaryAxisAlignItems": "SPACE_BETWEEN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "children": [
+       {
+        "name": "Icon box",
+        "type": "FRAME",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 17,
+        "width": 28,
+        "height": 28,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 8,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "background/default"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/md",
+         "topRightRadius": "radius/md",
+         "bottomLeftRadius": "radius/md",
+         "bottomRightRadius": "radius/md"
+        },
+        "propertyReferences": {
+         "visible": "Icon#431:1708"
+        },
+        "children": [
+         {
+          "name": "chart",
+          "type": "INSTANCE",
+          "visible": true,
+          "opacity": 1,
+          "x": 23,
+          "y": 23,
+          "width": 16,
+          "height": 16,
+          "layout": {
+           "layoutSizingHorizontal": "FIXED",
+           "layoutSizingVertical": "FIXED",
+           "layoutGrow": 0,
+           "layoutAlign": "INHERIT",
+           "clipsContent": false
+          },
+          "fills": [
+           {
+            "type": "SOLID",
+            "visible": false,
+            "hex": "#ffffff"
+           }
+          ],
+          "icon": {
+           "name": "chart",
+           "size": 16,
+           "variant": "Property 1=linear",
+           "colour": "icon/secondary"
+          }
+         }
+        ]
+       },
+       {
+        "name": "Label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 175,
+        "y": 21,
+        "width": 30,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Label (FA)#431:1673"
+        },
+        "text": {
+         "characters": "بازدید",
+         "textStyle": "FA/Label/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       }
+      ]
+     },
+     {
+      "name": "Value",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 145,
+      "y": 53,
+      "width": 60,
+      "height": 36,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#1a1d2c",
+        "token": "text/primary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "characters": "Value (FA)#431:1687"
+      },
+      "text": {
+       "characters": "۴٬۸۲۰",
+       "textStyle": "FA/Heading/24",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "DemiBold",
+       "fontSize": 24,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 36
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/primary"
+      }
+     },
+     {
+      "name": "Footer",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 17,
+      "y": 97,
+      "width": 188,
+      "height": 20,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 6,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "FIXED",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "FILL",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "STRETCH",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/6"
+      },
+      "propertyReferences": {
+       "visible": "Footer#431:1715"
+      },
+      "children": [
+       {
+        "name": "Comparison",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 98,
+        "width": 157,
+        "height": 18,
+        "layout": {
+         "layoutSizingHorizontal": "FILL",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 1,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "visible": "Show comparison#431:1722",
+         "characters": "Comparison (FA)#431:1701"
+        },
+        "text": {
+         "characters": "نسبت به ۳۰ روز قبل",
+         "textStyle": "FA/Label/12",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 18
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
+        "name": "Delta",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 180,
+        "y": 97,
+        "width": 25,
+        "height": 20,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 6,
+         "paddingBottom": 0,
+         "paddingLeft": 6,
+         "itemSpacing": 4,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "AUTO",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 9999,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#eaecf8",
+          "token": "status/neutral/subtle"
+         }
+        ],
+        "bound": {
+         "itemSpacing": "space/4",
+         "paddingLeft": "space/6",
+         "paddingRight": "space/6",
+         "topLeftRadius": "radius/full",
+         "topRightRadius": "radius/full",
+         "bottomLeftRadius": "radius/full",
+         "bottomRightRadius": "radius/full"
+        },
+        "instance": {
+         "component": "Badge",
+         "variant": "Locale=FA, Tone=Gray, Style=Subtle, Size=Small",
+         "componentProperties": {
+          "Icon swap#8:2982": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8652",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "tick-circle / Property 1=linear"
+          },
+          "Label#8:2859": {
+           "type": "TEXT",
+           "value": "Badge"
+          },
+          "Icon#8:2941": {
+           "type": "BOOLEAN",
+           "value": false
+          },
+          "Label (FA)#8:2900": {
+           "type": "TEXT",
+           "value": "۰٪"
+          },
+          "Locale": {
+           "value": "FA",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Tone": {
+           "value": "Gray",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Style": {
+           "value": "Subtle",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         },
+         "texts": {
+          "Label": "۰٪"
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  }
+ ]
+}

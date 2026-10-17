@@ -6,8 +6,8 @@
   "page": "Components"
  },
  "variableCount": 166,
- "componentCount": 48,
- "variantCount": 989,
+ "componentCount": 51,
+ "variantCount": 1005,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1433,6 +1433,49 @@
     "png/date-range-field/locale-fa--size-small--state-hover.png",
     "png/date-range-field/locale-fa--size-small--state-start-open.png"
    ]
+  },
+  {
+   "name": "Pagination",
+   "nodeId": "431:21103",
+   "variantCount": 2,
+   "json": "components/pagination.json",
+   "jsonVariantCount": 2,
+   "png": [
+    "png/pagination/locale-en.png",
+    "png/pagination/locale-fa.png"
+   ]
+  },
+  {
+   "name": "Item Card",
+   "nodeId": "431:21392",
+   "variantCount": 8,
+   "json": "components/item-card.json",
+   "jsonVariantCount": 8,
+   "png": [
+    "png/item-card/locale-en--type-add--state-default.png",
+    "png/item-card/locale-en--type-add--state-hover.png",
+    "png/item-card/locale-en--type-default--state-default.png",
+    "png/item-card/locale-en--type-default--state-hover.png",
+    "png/item-card/locale-fa--type-add--state-default.png",
+    "png/item-card/locale-fa--type-add--state-hover.png",
+    "png/item-card/locale-fa--type-default--state-default.png",
+    "png/item-card/locale-fa--type-default--state-hover.png"
+   ]
+  },
+  {
+   "name": "Stat Card",
+   "nodeId": "431:21496",
+   "variantCount": 6,
+   "json": "components/stat-card.json",
+   "jsonVariantCount": 6,
+   "png": [
+    "png/stat-card/locale-en--trend-down.png",
+    "png/stat-card/locale-en--trend-neutral.png",
+    "png/stat-card/locale-en--trend-up.png",
+    "png/stat-card/locale-fa--trend-down.png",
+    "png/stat-card/locale-fa--trend-neutral.png",
+    "png/stat-card/locale-fa--trend-up.png"
+   ]
   }
  ],
  "usage": [
@@ -1544,7 +1587,7 @@
    "name": "Modal · Usage",
    "nodeId": "53:5640",
    "width": 960,
-   "height": 1690,
+   "height": 2572,
    "png": "png/usage/modal-usage.png",
    "scale": 1
   },
@@ -1650,6 +1693,30 @@
    "width": 960,
    "height": 4597,
    "png": "png/usage/date-range-field-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Pagination · Usage",
+   "nodeId": "431:21879",
+   "width": 960,
+   "height": 890,
+   "png": "png/usage/pagination-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Item Card · Usage",
+   "nodeId": "431:21721",
+   "width": 960,
+   "height": 1073,
+   "png": "png/usage/item-card-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Stat Card · Usage",
+   "nodeId": "431:21922",
+   "width": 960,
+   "height": 1066,
+   "png": "png/usage/stat-card-usage.png",
    "scale": 1
   }
  ]
