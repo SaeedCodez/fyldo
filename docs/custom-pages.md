@@ -86,6 +86,7 @@ breaking the screen.
 | `React` | Fyldo's React 19. |
 | `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `GroupItem` ([below](#field-controls)). |
 | `Form` | A Fyldo form for one record (below). |
+| `useForm` | The same form for a page that draws the fields itself ([below](#drawing-the-fields-yourself-useform)). |
 
 Custom fields get the same object.
 
@@ -183,6 +184,77 @@ nothing moves when the values arrive; when the record cannot be loaded it says s
 no record says the item doesn't exist. It registers its unsaved edits with the guard by itself. Changing `record` from
 `'new'` to the key `onSaved` just gave does not reload the form, as long as the `Form` stays at the same place in the
 tree (a remount reloads). `Form` is a React component: use it from a `Component` page, not from `mount`.
+
+### Drawing the fields yourself: `useForm`
+
+`Form` draws Fyldo's fields from the schema. When the editor needs more than that (fields that depend on each other, a
+list the page manages itself, a live preview beside the fields), let the page draw the fields and keep Fyldo's form:
+`useForm` is the same engine as `Form` (loading, the checks, saving as a whole, 422 and 409, the unsaved-changes guard,
+the Save Bar), without the drawing. Nothing about saving is written twice.
+
+```js
+function StoryEditor({ record, navigate }) {
+  const form = useForm({ form: 'story', record, onSaved: (key) => record === 'new' && navigate([key], { replace: true }) });
+  const slides = form.values.slides;
+
+  return h(form.Frame, null,
+    h(ui.SectionCard, { title: 'Story' },
+      h(ui.SettingRow, { title: 'Title', error: form.error('title') }, h(ui.Input, { size: 'md', ...form.field('title') })),
+      h(ui.SettingRow, { title: 'Pinned', layout: 'inline' }, h(ui.Toggle, form.field('pinned'))),
+      form.values.ends === 'on_date'           // a field that depends on another: an ordinary `if`
+        ? h(ui.SettingRow, { title: 'Ends on', error: form.error('ends_at') }, h(ui.DatePicker, { size: 'md', ...form.field('ends_at') }))
+        : null),
+    h(Slides, {                               // the page's own list: one `custom` value
+      slides,
+      errorsOf: (i) => form.errorCount(`slides.${i}`),
+      onChange: (next) => form.set('slides', next),
+    }),
+    h(Preview, { story: form.values }),       // reads the edits as they happen
+  );
+}
+```
+
+| | |
+|---|---|
+| `useForm({ form, record, onSaved })` | As `Form`'s props. One form per component: for another form, render another component (or give it a `key`). A React hook: use it from a `Component` page. |
+| `status` | `loading` (the defaults are in `values`, `Frame` makes the fields inert), `ready`, `missing` or `failed` (`Frame` says why, with Retry). |
+| `values` | Every field's current value: the record's, with the edits, and the defaults while it loads. |
+| `field(id)` | Props for the control of a field, by its type: `{ value, onValueChange, onBlur, disabled }`, `{ checked, onCheckedChange, disabled }` for `toggle` and `checkbox`, and `ui.MediaPicker`'s `{ value, media, onValueChange, onBlur, disabled }` for `image` and `file`. `onBlur` checks the field, as Fyldo's fields do. |
+| `set(id, value, { clear })` | Set a value the page manages itself. `clear`: the message keys the edit makes stale (`['slides.2.link']`); default every message of the field. |
+| `error(path)`, `errorCount(path)`, `errors` | A message, and how many there are at or under a path (`slides.2` for a slide's Group Item). Messages come from the field's `validate` rules (on blur and on save) and from the server (422). |
+| `validate(id, path)` | Check a field now (on blur of a control the page draws itself); `path` checks one message key. |
+| `save()`, `discard()`, `dirty`, `saving` | What the Save Bar does, for a button of the page's own. |
+| `invalidSaves` | Grows with every save refused for invalid values: open the items that hold errors then. `Frame` focuses the first invalid control it can find. |
+| `Frame` | Draws around the page's content: the notices (loading, missing, failed, the 409 conflict), the content 24 below the header with 24 between its children, the Save Bar, Ctrl/⌘+S. |
+
+In PHP, declare every value of the record in the form's `sections`, so the server sanitizes and checks it. A value the
+page draws itself is a `custom` field with `'module' => false` (only in a form; a settings page needs a module). Its
+`sanitize_cb` and `validate_cb` are yours, and `validate_cb` may answer with messages by path inside the value, which
+the page shows under the right control:
+
+```php
+array(
+	'id'          => 'slides',
+	'type'        => 'custom',
+	'label'       => __( 'Slides', 'acme' ),
+	'module'      => false,               // the page draws it (useForm)
+	'default'     => array(),
+	'sanitize_cb' => 'acme_slides_sanitize',
+	'validate_cb' => function ( $slides ) {
+		$errors = array();
+		foreach ( $slides as $i => $slide ) {
+			if ( '' !== $slide['link'] && ! wp_http_validate_url( $slide['link'] ) ) {
+				$errors[ $i . '.link' ] = __( 'Enter a full URL.', 'acme' ); // shown under slides.<i>.link
+			}
+		}
+		return $errors;                     // array() = valid; '' => '…' is a message about the whole value
+	},
+),
+```
+
+A value with messages inside it is still loaded as stored (the person sees them when they save); only a message about
+the whole value makes a stored value fall back to its default. Checks across fields (an end date only when "ends on a
+date" is chosen) go in the form's `fyldo/{slug}/form/{id}/validate` filter.
 
 ## Field controls
 

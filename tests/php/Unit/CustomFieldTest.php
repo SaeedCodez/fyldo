@@ -10,6 +10,8 @@ namespace Fyldo\Tests\Unit;
 use Fyldo\V1\Fields\FieldFactory;
 use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Schema\Form;
+use Fyldo\V1\Schema\Page;
 use PHPUnit\Framework\TestCase;
 
 final class CustomFieldTest extends TestCase {
@@ -141,6 +143,93 @@ final class CustomFieldTest extends TestCase {
 		$this->assertInstanceOf( GroupField::class, $group );
 		$this->assertSame( 'custom', $group->to_client()['fields'][0]['type'] );
 		$this->assertSame( array( 'days.0.hours' => 'Only 9 to 5.' ), $group->errors( array( array( 'hours' => '10:00-11:00' ) ) ) );
+	}
+
+	public function test_validate_cb_may_answer_with_messages_by_path_inside_the_value(): void {
+		$field = $this->custom(
+			array(
+				'id'          => 'slides',
+				'default'     => array(),
+				'validate_cb' => static function ( $slides ) {
+					$errors = array();
+					foreach ( (array) $slides as $i => $slide ) {
+						if ( 0 !== strpos( (string) ( $slide['link'] ?? '' ), 'https://' ) ) {
+							$errors[ $i . '.link' ] = 'Enter a full URL.';
+						}
+					}
+					if ( count( (array) $slides ) > 3 ) {
+						$errors[''] = 'Three slides at most.';
+					}
+					return $errors;
+				},
+			)
+		);
+		$two = array( array( 'link' => 'https://example.com' ), array( 'link' => 'example.com' ) );
+
+		$this->assertSame( array( 'slides.1.link' => 'Enter a full URL.' ), $field->errors( $two ) );
+		$this->assertSame( 'Enter a full URL.', $field->validate( $two ), 'validate(): the first message' );
+		$this->assertSame( array(), $field->errors( array( array( 'link' => 'https://example.com' ) ) ) );
+		$this->assertSame( array( 'slides' => 'Three slides at most.' ), $field->errors( array_fill( 0, 4, array( 'link' => 'https://a.b' ) ) ) );
+
+		// A stored value keeps its items when a message is inside it; only a message about the whole value resets it.
+		$this->assertSame( $two, $field->stored_value( $two ) );
+		$this->assertSame( array(), $field->stored_value( array_fill( 0, 4, array( 'link' => 'https://a.b' ) ) ) );
+	}
+
+	public function test_the_declared_rules_still_come_first_and_a_plain_answer_keys_the_field(): void {
+		$field = $this->custom(
+			array(
+				'validate'    => array( 'required' => true ),
+				'validate_cb' => static function ( $value ) {
+					return 'nine-to-five' === $value ? true : 'Only 9 to 5.';
+				},
+			)
+		);
+		$this->assertSame( array( 'hours' ), array_keys( $field->errors( '' ) ), 'required' );
+		$this->assertSame( array( 'hours' => 'Only 9 to 5.' ), $field->errors( '10-11' ) );
+		$this->assertSame( array(), $field->errors( 'nine-to-five' ) );
+	}
+
+	public function test_module_false_is_for_a_form_whose_page_draws_the_field(): void {
+		$field = $this->custom( array( 'module' => false ) );
+		$this->assertFalse( $field->has_module() );
+		$this->assertSame( '', $field->to_client()['module'] );
+		$this->assertTrue( $this->custom()->has_module() );
+
+		$form = new Form(
+			'acme-shop',
+			'story',
+			array(
+				'sections' => array( array( 'id' => 'content', 'title' => 'Slides', 'fields' => array( array( 'id' => 'slides', 'type' => 'custom', 'label' => 'Slides', 'module' => false ) ) ) ),
+				'load'     => static function () {
+					return null;
+				},
+				'save'     => static function () {
+					return 'k';
+				},
+			)
+		);
+		$this->assertArrayHasKey( 'slides', $form->schema()->fields() );
+	}
+
+	/**
+	 * @dataProvider settings_pages_with_a_module_less_field
+	 *
+	 * @param array<string,mixed> $field Field config.
+	 */
+	public function test_a_settings_page_refuses_module_false( array $field ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( 'Custom field "slides": `module` false is only for a form whose page draws its fields (useForm)' );
+
+		new Page( 'acme-shop', 'general', array( 'title' => 'General', 'sections' => array( array( 'id' => 's', 'title' => 'S', 'fields' => array( $field ) ) ) ) );
+	}
+
+	public function settings_pages_with_a_module_less_field(): array {
+		$slides = array( 'id' => 'slides', 'type' => 'custom', 'label' => 'Slides', 'module' => false );
+		return array(
+			'on its own'     => array( $slides ),
+			'inside a group' => array( array( 'id' => 'days', 'type' => 'group', 'label' => 'Days', 'addable' => true, 'fields' => array( $slides ) ) ),
+		);
 	}
 
 	/**

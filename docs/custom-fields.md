@@ -31,7 +31,7 @@ array(
 
 | Key | |
 |---|---|
-| `module` | **Required.** URL of an ES module, either `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the page first renders, so nothing pops in. |
+| `module` | **Required.** URL of an ES module, either `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the page first renders, so nothing pops in. In a form whose page draws its own fields (`useForm`), `false`: Fyldo keeps and checks the value and draws nothing ([custom-pages.md](custom-pages.md#drawing-the-fields-yourself-useform)). |
 | `style` | URL of a stylesheet. It is enqueued on the settings screen, after Fyldo's own CSS, once per URL. |
 | `props` | An array keyed by name. It may hold only text, numbers, booleans, null and arrays, and it reaches the module unchanged. Put translated labels here, because the module has no text domain. |
 | `default` | Any JSON value. Without one the value is `null`. |
@@ -44,6 +44,9 @@ Every common key works as usual: `layout` (default `field`), `disabled`, `valida
 Fyldo cleans it the same way at every level: tags are stripped and line breaks kept (`sanitize_textarea_field`) in every
 string and in every key. Anything else becomes `null`. Your `sanitize_cb` then receives that cleaned value. Your
 `validate_cb` receives the sanitized value and returns `true`, `false` or a message; a message is shown under the field.
+For a value with parts (a list of items), it may return messages by path inside the value instead
+(`array( '2.link' => '…' )`, keyed `<field>.2.link`); a page that draws the value itself (`useForm`) shows each one
+under its control, and a stored value with such messages is kept as it is.
 
 ## JavaScript
 

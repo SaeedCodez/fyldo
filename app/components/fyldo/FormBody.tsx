@@ -3,7 +3,7 @@ import { __ } from '../../i18n';
 import { ApiError } from '../../lib/api';
 import { cn } from '../../lib/cn';
 import { firstErrorKey } from '../../lib/group';
-import { PAGE_SCOPE, scopeState, type FormController, type FormShape } from '../../lib/page-form';
+import { PAGE_SCOPE, scopeState, type FormController, type FormShape, type FormState } from '../../lib/page-form';
 import { RelationSearchContext, type RelationSearch } from '../../lib/relation';
 import { isValueField, type FieldValue, type SectionDef, type TabDef } from '../../types';
 import { Button } from '../ui/button';
@@ -53,6 +53,54 @@ const conflictTexts = {
   }),
 };
 
+/** What the Save Bar says for a form that saves as a whole: nothing (null), Dirty, Saving, Saved or Error. */
+export function saveBarState(state: FormState, dirty: readonly string[]): SaveBarState | null {
+  const page = scopeState(state, PAGE_SCOPE);
+  if (page.status === 'saving') return 'saving';
+  if (page.status === 'error') return 'error';
+  if (dirty.length > 0) return 'dirty';
+  return page.status === 'saved' ? 'saved' : null;
+}
+
+/** Ctrl/⌘+S inside `container` runs `onSave` (the browser's "Save page" is never what is meant there). */
+export function useSaveShortcut(container: RefObject<HTMLElement | null>, onSave: (() => void) | null): void {
+  const latest = useRef(onSave);
+  latest.current = onSave;
+  useEffect(() => {
+    const element = container.current;
+    const listener = (event: KeyboardEvent): void => {
+      if (!latest.current || !(event.ctrlKey || event.metaKey) || event.altKey || event.key.toLowerCase() !== 's') return;
+      event.preventDefault();
+      latest.current();
+    };
+    element?.addEventListener('keydown', listener);
+    return () => element?.removeEventListener('keydown', listener);
+  }, [container]);
+}
+
+/**
+ * 409: the stored values changed after this form read them. The edits stay until the person reloads. It appears after the
+ * page loaded, so it is announced (role="alert": amber).
+ */
+export function ConflictNotice({ kind, reloading, onReload }: { kind: 'settings' | 'record'; reloading: boolean; onReload: () => void }): ReactElement {
+  const text = conflictTexts[kind]();
+  return (
+    <Notice
+      className="fy:mt-6"
+      tone="amber"
+      live
+      title={text.title}
+      action={
+        <Button variant="secondary" size="sm" loading={reloading} onClick={onReload}>
+          {__('Reload latest values', 'fyldo')}
+        </Button>
+      }
+    >
+      {text.message}
+    </Notice>
+  );
+}
+
 /**
  * What a form draws below its header: [conflict Notice → 24] → Tabs (sub-pages) → 24 → Section Cards (24 apart) →
  * floating Save Bar (global save pattern) — or a Save in each card footer (per-section pattern): one pattern per form,
@@ -70,16 +118,7 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
   const tabs = useMemo(() => form.tabs ?? [], [form.tabs]);
 
   const pageScope = scopeState(state, PAGE_SCOPE);
-  const bar: SaveBarState | null =
-    pageScope.status === 'saving'
-      ? 'saving'
-      : pageScope.status === 'error'
-        ? 'error'
-        : dirty.length > 0
-          ? 'dirty'
-          : pageScope.status === 'saved'
-            ? 'saved'
-            : null;
+  const bar = saveBarState(state, dirty);
 
   // After a failed submit, move focus to the first invalid field — switching to its tab first when it is on another one.
   // A group's errors are its sub-fields' (`<group>.<index>.<sub-field>`): focus the first of those.
@@ -103,19 +142,15 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
     void save(scope);
   };
 
-  // Ctrl/⌘+S inside the form saves a form with a Save Bar (the browser's "Save page" is never what is meant here).
-  const shortcut = useRef<(event: KeyboardEvent) => void>(() => undefined);
-  shortcut.current = (event) => {
-    if (form.save !== 'global' || !(event.ctrlKey || event.metaKey) || event.altKey || event.key.toLowerCase() !== 's') return;
-    event.preventDefault();
-    if (dirty.length > 0 && pageScope.status !== 'saving') submit(PAGE_SCOPE);
-  };
-  useEffect(() => {
-    const element = container.current;
-    const listener = (event: KeyboardEvent): void => shortcut.current(event);
-    element?.addEventListener('keydown', listener);
-    return () => element?.removeEventListener('keydown', listener);
-  }, [container]);
+  // Ctrl/⌘+S inside the form saves a form with a Save Bar.
+  useSaveShortcut(
+    container,
+    form.save === 'global'
+      ? () => {
+          if (dirty.length > 0 && pageScope.status !== 'saving') submit(PAGE_SCOPE);
+        }
+      : null,
+  );
 
   const footer = (section: SectionDef) => {
     const scope = scopeState(state, section.id);
@@ -235,27 +270,9 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
     </div>
   );
 
-  const conflict = conflictTexts[kind]();
-
   return (
     <RelationSearchContext.Provider value={search}>
-      {state.conflict ? (
-        // 409: the stored values changed after this page read them. The edits stay until the user reloads. It appears
-        // after the page loaded, so it is announced (role="alert": amber).
-        <Notice
-          className="fy:mt-6"
-          tone="amber"
-          live
-          title={conflict.title}
-          action={
-            <Button variant="secondary" size="sm" loading={state.reloading} onClick={() => void reload()}>
-              {__('Reload latest values', 'fyldo')}
-            </Button>
-          }
-        >
-          {conflict.message}
-        </Notice>
-      ) : null}
+      {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
 
       {tabs.length > 0 ? (
         <Tabs

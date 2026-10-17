@@ -91,7 +91,7 @@ export function FieldRenderer({
   revision,
   locale = 'en',
   searchPath,
-}: FieldRendererProps): ReactElement {
+}: FieldRendererProps): ReactElement | null {
   const search = useRelationSearch();
 
   // Display only: no value, no label association, nothing to change, nothing to send.
@@ -477,6 +477,8 @@ export function FieldRenderer({
 
     case 'custom':
       // The developer's module draws the control; the row names it as a group, so one control or several work alike.
+      // Without a module the page draws it itself (`useForm`): `<Form>` shows nothing for it.
+      if (field.module === '') return null;
       return (
         <SettingRow {...common} group>
           <CustomControl

@@ -8,6 +8,8 @@
 namespace Fyldo\V1\Schema;
 
 use Fyldo\V1\Fields\AbstractField;
+use Fyldo\V1\Fields\CustomField;
+use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Support\Naming;
 
 /**
@@ -110,6 +112,14 @@ final class Page implements Guarded {
 
 				if ( $field->is_stored() ) {
 					$this->fields[ $field->id() ] = $field;
+				}
+
+				// `'module' => false` (the page draws the field) needs a page that does: a form shown with `useForm`.
+				$customs = $field instanceof GroupField ? array_values( $field->sub_fields() ) : array( $field );
+				foreach ( $customs as $one ) {
+					if ( 'Form' !== $noun && $one instanceof CustomField && ! $one->has_module() ) {
+						throw new ConfigException( sprintf( 'Custom field "%s": `module` false is only for a form whose page draws its fields (useForm); a settings page needs the URL of its JavaScript module.', $one->id() ) );
+					}
 				}
 			}
 

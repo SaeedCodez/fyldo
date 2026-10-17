@@ -64,7 +64,7 @@ export const customDefinition = (url: string): CustomFieldDefinition | null => r
 export function collectCustomModules(config: Pick<FyldoConfig, 'pages' | 'forms'>): string[] {
   const urls = new Set<string>();
   const visit = (field: FieldDef): void => {
-    if (field.type === 'custom') urls.add(field.module);
+    if (field.type === 'custom' && field.module !== '') urls.add(field.module);
     if (field.type === 'group') field.fields.forEach(visit);
   };
   const forms = [...config.pages.filter(isSettingsPage), ...(config.forms ?? [])];

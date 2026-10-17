@@ -5,7 +5,7 @@
  */
 import * as React from 'react';
 import type { ComponentType } from 'react';
-import { Form } from '../components/fyldo/Form';
+import { Form, useRecordForm } from '../components/fyldo/Form';
 import { PageHeader } from '../components/fyldo/PageHeader';
 import { SectionCard } from '../components/fyldo/SectionCard';
 import { SettingRow } from '../components/fyldo/SettingRow';
@@ -87,6 +87,8 @@ export const sdk = {
   /** Fields of a form registered in PHP, stored by the plugin: `<Form form="…" record="new" | "<key>" onSaved={…} />`. */
   // Form → fields → custom-fields → modules → sdk is an import cycle: Form must stay a (hoisted) function declaration.
   Form,
+  /** The same form, drawn by the page: `const form = useForm({ form, record, onSaved })`, then `h(form.Frame, null, …)`. */
+  useForm: useRecordForm,
 } as const;
 
 export type FyldoSdk = typeof sdk;
