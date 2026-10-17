@@ -6,8 +6,8 @@
   "page": "Components"
  },
  "variableCount": 192,
- "componentCount": 51,
- "variantCount": 1007,
+ "componentCount": 52,
+ "variantCount": 1015,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1478,6 +1478,23 @@
     "png/stat-card/locale-fa--trend-neutral.png",
     "png/stat-card/locale-fa--trend-up.png"
    ]
+  },
+  {
+   "name": "Code Editor",
+   "nodeId": "420:11198",
+   "variantCount": 8,
+   "json": "components/code-editor.json",
+   "jsonVariantCount": 8,
+   "png": [
+    "png/code-editor/locale-en--state-default.png",
+    "png/code-editor/locale-en--state-disabled.png",
+    "png/code-editor/locale-en--state-error.png",
+    "png/code-editor/locale-en--state-focus.png",
+    "png/code-editor/locale-fa--state-default.png",
+    "png/code-editor/locale-fa--state-disabled.png",
+    "png/code-editor/locale-fa--state-error.png",
+    "png/code-editor/locale-fa--state-focus.png"
+   ]
   }
  ],
  "usage": [
@@ -1719,6 +1736,14 @@
    "width": 960,
    "height": 1066,
    "png": "png/usage/stat-card-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Code Editor · Usage",
+   "nodeId": "420:11159",
+   "width": 960,
+   "height": 1489,
+   "png": "png/usage/code-editor-usage.png",
    "scale": 1
   }
  ]

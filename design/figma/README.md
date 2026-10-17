@@ -2,14 +2,14 @@
 
 A read-only export of the Fyldo design (Figma file `Pg3Ni7eqTLQYIG6hfNVPt6`, page **Components**), so that code, tests and
 cloud sessions never need Figma access. Exported 2026-10-11 (after the redesign: primary colour, tinted neutrals, bigger controls) through the figma-console MCP
-(Desktop Bridge); nothing in the Figma file was modified. 51 component sets, 1007 variants, 30 usage/template frames (Item Card, Pagination, Stat Card and the Modal `Content` slot added 2026-10-17 for custom pages; Group Item's `Status` badge and `Inactive` state the same day). The "Fyldo – HeroUI" file, the Foundations page and the icon sets themselves are **not** part of it (Iconsax is a published team library since 2026-10-16; icon instances are recorded by name, size and colour token)
+(Desktop Bridge); nothing in the Figma file was modified. 52 component sets, 1015 variants, 31 usage/template frames (Item Card, Pagination, Stat Card and the Modal `Content` slot added 2026-10-17 for custom pages; Group Item's `Status` badge and `Inactive` state the same day). The "Fyldo – HeroUI" file, the Foundations page and the icon sets themselves are **not** part of it (Iconsax is a published team library since 2026-10-16; icon instances are recorded by name, size and colour token)
 (tokens live in `tokens/figma.tokens.json`, styles in `tokens/figma.styles.json`, the spec in `docs/design-spec.md`).
 
 ## Contents
 
 | Path | What |
 |---|---|
-| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (192 = `tokens/figma.tokens.json`; project palettes reached only by a non-default Theme mode, such as `color/pelk/*`, are left out), `componentCount` (51), `variantCount` (1007). Start here. |
+| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (192 = `tokens/figma.tokens.json`; project palettes reached only by a non-default Theme mode, such as `color/pelk/*`, are left out), `componentCount` (52), `variantCount` (1015). Start here. |
 | `components/<kebab-name>.json` | One file per COMPONENT_SET (40): property definitions and, per variant, the full node tree. |
 | `png/<kebab-name>/<variant>.png` | Every variant at **2x** (839 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
 | `png/usage/*.png` | The 19 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**; 23 in all. |
@@ -32,7 +32,8 @@ Each node: `name, type, visible, opacity, x, y, width, height` (x/y relative to 
 `layoutMode`, four paddings, `itemSpacing`, `primaryAxisAlignItems`, `counterAxisAlignItems`, sizing modes,
 `layoutSizingHorizontal/Vertical`, `layoutGrow`, `layoutAlign`, min/max sizes, `clipsContent`), `cornerRadius`, `fills`,
 `strokes` (`paints`, `weight`, `align`), `effects` (`style` name + raw `values`), `text` (`characters`, `textStyle`, font,
-size, `lineHeight`, `letterSpacing`, alignment, `fillToken`), `children`.
+size, `lineHeight`, `letterSpacing`, alignment, `fillToken`, and `segments` when the text has several colours: each run's
+`characters`, `hex` and `token`), `children`.
 
 - **Tokens by name, never by id.** `fills[].token` / `strokes.paints[].token` is the bound variable name (`border/input`) next
   to the resolved `hex`. `bound` maps other properties (`paddingLeft`, `itemSpacing`, `topLeftRadius`, `fontFamily`…) to their

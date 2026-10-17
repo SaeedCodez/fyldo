@@ -219,6 +219,19 @@ globalThis.fyldoPack = async function fyldoPack(P) {
       if (node.textTruncation !== 'DISABLED') t.textTruncation = node.textTruncation;
       if (node.maxLines) t.maxLines = node.maxLines;
       if (Array.isArray(o.fills) && o.fills[0]) t.fillToken = o.fills[0].token;
+      // Text in several colours (a code sample's syntax colours): each run with its colour and token.
+      if (isMixed(node.fills)) {
+        t.segments = [];
+        for (const seg of node.getStyledTextSegments(['fills'])) {
+          const f = seg.fills[0];
+          const run = { characters: seg.characters };
+          if (f && f.type === 'SOLID') {
+            run.hex = hex(f.color);
+            if (f.boundVariables && f.boundVariables.color) run.token = await vname(f.boundVariables.color.id);
+          }
+          t.segments.push(run);
+        }
+      }
       o.text = t;
     }
 
