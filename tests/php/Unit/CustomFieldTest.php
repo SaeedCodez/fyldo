@@ -7,9 +7,12 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Fields\CustomField;
 use Fyldo\V1\Fields\FieldFactory;
 use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Schema\Form;
+use Fyldo\V1\Schema\Page;
 use PHPUnit\Framework\TestCase;
 
 final class CustomFieldTest extends TestCase {
@@ -143,6 +146,153 @@ final class CustomFieldTest extends TestCase {
 		$this->assertSame( array( 'days.0.hours' => 'Only 9 to 5.' ), $group->errors( array( array( 'hours' => '10:00-11:00' ) ) ) );
 	}
 
+	public function test_validate_cb_may_answer_with_messages_by_path_inside_the_value(): void {
+		$field = $this->custom(
+			array(
+				'id'          => 'slides',
+				'default'     => array(),
+				'validate_cb' => static function ( $slides ) {
+					$errors = array();
+					foreach ( (array) $slides as $i => $slide ) {
+						if ( 0 !== strpos( (string) ( $slide['link'] ?? '' ), 'https://' ) ) {
+							$errors[ $i . '.link' ] = 'Enter a full URL.';
+						}
+					}
+					if ( count( (array) $slides ) > 3 ) {
+						$errors[''] = 'Three slides at most.';
+					}
+					return $errors;
+				},
+			)
+		);
+		$two = array( array( 'link' => 'https://example.com' ), array( 'link' => 'example.com' ) );
+
+		$this->assertSame( array( 'slides.1.link' => 'Enter a full URL.' ), $field->errors( $two ) );
+		$this->assertSame( 'Enter a full URL.', $field->validate( $two ), 'validate(): the first message' );
+		$this->assertSame( array(), $field->errors( array( array( 'link' => 'https://example.com' ) ) ) );
+		$this->assertSame( array( 'slides' => 'Three slides at most.' ), $field->errors( array_fill( 0, 4, array( 'link' => 'https://a.b' ) ) ) );
+
+		// A stored value keeps its items when a message is inside it; only a message about the whole value resets it.
+		$this->assertSame( $two, $field->stored_value( $two ) );
+		$this->assertSame( array(), $field->stored_value( array_fill( 0, 4, array( 'link' => 'https://a.b' ) ) ) );
+	}
+
+	public function test_the_declared_rules_still_come_first_and_a_plain_answer_keys_the_field(): void {
+		$field = $this->custom(
+			array(
+				'validate'    => array( 'required' => true ),
+				'validate_cb' => static function ( $value ) {
+					return 'nine-to-five' === $value ? true : 'Only 9 to 5.';
+				},
+			)
+		);
+		$this->assertSame( array( 'hours' ), array_keys( $field->errors( '' ) ), 'required' );
+		$this->assertSame( array( 'hours' => 'Only 9 to 5.' ), $field->errors( '10-11' ) );
+		$this->assertSame( array(), $field->errors( 'nine-to-five' ) );
+	}
+
+	public function test_module_false_is_for_a_form_whose_page_draws_the_field(): void {
+		$field = $this->custom( array( 'module' => false ) );
+		$this->assertFalse( $field->has_module() );
+		$this->assertSame( '', $field->to_client()['module'] );
+		$this->assertTrue( $this->custom()->has_module() );
+
+		$form = new Form(
+			'acme-shop',
+			'story',
+			array(
+				'sections' => array( array( 'id' => 'content', 'title' => 'Slides', 'fields' => array( array( 'id' => 'slides', 'type' => 'custom', 'label' => 'Slides', 'module' => false ) ) ) ),
+				'load'     => static function () {
+					return null;
+				},
+				'save'     => static function () {
+					return 'k';
+				},
+			)
+		);
+		$this->assertArrayHasKey( 'slides', $form->schema()->fields() );
+	}
+
+	/** A settings page holding `$fields` in one section. */
+	private static function page( array $fields ): Page {
+		return new Page( 'acme-shop', 'appearance', array( 'title' => 'Appearance', 'sections' => array( array( 'id' => 's', 'title' => 'S', 'fields' => $fields ) ) ) );
+	}
+
+	public function test_watch_names_fields_of_the_same_page_and_reaches_the_browser(): void {
+		$page = self::page(
+			array(
+				array( 'id' => 'brand', 'type' => 'color', 'label' => 'Brand colour' ),
+				array( 'id' => 'theme', 'type' => 'select', 'label' => 'Theme', 'options' => array( 'light' => 'Light', 'dark' => 'Dark' ) ),
+				array( 'id' => 'preview', 'type' => 'custom', 'label' => 'Preview', 'module' => '/preview.js', 'watch' => array( 'brand', 'theme', 'brand' ) ),
+				array(
+					'id'      => 'rows',
+					'type'    => 'group',
+					'label'   => 'Rows',
+					'addable' => true,
+					'fields'  => array( array( 'id' => 'sample', 'type' => 'custom', 'label' => 'Sample', 'module' => '/sample.js', 'watch' => array( 'theme' ) ) ),
+				),
+			)
+		);
+
+		$preview = $page->field( 'preview' );
+		$this->assertInstanceOf( CustomField::class, $preview );
+		$this->assertSame( array( 'brand', 'theme' ), $preview->watch(), 'each id once, in order' );
+		$this->assertSame( array( 'brand', 'theme' ), $preview->to_client()['watch'] );
+		$this->assertSame( array(), $this->custom()->to_client()['watch'], 'nothing watched: an empty list' );
+	}
+
+	/**
+	 * @dataProvider invalid_watches
+	 *
+	 * @param array<int,array<string,mixed>> $fields  The page's fields.
+	 * @param string                         $message Expected part of the message.
+	 */
+	public function test_watch_errors( array $fields, string $message ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( $message );
+		self::page( $fields );
+	}
+
+	public function invalid_watches(): array {
+		$preview = static fn( $watch ): array => array( 'id' => 'preview', 'type' => 'custom', 'label' => 'Preview', 'module' => '/preview.js', 'watch' => $watch );
+		$brand   = array( 'id' => 'brand', 'type' => 'color', 'label' => 'Brand colour' );
+		return array(
+			'not a list'         => array( array( $brand, $preview( 'brand' ) ), '`watch` must be a list of field ids of the same page' ),
+			'keyed'              => array( array( $brand, $preview( array( 'a' => 'brand' ) ) ), '`watch` must be a list of field ids' ),
+			'not text'           => array( array( $brand, $preview( array( 1 ) ) ), '`watch` must be a list of field ids' ),
+			'unknown field'      => array( array( $brand, $preview( array( 'logo' ) ) ), 'Custom field "preview" watches "logo", which is not a field of page "appearance"' ),
+			'itself'             => array( array( $preview( array( 'preview' ) ) ), 'Custom field "preview" cannot watch itself' ),
+			'a password'         => array( array( array( 'id' => 'key', 'type' => 'password', 'label' => 'Key' ), $preview( array( 'key' ) ) ), 'cannot watch password field "key"' ),
+			'a group sub-field'  => array(
+				array(
+					array( 'id' => 'rows', 'type' => 'group', 'label' => 'Rows', 'addable' => true, 'fields' => array( array( 'id' => 'label', 'type' => 'text', 'label' => 'Label' ) ) ),
+					$preview( array( 'label' ) ),
+				),
+				'watches "label", which is not a field of page',
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider settings_pages_with_a_module_less_field
+	 *
+	 * @param array<string,mixed> $field Field config.
+	 */
+	public function test_a_settings_page_refuses_module_false( array $field ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( 'Custom field "slides": `module` false is only for a form whose page draws its fields (useForm)' );
+
+		new Page( 'acme-shop', 'general', array( 'title' => 'General', 'sections' => array( array( 'id' => 's', 'title' => 'S', 'fields' => array( $field ) ) ) ) );
+	}
+
+	public function settings_pages_with_a_module_less_field(): array {
+		$slides = array( 'id' => 'slides', 'type' => 'custom', 'label' => 'Slides', 'module' => false );
+		return array(
+			'on its own'     => array( $slides ),
+			'inside a group' => array( array( 'id' => 'days', 'type' => 'group', 'label' => 'Days', 'addable' => true, 'fields' => array( $slides ) ) ),
+		);
+	}
+
 	/**
 	 * @dataProvider invalid_configs
 	 *
@@ -167,6 +317,7 @@ final class CustomFieldTest extends TestCase {
 			'props not an array'      => array( array( 'props' => 'x' ), '`props` must be an array keyed by name' ),
 			'props with a callback'   => array( array( 'props' => array( 'cb' => static function () {} ) ), '`props` must be an array keyed by name' ),
 			'unknown key'             => array( array( 'component' => 'x' ), 'unknown key(s): component' ),
+			'media not a boolean'     => array( array( 'media' => 'yes' ), '`media` must be true (the module opens the media library) or false' ),
 		);
 	}
 }

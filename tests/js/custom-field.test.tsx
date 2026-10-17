@@ -2,7 +2,7 @@
  * `custom` fields (docs/custom-fields.md): the developer's module draws the control, Fyldo the row, the validation and
  * the save. The React path is driven with the demo's real module (demo/custom/working-hours.js, also in the fixture page).
  */
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -14,7 +14,7 @@ import { ApiError } from '../../app/lib/api';
 import { collectCustomModules, customError, customFieldApi, defineCustomField, type CustomFieldProps } from '../../app/lib/custom-fields';
 import { groupErrors } from '../../app/lib/group';
 import { PortalContainerContext } from '../../app/lib/portal';
-import type { CustomFieldDef, FieldValue, GroupFieldDef, PageDef } from '../../app/types';
+import type { CustomFieldDef, FieldDef, FieldValue, GroupFieldDef, PageDef } from '../../app/types';
 
 const fixture = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/form-fields-page.client.json'), 'utf8')) as PageDef;
 const hours = fixture.sections.flatMap((s) => s.fields).find((f): f is CustomFieldDef => f.type === 'custom') as CustomFieldDef;
@@ -105,6 +105,7 @@ function WorkingHoursAlone({ locale }: { locale: string }) {
     props: hours.props,
     field: { id: 'h', label: 'Hours', description: '' },
     locale,
+    values: {},
   };
   return <Component {...props} />;
 }
@@ -205,5 +206,67 @@ describe('Custom field helpers', () => {
     });
     expect(customError({ ...hours, module: '/throws.js' }, 'v')).toBeNull();
     error.mockRestore();
+  });
+});
+
+describe('Custom field, watch (a live preview)', () => {
+  const shopName = { id: 'shop_name', type: 'text', label: 'Shop name', description: '', default: 'Corner shop', disabled: false, layout: 'field', validate: {}, placeholder: '' } as FieldDef;
+
+  /** A page with the shop's name, its hours, and a preview custom field that watches both. */
+  function previewPage(module: string): PageDef {
+    const preview: CustomFieldDef = { ...hours, id: 'preview', label: 'Preview', description: '', module, props: {}, default: null, watch: ['shop_name', 'opening_hours'] };
+    return {
+      ...fixture,
+      sections: [{ id: 'main', tab: '', title: 'Shop', description: '', tone: 'default', fields: [shopName, { ...hours }, preview] }],
+      values: { opening_hours: '09:00-17:00', preview: null },
+    };
+  }
+
+  it('the module gets the watched values as they are edited (a default for one the stored values lack), and saving sends only real edits', async () => {
+    const renders = vi.fn();
+    defineCustomField('/test/preview.js', () => ({
+      Component: ({ values }: CustomFieldProps) => {
+        renders(values);
+        return <p data-testid="preview">{`${String(values.shop_name)}: ${String(values.opening_hours)}`}</p>;
+      },
+    }));
+    const { savePage } = setup(previewPage('/test/preview.js'));
+    expect(screen.getByTestId('preview')).toHaveTextContent('Corner shop: 09:00-17:00');
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Shop name' }), '!');
+    expect(screen.getByTestId('preview')).toHaveTextContent('Corner shop!: 09:00-17:00');
+    await pick('Closes', '18:00');
+    expect(screen.getByTestId('preview')).toHaveTextContent('Corner shop!: 09:00-18:00');
+
+    await userEvent.click(saveChanges());
+    expect(savePage).toHaveBeenCalledWith('fields', { shop_name: 'Corner shop!', opening_hours: '09:00-18:00' }, 'rev-1');
+  });
+
+  it('keeps the same values object until a watched value changes', async () => {
+    const seen: Array<Readonly<Record<string, unknown>>> = [];
+    defineCustomField('/test/preview-identity.js', () => ({
+      Component: ({ values }: CustomFieldProps) => {
+        seen.push(values);
+        return null;
+      },
+    }));
+    const page = previewPage('/test/preview-identity.js');
+    const watchOne = { ...page, sections: [{ ...page.sections[0]!, fields: page.sections[0]!.fields.map((f) => (f.id === 'preview' ? { ...f, watch: ['opening_hours'] } : f)) }] } as PageDef;
+    setup(watchOne);
+    const before = seen.length;
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Shop name' }), 'x'); // not watched: re-renders, same object
+    expect(seen.length).toBeGreaterThan(before);
+    expect(new Set(seen).size).toBe(1);
+    expect(seen[0]).toEqual({ opening_hours: '09:00-17:00' });
+  });
+
+  it('a plain-DOM module gets the new values through update()', async () => {
+    const update = vi.fn();
+    defineCustomField('/test/preview-mount.js', () => ({ mount: () => ({ update }) }));
+    setup(previewPage('/test/preview-mount.js'));
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Shop name' }), '!');
+    await waitFor(() => expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ values: { shop_name: 'Corner shop!', opening_hours: '09:00-17:00' } })));
   });
 });

@@ -234,6 +234,55 @@ abstract class AbstractField {
 	}
 
 	/**
+	 * The messages of `validate_cb`: `true`, `false`, a message, or messages by path inside the value
+	 * (`array( '2.link' => '…' )` → `<field>.2.link`; the key `''` is the field itself). For the fields whose values have
+	 * parts (custom, code).
+	 *
+	 * @param mixed $value Sanitized value.
+	 * @return array<string,string>
+	 */
+	protected function callback_errors( $value ): array {
+		$result = isset( $this->config['validate_cb'] ) && is_callable( $this->config['validate_cb'] ) ? call_user_func( $this->config['validate_cb'], $value ) : true;
+		if ( is_array( $result ) ) {
+			$errors = array();
+			foreach ( $result as $path => $message ) {
+				if ( is_string( $message ) && '' !== $message ) {
+					$errors[ '' === (string) $path ? $this->id() : $this->id() . '.' . $path ] = $message;
+				}
+			}
+			return $errors;
+		}
+		if ( is_string( $result ) && '' !== $result ) {
+			return array( $this->id() => $result );
+		}
+
+		return false === $result ? array( $this->id() => Messages::for( 'invalid' ) ) : array();
+	}
+
+	/**
+	 * The first message of errors(), or null: validate() for the fields whose errors() is the source.
+	 *
+	 * @param mixed $value Sanitized value.
+	 */
+	protected function first_error( $value ): ?string {
+		$errors = $this->errors( $value );
+
+		return array() === $errors ? null : (string) reset( $errors );
+	}
+
+	/**
+	 * stored_value() for the fields with messages inside their value: only a message about the whole value resets it.
+	 *
+	 * @param mixed $raw Stored value.
+	 * @return mixed
+	 */
+	protected function stored_unless_whole_error( $raw ) {
+		$value = $this->sanitize( $raw );
+
+		return isset( $this->errors( $value )[ $this->id() ] ) ? $this->default_value() : $value;
+	}
+
+	/**
 	 * A stored value as the page reads it: sanitized, and the default when it no longer validates (e.g. a removed select option).
 	 *
 	 * @param mixed $raw Stored value.

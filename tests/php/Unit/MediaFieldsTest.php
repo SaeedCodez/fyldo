@@ -55,6 +55,7 @@ final class MediaFieldsTest extends TestCase {
 			7  => array( 'id' => 7, 'filename' => 'logo-mark.png', 'filesize' => 38912, 'mime' => 'image/png', 'extension' => 'png', 'width' => 512, 'height' => 512, 'thumbnail' => 'https://example.com/logo-150x150.png', 'image' => true ),
 			8  => array( 'id' => 8, 'filename' => 'photo.jpg', 'filesize' => 3145728, 'mime' => 'image/jpeg', 'extension' => 'jpg', 'width' => 4000, 'height' => 3000, 'thumbnail' => null, 'image' => true ),
 			9  => array( 'id' => 9, 'filename' => 'guide.pdf', 'filesize' => 1258291, 'mime' => 'application/pdf', 'extension' => 'pdf', 'width' => null, 'height' => null, 'thumbnail' => null, 'image' => false ),
+			10 => array( 'id' => 10, 'filename' => 'stretch.mp4', 'filesize' => 4194304, 'mime' => 'video/mp4', 'extension' => 'mp4', 'width' => null, 'height' => null, 'thumbnail' => null, 'image' => false, 'duration' => 72 ),
 		);
 		StubbedFileField::$attachments = StubbedImageField::$attachments;
 		StubbedImageField::$unreadable = array();
@@ -307,9 +308,11 @@ final class MediaFieldsTest extends TestCase {
 				'width'     => 512,
 				'height'    => 512,
 				'thumbnail' => 'https://example.com/logo-150x150.png',
+				'duration'  => null,
 			),
 			$image->media( 7 )
 		);
+		$this->assertSame( 72, $this->file()->media( 10 )['duration'], 'a video: its length in seconds' );
 		$this->assertNull( $image->media( 0 ), 'nothing chosen' );
 		$this->assertNull( $image->media( 99 ), 'gone' );
 

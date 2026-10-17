@@ -73,11 +73,14 @@ import { TopNavigation } from '../../../app/components/fyldo/TopNavigation';
 import type { NavGroup } from '../../../app/components/fyldo/nav-model';
 import { Badge, type BadgeSize, type BadgeTone } from '../../../app/components/ui/badge';
 import { Input } from '../../../app/components/ui/input';
+import { DragHandle } from '../../../app/icons/DragHandle';
 import { Icon } from '../../../app/icons/Icon';
 import { Button, type ButtonSize, type ButtonVariant } from '../../../app/components/ui/button';
 import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
+import { CodeEditor } from '../../../app/components/ui/code-editor';
 import { GroupField } from '../../../app/components/ui/group-field';
+import { GroupItem, type GroupItemStatus } from '../../../app/components/ui/group-item';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { ChoiceCard, type ChoiceCardContent } from '../../../app/components/ui/choice-card';
 import { ChoiceCardGroup } from '../../../app/components/ui/choice-card-group';
@@ -93,7 +96,7 @@ import { parseTime, setClock, setDateSettings, type CalendarKind } from '../../.
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
 import { MediaField } from '../../../app/components/ui/media-field';
 import type { MediaKind } from '../../../app/lib/wp-media';
-import type { FieldValue, GroupFieldDef, RelationItem } from '../../../app/types';
+import type { CodeLanguage, FieldValue, GroupFieldDef, RelationItem } from '../../../app/types';
 import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
@@ -372,6 +375,57 @@ function GroupDemo() {
   );
 }
 
+/** Code Editor with its label and helper (Figma "Code Editor", 520 wide): `code`, `language`, `invalid` (lines, comma-separated). */
+function CodeEditorDemo() {
+  const [value, setValue] = useState(param('code'));
+  const error = state === 'error' ? param('error') : undefined;
+  return (
+    <div style={{ width: 520 }}>
+      <FieldShell label={param('label')} description={param('helper') || undefined} error={error} disabled={state === 'disabled'}>
+        <CodeEditor
+          value={value}
+          onValueChange={setValue}
+          language={param('language', 'css') as CodeLanguage}
+          invalidLines={param('invalid').split(',').filter(Boolean).map(Number)}
+          disabled={state === 'disabled'}
+        />
+      </FieldShell>
+    </div>
+  );
+}
+
+/** One Group Item on its own (Figma "Group Item"), collapsed, with `status` labels (JSON) and `inactive=1`. */
+function GroupItemDemo() {
+  const title = param('title');
+  return (
+    <div style={{ width: 894 }}>
+      <GroupItem
+        title={title}
+        summary={param('summary') || undefined}
+        mono
+        preview={param('preview')}
+        open={false}
+        onOpenChange={() => undefined}
+        status={JSON.parse(param('status', '[]')) as GroupItemStatus[]}
+        inactive={q.get('inactive') === '1'}
+        handle={
+          <span data-slot="fy-group-item-handle" className="fy:flex fy:size-5 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-tertiary">
+            <DragHandle size={20} />
+          </span>
+        }
+        actions={
+          <>
+            <IconButton icon="copy" label={`Duplicate ${title}`} />
+            <IconButton icon="trash" label={`Remove ${title}`} />
+          </>
+        }
+      >
+        {null}
+      </GroupItem>
+    </div>
+  );
+}
+
 /** Upload Image / Select File, empty or filled (`preview=filled` + the attachment's facts). Hover and focus are forced by the test. */
 function MediaDemo({ kind }: { kind: MediaKind }) {
   const filled = param('preview') === 'filled';
@@ -396,8 +450,7 @@ function MediaDemo({ kind }: { kind: MediaKind }) {
         value={filled ? 7 : 0}
         media={media}
         locale={locale}
-        onSelect={() => undefined}
-        onRemove={() => undefined}
+        onValueChange={() => undefined}
         onError={() => undefined}
         error={state === 'error' ? param('error') : undefined}
         disabled={state === 'disabled'}
@@ -1000,6 +1053,10 @@ function Variant() {
       return <IconPickerModalDemo />;
     case 'group':
       return <GroupDemo />;
+    case 'group-item':
+      return <GroupItemDemo />;
+    case 'code-editor':
+      return <CodeEditorDemo />;
     case 'upload-image':
       return <MediaDemo kind="image" />;
     case 'select-file':

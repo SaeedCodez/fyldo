@@ -23,6 +23,8 @@ export interface Node {
   name: string;
   type: string;
   visible: boolean;
+  /** Layer opacity, 0–1. */
+  opacity: number;
   x: number;
   y: number;
   width: number;
@@ -50,6 +52,8 @@ export interface Node {
     lineHeight: { unit: string; value: number };
     letterSpacing: { unit: string; value: number };
     fillToken?: string;
+    /** Text in several colours: each run with its colour token (a code sample's syntax colours). */
+    segments?: Array<{ characters: string; hex?: string; token?: string }>;
   };
   /** A nested component instance (not walked further): which variant it is and the visible text overrides. */
   instance?: { component: string; variant: string; componentProperties: Record<string, { type: string; value: unknown; valueName?: string }>; texts: Record<string, string> };

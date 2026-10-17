@@ -49,6 +49,9 @@ final class Messages {
 			case 'color':
 				return __( 'Enter a valid color, like #rrggbb.', 'fyldo' );
 
+			case 'code':
+				return 'json' === ( $params['language'] ?? '' ) ? __( 'Enter valid JSON.', 'fyldo' ) : __( 'Markup is not allowed in CSS.', 'fyldo' );
+
 			case 'date':
 				return __( 'Enter a valid date.', 'fyldo' );
 

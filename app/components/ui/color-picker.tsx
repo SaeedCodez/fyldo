@@ -3,6 +3,7 @@ import { lazy, Suspense, useRef, useState, type KeyboardEvent, type MouseEvent, 
 import { Icon } from '../../icons/Icon';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import { DEFAULT_PRESETS } from '../../lib/color';
 import { ColorDot, type ColorDotSize } from './color-swatch';
 import { CONTROL_BASE, CONTROL_SIZE, type ControlSize } from './control';
@@ -25,7 +26,7 @@ export interface ColorPickerProps {
   disabled?: boolean;
   name?: string;
   id?: string;
-  /** The page's locale: the panel speaks its values in its numerals. */
+  /** The page's locale (default: the screen's): the panel speaks its values in its numerals. */
   locale?: string;
   /** The picker closed, or focus left the closed field (the caller validates). */
   onBlur?: () => void;
@@ -46,11 +47,12 @@ export function ColorPicker({
   disabled,
   name,
   id,
-  locale = 'en',
+  locale: localeProp,
   onBlur,
   className,
   ...aria
 }: ColorPickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
   // Mounted on first open and kept: Base UI's Popover then runs its own enter / exit and returns focus to the field.

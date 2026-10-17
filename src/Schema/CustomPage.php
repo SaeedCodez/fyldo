@@ -17,12 +17,12 @@ use Fyldo\V1\Support\Naming;
  */
 final class CustomPage implements Guarded {
 
-	const KEYS = array( 'type', 'title', 'description', 'icon', 'group', 'badge', 'capability', 'module', 'style', 'props' );
+	const KEYS = array( 'type', 'title', 'description', 'icon', 'group', 'badge', 'capability', 'module', 'style', 'props', 'media' );
 
 	/** @var string */
 	private $id;
 
-	/** @var array{title:string,description:string,icon:string,group:string,badge:string,capability:string,module:string,style:string,props:array<string,mixed>} */
+	/** @var array{title:string,description:string,icon:string,group:string,badge:string,capability:string,module:string,style:string,props:array<string,mixed>,media:bool} */
 	private $config;
 
 	/**
@@ -73,6 +73,11 @@ final class CustomPage implements Guarded {
 			throw new ConfigException( sprintf( 'Custom page "%s": `props` must be an array keyed by name, holding only text, numbers, booleans, null and arrays.', $id ) );
 		}
 
+		$media = $config['media'] ?? false;
+		if ( ! is_bool( $media ) ) {
+			throw new ConfigException( sprintf( 'Custom page "%s": `media` must be true (the module opens the media library) or false.', $id ) );
+		}
+
 		$this->id     = $id;
 		$this->config = array(
 			'title'       => (string) $config['title'],
@@ -84,6 +89,7 @@ final class CustomPage implements Guarded {
 			'module'      => $module,
 			'style'       => $style,
 			'props'       => $props,
+			'media'       => $media,
 		);
 	}
 
@@ -103,6 +109,11 @@ final class CustomPage implements Guarded {
 	/** URL of the stylesheet to enqueue with the screen; '' = none. */
 	public function style(): string {
 		return $this->config['style'];
+	}
+
+	/** Whether the module opens the media library (`ui.MediaPicker`): the screen then loads `wp.media`. */
+	public function media(): bool {
+		return $this->config['media'];
 	}
 
 	/**

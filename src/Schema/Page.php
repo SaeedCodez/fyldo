@@ -8,6 +8,8 @@
 namespace Fyldo\V1\Schema;
 
 use Fyldo\V1\Fields\AbstractField;
+use Fyldo\V1\Fields\CustomField;
+use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Support\Naming;
 
 /**
@@ -90,6 +92,7 @@ final class Page implements Guarded {
 
 		$section_ids = array();
 		$field_ids   = array();
+		$watching    = array(); // custom field id => the ids it watches
 		foreach ( (array) ( $config['sections'] ?? array() ) as $section_config ) {
 			$section = new Section( (array) $section_config );
 
@@ -111,6 +114,17 @@ final class Page implements Guarded {
 				if ( $field->is_stored() ) {
 					$this->fields[ $field->id() ] = $field;
 				}
+
+				// `'module' => false` (the page draws the field) needs a page that does: a form shown with `useForm`.
+				$customs = $field instanceof GroupField ? array_values( $field->sub_fields() ) : array( $field );
+				foreach ( $customs as $one ) {
+					if ( 'Form' !== $noun && $one instanceof CustomField && ! $one->has_module() ) {
+						throw new ConfigException( sprintf( 'Custom field "%s": `module` false is only for a form whose page draws its fields (useForm); a settings page needs the URL of its JavaScript module.', $one->id() ) );
+					}
+					if ( $one instanceof CustomField ) {
+						$watching[ $one->id() ] = $one->watch();
+					}
+				}
 			}
 
 			$this->sections[] = $section;
@@ -118,6 +132,22 @@ final class Page implements Guarded {
 
 		if ( array() === $this->sections ) {
 			throw new ConfigException( sprintf( '%1$s "%2$s" needs at least one section.', $noun, $id ) );
+		}
+
+		// A custom field watches fields of the same page (a group's custom field too): ones that hold a value the browser has.
+		foreach ( $watching as $watcher => $ids ) {
+			foreach ( $ids as $watched ) {
+				$target = $this->fields[ $watched ] ?? null;
+				if ( $watched === $watcher ) {
+					throw new ConfigException( sprintf( 'Custom field "%s" cannot watch itself: its own value is `value`.', $watcher ) );
+				}
+				if ( null === $target ) {
+					throw new ConfigException( sprintf( 'Custom field "%1$s" watches "%2$s", which is not a field of %3$s "%4$s".', $watcher, $watched, strtolower( $noun ), $id ) );
+				}
+				if ( 'password' === $target->type() ) {
+					throw new ConfigException( sprintf( 'Custom field "%1$s" cannot watch password field "%2$s": its value never reaches the browser.', $watcher, $watched ) );
+				}
+			}
 		}
 
 		$this->assert_danger_sections_last();

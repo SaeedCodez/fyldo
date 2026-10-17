@@ -12,7 +12,7 @@ import { isValueField, type FieldValue, type MediaMap, type PageDef, type Sectio
 import { ApiError, LOGGED_OUT, type Api, type ItemsQuery, type ItemsResult, type SaveResult } from './api';
 import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
-import { validateValue } from './validation';
+import { check, messageFor, validateValue } from './validation';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -274,6 +274,12 @@ const valueFields = (form: Pick<FormShape, 'sections'>): ValueFieldDef[] => form
 /** Every message of a field's value, keyed like the server's (a group: per sub-field). A stored password the user has not touched is `null` ("keep"): nothing to validate. */
 function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Record<string, string> {
   if (field.type === 'group') return groupErrors(field, value);
+  // A code field's CSS message is at its line, keyed `<field>.<line>` as the server keys it.
+  if (field.type === 'code') {
+    const failure = check(field.validate, value);
+    const line = failure?.params.line;
+    return failure ? { [typeof line === 'number' ? `${field.id}.${line}` : field.id]: messageFor(failure) } : {};
+  }
   const error =
     field.type === 'password' && value === null
       ? null

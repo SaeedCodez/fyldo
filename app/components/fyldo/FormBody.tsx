@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement, t
 import { __ } from '../../i18n';
 import { ApiError } from '../../lib/api';
 import { cn } from '../../lib/cn';
+import { FormValuesContext } from '../../lib/form-values';
 import { firstErrorKey } from '../../lib/group';
-import { PAGE_SCOPE, scopeState, type FormController, type FormShape } from '../../lib/page-form';
+import { PAGE_SCOPE, scopeState, type FormController, type FormShape, type FormState } from '../../lib/page-form';
 import { RelationSearchContext, type RelationSearch } from '../../lib/relation';
 import { isValueField, type FieldValue, type SectionDef, type TabDef } from '../../types';
 import { Button } from '../ui/button';
@@ -53,6 +54,54 @@ const conflictTexts = {
   }),
 };
 
+/** What the Save Bar says for a form that saves as a whole: nothing (null), Dirty, Saving, Saved or Error. */
+export function saveBarState(state: FormState, dirty: readonly string[]): SaveBarState | null {
+  const page = scopeState(state, PAGE_SCOPE);
+  if (page.status === 'saving') return 'saving';
+  if (page.status === 'error') return 'error';
+  if (dirty.length > 0) return 'dirty';
+  return page.status === 'saved' ? 'saved' : null;
+}
+
+/** Ctrl/⌘+S inside `container` runs `onSave` (the browser's "Save page" is never what is meant there). */
+export function useSaveShortcut(container: RefObject<HTMLElement | null>, onSave: (() => void) | null): void {
+  const latest = useRef(onSave);
+  latest.current = onSave;
+  useEffect(() => {
+    const element = container.current;
+    const listener = (event: KeyboardEvent): void => {
+      if (!latest.current || !(event.ctrlKey || event.metaKey) || event.altKey || event.key.toLowerCase() !== 's') return;
+      event.preventDefault();
+      latest.current();
+    };
+    element?.addEventListener('keydown', listener);
+    return () => element?.removeEventListener('keydown', listener);
+  }, [container]);
+}
+
+/**
+ * 409: the stored values changed after this form read them. The edits stay until the person reloads. It appears after the
+ * page loaded, so it is announced (role="alert": amber).
+ */
+export function ConflictNotice({ kind, reloading, onReload }: { kind: 'settings' | 'record'; reloading: boolean; onReload: () => void }): ReactElement {
+  const text = conflictTexts[kind]();
+  return (
+    <Notice
+      className="fy:mt-6"
+      tone="amber"
+      live
+      title={text.title}
+      action={
+        <Button variant="secondary" size="sm" loading={reloading} onClick={onReload}>
+          {__('Reload latest values', 'fyldo')}
+        </Button>
+      }
+    >
+      {text.message}
+    </Notice>
+  );
+}
+
 /**
  * What a form draws below its header: [conflict Notice → 24] → Tabs (sub-pages) → 24 → Section Cards (24 apart) →
  * floating Save Bar (global save pattern) — or a Save in each card footer (per-section pattern): one pattern per form,
@@ -68,18 +117,15 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
   if (danger) lastDanger.current = danger;
   const focusAfterErrors = useRef(false);
   const tabs = useMemo(() => form.tabs ?? [], [form.tabs]);
+  // Every value as the fields show it (the defaults where the stored values hold none): what a custom field's `watch` reads.
+  const current = useMemo(() => {
+    const values: Record<string, FieldValue> = {};
+    for (const field of form.sections.flatMap((s) => s.fields)) if (isValueField(field)) values[field.id] = field.id in state.values ? (state.values[field.id] as FieldValue) : field.default;
+    return values;
+  }, [form.sections, state.values]);
 
   const pageScope = scopeState(state, PAGE_SCOPE);
-  const bar: SaveBarState | null =
-    pageScope.status === 'saving'
-      ? 'saving'
-      : pageScope.status === 'error'
-        ? 'error'
-        : dirty.length > 0
-          ? 'dirty'
-          : pageScope.status === 'saved'
-            ? 'saved'
-            : null;
+  const bar = saveBarState(state, dirty);
 
   // After a failed submit, move focus to the first invalid field — switching to its tab first when it is on another one.
   // A group's errors are its sub-fields' (`<group>.<index>.<sub-field>`): focus the first of those.
@@ -93,9 +139,15 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
       return; // focus once the tab is shown (this effect runs again when `tab` changes)
     }
     focusAfterErrors.current = false;
-    container.current
-      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.key}"] :is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])`)
-      ?.focus();
+    // A group's sub-field has a row of its own (`<group>.<index>.<sub-field>`); a message inside a value (a code field's
+    // line, `<field>.<line>`) belongs to the field's row.
+    // In the row, the control marked invalid comes first (a code field's textarea, not its toolbar's Copy button).
+    const controls = ':is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])';
+    const at = (key: string): HTMLElement | null | undefined => {
+      const row = container.current?.querySelector<HTMLElement>(`[data-field-id="${key}"]`);
+      return row?.querySelector<HTMLElement>(`${controls}[aria-invalid="true"]`) ?? row?.querySelector<HTMLElement>(controls);
+    };
+    (at(firstInvalid.key as string) ?? at(firstInvalid.field.id))?.focus();
   }, [state.errors, firstInvalid, tab, onTabChange, container]);
 
   const submit = (scope: string): void => {
@@ -103,19 +155,15 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
     void save(scope);
   };
 
-  // Ctrl/⌘+S inside the form saves a form with a Save Bar (the browser's "Save page" is never what is meant here).
-  const shortcut = useRef<(event: KeyboardEvent) => void>(() => undefined);
-  shortcut.current = (event) => {
-    if (form.save !== 'global' || !(event.ctrlKey || event.metaKey) || event.altKey || event.key.toLowerCase() !== 's') return;
-    event.preventDefault();
-    if (dirty.length > 0 && pageScope.status !== 'saving') submit(PAGE_SCOPE);
-  };
-  useEffect(() => {
-    const element = container.current;
-    const listener = (event: KeyboardEvent): void => shortcut.current(event);
-    element?.addEventListener('keydown', listener);
-    return () => element?.removeEventListener('keydown', listener);
-  }, [container]);
+  // Ctrl/⌘+S inside the form saves a form with a Save Bar.
+  useSaveShortcut(
+    container,
+    form.save === 'global'
+      ? () => {
+          if (dirty.length > 0 && pageScope.status !== 'saving') submit(PAGE_SCOPE);
+        }
+      : null,
+  );
 
   const footer = (section: SectionDef) => {
     const scope = scopeState(state, section.id);
@@ -235,68 +283,52 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
     </div>
   );
 
-  const conflict = conflictTexts[kind]();
-
   return (
-    <RelationSearchContext.Provider value={search}>
-      {state.conflict ? (
-        // 409: the stored values changed after this page read them. The edits stay until the user reloads. It appears
-        // after the page loaded, so it is announced (role="alert": amber).
-        <Notice
-          className="fy:mt-6"
-          tone="amber"
-          live
-          title={conflict.title}
-          action={
-            <Button variant="secondary" size="sm" loading={state.reloading} onClick={() => void reload()}>
-              {__('Reload latest values', 'fyldo')}
-            </Button>
-          }
-        >
-          {conflict.message}
-        </Notice>
-      ) : null}
+    <FormValuesContext.Provider value={current}>
+      <RelationSearchContext.Provider value={search}>
+        {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
 
-      {tabs.length > 0 ? (
-        <Tabs
-          className="fy:mt-6"
-          label={form.title ?? ''}
-          locale={locale}
-          value={tab || (tabs[0]?.id ?? '')}
-          onValueChange={(next) => onTabChange?.(next)}
-          tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
-        >
-          {cards}
-        </Tabs>
-      ) : (
-        cards('')
-      )}
+        {tabs.length > 0 ? (
+          <Tabs
+            className="fy:mt-6"
+            label={form.title ?? ''}
+            locale={locale}
+            value={tab || (tabs[0]?.id ?? '')}
+            onValueChange={(next) => onTabChange?.(next)}
+            tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
+          >
+            {cards}
+          </Tabs>
+        ) : (
+          cards('')
+        )}
 
-      {form.save === 'global' ? (
-        <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
-      ) : null}
-      {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
+        {form.save === 'global' ? (
+          <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
+        ) : null}
+        {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
 
-      {runAction ? (
-        <Modal
-          open={danger !== null}
-          onOpenChange={(open) => {
-            if (!open) setDanger(null);
-          }}
-          type="danger"
-          title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
-          description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
-          cancelLabel={__('Cancel', 'fyldo')}
-          confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
-          confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
-          onConfirm={async () => {
-            if (danger) await attempt(danger);
-            setDanger(null);
-          }}
-          // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
-          focusAfterConfirm={() => dangerTrigger.current}
-        />
-      ) : null}
-    </RelationSearchContext.Provider>
+        {runAction ? (
+          <Modal
+            open={danger !== null}
+            onOpenChange={(open) => {
+              if (!open) setDanger(null);
+            }}
+            type="danger"
+            title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
+            description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
+            cancelLabel={__('Cancel', 'fyldo')}
+            confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
+            confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
+            onConfirm={async () => {
+              if (danger) await attempt(danger);
+              setDanger(null);
+            }}
+            // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
+            focusAfterConfirm={() => dangerTrigger.current}
+          />
+        ) : null}
+      </RelationSearchContext.Provider>
+    </FormValuesContext.Provider>
   );
 }

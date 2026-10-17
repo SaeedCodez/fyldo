@@ -112,7 +112,7 @@ Base: shadcn `textarea` inside `FieldShell`.
 ```ts
 type TextareaFieldProps = TextFieldProps & { rows?: number /*default 4 (=120px)*/; showCounter?: boolean; code?: boolean; resize?: 'vertical'|'none' };
 ```
-*Implemented in M2 part 1:* `Textarea` (bordered control), `TextareaFooter` (helper/error + counter, one row), `TextareaField` (the full Figma "Textarea", 360 wide). Height = Figma's 120 px at `rows` 4, +20 px per row; the resize handle is the native resizer repainted as Figma's 6×6 glyph (Chromium/WebKit; other engines keep theirs). `code` is not built (the `code` field type is later). The counter uses the page's numerals (`Intl`), Mono/12 in EN and Label/12 in FA (as Figma), and announces only at 90 % / 100 % / over.
+*Implemented in M2 part 1:* `Textarea` (bordered control), `TextareaFooter` (helper/error + counter, one row), `TextareaField` (the full Figma "Textarea", 360 wide). Height = Figma's 120 px at `rows` 4, +20 px per row; the resize handle is the native resizer repainted as Figma's 6×6 glyph (Chromium/WebKit; other engines keep theirs). Code is its own field and component since 2026-10-17: `code` / `CodeEditor` (below). The counter uses the page's numerals (`Intl`), Mono/12 in EN and Label/12 in FA (as Figma), and announces only at 90 % / 100 % / over.
 
 **Gaps:** ➕ Counter (Mono/12, `text/tertiary`; turns `status/error/text` and the field goes Error when `value.length > maxLength` — **never truncates**, so do not pass `maxLength` to the DOM element). ➕ Custom 6×6 resize glyph (native `resize: vertical` + pseudo-element). ➕ `code` → Geist Mono + `dir="ltr"` + `spellcheck=false`. Counter announces via `aria-live="polite"` only at thresholds (90 %, 100 %) to avoid noise.
 
@@ -566,8 +566,8 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `post` `term` `user` | `RelationSelect` (one value: Select + Select Menu `Type=Search`; `multiple`: Multi Select tags + Select Menu `Type=Multi`; status rows: `MenuMessage`) | field | IDs of existing items that fit the source (`post_type`/`post_status`, `taxonomy`, `role`), readable by the current user when saving; one ID or a list in pick order | relation, required, min/max items |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
-| `group` | `FieldGroup` + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
-| *later* `media`, `code editor`, `date` | out of scope until designed | | | |
+| `group` | `FieldGroup` (the schema) on `GroupList` (the list, reordering, adding, removing; public as `ui.GroupList`) + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
+| `code` | `CodeEditor` (Figma `Code Editor` 420:11198: toolbar, line numbers, a textarea over its syntax-coloured copy) | stacked, full width | the code as typed: valid UTF-8, `\n` line ends, no NUL; `html` through `wp_kses_post` without `unfiltered_html` | code (JSON parses, CSS has no markup: keyed `<field>.<line>`), required, max_length |
 
 ## 6. Shared gaps summary (design silent — proposals in ARCHITECTURE §15)
 

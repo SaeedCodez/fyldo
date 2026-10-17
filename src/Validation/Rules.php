@@ -24,7 +24,10 @@ final class Rules {
 	 * of them); the others are declared by the developer. A range field (`date_range`, `time_range`, `datetime_range`) implies
 	 * its single type's rule with `range` on: the value is `array( 'start' => …, 'end' => … )`, see range().
 	 */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'date', 'time', 'datetime', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'code', 'date', 'time', 'datetime', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
+
+	/** The languages the implied `code` rule checks: JSON must parse, CSS must hold no markup. */
+	const CODE_CHECKS = array( 'json', 'css' );
 
 	/**
 	 * The date and time rules: `true`, or an array of `min`, `max` (stored format, or `today` / `now`), `step` (minutes) and
@@ -99,6 +102,13 @@ final class Rules {
 			// A color field stores `#rrggbb`; text the server could not read as a colour stays text and lands here.
 			if ( ! empty( $rules['color'] ) && 1 !== preg_match( '/^#[0-9a-f]{6}$/D', $value ) ) {
 				return self::fail( 'color', array() );
+			}
+			// A code field: JSON that parses; CSS without markup (as WordPress checks its own Additional CSS), with the line.
+			if ( isset( $rules['code']['language'] ) ) {
+				$failure = self::code( (string) $rules['code']['language'], $value );
+				if ( null !== $failure ) {
+					return $failure;
+				}
 			}
 		}
 
@@ -451,6 +461,32 @@ final class Rules {
 	}
 
 	/**
+	 * The implied rule of a `code` field.
+	 *
+	 * @param string $language `json` or `css` (others are not checked).
+	 * @param string $value    The code.
+	 * @return array{rule:string,params:array<string,mixed>}|null
+	 */
+	private static function code( string $language, string $value ): ?array {
+		if ( 'json' === $language ) {
+			json_decode( $value );
+			return JSON_ERROR_NONE === json_last_error() ? null : self::fail( 'code', array( 'language' => 'json' ) );
+		}
+		if ( 'css' === $language && 1 === preg_match( '#</?\w#', $value, $match, PREG_OFFSET_CAPTURE ) ) {
+			return self::fail(
+				'code',
+				array(
+					'language' => 'css',
+					'line'     => substr_count( substr( $value, 0, (int) $match[0][1] ), "\n" ) + 1,
+				)
+			);
+		}
+
+		return null;
+	}
+
+	/**
+	 * @param string              $rule   Rule id.
 	 * @param array<string,mixed> $params Parameters.
 	 * @return array{rule:string,params:array<string,mixed>}
 	 */

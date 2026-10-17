@@ -1,9 +1,10 @@
 import { Field } from '@base-ui/react/field';
 import type { Popover } from '@base-ui/react/popover';
-import { lazy, Suspense, useRef, useState, type KeyboardEvent, type ReactElement } from 'react';
+import { lazy, Suspense, useContext, useId, useRef, useState, type KeyboardEvent, type ReactElement } from 'react';
 import { Icon } from '../../icons/Icon';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import {
   equivalentText,
   formatTime,
@@ -17,6 +18,7 @@ import {
   type Time,
 } from '../../lib/datetime';
 import { CONTROL_BASE, CONTROL_SIZE, type ControlSize } from './control';
+import { InFieldRoot } from './field-shell';
 import { Tooltip } from './tooltip';
 
 /** The panels (and Base UI's Popover with them) are their own chunk, fetched the first time a picker opens. */
@@ -57,7 +59,7 @@ interface PickerBase {
   disabled?: boolean;
   name?: string;
   id?: string;
-  /** The page's locale: its numerals, and Persian month names in Persian. */
+  /** The page's locale (default: the screen's): its numerals, and Persian month names in Persian. */
   locale?: string;
   /** The popup closed, or focus left the closed field (the caller validates). */
   onBlur?: () => void;
@@ -87,7 +89,7 @@ export interface DatePickerProps extends PickerBase {
 /**
  * Figma "Date Field": the Select anatomy (calendar icon, value, chevron) that opens the Calendar Panel under it; a datetime
  * field opens it with the time columns. Under a filled field, the same value in the other calendar (Figma "Equivalent").
- * Use inside a `Field.Root` (FieldShell / SettingRow).
+ * Inside a Setting Row (or a FieldShell) the row names and describes it; on its own, give it an `aria-label`.
  */
 export function DatePicker({
   kind = 'date',
@@ -103,12 +105,13 @@ export function DatePicker({
   disabled,
   name,
   id,
-  locale = 'en',
+  locale: localeProp,
   onBlur,
   bare = false,
   className,
   ...aria
 }: DatePickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLDivElement | null>(null);
   const control = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
@@ -118,6 +121,10 @@ export function DatePicker({
   const calendar = initialCalendar(setting);
   const text = formatValue(kind, value, calendar, locale);
   const equivalent = text === '' || bare ? '' : equivalentText(kind, value, calendar, locale);
+  // In a Setting Row the Equivalent is one of the field's descriptions; on its own the picker links it itself.
+  const inField = useContext(InFieldRoot);
+  const equivalentId = useId();
+  const describedBy = !inField && equivalent !== '' ? { 'aria-describedby': equivalentId } : {};
 
   const show = (): void => {
     setLoaded(true);
@@ -132,6 +139,7 @@ export function DatePicker({
     <div ref={anchor} data-slot="fy-date-picker" className={cn('fy:flex fy:w-full fy:flex-col fy:gap-2', className)}>
       <Field.Control
         {...aria}
+        {...describedBy}
         ref={control}
         id={id}
         name={name}
@@ -167,10 +175,14 @@ export function DatePicker({
         )}
         {bare ? null : <Chevron group="date" />}
       </Field.Control>
-      {equivalent !== '' ? (
+      {equivalent !== '' && inField ? (
         <Field.Description data-slot="fy-date-equivalent" className="fy:text-copy-13 fy:text-text-tertiary fy:group-data-[disabled]/field:text-text-disabled">
           {equivalent}
         </Field.Description>
+      ) : equivalent !== '' ? (
+        <p id={equivalentId} data-slot="fy-date-equivalent" className="fy:text-copy-13 fy:text-text-tertiary">
+          {equivalent}
+        </p>
       ) : null}
 
       {loaded ? (
@@ -222,12 +234,13 @@ export function TimePicker({
   disabled,
   name,
   id,
-  locale = 'en',
+  locale: localeProp,
   onBlur,
   bare = false,
   className,
   ...aria
 }: TimePickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLDivElement | null>(null);
   const input = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);

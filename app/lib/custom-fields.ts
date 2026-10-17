@@ -26,6 +26,11 @@ export interface CustomFieldProps {
   field: { id: string; label: string; description: string };
   /** The page's locale (`fa_IR`…). The direction is the one of the page: `element.closest('[dir]')`. */
   locale: string;
+  /**
+   * The current values of the fields named in PHP's `watch`, keyed by id, with the person's edits as they happen (a live
+   * preview). Read-only: `{}` when the field watches nothing. The object is new only when one of them changes.
+   */
+  values: Readonly<Record<string, JsonValue>>;
 }
 
 export interface CustomFieldMountHandle {
@@ -64,7 +69,7 @@ export const customDefinition = (url: string): CustomFieldDefinition | null => r
 export function collectCustomModules(config: Pick<FyldoConfig, 'pages' | 'forms'>): string[] {
   const urls = new Set<string>();
   const visit = (field: FieldDef): void => {
-    if (field.type === 'custom') urls.add(field.module);
+    if (field.type === 'custom' && field.module !== '') urls.add(field.module);
     if (field.type === 'group') field.fields.forEach(visit);
   };
   const forms = [...config.pages.filter(isSettingsPage), ...(config.forms ?? [])];

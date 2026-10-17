@@ -8,6 +8,7 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Assets\Assets;
 use Fyldo\V1\Assets\ClientConfig;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Schema\ConfigException;
@@ -106,7 +107,41 @@ final class CustomPageTest extends TestCase {
 			'props with an object' => array( array( 'props' => array( 'when' => new \DateTime() ) ), '`props` must be an array keyed by name' ),
 			'props not an array'   => array( array( 'props' => 'x' ), '`props` must be an array keyed by name' ),
 			'badge bool'           => array( array( 'badge' => true ), 'badge' ),
+			'media not a boolean'  => array( array( 'media' => 1 ), '`media` must be true (the module opens the media library) or false' ),
 		);
+	}
+
+	public function test_the_screen_loads_the_media_library_only_when_something_opens_it(): void {
+		$custom_field = static function ( bool $media ): array {
+			return array( 'id' => 'cover', 'type' => 'custom', 'label' => 'Cover', 'module' => '/cover.js', 'media' => $media );
+		};
+		$page         = static function ( array $field ): array {
+			return array(
+				'title'    => 'General',
+				'sections' => array( array( 'id' => 's', 'title' => 'S', 'fields' => array( $field ) ) ),
+			);
+		};
+		$screen       = static function ( callable $register ): bool {
+			$instance = new Instance( 'acme-shop', array( 'title' => 'Acme Shop' ) );
+			$register( $instance );
+			return Assets::needs_media( $instance );
+		};
+
+		$this->assertFalse( $screen( static fn( Instance $i ) => $i->add_page( 'books', self::custom() ) ), 'a custom page without `media`' );
+		$this->assertFalse( $screen( static fn( Instance $i ) => $i->add_page( 'general', $page( $custom_field( false ) ) ) ) );
+		$this->assertTrue( $screen( static fn( Instance $i ) => $i->add_page( 'books', self::custom( array( 'media' => true ) ) ) ) );
+		$this->assertTrue( $screen( static fn( Instance $i ) => $i->add_page( 'general', $page( $custom_field( true ) ) ) ) );
+		$this->assertTrue(
+			$screen(
+				static fn( Instance $i ) => $i->add_page(
+					'general',
+					$page( array( 'id' => 'slides', 'type' => 'group', 'label' => 'Slides', 'addable' => true, 'fields' => array( $custom_field( true ) ) ) )
+				)
+			),
+			'a custom field inside a group'
+		);
+		$this->assertTrue( $screen( static fn( Instance $i ) => $i->add_page( 'general', $page( array( 'id' => 'logo', 'type' => 'image', 'label' => 'Logo' ) ) ) ) );
+		$this->assertSame( array(), $GLOBALS['__fyldo_test_wrong'] );
 	}
 
 	public function test_custom_pages_are_kept_apart_from_the_settings_pages_in_registration_order(): void {

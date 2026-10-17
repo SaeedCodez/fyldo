@@ -11,6 +11,8 @@ export interface RuleSet {
   number?: boolean;
   /** Implied by the `color` field: the value must be `#rrggbb`. */
   color?: boolean;
+  /** Implied by the `code` field for JSON (it must parse) and CSS (no markup; the failure names its `line`). */
+  code?: { language: 'json' | 'css' };
   /** Implied by the `image` and `file` fields: the value is an attachment ID, a whole number of 0 or more (0 = nothing chosen). */
   media?: boolean;
   /** Implied by the `post`, `term` and `user` fields: the value is an ID (0 = nothing chosen), or with `multiple` a list of IDs. */
@@ -131,6 +133,18 @@ export interface TextareaFieldDef extends FieldBase {
   resize: 'vertical' | 'none';
 }
 
+/** Figma "Code Editor": code in Geist Mono, left to right, with a language label, a copy button and line numbers. */
+export interface CodeFieldDef extends FieldBase {
+  type: 'code';
+  language: CodeLanguage;
+  /** Lines shown before the code scrolls. */
+  rows: number;
+  toolbar: boolean;
+  line_numbers: boolean;
+}
+
+export type CodeLanguage = 'css' | 'html' | 'json' | 'text';
+
 export interface CheckboxFieldDef extends FieldBase {
   type: 'checkbox';
 }
@@ -231,6 +245,8 @@ export interface MediaItem {
   height: number | null;
   /** An image field's thumbnail; null for a file or an image without one. */
   thumbnail: string | null;
+  /** A video's or an audio file's length in seconds, as WordPress read it; null (or absent) for anything else or unknown. */
+  duration?: number | null;
 }
 
 /** One post, term or user as a relation field draws it (PHP: src/Support/Relations.php). */
@@ -284,7 +300,10 @@ export interface RelationFieldDef extends FieldBase {
  */
 export interface CustomFieldDef extends FieldBase {
   type: 'custom';
+  /** '' (`'module' => false` in PHP): a form's field that the page draws itself (`useForm`); Fyldo draws nothing for it. */
   module: string;
+  /** Fields of the same page whose current values the module gets as `values` (a live preview); absent = none. */
+  watch?: string[];
   /** Passed to the module as they are (translated labels, option lists…). */
   props: Record<string, JsonValue>;
 }
@@ -318,6 +337,7 @@ export type ValueFieldDef =
   | NumberFieldDef
   | PasswordFieldDef
   | TextareaFieldDef
+  | CodeFieldDef
   | ToggleFieldDef
   | CheckboxFieldDef
   | CheckboxGroupFieldDef

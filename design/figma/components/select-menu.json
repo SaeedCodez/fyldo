@@ -3114,6 +3114,9 @@
        "paddingRight": "space/12",
        "paddingBottom": "space/8"
       },
+      "propertyReferences": {
+       "visible": "Search#9:544"
+      },
       "children": [
        {
         "name": "Search icon",
@@ -4933,6 +4936,9 @@
        "paddingRight": "space/4",
        "paddingBottom": "space/4"
       },
+      "propertyReferences": {
+       "visible": "Footer#9:549"
+      },
       "children": [
        {
         "name": "Count",
@@ -5795,6 +5801,9 @@
        "paddingTop": "space/8",
        "paddingRight": "space/12",
        "paddingBottom": "space/8"
+      },
+      "propertyReferences": {
+       "visible": "Search#9:544"
       },
       "children": [
        {
@@ -7614,6 +7623,9 @@
        "paddingTop": "space/4",
        "paddingRight": "space/12",
        "paddingBottom": "space/4"
+      },
+      "propertyReferences": {
+       "visible": "Footer#9:549"
       },
       "children": [
        {

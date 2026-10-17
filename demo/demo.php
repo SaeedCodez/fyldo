@@ -366,6 +366,7 @@ final class Demo {
 					'label' => __( 'Limits', 'fyldo' ),
 					'badge' => 2,
 				),
+				'code'    => __( 'Code', 'fyldo' ),
 			),
 			'sections'    => array(
 				array(
@@ -566,6 +567,31 @@ final class Demo {
 							'min'         => 0,
 							'max'         => 100,
 							'step'        => 5,
+						),
+					),
+				),
+				array(
+					'id'          => 'custom_code',
+					'tab'         => 'code',
+					'title'       => __( 'Custom code', 'fyldo' ),
+					'description' => __( 'Code fields: line numbers, syntax colours, and a check of the language on save.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'custom_css',
+							'type'        => 'code',
+							'language'    => 'css',
+							'label'       => __( 'Custom CSS', 'fyldo' ),
+							'description' => __( 'Loaded after your theme styles.', 'fyldo' ),
+							'default'     => "/* Custom styles */\n.site-header {\n  padding: 16px;\n}",
+						),
+						array(
+							'id'          => 'structured_data',
+							'type'        => 'code',
+							'language'    => 'json',
+							'label'       => __( 'Structured data', 'fyldo' ),
+							'description' => __( 'JSON-LD added to every page. It must be valid JSON.', 'fyldo' ),
+							'rows'        => 5,
+							'default'     => "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Organization\"\n}",
 						),
 					),
 				),
@@ -1002,6 +1028,28 @@ final class Demo {
 									'day'   => __( 'New Year’s Eve', 'fyldo' ),
 									'hours' => '10:00-14:00',
 								),
+							),
+						),
+					),
+				),
+				array(
+					'id'          => 'preview',
+					'title'       => __( 'Preview', 'fyldo' ),
+					'description' => __( 'A custom field that watches the fields above: it changes as you edit them and saves nothing of its own.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'hours_preview',
+							'type'        => 'custom',
+							'label'       => __( 'On your site', 'fyldo' ),
+							'description' => __( 'How visitors will read your hours.', 'fyldo' ),
+							'layout'      => 'stacked',
+							'module'      => plugins_url( 'demo/custom/hours-preview.js', self::$main_file ),
+							'style'       => plugins_url( 'demo/custom/hours-preview.css', self::$main_file ),
+							'watch'       => array( 'working_hours', 'special_days' ),
+							'props'       => array(
+								'title'   => __( 'Opening hours', 'fyldo' ),
+								'regular' => __( 'Every day', 'fyldo' ),
+								'none'    => __( 'Not set', 'fyldo' ),
 							),
 						),
 					),

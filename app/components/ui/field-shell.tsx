@@ -1,5 +1,5 @@
 import { Field } from '@base-ui/react/field';
-import type { ReactElement, ReactNode } from 'react';
+import { createContext, type ReactElement, type ReactNode } from 'react';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 
@@ -18,6 +18,13 @@ export interface FieldShellProps {
   className?: string;
   children: ReactNode;
 }
+
+/**
+ * True inside a Field.Root Fyldo draws (a Setting Row, a Field Shell). A control that adds a line of its own (the Date
+ * Field's Equivalent) makes it one of the field's descriptions there, and links it itself where it stands alone (a
+ * custom page's toolbar).
+ */
+export const InFieldRoot = createContext(false);
 
 /** Error row: 16px `info-circle` + Copy/13 in `status/error/text`. */
 export function FieldError({ children, className }: { children: ReactNode; className?: string }): ReactElement {
@@ -44,7 +51,7 @@ export function FieldShell({ label, hideLabel, description, error, footer, disab
       >
         {label}
       </Field.Label>
-      {children}
+      <InFieldRoot.Provider value>{children}</InFieldRoot.Provider>
       {footer !== undefined ? (
         footer
       ) : error ? (

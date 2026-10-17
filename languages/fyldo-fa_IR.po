@@ -891,6 +891,24 @@ msgstr "در یک روز عادی چه ساعتی باز می‌کنید و چه
 msgid "Special days"
 msgstr "روزهای خاص"
 
+msgid "Preview"
+msgstr "پیش‌نمایش"
+
+msgid "A custom field that watches the fields above: it changes as you edit them and saves nothing of its own."
+msgstr "یک فیلد سفارشی که فیلدهای بالا را دنبال می‌کند: با ویرایش آن‌ها تغییر می‌کند و خودش چیزی ذخیره نمی‌کند."
+
+msgid "On your site"
+msgstr "در سایت شما"
+
+msgid "How visitors will read your hours."
+msgstr "بازدیدکننده‌ها ساعت‌های کاری شما را این‌طور می‌بینند."
+
+msgid "Every day"
+msgstr "هر روز"
+
+msgid "Not set"
+msgstr "تعیین نشده"
+
 msgid "The same custom field inside a group."
 msgstr "همان فیلد سفارشی، درون یک گروه."
 
@@ -1767,3 +1785,45 @@ msgstr "بازدیدها"
 
 msgid "all time"
 msgstr "از ابتدا تا امروز"
+
+msgid "Code"
+msgstr "کد"
+
+msgid "Custom code"
+msgstr "کد سفارشی"
+
+msgid "Code fields: line numbers, syntax colours, and a check of the language on save."
+msgstr "فیلدهای کد: شماره‌ی خط، رنگ‌بندی نحو، و بررسی زبان هنگام ذخیره."
+
+msgid "Custom CSS"
+msgstr "CSS سفارشی"
+
+msgid "Loaded after your theme styles."
+msgstr "بعد از استایل‌های قالب بارگذاری می‌شود."
+
+msgid "Structured data"
+msgstr "داده‌ی ساختاریافته"
+
+msgid "JSON-LD added to every page. It must be valid JSON."
+msgstr "JSON-LD که به همه‌ی صفحه‌ها اضافه می‌شود. باید JSON معتبر باشد."
+
+msgid "Text"
+msgstr "متن"
+
+msgid "Copied"
+msgstr "کپی شد"
+
+msgid "Copy code"
+msgstr "کپی کد"
+
+msgid "Tab inserts two spaces. To leave the editor, press Escape, then Tab."
+msgstr "کلید Tab دو فاصله درج می‌کند. برای خروج از ویرایشگر، اول Escape و بعد Tab را بزنید."
+
+msgid "Line %1$s: %2$s"
+msgstr "خط %1$s: %2$s"
+
+msgid "Enter valid JSON."
+msgstr "یک JSON معتبر وارد کنید."
+
+msgid "Markup is not allowed in CSS."
+msgstr "در CSS نمی‌توان تگ HTML نوشت."

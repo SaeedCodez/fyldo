@@ -26,6 +26,7 @@ final class FieldFactory {
 			PasswordField::class,
 			NoticeField::class,
 			TextareaField::class,
+			CodeField::class,
 			ToggleField::class,
 			CheckboxField::class,
 			CheckboxGroupField::class,

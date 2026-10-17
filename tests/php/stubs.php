@@ -116,6 +116,20 @@ if ( ! function_exists( 'sanitize_textarea_field' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_check_invalid_utf8' ) ) {
+	function wp_check_invalid_utf8( $text ) {
+		return 1 === preg_match( '//u', (string) $text ) ? (string) $text : '';
+	}
+}
+
+if ( ! function_exists( 'wp_kses_post' ) ) {
+	// Enough of kses for the tests: scripts and event handlers go, ordinary markup stays.
+	function wp_kses_post( $html ) {
+		$html = preg_replace( '#<script\b[^>]*>.*?</script>#is', '', (string) $html );
+		return preg_replace( '#\son\w+="[^"]*"#i', '', $html );
+	}
+}
+
 if ( ! function_exists( 'esc_url_raw' ) ) {
 	function esc_url_raw( $url, $protocols = null ) {
 		$url = trim( (string) $url );

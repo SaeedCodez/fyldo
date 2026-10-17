@@ -37,6 +37,7 @@ $acme->add_page( 'stories', array(
 		'text' => array( 'add' => __( 'Add story', 'acme' ) ),
 	),
 	'capability'  => 'edit_posts',                               // optional, as for any page
+	'media'       => true,                                       // optional: the module opens the media library
 ) );
 ```
 
@@ -46,6 +47,7 @@ $acme->add_page( 'stories', array(
 | `module` | **Required.** URL of an ES module, `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the first render. |
 | `style` | URL of a stylesheet, enqueued on the Fyldo screen after Fyldo's own CSS, once per URL. |
 | `props` | Plain data (text, numbers, booleans, null, arrays). Put translated strings here: the module has no text domain. |
+| `media` | `true` when the module uses `ui.MediaPicker`: the screen then loads the WordPress media library (`wp.media`). Without it, the library loads only when a settings page or form has an `image` or `file` field. |
 | `title`, `description`, `icon`, `group`, `badge`, `capability` | As for a settings page. The page shows in the navigation like any other. |
 
 A custom page has no sections, tabs, option or values. `sections`, `tabs`, `save` and `option_name` are errors.
@@ -82,8 +84,9 @@ breaking the screen.
 |---|---|
 | `version` | `1`. Within v1 members are only added, never removed or changed. |
 | `React` | Fyldo's React 19. |
-| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, and for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`. |
+| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `CodeEditor`, `ChoiceCards`, `GroupItem` and `GroupList` ([below](#field-controls)). |
 | `Form` | A Fyldo form for one record (below). |
+| `useForm` | The same form for a page that draws the fields itself ([below](#drawing-the-fields-yourself-useform)). |
 
 Custom fields get the same object.
 
@@ -181,6 +184,103 @@ nothing moves when the values arrive; when the record cannot be loaded it says s
 no record says the item doesn't exist. It registers its unsaved edits with the guard by itself. Changing `record` from
 `'new'` to the key `onSaved` just gave does not reload the form, as long as the `Form` stays at the same place in the
 tree (a remount reloads). `Form` is a React component: use it from a `Component` page, not from `mount`.
+
+### Drawing the fields yourself: `useForm`
+
+`Form` draws Fyldo's fields from the schema. When the editor needs more than that (fields that depend on each other, a
+list the page manages itself, a live preview beside the fields), let the page draw the fields and keep Fyldo's form:
+`useForm` is the same engine as `Form` (loading, the checks, saving as a whole, 422 and 409, the unsaved-changes guard,
+the Save Bar), without the drawing. Nothing about saving is written twice.
+
+```js
+function StoryEditor({ record, navigate }) {
+  const form = useForm({ form: 'story', record, onSaved: (key) => record === 'new' && navigate([key], { replace: true }) });
+  const slides = form.values.slides;
+
+  return h(form.Frame, null,
+    h(ui.SectionCard, { title: 'Story' },
+      h(ui.SettingRow, { title: 'Title', error: form.error('title') }, h(ui.Input, { size: 'md', ...form.field('title') })),
+      h(ui.SettingRow, { title: 'Pinned', layout: 'inline' }, h(ui.Toggle, form.field('pinned'))),
+      form.values.ends === 'on_date'           // a field that depends on another: an ordinary `if`
+        ? h(ui.SettingRow, { title: 'Ends on', error: form.error('ends_at') }, h(ui.DatePicker, { size: 'md', ...form.field('ends_at') }))
+        : null),
+    h(Slides, {                               // the page's own list: one `custom` value
+      slides,
+      errorsOf: (i) => form.errorCount(`slides.${i}`),
+      onChange: (next) => form.set('slides', next),
+    }),
+    h(Preview, { story: form.values }),       // reads the edits as they happen
+  );
+}
+```
+
+| | |
+|---|---|
+| `useForm({ form, record, onSaved })` | As `Form`'s props. One form per component: for another form, render another component (or give it a `key`). A React hook: use it from a `Component` page. |
+| `status` | `loading` (the defaults are in `values`, `Frame` makes the fields inert), `ready`, `missing` or `failed` (`Frame` says why, with Retry). |
+| `values` | Every field's current value: the record's, with the edits, and the defaults while it loads. |
+| `field(id)` | Props for the control of a field, by its type: `{ value, onValueChange, onBlur, disabled }`, `{ checked, onCheckedChange, disabled }` for `toggle` and `checkbox`, and `ui.MediaPicker`'s `{ value, media, onValueChange, onBlur, disabled }` for `image` and `file`. `onBlur` checks the field, as Fyldo's fields do. |
+| `set(id, value, { clear })` | Set a value the page manages itself. `clear`: the message keys the edit makes stale (`['slides.2.link']`); default every message of the field. |
+| `error(path)`, `errorCount(path)`, `errors` | A message, and how many there are at or under a path (`slides.2` for a slide's Group Item). Messages come from the field's `validate` rules (on blur and on save) and from the server (422). |
+| `validate(id, path)` | Check a field now (on blur of a control the page draws itself); `path` checks one message key. |
+| `save()`, `discard()`, `dirty`, `saving` | What the Save Bar does, for a button of the page's own. |
+| `invalidSaves` | Grows with every save refused for invalid values: open the items that hold errors then. `Frame` focuses the first invalid control it can find. |
+| `Frame` | Draws around the page's content: the notices (loading, missing, failed, the 409 conflict), the content 24 below the header with 24 between its children, the Save Bar, Ctrl/⌘+S. |
+
+In PHP, declare every value of the record in the form's `sections`, so the server sanitizes and checks it. A value the
+page draws itself is a `custom` field with `'module' => false` (only in a form; a settings page needs a module). Its
+`sanitize_cb` and `validate_cb` are yours, and `validate_cb` may answer with messages by path inside the value, which
+the page shows under the right control:
+
+```php
+array(
+	'id'          => 'slides',
+	'type'        => 'custom',
+	'label'       => __( 'Slides', 'acme' ),
+	'module'      => false,               // the page draws it (useForm)
+	'default'     => array(),
+	'sanitize_cb' => 'acme_slides_sanitize',
+	'validate_cb' => function ( $slides ) {
+		$errors = array();
+		foreach ( $slides as $i => $slide ) {
+			if ( '' !== $slide['link'] && ! wp_http_validate_url( $slide['link'] ) ) {
+				$errors[ $i . '.link' ] = __( 'Enter a full URL.', 'acme' ); // shown under slides.<i>.link
+			}
+		}
+		return $errors;                     // array() = valid; '' => '…' is a message about the whole value
+	},
+),
+```
+
+A value with messages inside it is still loaded as stored (the person sees them when they save); only a message about
+the whole value makes a stored value fall back to its default. Checks across fields (an end date only when "ends on a
+date" is chosen) go in the form's `fyldo/{slug}/form/{id}/validate` filter.
+
+## Field controls
+
+The controls Fyldo's `color`, `date`, `time`, `datetime`, the range fields and `image` / `file` draw, and the Group Item
+a `group` draws, for a page that keeps its record in its own state (an editor whose fields depend on each other, with a
+live preview). They are the same components, so they look and behave exactly like Fyldo's fields.
+
+Put each control in a `ui.SettingRow` (inside a `ui.SectionCard`), as Fyldo does: the row's `title` names it, its
+`description` and `error` describe it. On its own (a filter in a toolbar), give it an `aria-label`. Every control writes
+in the screen's language (Persian numerals and month names on a Persian screen) unless you pass `locale`.
+
+| Component | Value | Props |
+|---|---|---|
+| `ColorPicker` | `#rrggbb` (lower case), `''` for none | `value`, `onValueChange`, `presets` (hex list, or `false`), `placeholder`, `size` (`sm`, `md`, `lg`; `md` in a Setting Row), `disabled`, `onBlur` |
+| `DatePicker` | `Y-m-d`; with `kind: 'datetime'`, `Y-m-d H:i:s` in UTC, shown in the site's time | `value`, `onValueChange`, `kind`, `calendar` (`auto`, `gregorian`, `jalali`), `min`, `max` (a value, or `today` / `now`), `step` (minutes), `placeholder`, `size`, `disabled`, `onBlur` |
+| `TimePicker` | `H:i` (24-hour) | `value`, `onValueChange`, `step`, `placeholder`, `size`, `disabled`, `onBlur` |
+| `DateRangePicker` | `{ start, end }`, each as above | `value`, `onValueChange`, `kind` (`date`, `time`, `datetime`), `calendar`, `min`, `max`, `step`, `placeholder`, `startPlaceholder`, `endPlaceholder`, `size`, `disabled`, `error` (shown under it), `invalid` (the end drawn red: `start` or `end`), `onBlur`. In a Setting Row, pass the row `group`, `ownError` and `range`. |
+| `MediaPicker` | The attachment ID, `0` for none | `kind` (`image` or `file`), `label` (the media library's title), `value`, `onValueChange(id, item)` (`item` describes the attachment; `0` and `null` on Remove), `onError(message)` (the chosen file is the wrong type or too large: show it as the row's `error`; `item.duration` is a video's or an audio file's length in seconds, `null` when unknown), `mimes` (e.g. `['video/mp4', 'video/webm']`), `maxSize` (bytes), `disabled`, `onBlur`. It looks the attachment up by its ID, so keeping the ID is enough. Set `'media' => true` on the page (or the custom field) so the media library is loaded. In a Setting Row, pass the row `group` and `wide`. |
+| `CodeEditor` | The code, `''` for none | `value`, `onValueChange`, `language` (`css`, `html`, `json`, `text`), `rows` (lines shown, default 7), `toolbar`, `lineNumbers`, `invalidLines` (lines whose number and values turn red, from 1), `disabled`, `onBlur`. Tab indents; Escape, then Tab, leaves it. In a Setting Row, pass the row `full`. |
+| `GroupItem` | | `title`, `summary` (a line under it), `preview` (an Iconsax name for the tile, `''` for an empty one), `open`, `onOpenChange`, `status` (labels after the title that say what holds for the item without opening it: `[{ label: 'Scheduled', tone: 'blue', icon: 'clock' }]`, tones as for `Badge`; usually one), `inactive` (the item is kept but not in effect: its preview, title and summary fade; it stays editable; add an "Inactive" `status` too, since fading says nothing to a screen reader), `errorCount` (a red border and "2 errors" while it is invalid), `actions` (your `ui.IconButton`s), `children` (the item's fields, drawn while open). For a list of them use `GroupList`, which draws Group Items for you. Figma: Group Item's `Status` badge and `State=Inactive`. |
+| `GroupList` | Your items, in order (any values) | Figma "Group" without a schema: the list the `group` field draws, for items the page keeps itself (slides, sections). `items`, `onChange(items)` (after a move, an add, a duplicate, a removal or its Undo, or an item's edit), `title(item, index)` (empty: "Item 2"), `summary`, `preview`, `status`, `inactive`, `errorCount` (each `(item, index) => …`, as on Group Item), `children(item, index, update)` (the open item's fields; `update(next)` replaces it), `sortable` (a drag handle: pointer, or Space, the arrows, Space, Escape; every step announced), `addable` with `create()` (Add at the end, Duplicate below, Remove with Undo), `copy`, `min`, `max` (with a count next to Add), `addLabel`, `disabled`, `reveal` (grows on a refused save: the first item with errors opens, e.g. `form.invalidSaves`), `locale`. In a Setting Row pass the row `group` and `full`; on its own give it an `aria-label`. |
+| `ChoiceCards` | The chosen option's `value` | `options` (`{ value, label, description?, image?, disabled? }`), `content` (`image_text`, `image`, `text`), `columns` (2, 3, 4), `value`, `onValueChange`, `disabled`, `onBlur`. A radio group: the arrow keys move the choice. In a Setting Row pass the row `group` and `cards`. |
+
+`onValueChange` gives the new value, `onBlur` says the person has left the control (the moment Fyldo's fields validate).
+The values are the formats Fyldo's own fields store, so PHP reads them the same way (`Support\Dates::to_site()` for a
+datetime).
 
 ## Components for list and dashboard pages
 

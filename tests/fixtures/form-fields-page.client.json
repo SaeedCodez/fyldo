@@ -656,6 +656,7 @@
                     "layout": "field",
                     "validate": {},
                     "module": "https://example.com/wp-content/plugins/fyldo/working-hours.js",
+                    "watch": [],
                     "props": {
                         "times": [
                             "08:00",

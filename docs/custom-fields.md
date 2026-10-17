@@ -31,10 +31,12 @@ array(
 
 | Key | |
 |---|---|
-| `module` | **Required.** URL of an ES module, either `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the page first renders, so nothing pops in. |
+| `module` | **Required.** URL of an ES module, either `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the page first renders, so nothing pops in. In a form whose page draws its own fields (`useForm`), `false`: Fyldo keeps and checks the value and draws nothing ([custom-pages.md](custom-pages.md#drawing-the-fields-yourself-useform)). |
 | `style` | URL of a stylesheet. It is enqueued on the settings screen, after Fyldo's own CSS, once per URL. |
 | `props` | An array keyed by name. It may hold only text, numbers, booleans, null and arrays, and it reaches the module unchanged. Put translated labels here, because the module has no text domain. |
 | `default` | Any JSON value. Without one the value is `null`. |
+| `media` | `true` when the module uses `ui.MediaPicker`: the screen then loads the WordPress media library. |
+| `watch` | Ids of other fields of the same page (or form) whose current values the module gets as `values`, as the person edits them: a live preview of the page's settings ([below](#a-live-preview-watch)). Not a password field, not a group's sub-field, not the field itself. |
 
 Every common key works as usual: `layout` (default `field`), `disabled`, `validate`, `validate_cb`, `sanitize_cb`,
 `default_before`, `icon`, `badge`.
@@ -43,6 +45,9 @@ Every common key works as usual: `layout` (default `field`), `disabled`, `valida
 Fyldo cleans it the same way at every level: tags are stripped and line breaks kept (`sanitize_textarea_field`) in every
 string and in every key. Anything else becomes `null`. Your `sanitize_cb` then receives that cleaned value. Your
 `validate_cb` receives the sanitized value and returns `true`, `false` or a message; a message is shown under the field.
+For a value with parts (a list of items), it may return messages by path inside the value instead
+(`array( '2.link' => '…' )`, keyed `<field>.2.link`); a page that draws the value itself (`useForm`) shows each one
+under its control, and a stored value with such messages is kept as it is.
 
 ## JavaScript
 
@@ -77,14 +82,14 @@ export default function workingHours({ React, ui }) {
 |---|---|
 | `version` | `1`. Within v1, members are only ever added, never removed. Custom pages get the same object, with `Form` too. |
 | `React` | Fyldo's own React 19. Use it for hooks and `createElement`. **Do not bundle React yourself**: a second copy breaks hooks. |
-| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`, and since custom pages every other public one (`Badge`, `MultiSelect`, `RadioGroup`, `SegmentedControl`, `Tag`, `Tooltip`… — the full list is in [custom-pages.md](custom-pages.md)). Their props are the same as in `app/components/ui/*` and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
+| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`, and since custom pages every other public one (`Badge`, `MultiSelect`, `RadioGroup`, `SegmentedControl`, `Tag`, `Tooltip`, and the field controls `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `GroupItem`… — the full list and the controls' props are in [custom-pages.md](custom-pages.md#field-controls)). Their props are the same as in `app/components/ui/*` and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
 
 ### The definition (return value)
 
 | | |
 |---|---|
 | `Component` | A React component, rendered with Fyldo's React. |
-| `mount(element, props)` | Plain DOM, or any framework that brings its own runtime (Vue, Svelte, …). Fyldo calls it once with an empty `<div>`. Return `{ update(props), destroy() }`: `update` runs after every change of value, disabled or invalid, and `destroy` runs when the field leaves the screen (another page or tab). Used when there is no `Component`. |
+| `mount(element, props)` | Plain DOM, or any framework that brings its own runtime (Vue, Svelte, …). Fyldo calls it once with an empty `<div>`. Return `{ update(props), destroy() }`: `update` runs after every change of value, disabled, invalid or a watched value, and `destroy` runs when the field leaves the screen (another page or tab). Used when there is no `Component`. |
 | `validate(value, props)` | Optional. It runs on blur and on save, after the `validate` rules. Return a message, or `null` when the value is valid. This is instant feedback only; the server still decides. |
 
 You can also export the definition object itself, without the function, if you don't need the API (a `mount`-only field).
@@ -102,6 +107,32 @@ You can also export the definition object itself, without the function, if you d
 | `props` | The `props` from PHP. |
 | `field` | `{ id, label, description }`. |
 | `locale` | The page's locale, for example `fa_IR`. Format numbers with `Intl.NumberFormat(locale.replace('_', '-'))`. For the direction, read `element.closest('[dir]')`. |
+| `values` | The current values of the fields named in `watch`, keyed by id: the stored ones, with the person's unsaved edits, and a field's default when nothing is stored. Read-only, and `{}` without `watch`. It is a new object only when one of them changes. |
+
+### A live preview: `watch`
+
+A field that shows the page's other settings as they are being edited (a preview card of a story bar, a sign with the
+opening hours) names them in `watch` and draws from `values`:
+
+```php
+array(
+	'id'     => 'preview',
+	'type'   => 'custom',
+	'label'  => __( 'Preview', 'acme' ),
+	'layout' => 'stacked',
+	'module' => plugins_url( 'fields/preview.js', __FILE__ ),
+	'watch'  => array( 'brand_color', 'ring_style', 'theme' ),
+)
+```
+
+```js
+export default ({ React }) => ({
+  Component: ({ values, labelledBy }) =>
+    React.createElement('div', { role: 'group', 'aria-labelledby': labelledBy, style: { color: values.brand_color } }, '…'),
+});
+```
+
+A field that only shows never calls `onChange`: its own value stays its default (`null`). The demo's "Opening hours" page has one (`demo/custom/hours-preview.js`).
 
 ### Writing JSX
 

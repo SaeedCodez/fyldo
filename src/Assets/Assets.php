@@ -63,7 +63,7 @@ final class Assets {
 		}
 
 		// The native media modal (wp.media) for the `image` and `file` fields: only on a screen that has one.
-		if ( self::has_media_field( $instance ) && function_exists( 'wp_enqueue_media' ) ) {
+		if ( self::needs_media( $instance ) && function_exists( 'wp_enqueue_media' ) ) {
 			wp_enqueue_media();
 		}
 
@@ -84,12 +84,26 @@ final class Assets {
 		wp_enqueue_script( $handle );
 	}
 
-	/** Whether any settings page or form of the instance has an `image` or `file` field. */
-	private static function has_media_field( Instance $instance ): bool {
+	/**
+	 * Whether the screen opens the media library: a settings page or form has an `image` or `file` field, or a custom
+	 * page or custom field (a group's too) says its module does (`'media' => true`).
+	 */
+	public static function needs_media( Instance $instance ): bool {
+		foreach ( $instance->custom_pages() as $custom ) {
+			if ( $custom->media() ) {
+				return true;
+			}
+		}
 		foreach ( self::schemas( $instance ) as $page ) {
 			foreach ( $page->fields() as $field ) {
 				if ( $field instanceof AbstractMediaField ) {
 					return true;
+				}
+				$fields = $field instanceof GroupField ? array_values( $field->sub_fields() ) : array( $field );
+				foreach ( $fields as $one ) {
+					if ( $one instanceof CustomField && $one->media() ) {
+						return true;
+					}
 				}
 			}
 		}
