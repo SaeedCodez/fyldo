@@ -78,6 +78,7 @@ import { Icon } from '../../../app/icons/Icon';
 import { Button, type ButtonSize, type ButtonVariant } from '../../../app/components/ui/button';
 import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
+import { CodeEditor } from '../../../app/components/ui/code-editor';
 import { GroupField } from '../../../app/components/ui/group-field';
 import { GroupItem, type GroupItemStatus } from '../../../app/components/ui/group-item';
 import { RadioGroup } from '../../../app/components/ui/radio';
@@ -95,7 +96,7 @@ import { parseTime, setClock, setDateSettings, type CalendarKind } from '../../.
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
 import { MediaField } from '../../../app/components/ui/media-field';
 import type { MediaKind } from '../../../app/lib/wp-media';
-import type { FieldValue, GroupFieldDef, RelationItem } from '../../../app/types';
+import type { CodeLanguage, FieldValue, GroupFieldDef, RelationItem } from '../../../app/types';
 import IconPickerModal from '../../../app/components/ui/icon-picker-modal';
 import { SliderField } from '../../../app/components/ui/slider-field';
 import { Textarea, TextareaFooter } from '../../../app/components/ui/textarea';
@@ -370,6 +371,25 @@ function GroupDemo() {
   return (
     <div style={{ width: 894 }}>
       <FieldRenderer field={field} value={value} divider onChange={(_, next) => setValue(next)} onBlur={() => undefined} locale={locale} />
+    </div>
+  );
+}
+
+/** Code Editor with its label and helper (Figma "Code Editor", 520 wide): `code`, `language`, `invalid` (lines, comma-separated). */
+function CodeEditorDemo() {
+  const [value, setValue] = useState(param('code'));
+  const error = state === 'error' ? param('error') : undefined;
+  return (
+    <div style={{ width: 520 }}>
+      <FieldShell label={param('label')} description={param('helper') || undefined} error={error} disabled={state === 'disabled'}>
+        <CodeEditor
+          value={value}
+          onValueChange={setValue}
+          language={param('language', 'css') as CodeLanguage}
+          invalidLines={param('invalid').split(',').filter(Boolean).map(Number)}
+          disabled={state === 'disabled'}
+        />
+      </FieldShell>
     </div>
   );
 }
@@ -1035,6 +1055,8 @@ function Variant() {
       return <GroupDemo />;
     case 'group-item':
       return <GroupItemDemo />;
+    case 'code-editor':
+      return <CodeEditorDemo />;
     case 'upload-image':
       return <MediaDemo kind="image" />;
     case 'select-file':

@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import type { FocusEvent } from 'react';
-import { __, formatNumber } from '../../i18n';
+import { __, formatNumber, sprintf } from '../../i18n';
 import { mediaItem, type FieldDef, type FieldValue, type GroupItemValue, type MediaItem, type MediaMap, type RelationItem } from '../../types';
 import { cn } from '../../lib/cn';
 import { sanitizeMediaId } from '../../lib/wp-media';
@@ -18,6 +18,7 @@ import { Notice } from '../ui/notice';
 import { NumberInput } from '../ui/number-input';
 import { PasswordInput } from '../ui/password-input';
 import { ChoiceCards } from '../ui/choice-card';
+import { CodeEditor } from '../ui/code-editor';
 import { RadioGroup } from '../ui/radio';
 import { RelationSelect } from '../ui/relation-select';
 import { SegmentedControl } from '../ui/segmented-control';
@@ -333,6 +334,32 @@ export function FieldRenderer({
           />
         </SettingRow>
       );
+
+    case 'code': {
+      // A message at a line (`<field>.<line>`, CSS markup or the developer's validate_cb) reads "Line 3: …" and turns
+      // the line red; a message about the whole code reads as it is.
+      const atLines = Object.entries(errors ?? {})
+        .map(([key, message]) => ({ line: key.startsWith(`${field.id}.`) ? Number(key.slice(field.id.length + 1)) : NaN, message }))
+        .filter((entry) => Number.isInteger(entry.line) && entry.line > 0)
+        .sort((a, b) => a.line - b.line);
+      const first = atLines[0];
+      const message = error ?? (first ? sprintf(__('Line %1$s: %2$s', 'fyldo'), formatNumber(first.line, locale), first.message) : undefined);
+      return (
+        <SettingRow {...common} error={message} full>
+          <CodeEditor
+            value={typeof value === 'string' ? value : ''}
+            language={field.language}
+            rows={field.rows}
+            toolbar={field.toolbar}
+            lineNumbers={field.line_numbers}
+            invalidLines={atLines.map((entry) => entry.line)}
+            disabled={disabled}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
+        </SettingRow>
+      );
+    }
 
     case 'textarea': {
       const text = typeof value === 'string' ? value : '';

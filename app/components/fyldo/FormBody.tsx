@@ -139,9 +139,15 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
       return; // focus once the tab is shown (this effect runs again when `tab` changes)
     }
     focusAfterErrors.current = false;
-    container.current
-      ?.querySelector<HTMLElement>(`[data-field-id="${firstInvalid.key}"] :is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])`)
-      ?.focus();
+    // A group's sub-field has a row of its own (`<group>.<index>.<sub-field>`); a message inside a value (a code field's
+    // line, `<field>.<line>`) belongs to the field's row.
+    // In the row, the control marked invalid comes first (a code field's textarea, not its toolbar's Copy button).
+    const controls = ':is(input, textarea, button, [role="switch"], [role="combobox"], [role="checkbox"], [role="radio"])';
+    const at = (key: string): HTMLElement | null | undefined => {
+      const row = container.current?.querySelector<HTMLElement>(`[data-field-id="${key}"]`);
+      return row?.querySelector<HTMLElement>(`${controls}[aria-invalid="true"]`) ?? row?.querySelector<HTMLElement>(controls);
+    };
+    (at(firstInvalid.key as string) ?? at(firstInvalid.field.id))?.focus();
   }, [state.errors, firstInvalid, tab, onTabChange, container]);
 
   const submit = (scope: string): void => {

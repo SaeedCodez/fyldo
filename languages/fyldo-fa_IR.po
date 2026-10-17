@@ -1785,3 +1785,45 @@ msgstr "بازدیدها"
 
 msgid "all time"
 msgstr "از ابتدا تا امروز"
+
+msgid "Code"
+msgstr "کد"
+
+msgid "Custom code"
+msgstr "کد سفارشی"
+
+msgid "Code fields: line numbers, syntax colours, and a check of the language on save."
+msgstr "فیلدهای کد: شماره‌ی خط، رنگ‌بندی نحو، و بررسی زبان هنگام ذخیره."
+
+msgid "Custom CSS"
+msgstr "CSS سفارشی"
+
+msgid "Loaded after your theme styles."
+msgstr "بعد از استایل‌های قالب بارگذاری می‌شود."
+
+msgid "Structured data"
+msgstr "داده‌ی ساختاریافته"
+
+msgid "JSON-LD added to every page. It must be valid JSON."
+msgstr "JSON-LD که به همه‌ی صفحه‌ها اضافه می‌شود. باید JSON معتبر باشد."
+
+msgid "Text"
+msgstr "متن"
+
+msgid "Copied"
+msgstr "کپی شد"
+
+msgid "Copy code"
+msgstr "کپی کد"
+
+msgid "Tab inserts two spaces. To leave the editor, press Escape, then Tab."
+msgstr "کلید Tab دو فاصله درج می‌کند. برای خروج از ویرایشگر، اول Escape و بعد Tab را بزنید."
+
+msgid "Line %1$s: %2$s"
+msgstr "خط %1$s: %2$s"
+
+msgid "Enter valid JSON."
+msgstr "یک JSON معتبر وارد کنید."
+
+msgid "Markup is not allowed in CSS."
+msgstr "در CSS نمی‌توان تگ HTML نوشت."

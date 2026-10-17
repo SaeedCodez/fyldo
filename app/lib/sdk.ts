@@ -13,6 +13,7 @@ import { Tabs } from '../components/fyldo/Tabs';
 import { Badge } from '../components/ui/badge';
 import { Button, ButtonLink } from '../components/ui/button';
 import { Checkbox } from '../components/ui/checkbox';
+import { CodeEditor } from '../components/ui/code-editor';
 import { ColorPicker } from '../components/ui/color-picker';
 import { DatePicker, TimePicker, type DatePickerProps, type TimePickerProps } from '../components/ui/date-picker';
 import { DateRangePicker } from '../components/ui/date-range-field';
@@ -55,6 +56,7 @@ export const sdk = {
     Button,
     ButtonLink,
     Checkbox,
+    CodeEditor,
     ColorPicker,
     DatePicker: PublicDatePicker,
     DateRangePicker,

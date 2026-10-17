@@ -624,6 +624,46 @@ for (const locale of ['EN', 'FA'] as const) {
   });
 }
 
+// ── Code Editor ───────────────────────────────────────────────────────────────────────────────────────
+// Default: label → control (toolbar with the language and Copy, line numbers, the CSS sample in its syntax colours) →
+// helper. EN compares the whole component; FA the control, which stays left to right in Persian (its code is Latin).
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Code Editor ${locale} · default`, async ({ browser }, testInfo) => {
+    const v = variant('code-editor', { Locale: locale, State: 'Default' });
+    const root = v.node;
+    const control = layer(root, 'Control');
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'code-editor',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      label: layer(root, 'Label').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+      code: layer(root, 'Code').text?.characters ?? '',
+      language: (layer(root, 'Language').text?.characters ?? 'CSS').toLowerCase(),
+      names: 'copy',
+    });
+    await still(page);
+    const editor = stage.locator('[data-slot=fy-code-editor]');
+    const b = await box(editor);
+    expect([Math.round(b.width), Math.round(b.height)]).toEqual([control.width, control.height]);
+    expect(Math.round((await box(editor.locator('[data-slot=fy-code-toolbar]'))).height)).toBe(layer(root, 'Toolbar').height);
+    expect(Math.round((await box(editor.locator('[data-slot=fy-code-lines]'))).width)).toBe(layer(root, 'Line numbers').width);
+    const size = pngSize(readFileSync(pngPath('code-editor', v)));
+    const region: Rect = locale === 'FA' ? rect(control, root) : { x: 0, y: 0, width: size.width / SCALE, height: size.height / SCALE };
+    await comparePixels({
+      page,
+      testInfo,
+      reference: pngPath('code-editor', v),
+      scale: SCALE,
+      stage,
+      referenceRegion: region,
+      actualRegion: locale === 'FA' ? { x: 0, y: b.y - (await box(stage)).y, width: region.width, height: region.height } : region,
+      maxDiffRatio: 0.08,
+    });
+    await close();
+  });
+}
+
 // ── Group Item / Group ───────────────────────────────────────────────────────────────────────────────────────
 // Group Item, Collapsed: the first of two header buttons (the handle shows from two items on), with its icon tile, the
 // title, the link in Mono/12, Duplicate, Remove and the chevron. Group, Empty: the field's title and description over

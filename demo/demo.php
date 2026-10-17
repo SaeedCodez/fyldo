@@ -366,6 +366,7 @@ final class Demo {
 					'label' => __( 'Limits', 'fyldo' ),
 					'badge' => 2,
 				),
+				'code'    => __( 'Code', 'fyldo' ),
 			),
 			'sections'    => array(
 				array(
@@ -566,6 +567,31 @@ final class Demo {
 							'min'         => 0,
 							'max'         => 100,
 							'step'        => 5,
+						),
+					),
+				),
+				array(
+					'id'          => 'custom_code',
+					'tab'         => 'code',
+					'title'       => __( 'Custom code', 'fyldo' ),
+					'description' => __( 'Code fields: line numbers, syntax colours, and a check of the language on save.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'custom_css',
+							'type'        => 'code',
+							'language'    => 'css',
+							'label'       => __( 'Custom CSS', 'fyldo' ),
+							'description' => __( 'Loaded after your theme styles.', 'fyldo' ),
+							'default'     => "/* Custom styles */\n.site-header {\n  padding: 16px;\n}",
+						),
+						array(
+							'id'          => 'structured_data',
+							'type'        => 'code',
+							'language'    => 'json',
+							'label'       => __( 'Structured data', 'fyldo' ),
+							'description' => __( 'JSON-LD added to every page. It must be valid JSON.', 'fyldo' ),
+							'rows'        => 5,
+							'default'     => "{\n  \"@context\": \"https://schema.org\",\n  \"@type\": \"Organization\"\n}",
 						),
 					),
 				),

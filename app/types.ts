@@ -11,6 +11,8 @@ export interface RuleSet {
   number?: boolean;
   /** Implied by the `color` field: the value must be `#rrggbb`. */
   color?: boolean;
+  /** Implied by the `code` field for JSON (it must parse) and CSS (no markup; the failure names its `line`). */
+  code?: { language: 'json' | 'css' };
   /** Implied by the `image` and `file` fields: the value is an attachment ID, a whole number of 0 or more (0 = nothing chosen). */
   media?: boolean;
   /** Implied by the `post`, `term` and `user` fields: the value is an ID (0 = nothing chosen), or with `multiple` a list of IDs. */
@@ -130,6 +132,18 @@ export interface TextareaFieldDef extends FieldBase {
   rows: number;
   resize: 'vertical' | 'none';
 }
+
+/** Figma "Code Editor": code in Geist Mono, left to right, with a language label, a copy button and line numbers. */
+export interface CodeFieldDef extends FieldBase {
+  type: 'code';
+  language: CodeLanguage;
+  /** Lines shown before the code scrolls. */
+  rows: number;
+  toolbar: boolean;
+  line_numbers: boolean;
+}
+
+export type CodeLanguage = 'css' | 'html' | 'json' | 'text';
 
 export interface CheckboxFieldDef extends FieldBase {
   type: 'checkbox';
@@ -321,6 +335,7 @@ export type ValueFieldDef =
   | NumberFieldDef
   | PasswordFieldDef
   | TextareaFieldDef
+  | CodeFieldDef
   | ToggleFieldDef
   | CheckboxFieldDef
   | CheckboxGroupFieldDef

@@ -129,27 +129,11 @@ final class CustomField extends AbstractField {
 			return array( $this->id() => Messages::for( $failure['rule'], $failure['params'] ) );
 		}
 
-		$result = isset( $this->config['validate_cb'] ) && is_callable( $this->config['validate_cb'] ) ? call_user_func( $this->config['validate_cb'], $value ) : true;
-		if ( is_array( $result ) ) {
-			$errors = array();
-			foreach ( $result as $path => $message ) {
-				if ( is_string( $message ) && '' !== $message ) {
-					$errors[ '' === (string) $path ? $this->id() : $this->id() . '.' . $path ] = $message;
-				}
-			}
-			return $errors;
-		}
-		if ( is_string( $result ) && '' !== $result ) {
-			return array( $this->id() => $result );
-		}
-
-		return false === $result ? array( $this->id() => Messages::for( 'invalid' ) ) : array();
+		return $this->callback_errors( $value );
 	}
 
 	public function validate( $value ): ?string {
-		$errors = $this->errors( $value );
-
-		return array() === $errors ? null : (string) reset( $errors );
+		return $this->first_error( $value );
 	}
 
 	/**
@@ -160,9 +144,7 @@ final class CustomField extends AbstractField {
 	 * @return mixed
 	 */
 	public function stored_value( $raw ) {
-		$value = $this->sanitize( $raw );
-
-		return isset( $this->errors( $value )[ $this->id() ] ) ? $this->default_value() : $value;
+		return $this->stored_unless_whole_error( $raw );
 	}
 
 	protected function client_extra(): array {

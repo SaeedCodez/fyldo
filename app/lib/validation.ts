@@ -2,7 +2,7 @@
  * Client mirror of src/Validation/Rules.php. The server is authoritative; this exists for instant feedback.
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
- * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, date, time, datetime, media, relation, allowed,
+ * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, code, date, time, datetime, media, relation, allowed,
  * min, max, step. `date`, `time` and `datetime` check the format, then their own `min`, `max` and minute `step`; with `range`
  * on (the range fields) the value is a start → end pair and each end is checked, then the order.
  */
@@ -28,6 +28,21 @@ export const isEmpty = (value: unknown): boolean =>
 export const length = (value: string): number => [...value].length;
 
 const fail = (rule: Failure['rule'], params: Record<string, unknown> = {}): Failure => ({ rule, params });
+
+/** The `code` rule (src/Validation/Rules.php `code()`): JSON must parse, CSS must hold no markup (`</?\w`, WordPress's check). */
+function codeFailure(language: string, value: string): Failure | null {
+  if (language === 'json') {
+    try {
+      JSON.parse(value);
+      return null;
+    } catch {
+      return fail('code', { language });
+    }
+  }
+  if (language !== 'css') return null;
+  const markup = /<\/?\w/.exec(value);
+  return markup ? fail('code', { language, line: value.slice(0, markup.index).split('\n').length }) : null;
+}
 
 function matches(source: string, value: string): boolean {
   try {
@@ -138,6 +153,11 @@ export function check(rules: RuleSet, raw: unknown): Failure | null {
     if (rules.number) return fail('number');
     // A color field stores `#rrggbb`; anything else the server could not read stays text and lands here.
     if (rules.color && !isHexColor(value)) return fail('color');
+    // A code field: JSON that parses; CSS without markup (as WordPress checks its own Additional CSS), with the line.
+    if (rules.code) {
+      const failure = codeFailure(rules.code.language, value);
+      if (failure) return failure;
+    }
   }
 
   for (const kind of MOMENTS) {
@@ -192,6 +212,8 @@ export function messageFor(failure: Failure): string {
       return __('Enter a number.', 'fyldo');
     case 'color':
       return __('Enter a valid color, like #rrggbb.', 'fyldo');
+    case 'code':
+      return failure.params.language === 'json' ? __('Enter valid JSON.', 'fyldo') : __('Markup is not allowed in CSS.', 'fyldo');
     case 'date':
       return __('Enter a valid date.', 'fyldo');
     case 'time':
