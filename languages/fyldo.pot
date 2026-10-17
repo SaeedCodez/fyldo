@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-17T08:38:54+00:00\n"
+"POT-Creation-Date: 2026-10-17T09:00:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -639,1011 +639,805 @@ msgstr ""
 msgid "%1$s · %2$s"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1001
 #: demo/demo.php:1001
 msgid "Categories, tags and people"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1002
 #: demo/demo.php:1002
 msgid "The same field for terms of any taxonomy and for users."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1007
 #: demo/demo.php:1007
 msgid "Featured category"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1008
 #: demo/demo.php:1008
 msgid "Select a category…"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1014
 #: demo/demo.php:1014
 msgid "Tags to highlight"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1015
 #: demo/demo.php:1015
 msgid "Select tags…"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1022
 #: demo/demo.php:1022
 msgid "Support contact"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1023
 #: demo/demo.php:1023
 msgid "Only administrators and editors are listed."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1024
 #: demo/demo.php:1024
 msgid "Select a user…"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1032
 #: demo/demo.php:1032
 msgid "In a group"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1033
 #: demo/demo.php:1033
 msgid ""
 "A post field works inside a group too, and can name its items: pick a page "
 "and the item takes its title."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1038
 #: demo/demo.php:1038
 msgid "Promotions"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:104
 #: demo/demo.php:104
 msgid ""
 "This demo is only added when Fyldo is installed as a plugin. Return false "
 "from the fyldo/fyldo-demo/enabled filter to hide it."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1043
 #: demo/demo.php:1043
 msgid "Add promotion"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1048
 #: demo/demo.php:1048
 msgid "Links to"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1056
 #: demo/demo.php:1056
 msgid "Button text"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1078
 #: demo/demo.php:1078
 msgid "Choose both times."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1079
 #: demo/demo.php:1079
 msgid "The closing time must be after the opening time."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1091
 #: demo/demo.php:1091
 msgid "Opens"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:1092
 #: demo/demo.php:1092
 msgid "Closes"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:115
 #: demo/demo.php:115
 msgid "Overview"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:116
 #: demo/demo.php:116
 msgid "A live tour of what a settings screen built with Fyldo looks like."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:121
 #: demo/demo.php:121
 msgid "Welcome"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:127
 #: demo/demo.php:127
 msgid "Everything here is declared in PHP"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:128
 #: demo/demo.php:128
 msgid ""
 "Pages, sections and fields come from one array. Change a value, save it and "
 "reload: it is stored in a normal WordPress option."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:133
 #: demo/demo.php:133
 msgid "English and فارسی"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:134
 #: demo/demo.php:134
 msgid ""
 "The screen follows your language. Set your profile language to فارسی to see "
 "the right-to-left layout."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:140
 #: demo/demo.php:140
 msgid "Take the tour"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:141
 #: demo/demo.php:141
 msgid "Each page shows different building blocks."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:147
-#: build/fyldo/demo/demo.php:193
 #: demo/demo.php:147
 #: demo/demo.php:193
 msgid "General"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:148
 #: demo/demo.php:148
 msgid ""
 "Text, URL, email, textarea, toggle, select and radio fields with one Save "
 "Bar for the whole page."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:154
-#: build/fyldo/demo/demo.php:311
 #: demo/demo.php:154
 #: demo/demo.php:311
 msgid "Content"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:155
 #: demo/demo.php:155
 msgid "Tabs, checkbox groups, multi select and number fields, saved card by card."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:161
-#: build/fyldo/demo/demo.php:582
 #: demo/demo.php:161
 #: demo/demo.php:582
 msgid "Header"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:162
 #: demo/demo.php:162
 msgid ""
 "Groups of fields: fixed header buttons, ones you can reorder, add and "
 "remove, and a group that starts empty."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:168
-#: build/fyldo/demo/demo.php:969
 #: demo/demo.php:168
 #: demo/demo.php:969
 msgid "Links"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:169
 #: demo/demo.php:169
 msgid ""
 "Post, term and user fields: search the site’s pages, posts, categories, "
 "tags and users, and pick one or several."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:175
-#: build/fyldo/demo/demo.php:850
 #: demo/demo.php:175
 #: demo/demo.php:850
 msgid "Security"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:176
 #: demo/demo.php:176
 msgid ""
 "A write-only password, a disabled field, a server-side rule and a Danger "
 "card that resets the page."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:181
 #: demo/demo.php:181
 msgid "Custom field"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:182
 #: demo/demo.php:182
 msgid ""
 "A field Fyldo does not ship: two selects drawn by a small JavaScript module "
 "and saved as one value."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:194
 #: demo/demo.php:194
 msgid "Your site’s identity and how search engines see it."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:201
 #: demo/demo.php:201
 msgid "Site identity"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:202
 #: demo/demo.php:202
 msgid "How your site introduces itself."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:207
 #: demo/demo.php:207
 msgid "Site title"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:208
 #: demo/demo.php:208
 msgid "Shown in the browser tab and in search results."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:209
 #: demo/demo.php:209
 msgid "My WordPress site"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:218
 #: demo/demo.php:218
 msgid "Home address"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:219
 #: demo/demo.php:219
 msgid "Only https addresses are accepted."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:226
 #: demo/demo.php:226
 msgid "Contact email"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:232
 #: demo/demo.php:232
 msgid "Tagline"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:233
 #: demo/demo.php:233
 msgid "A short sentence, up to 160 characters."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:240
 #: demo/demo.php:240
 msgid "Maintenance mode"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:241
 #: demo/demo.php:241
 msgid "Show a coming-soon page to visitors. Administrators still see the site."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:248
 #: demo/demo.php:248
 msgid "Language and indexing"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:253
 #: demo/demo.php:253
 msgid "Site language"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:287
 #: demo/demo.php:287
 msgid "Search engine visibility"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:292
 #: demo/demo.php:292
 msgid "Index"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:293
 #: demo/demo.php:293
 msgid "Let search engines list this site."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:297
 #: demo/demo.php:297
 msgid "Discourage indexing"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:298
 #: demo/demo.php:298
 msgid "Ask search engines to skip this site."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:312
 #: demo/demo.php:312
 msgid "What is shown, where, and how much of it."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:317
 #: demo/demo.php:317
 msgid "Display"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:319
 #: demo/demo.php:319
 msgid "Limits"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:327
 #: demo/demo.php:327
 msgid "Where to show it"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:328
 #: demo/demo.php:328
 msgid "Each card saves on its own."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:333
 #: demo/demo.php:333
 msgid "Show on"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:334
 #: demo/demo.php:334
 msgid "All post types"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:340
-#: build/fyldo/demo/demo.php:365
 #: demo/demo.php:340
 #: demo/demo.php:365
 msgid "Posts"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:344
-#: build/fyldo/demo/demo.php:369
 #: demo/demo.php:344
 #: demo/demo.php:369
 msgid "Pages"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:348
 #: demo/demo.php:348
 msgid "Products"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:349
 #: demo/demo.php:349
 msgid "Not available in the demo."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:357
 #: demo/demo.php:357
 msgid "Include in the sitemap"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:358
 #: demo/demo.php:358
 msgid "Select content types…"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:373
 #: demo/demo.php:373
 msgid "Categories"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:377
 #: demo/demo.php:377
 msgid "Tags"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:381
 #: demo/demo.php:381
 msgid "Authors"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:390
 #: demo/demo.php:390
 msgid "Layout"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:395
 #: demo/demo.php:395
 msgid "Page layout"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:400
 #: demo/demo.php:400
 msgid "Full width"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:404
 #: demo/demo.php:404
 msgid "Boxed"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:411
 #: demo/demo.php:411
 msgid "Theme"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:412
 #: demo/demo.php:412
 msgid "Choose how the settings panel looks."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:418
 #: demo/demo.php:418
 msgid "Light"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:419
 #: demo/demo.php:419
 msgid "Bright surfaces"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:424
 #: demo/demo.php:424
 msgid "Dark"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:425
 #: demo/demo.php:425
 msgid "Low-light ready"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:430
 #: demo/demo.php:430
 msgid "System"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:431
 #: demo/demo.php:431
 msgid "Match device"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:439
 #: demo/demo.php:439
 msgid "Sort products"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:440
 #: demo/demo.php:440
 msgid "Choose how the list is grouped."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:443
 #: demo/demo.php:443
 msgid "By order"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:444
 #: demo/demo.php:444
 msgid "By product"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:445
 #: demo/demo.php:445
 msgid "Simple"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:451
 #: demo/demo.php:451
 msgid "Show publish dates"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:457
 #: demo/demo.php:457
 msgid "Accent color"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:458
 #: demo/demo.php:458
 msgid "Used for links and buttons on your settings page."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:464
 #: demo/demo.php:464
 msgid "Menu icon"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:465
 #: demo/demo.php:465
 msgid "Shown next to the menu item."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:471
 #: demo/demo.php:471
 msgid "Site logo"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:472
 #: demo/demo.php:472
 msgid "Shown in the sidebar and on the login screen."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:478
 #: demo/demo.php:478
 msgid "Brand guidelines"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:479
 #: demo/demo.php:479
 msgid "Offered as a download on the About tab."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:487
 #: demo/demo.php:487
 msgid "Amounts"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:488
 #: demo/demo.php:488
 msgid "Numbers are checked in the browser and again on the server."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:493
 #: demo/demo.php:493
 msgid "Items per page"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:494
 #: demo/demo.php:494
 msgid "Between 5 and 100, in steps of 5."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:505
 #: demo/demo.php:505
 msgid "Excerpt length"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:506
 #: demo/demo.php:506
 msgid "In words, between 10 and 200."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:516
 #: demo/demo.php:516
 msgid "Image quality"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:517
 #: demo/demo.php:517
 msgid "Higher quality creates larger files."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:536
 #: demo/demo.php:536
 msgid "Pricing"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:541
 #: demo/demo.php:541
 msgid "Docs"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:546
 #: demo/demo.php:546
 msgid "Get started"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:55
 #: demo/demo.php:55
 msgid "Open demo"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:553
 #: demo/demo.php:553
 msgid "Header buttons"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:554
 #: demo/demo.php:554
 msgid "Buttons shown in the site header, in this order."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:561
-#: build/fyldo/demo/demo.php:650
 #: demo/demo.php:561
 #: demo/demo.php:650
 msgid "Label"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:567
-#: build/fyldo/demo/demo.php:656
 #: demo/demo.php:567
 #: demo/demo.php:656
 msgid "Icon"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:573
-#: build/fyldo/demo/demo.php:663
 #: demo/demo.php:573
 #: demo/demo.php:663
 msgid "Link"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:574
 #: demo/demo.php:574
 msgid "A full URL, like https://example.com/pricing."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:583
 #: demo/demo.php:583
 msgid "Buttons and links of the site header, set up as groups of fields."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:590
 #: demo/demo.php:590
 msgid "Fixed group"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:591
 #: demo/demo.php:591
 msgid ""
 "The plugin sets the three buttons. You can change what is inside each one, "
 "but not how many there are or their order."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:598
 #: demo/demo.php:598
 msgid "Editable group"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:599
 #: demo/demo.php:599
 msgid ""
 "Reorder the buttons with their handles, add up to five, duplicate or remove "
 "them. At least one has to stay."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:609
 #: demo/demo.php:609
 msgid "Add button"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:616
 #: demo/demo.php:616
 msgid "Reorder only"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:617
 #: demo/demo.php:617
 msgid ""
 "The same three buttons in the mobile menu: you can change their order, but "
 "not add or remove any."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:623
 #: demo/demo.php:623
 msgid "Mobile menu buttons"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:624
 #: demo/demo.php:624
 msgid "Shown in this order in the mobile menu."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:632
 #: demo/demo.php:632
 msgid "Starts empty"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:633
 #: demo/demo.php:633
 msgid "A group without default items shows an empty state with the Add button."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:638
 #: demo/demo.php:638
 msgid "Social links"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:639
 #: demo/demo.php:639
 msgid "Shown as icons in the site footer."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:645
 #: demo/demo.php:645
 msgid "Add link"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:680
 #: demo/demo.php:680
 msgid "Dates and times"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:681
 #: demo/demo.php:681
 msgid ""
 "Dates show in the Jalali or the Gregorian calendar; what is saved is always "
 "Gregorian, a datetime in UTC."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:688
 #: demo/demo.php:688
 msgid "Sale"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:689
 #: demo/demo.php:689
 msgid "When the next sale starts and ends, in the site’s time zone."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:694
 #: demo/demo.php:694
 msgid "Launch date"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:695
 #: demo/demo.php:695
 msgid "Today or later."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:701
 #: demo/demo.php:701
 msgid "Sale starts"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:702
-#: build/fyldo/demo/demo.php:838
 #: demo/demo.php:702
 #: demo/demo.php:838
 msgid "In steps of 5 minutes. Saved in UTC."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:709
 #: demo/demo.php:709
 msgid "Sale ends"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:710
 #: demo/demo.php:710
 msgid "Leave empty to keep the sale running."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:716
 #: demo/demo.php:716
 msgid "Calendars"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:717
 #: demo/demo.php:717
 msgid ""
 "A field can follow the site language (with a switch) or be locked to one "
 "calendar."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:72
 #: demo/demo.php:72
 msgid "Fyldo demo"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:722
 #: demo/demo.php:722
 msgid "Birthday"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:723
 #: demo/demo.php:723
 msgid "Always in the Jalali calendar."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:729
 #: demo/demo.php:729
 msgid "Invoice date"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:730
 #: demo/demo.php:730
 msgid "Always in the Gregorian calendar."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:736
 #: demo/demo.php:736
 msgid "Next holiday"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:737
 #: demo/demo.php:737
 msgid "Follows the site language; switch the calendar in the panel."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:744
 #: demo/demo.php:744
 msgid "Times"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:745
 #: demo/demo.php:745
 msgid "Type a time (24-hour) or pick it from the hour and minute columns."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:750
 #: demo/demo.php:750
 msgid "Send the daily report at"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:751
-#: build/fyldo/demo/demo.php:821
 #: demo/demo.php:751
 #: demo/demo.php:821
 msgid "In steps of 15 minutes."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:758
 #: demo/demo.php:758
 msgid "Quiet hours start at"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:759
 #: demo/demo.php:759
 msgid "No notifications are sent after this time."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:76
 #: demo/demo.php:76
 msgid "Documentation"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:766
-#: build/fyldo/demo/demo.php:772
 #: demo/demo.php:766
 #: demo/demo.php:772
 msgid "Events"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:767
 #: demo/demo.php:767
 msgid "Date and time fields work inside a group too."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:773
 #: demo/demo.php:773
 msgid "Shown on the events page, in this order."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:777
 #: demo/demo.php:777
 msgid "Add event"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:782
 #: demo/demo.php:782
 msgid "Title"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:788
-#: build/fyldo/demo/demo.php:943
 #: demo/demo.php:788
 #: demo/demo.php:943
 msgid "Day"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:794
 #: demo/demo.php:794
 msgid "Time"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:799
 #: demo/demo.php:799
 msgid "Booking open"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:807
 #: demo/demo.php:807
 msgid "Ranges"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:808
 #: demo/demo.php:808
 msgid "Two inputs, start and end; each opens the same picker as a single field."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:813
 #: demo/demo.php:813
 msgid "Sale period"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:814
 #: demo/demo.php:814
 msgid "Both days are counted. Today or later."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:82
 #: demo/demo.php:82
 msgid "Report an issue"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:820
-#: build/fyldo/demo/demo.php:905
 #: demo/demo.php:820
 #: demo/demo.php:905
 msgid "Opening hours"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:827
 #: demo/demo.php:827
 msgid "Quiet hours"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:828
 #: demo/demo.php:828
 msgid "May cross midnight: an end before the start is the next day."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:837
 #: demo/demo.php:837
 msgid "Campaign"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:851
 #: demo/demo.php:851
 msgid "Keys, accounts and a way back to the defaults."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:858
 #: demo/demo.php:858
 msgid "Access"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:859
 #: demo/demo.php:859
 msgid "Nothing you type here leaves this site."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:864
 #: demo/demo.php:864
 msgid "API key"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:865
 #: demo/demo.php:865
 msgid "Write-only: once saved, the key is never sent back to the browser."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:872
 #: demo/demo.php:872
 msgid "Account name"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:873
 #: demo/demo.php:873
 msgid "Checked by a rule that only runs on the server. Try “admin”."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:875
 #: demo/demo.php:875
 msgid "“admin” is reserved. Choose another name."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:881
 #: demo/demo.php:881
 msgid "License key"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:883
 #: demo/demo.php:883
 msgid "Managed by your hosting provider."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:889
-#: build/fyldo/demo/demo.php:894
 #: demo/demo.php:889
 #: demo/demo.php:894
 #: app/components/fyldo/SettingsPage.tsx:179
@@ -1651,442 +1445,104 @@ msgstr ""
 msgid "Reset settings"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:890
 #: demo/demo.php:890
 msgid "Restore every option on this page to its default value."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:906
 #: demo/demo.php:906
 msgid "A custom field: its control comes from a JavaScript module, not from Fyldo."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:91
 #: demo/demo.php:91
 msgid "Settings"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:913
 #: demo/demo.php:913
 msgid "Regular hours"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:914
 #: demo/demo.php:914
 msgid ""
 "Two selects, saved as one value such as 09:00-17:00 and split again when "
 "the page loads."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:919
 #: demo/demo.php:919
 msgid "Working hours"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:92
 #: demo/demo.php:92
 msgid "Tools"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:920
 #: demo/demo.php:920
 msgid "When you open and close on a normal day."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:928
 #: demo/demo.php:928
 msgid "Special days"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:929
 #: demo/demo.php:929
 msgid "The same custom field inside a group."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:934
 #: demo/demo.php:934
 msgid "Days"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:938
 #: demo/demo.php:938
 msgid "Add day"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:949
 #: demo/demo.php:949
 msgid "Hours"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:955
 #: demo/demo.php:955
 msgid "New Year’s Eve"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:970
 #: demo/demo.php:970
 msgid "Point to the site’s own pages, posts, categories and people."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:976
 #: demo/demo.php:976
 msgid "Pages and posts"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:977
 #: demo/demo.php:977
 msgid ""
 "Open a field and type to search; before you type it lists the most recent "
 "items."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:982
 #: demo/demo.php:982
 msgid "Homepage link"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:983
 #: demo/demo.php:983
 msgid "The page the logo links to."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:984
-#: build/fyldo/demo/demo.php:1049
 #: demo/demo.php:984
 #: demo/demo.php:1049
 msgid "Select a page…"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:990
 #: demo/demo.php:990
 msgid "Featured content"
 msgstr ""
 
-#: build/fyldo/demo/demo.php:991
 #: demo/demo.php:991
 msgid ""
 "Posts and pages shown at the top of the blog, up to four. Each result names "
 "its type."
 msgstr ""
 
-#: build/fyldo/demo/demo.php:992
 #: demo/demo.php:992
 msgid "Select posts or pages…"
 msgstr ""
-
-#: build/fyldo/src/Admin/Screen.php:69
-#: src/Admin/Screen.php:69
-msgid "This settings screen needs JavaScript. Please enable it and reload the page."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:135
-#: src/Rest/Controller.php:135
-msgid "You must be logged in."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:140
-#: src/Rest/Controller.php:140
-msgid "This settings page does not exist."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:145
-#: src/Rest/Controller.php:145
-msgid "Your session has expired. Reload the page and try again."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:149
-#: src/Rest/Controller.php:149
-msgid "You are not allowed to change these settings."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:153
-#: src/Rest/Controller.php:153
-msgid "The request is too large."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:168
-#: src/Rest/Controller.php:168
-msgid "This field does not exist."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:232
-#: src/Rest/Controller.php:232
-msgid "The values must be an object."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:241
-#: src/Rest/Controller.php:241
-msgid "Some values are not valid."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:252
-#: src/Rest/Controller.php:252
-msgid "These settings were changed somewhere else. Reload to see the latest values."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:280
-#: src/Rest/Controller.php:280
-msgid "This action does not exist."
-msgstr ""
-
-#: build/fyldo/src/Rest/Controller.php:285
-#: src/Rest/Controller.php:285
-msgid "The confirmation text does not match."
-msgstr ""
-
-#: build/fyldo/src/Support/Relations.php:339
-#: src/Support/Relations.php:339
-msgid "(no title)"
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:100
-#: src/Validation/Messages.php:100
-#: app/lib/validation.ts:221
-msgid "Choose a file from the media library."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:103
-#: src/Validation/Messages.php:103
-#: app/lib/validation.ts:223
-msgid "Choose an item from the list."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:106
-#: src/Validation/Messages.php:106
-msgid "This file is no longer available. Choose another one."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:109
-#: src/Validation/Messages.php:109
-#: app/lib/wp-media.ts:120
-msgid "Choose an image."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:112
-#: src/Validation/Messages.php:112
-#: app/lib/wp-media.ts:121
-msgid "This file type is not allowed."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:116
-#: src/Validation/Messages.php:116
-#: app/lib/wp-media.ts:122
-#. translators: %s: the largest allowed file size, such as 2 MB.
-#, php-format
-msgid "Choose a file of %s or less."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:122
-#: src/Validation/Messages.php:122
-#: app/lib/validation.ts:237
-#. translators: %d: minimum number of selected options.
-#, php-format
-msgid "Select at least %d option."
-msgid_plural "Select at least %d options."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:125
-#: src/Validation/Messages.php:125
-#: app/lib/validation.ts:239
-#. translators: %s: minimum allowed number.
-#, php-format
-msgid "Enter a value of at least %s."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:131
-#: src/Validation/Messages.php:131
-#: app/lib/validation.ts:243
-#. translators: %d: maximum number of selected options.
-#, php-format
-msgid "Select no more than %d option."
-msgid_plural "Select no more than %d options."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:134
-#: src/Validation/Messages.php:134
-#: app/lib/validation.ts:245
-#. translators: %s: maximum allowed number.
-#, php-format
-msgid "Enter a value of at most %s."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:138
-#: src/Validation/Messages.php:138
-#: app/lib/validation.ts:233
-#. translators: %s: the step, e.g. 5 (the value must be a multiple of it, counted from the minimum).
-#, php-format
-msgid "Enter a value in steps of %s."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:141
-#: src/Validation/Messages.php:141
-#: app/lib/validation.ts:247
-msgid "This value is not valid."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:24
-#: src/Validation/Messages.php:24
-#: app/lib/validation.ts:176
-msgid "This field is required."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:29
-#: src/Validation/Messages.php:29
-#: app/lib/validation.ts:179
-#. translators: %d: minimum number of characters.
-#, php-format
-msgid "Use at least %d character."
-msgid_plural "Use at least %d characters."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:34
-#: src/Validation/Messages.php:34
-#: app/lib/validation.ts:183
-#. translators: %d: maximum number of characters.
-#, php-format
-msgid "Use no more than %d character."
-msgid_plural "Use no more than %d characters."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:37
-#: src/Validation/Messages.php:37
-#: app/lib/validation.ts:186
-msgid "This value is not in the expected format."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:41
-#: src/Validation/Messages.php:41
-#: app/lib/validation.ts:188
-msgid "Enter a valid URL."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:44
-#: src/Validation/Messages.php:44
-#: app/lib/validation.ts:190
-msgid "Enter a valid email address."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:47
-#: src/Validation/Messages.php:47
-#: app/lib/validation.ts:192
-msgid "Enter a number."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:50
-#: src/Validation/Messages.php:50
-#: app/lib/validation.ts:194
-msgid "Enter a valid color, like #rrggbb."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:53
-#: src/Validation/Messages.php:53
-#: app/lib/validation.ts:196
-msgid "Enter a valid date."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:56
-#: src/Validation/Messages.php:56
-#: app/lib/validation.ts:198
-msgid "Enter a valid time between 00:00 and 23:59."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:59
-#: src/Validation/Messages.php:59
-#: app/lib/validation.ts:200
-msgid "Enter a valid date and time."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:63
-#: src/Validation/Messages.php:63
-#: app/lib/validation.ts:203
-#. translators: %s: the earliest date or time allowed.
-#, php-format
-msgid "Choose %s or later."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:67
-#: src/Validation/Messages.php:67
-#: app/lib/validation.ts:206
-#. translators: %s: the latest date or time allowed.
-#, php-format
-msgid "Choose %s or earlier."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:72
-#: src/Validation/Messages.php:72
-#: app/lib/validation.ts:209
-#. translators: %d: minutes between the times that can be chosen.
-#, php-format
-msgid "Choose a time in steps of %d minute."
-msgid_plural "Choose a time in steps of %d minutes."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:76
-#: src/Validation/Messages.php:76
-#: app/lib/validation.ts:212
-msgid "Choose a start date."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:76
-#: src/Validation/Messages.php:76
-#: app/lib/validation.ts:212
-msgid "Choose a start time."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:78
-#: src/Validation/Messages.php:78
-#: app/lib/validation.ts:213
-msgid "Choose an end date."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:78
-#: src/Validation/Messages.php:78
-#: app/lib/validation.ts:213
-msgid "Choose an end time."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:81
-#: src/Validation/Messages.php:81
-#: app/lib/validation.ts:215
-msgid "Choose an end after the start."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:84
-#: src/Validation/Messages.php:84
-#: app/lib/validation.ts:217
-msgid "Choose an end different from the start."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:87
-#: src/Validation/Messages.php:87
-#: app/lib/validation.ts:219
-msgid "Choose one of the available options."
-msgstr ""
-
-#: build/fyldo/src/Validation/Messages.php:92
-#: src/Validation/Messages.php:92
-#: app/lib/validation.ts:226
-#. translators: %d: minimum number of items in a group.
-#, php-format
-msgid "Add at least %d item."
-msgid_plural "Add at least %d items."
-msgstr[0] ""
-msgstr[1] ""
-
-#: build/fyldo/src/Validation/Messages.php:97
-#: src/Validation/Messages.php:97
-#: app/lib/validation.ts:230
-#. translators: %d: maximum number of items in a group.
-#, php-format
-msgid "Use no more than %d item."
-msgid_plural "Use no more than %d items."
-msgstr[0] ""
-msgstr[1] ""
 
 #: fyldo.php
 #. Description of the plugin
@@ -2097,12 +1553,277 @@ msgid ""
 msgstr ""
 
 #: fyldo.php
-#: build/fyldo/src/Instance.php:126
 #: src/Instance.php:126
 #. Plugin Name of the plugin
 #. Author of the plugin
 msgid "Fyldo"
 msgstr ""
+
+#: src/Admin/Screen.php:69
+msgid "This settings screen needs JavaScript. Please enable it and reload the page."
+msgstr ""
+
+#: src/Rest/Controller.php:135
+msgid "You must be logged in."
+msgstr ""
+
+#: src/Rest/Controller.php:140
+msgid "This settings page does not exist."
+msgstr ""
+
+#: src/Rest/Controller.php:145
+msgid "Your session has expired. Reload the page and try again."
+msgstr ""
+
+#: src/Rest/Controller.php:149
+msgid "You are not allowed to change these settings."
+msgstr ""
+
+#: src/Rest/Controller.php:153
+msgid "The request is too large."
+msgstr ""
+
+#: src/Rest/Controller.php:168
+msgid "This field does not exist."
+msgstr ""
+
+#: src/Rest/Controller.php:232
+msgid "The values must be an object."
+msgstr ""
+
+#: src/Rest/Controller.php:241
+msgid "Some values are not valid."
+msgstr ""
+
+#: src/Rest/Controller.php:252
+msgid "These settings were changed somewhere else. Reload to see the latest values."
+msgstr ""
+
+#: src/Rest/Controller.php:280
+msgid "This action does not exist."
+msgstr ""
+
+#: src/Rest/Controller.php:285
+msgid "The confirmation text does not match."
+msgstr ""
+
+#: src/Support/Relations.php:339
+msgid "(no title)"
+msgstr ""
+
+#: src/Validation/Messages.php:100
+#: app/lib/validation.ts:221
+msgid "Choose a file from the media library."
+msgstr ""
+
+#: src/Validation/Messages.php:103
+#: app/lib/validation.ts:223
+msgid "Choose an item from the list."
+msgstr ""
+
+#: src/Validation/Messages.php:106
+msgid "This file is no longer available. Choose another one."
+msgstr ""
+
+#: src/Validation/Messages.php:109
+#: app/lib/wp-media.ts:120
+msgid "Choose an image."
+msgstr ""
+
+#: src/Validation/Messages.php:112
+#: app/lib/wp-media.ts:121
+msgid "This file type is not allowed."
+msgstr ""
+
+#: src/Validation/Messages.php:116
+#: app/lib/wp-media.ts:122
+#. translators: %s: the largest allowed file size, such as 2 MB.
+#, php-format
+msgid "Choose a file of %s or less."
+msgstr ""
+
+#: src/Validation/Messages.php:122
+#: app/lib/validation.ts:237
+#. translators: %d: minimum number of selected options.
+#, php-format
+msgid "Select at least %d option."
+msgid_plural "Select at least %d options."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:125
+#: app/lib/validation.ts:239
+#. translators: %s: minimum allowed number.
+#, php-format
+msgid "Enter a value of at least %s."
+msgstr ""
+
+#: src/Validation/Messages.php:131
+#: app/lib/validation.ts:243
+#. translators: %d: maximum number of selected options.
+#, php-format
+msgid "Select no more than %d option."
+msgid_plural "Select no more than %d options."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:134
+#: app/lib/validation.ts:245
+#. translators: %s: maximum allowed number.
+#, php-format
+msgid "Enter a value of at most %s."
+msgstr ""
+
+#: src/Validation/Messages.php:138
+#: app/lib/validation.ts:233
+#. translators: %s: the step, e.g. 5 (the value must be a multiple of it, counted from the minimum).
+#, php-format
+msgid "Enter a value in steps of %s."
+msgstr ""
+
+#: src/Validation/Messages.php:141
+#: app/lib/validation.ts:247
+msgid "This value is not valid."
+msgstr ""
+
+#: src/Validation/Messages.php:24
+#: app/lib/validation.ts:176
+msgid "This field is required."
+msgstr ""
+
+#: src/Validation/Messages.php:29
+#: app/lib/validation.ts:179
+#. translators: %d: minimum number of characters.
+#, php-format
+msgid "Use at least %d character."
+msgid_plural "Use at least %d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:34
+#: app/lib/validation.ts:183
+#. translators: %d: maximum number of characters.
+#, php-format
+msgid "Use no more than %d character."
+msgid_plural "Use no more than %d characters."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:37
+#: app/lib/validation.ts:186
+msgid "This value is not in the expected format."
+msgstr ""
+
+#: src/Validation/Messages.php:41
+#: app/lib/validation.ts:188
+msgid "Enter a valid URL."
+msgstr ""
+
+#: src/Validation/Messages.php:44
+#: app/lib/validation.ts:190
+msgid "Enter a valid email address."
+msgstr ""
+
+#: src/Validation/Messages.php:47
+#: app/lib/validation.ts:192
+msgid "Enter a number."
+msgstr ""
+
+#: src/Validation/Messages.php:50
+#: app/lib/validation.ts:194
+msgid "Enter a valid color, like #rrggbb."
+msgstr ""
+
+#: src/Validation/Messages.php:53
+#: app/lib/validation.ts:196
+msgid "Enter a valid date."
+msgstr ""
+
+#: src/Validation/Messages.php:56
+#: app/lib/validation.ts:198
+msgid "Enter a valid time between 00:00 and 23:59."
+msgstr ""
+
+#: src/Validation/Messages.php:59
+#: app/lib/validation.ts:200
+msgid "Enter a valid date and time."
+msgstr ""
+
+#: src/Validation/Messages.php:63
+#: app/lib/validation.ts:203
+#. translators: %s: the earliest date or time allowed.
+#, php-format
+msgid "Choose %s or later."
+msgstr ""
+
+#: src/Validation/Messages.php:67
+#: app/lib/validation.ts:206
+#. translators: %s: the latest date or time allowed.
+#, php-format
+msgid "Choose %s or earlier."
+msgstr ""
+
+#: src/Validation/Messages.php:72
+#: app/lib/validation.ts:209
+#. translators: %d: minutes between the times that can be chosen.
+#, php-format
+msgid "Choose a time in steps of %d minute."
+msgid_plural "Choose a time in steps of %d minutes."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:76
+#: app/lib/validation.ts:212
+msgid "Choose a start date."
+msgstr ""
+
+#: src/Validation/Messages.php:76
+#: app/lib/validation.ts:212
+msgid "Choose a start time."
+msgstr ""
+
+#: src/Validation/Messages.php:78
+#: app/lib/validation.ts:213
+msgid "Choose an end date."
+msgstr ""
+
+#: src/Validation/Messages.php:78
+#: app/lib/validation.ts:213
+msgid "Choose an end time."
+msgstr ""
+
+#: src/Validation/Messages.php:81
+#: app/lib/validation.ts:215
+msgid "Choose an end after the start."
+msgstr ""
+
+#: src/Validation/Messages.php:84
+#: app/lib/validation.ts:217
+msgid "Choose an end different from the start."
+msgstr ""
+
+#: src/Validation/Messages.php:87
+#: app/lib/validation.ts:219
+msgid "Choose one of the available options."
+msgstr ""
+
+#: src/Validation/Messages.php:92
+#: app/lib/validation.ts:226
+#. translators: %d: minimum number of items in a group.
+#, php-format
+msgid "Add at least %d item."
+msgid_plural "Add at least %d items."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Validation/Messages.php:97
+#: app/lib/validation.ts:230
+#. translators: %d: maximum number of items in a group.
+#, php-format
+msgid "Use no more than %d item."
+msgid_plural "Use no more than %d items."
+msgstr[0] ""
+msgstr[1] ""
 
 #: app/components/fyldo/App.tsx:145
 msgctxt "unsaved changes dialog"
