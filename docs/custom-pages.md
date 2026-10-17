@@ -109,6 +109,39 @@ WordPress checks the nonce that `request` sends.
 Icons are Iconsax names (`ui.Icon`, and the `icon`, `leadingIcon`… props). Directional icons (`arrow-left`,
 `arrow-right`…) mirror themselves under RTL: always pass the left-to-right name.
 
+#### TypeScript
+
+A page module is typed with the same file as a custom field, `assets/dist/fyldo-sdk.d.ts`, with the same `tsconfig`
+(`paths` → that file, `jsx: "react"`) and the same esbuild command: see
+[custom-fields.md](custom-fields.md#typescript).
+
+```tsx
+// pages/stories.tsx — esbuild pages/stories.tsx --bundle --format=esm --jsx=transform --external:react --outfile=pages/stories.js
+import type { CustomPageExport, CustomPageProps } from 'fyldo';
+
+interface Story { id: number; title: string }
+
+const stories: CustomPageExport = ({ React, ui, Form }) => {
+  function Stories({ page, path, navigate, request, toast, headingRef }: CustomPageProps) {
+    const [items, setItems] = React.useState<Story[]>([]);
+    React.useEffect(() => {
+      request<Story[]>('acme/v1/stories').then(setItems, () => toast.error('Could not load the stories'));
+    }, [request, toast]);
+
+    if (path[0] !== undefined) return <Form form="story" record={path[0]} onSaved={(key) => navigate(key, { replace: true })} />;
+    return <ui.PageHeader title={page.title} description={page.description} headingRef={headingRef} />;
+  }
+  return { Component: Stories };
+};
+
+export default stories;
+```
+
+`request<T>()` types the JSON it resolves with; Fyldo does not check it. `useForm`'s `field(id)` is typed as the union
+of its three shapes ([below](#drawing-the-fields-yourself-useform)), since the type of a field is only known in PHP:
+narrow it (`'checked' in binding` for a toggle) or bind the value yourself
+(`value={…} onValueChange={(v) => form.set('title', v)} onBlur={() => form.validate('title')}`).
+
 #### Styling
 
 The page lives inside Fyldo's root, behind a scoped reset whose selectors are raised to ID level so wp-admin's CSS
