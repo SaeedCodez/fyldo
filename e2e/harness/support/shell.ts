@@ -5,33 +5,40 @@
 import { digits, type Node } from './pack';
 
 /**
- * The pack names nested icon instances only by their component-swap id. These are the Iconsax names behind those ids,
- * found by geometry matching (every Iconsax Linear icon rendered at 16px and compared with the pack PNGs; each winner
- * differs from the pack by a small fraction of the runner-up's distance), as was done for the Select chevrons in M1.
+ * Nested icon instances are named by the Iconsax library component behind their swap (`valueName`, e.g.
+ * "flash / Property 1=linear"). Node ids are not used: they change whenever Figma re-imports the library. The code's
+ * icon set names a few of these differently; the targets were found by geometry matching (every Iconsax Linear icon
+ * rendered at 16px and compared with the pack PNGs), as was done for the Select chevrons in M1.
  */
 export const ICON_BY_SWAP: Record<string, string> = {
-  '8:36649': 'setting-2',
-  '8:18622': 'brush-2',
-  '8:38716': 'notification-bing',
-  '8:42054': 'shield-tick',
-  '8:15129': 'flashy',
-  '8:43437': 'element-3',
-  '8:38208': 'data',
-  '8:37753': 'code-1',
-  '8:45089': 'book-1',
-  '8:30359': 'message-question',
-  '8:12239': 'export-square',
+  'setting-2': 'setting-2',
+  'brush-2': 'brush-2',
+  'notification-bing': 'notification-bing',
+  'shield-tick': 'shield-tick',
+  flash: 'flashy',
+  'element-3': 'element-3',
+  data: 'data',
+  code: 'code-1',
+  book: 'book-1',
+  'message-question': 'message-question',
+  export: 'export-square',
 };
 
 export type Locale = 'EN' | 'FA';
 
-const prop = (n: Node, name: string): unknown => {
+const propEntry = (n: Node, name: string) => {
   const props = n.instance?.componentProperties ?? {};
   const key = Object.keys(props).find((k) => k === name || k.startsWith(`${name}#`));
-  return key ? props[key]?.value : undefined;
+  return key ? props[key] : undefined;
 };
 
-const icon = (n: Node, swap: string): string => ICON_BY_SWAP[String(prop(n, swap))] ?? '';
+const prop = (n: Node, name: string): unknown => propEntry(n, name)?.value;
+
+/** The code's icon name for an instance-swap property ("flash / Property 1=linear" → "flashy"). */
+const icon = (n: Node, swap: string): string => {
+  const library = (propEntry(n, swap)?.valueName ?? '').split(' / ')[0] ?? '';
+  return ICON_BY_SWAP[library] ?? '';
+};
 
 /** The label a nested instance shows in a locale (FA components carry their text in the `Label (FA)` property). */
 export const label = (n: Node, locale: Locale, base = 'Label'): string =>
@@ -104,7 +111,7 @@ export function navSpec(root: Node, locale: Locale, item: 'Nav Item' | 'Tab') {
         const leading = prop(c, 'Leading icon') === true;
         links.push({
           label: label(c, locale),
-          icon: leading ? (ICON_BY_SWAP[String(prop(c, 'Leading icon swap'))] ?? '') : '',
+          icon: leading ? icon(c, 'Leading icon swap') : '',
         });
       }
     }

@@ -8,6 +8,7 @@
   "id": "427:16298",
   "name": "Date Range Field",
   "kebab": "date-range-field",
+  "description": "Two inputs, start and end, for date_range, time_range or datetime_range. Each input opens the same Calendar Panel or Time Panel as Date Field and sets only its own value. The duration line appears once both ends are set. Locale × Size × State.",
   "width": 3696,
   "height": 1062,
   "variantCount": 42,
@@ -13817,7 +13818,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -14406,7 +14407,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -15541,7 +15542,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/disabled"
@@ -17694,7 +17695,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -18283,7 +18284,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -19418,7 +19419,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/disabled"
@@ -21571,7 +21572,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -22160,7 +22161,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/secondary"
@@ -23295,7 +23296,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "WIDTH_AND_HEIGHT",
          "fillToken": "text/disabled"

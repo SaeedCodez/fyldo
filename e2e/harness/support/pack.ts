@@ -52,7 +52,7 @@ export interface Node {
     fillToken?: string;
   };
   /** A nested component instance (not walked further): which variant it is and the visible text overrides. */
-  instance?: { component: string; variant: string; componentProperties: Record<string, { type: string; value: unknown }>; texts: Record<string, string> };
+  instance?: { component: string; variant: string; componentProperties: Record<string, { type: string; value: unknown; valueName?: string }>; texts: Record<string, string> };
   /** An Iconsax instance (not walked further). */
   icon?: { name: string; size: number; variant: string; colour: string };
   children?: Node[];

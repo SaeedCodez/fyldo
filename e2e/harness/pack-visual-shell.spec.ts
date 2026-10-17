@@ -457,7 +457,7 @@ for (const locale of ['EN', 'FA'] as const) {
     const ourAction = stage.locator('[data-slot=fy-page-header-actions] a');
     await expect(ourAction.locator('svg')).toHaveAttribute(
       'data-fyldo-icon',
-      ICON_BY_SWAP['8:12239']!.replace(/-/g, ''),
+      ICON_BY_SWAP.export!.replace(/-/g, ''),
     );
     if (locale === 'EN') {
       await compare({ page, testInfo, stage, set: 'page-header', props });

@@ -27,7 +27,7 @@
    },
    "Leading icon swap#8:2248": {
     "type": "INSTANCE_SWAP",
-    "defaultValue": "8:21546",
+    "defaultValue": "409:8465",
     "defaultValueName": "global / Property 1=linear",
     "preferredValueCount": 48
    },
@@ -2463,9 +2463,9 @@
       "visible": true,
       "opacity": 1,
       "x": 284,
-      "y": 10,
+      "y": 9,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2707,9 +2707,9 @@
       "visible": true,
       "opacity": 1,
       "x": 284,
-      "y": 10,
+      "y": 9,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -2944,9 +2944,9 @@
       "visible": true,
       "opacity": 1,
       "x": 284,
-      "y": 10,
+      "y": 9,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,
@@ -3181,9 +3181,9 @@
       "visible": true,
       "opacity": 1,
       "x": 284,
-      "y": 10,
+      "y": 9,
       "width": 20,
-      "height": 20,
+      "height": 22,
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 0,

@@ -74,14 +74,14 @@ Count: gray 12 (10 steps + 850 + 1000-hover) + blue, red, amber, green 40 + prim
 | **Link / focus** | `link/default` **primary/700** | Inline links (no component variant uses it) |
 | | `focus/ring-neutral` **primary/600** · `focus/border` **primary/600** | The focus colour (field focus border, choice card / swatch / tile selection, the neutral ring) |
 | | `focus/ring` primary/500 | **Unused by any component variant** — see §9 |
-| **Status** (×5 tones: `info`, `success`, `warning`, `error`, `neutral`) | `status/<tone>/bg`, `/border`, `/solid`, `/text`, `/subtle` | `neutral` = gray, `info` = **primary** (indigo), `success` = green, `warning` = amber, `error` = red. Solid: neutral gray/1000, info primary/700, success green/900, warning amber/700, error red/800 |
+| **Status** (×5 tones: `info`, `success`, `warning`, `error`, `neutral`) | `status/<tone>/bg`, `/border`, `/solid`, `/text`, `/subtle` | `neutral` = gray, `info` = **blue**, `success` = green, `warning` = amber, `error` = red. Solid: neutral gray/1000, info blue/700, success green/900, warning amber/700, error red/800 |
 
 Full alias table (tone → primitive step):
 
 | Tone | bg | border | solid | text | subtle |
 |---|---|---|---|---|---|
 | neutral | gray/100 | gray/400 | gray/1000 | gray/1000 | gray/200 |
-| info | primary/50 | primary/200 | primary/700 | primary/800 | primary/100 |
+| info | blue/100 | blue/400 | blue/700 | blue/800 | blue/300 |
 | success | green/100 | green/400 | green/900 | green/900 | green/300 |
 | warning | amber/100 | amber/400 | amber/700 | amber/900 | amber/300 |
 | error | red/100 | red/400 | red/800 | red/900 | red/200 |
@@ -398,7 +398,7 @@ These are collected as designer questions in [ARCHITECTURE.md §15](./ARCHITECTU
 > - **D1/D2 (focus):** `focus/ring` is now `primary/500` and is still unused; the field focus border and the neutral ring are `focus/border` / `focus/ring-neutral` = `primary/600`, with the `Focus/Input` halo `primary/600` at 18 %. So "we will not ship blue" now reads: the ring is the brand indigo, not the unused `Focus/Ring` effect.
 > - **D4/D6 (borders):** the field border is `border/input` (gray/500 #babfdb, 1.82:1 on white); the off switch and the unchecked checkbox/radio use gray/700 #888b9b (3.38:1).
 > - **D5:** `text/tertiary` is `gray/850` #6c6f80 (4.97:1); `text/disabled` is gray/700 (3.38:1). They are different values now.
-> - **D9:** `status/success/solid` is green/900, `status/info/solid` is `primary/700` (white 5.94:1).
+> - **D9:** `status/success/solid` is green/900. `status/info/solid` was `primary/700` (white 5.94:1) until 2026-10-17, when the info tone moved back to the blue scale: `blue/700`, white 4.44:1 (below 4.5:1 for 12–13 px text; the contrast test's floor is 4:1). Info text on bg 5.30:1, on subtle 4.93:1.
 > - **D12:** `gray/200` (#eaecf8) and `gray/400` (#dadef4) are distinct now. `control/on` = `action/primary` (both `primary/600`) still coincide.
 
 Contrast is computed from the Figma token values (WCAG 2.x formula, against `background/default` #fff unless noted).

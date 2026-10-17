@@ -8,7 +8,7 @@
   "id": "423:11892",
   "name": "Date Field",
   "kebab": "date-field",
-  "description": "Field for picking one free color: swatch + hex value + chevron, same anatomy as Select. Open state pairs with Color Picker Panel placed 4px below the control. The Swatch fill is the value (override per instance); the empty state shows a dashed swatch and a placeholder. Hex is always left-to-right text.",
+  "description": "Field for one date, time or datetime value. Same anatomy as Select: calendar icon (clock for the time type) + value + chevron. Opens Calendar Panel (date, datetime with Time on) or Time Panel (time) 4px below the control. Under a filled field, Equivalent shows the same value in the other calendar (Jalali ↔ Gregorian). Locale × Size × State.",
   "width": 2416,
   "height": 1062,
   "variantCount": 42,
