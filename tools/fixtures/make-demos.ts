@@ -169,6 +169,8 @@ add_action(
 		$fyldo->add_page( 'general', array_merge( require __DIR__ . '/page.php', array( 'group' => 'settings' ) ) );
 		$fyldo->add_page( 'fields', array_merge( require __DIR__ . '/fields.php', array( 'group' => 'settings', 'badge' => 3 ) ) ); // M2: #/fields
 		$fyldo->add_page( 'advanced', require __DIR__ . '/advanced.php' ); // M3: tabs, #/advanced/<tab>
+		// Custom pages and forms: #/notes (list) and #/notes/<id> (a form whose records the plugin stores itself).
+		( require __DIR__ . '/notes.php' )( $fyldo, '${demo.slug}', plugins_url( '', __FILE__ ) );
 		// M4: notices for the Fyldo screen (drawn in Fyldo's own slot on the fields page, never with the core notice class).
 		$fyldo->admin_notice(
 			'A new version of ${demo.title} is available.',
@@ -199,6 +201,9 @@ export function makeDemos(): void {
     cpSync(resolve(root, 'tests/fixtures/tabs-page.php'), resolve(dir, 'advanced.php'));
     // The custom field of the fields page loads the demo's module and stylesheet from the plugin's own folder.
     for (const file of ['working-hours.js', 'working-hours.css']) cpSync(resolve(root, 'demo/custom', file), resolve(dir, file));
+    // The custom page's PHP (page, form, list route) and its module.
+    cpSync(resolve(root, 'tests/fixtures/notes-page.php'), resolve(dir, 'notes.php'));
+    cpSync(resolve(root, 'tests/fixtures/notes-page.js'), resolve(dir, 'notes.js'));
 
     if (demo.kind === 'strauss') {
       strauss(dir, demo.fyldoVersion);

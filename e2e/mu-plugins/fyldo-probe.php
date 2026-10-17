@@ -62,8 +62,8 @@ add_action(
 				},
 				'callback'            => static function () {
 					global $wpdb;
-					// Every fixture instance stores `acme-<name>_<page>`.
-					$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'acme-%\\_general' OR option_name LIKE 'acme-%\\_fields' OR option_name LIKE 'acme-%\\_advanced'" ); // phpcs:ignore
+					// Every fixture instance stores `acme-<name>_<page>`, and its custom page's notes in `acme-<name>_e2e_notes`.
+					$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'acme-%\\_general' OR option_name LIKE 'acme-%\\_fields' OR option_name LIKE 'acme-%\\_advanced' OR option_name LIKE 'acme-%\\_e2e\\_notes'" ); // phpcs:ignore
 					wp_cache_flush();
 					return array( 'reset' => true );
 				},
