@@ -209,7 +209,7 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     await expect(page.locator('#wpfooter')).toBeHidden();
 
     // the utility links sit at the bottom of the column
-    const footer = await page.locator('[data-slot=fy-sidebar-footer]').boundingBox(); // the links and the version line
+    const footer = await page.locator('[data-slot=fy-sidebar-footer]').boundingBox(); // the utility links (the version is in the header since 2026-10-17)
     expect(Math.round(footer!.y + footer!.height)).toBe(900);
 
     // the content area scrolls inside the shell (Fyldo's own scrollbar): the document itself does not, and the sidebar stays
@@ -273,6 +273,7 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     ]);
     await expect(nav(page).getByRole('list', { name: 'Tools' }).getByRole('link')).toHaveText([
       'Advanced',
+      'Notes', // a custom page (tests/fixtures/notes-page.php)
     ]);
     const docs = page
       .getByRole('navigation', { name: 'Resources' })
@@ -329,6 +330,24 @@ test.describe('top navigation layout', () => {
     await page.goBack();
     await expect(h1(page)).toHaveText('General');
     await page.screenshot({ path: 'test-results/wp-top-nav.png' });
+  });
+
+  test('a plugin theme recolours its own screen only (acme-gamma sets brand 600/700 and neutral 1000)', async ({ page }) => {
+    const colours = () =>
+      page.evaluate(() => {
+        const root = document.querySelector<HTMLElement>('[data-fyldo-v1]')!;
+        return {
+          primary: getComputedStyle(root).getPropertyValue('--fyldo-action-primary').trim(),
+          heading: getComputedStyle(root.querySelector('h1')!).color,
+        };
+      });
+    await page.goto(TOP);
+    await expect(h1(page)).toHaveText('General');
+    expect(await colours()).toEqual({ primary: '#c8401f', heading: 'rgb(28, 26, 43)' });
+
+    await page.goto(SIDEBAR); // no theme: Fyldo's own colours
+    await expect(h1(page)).toHaveText('General');
+    expect(await colours()).toEqual({ primary: '#6e62fe', heading: 'rgb(26, 29, 44)' });
   });
 });
 

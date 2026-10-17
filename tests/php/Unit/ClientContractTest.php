@@ -8,6 +8,7 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Assets\ClientConfig;
 use Fyldo\V1\Instance;
 use PHPUnit\Framework\TestCase;
 
@@ -63,5 +64,27 @@ final class ClientContractTest extends TestCase {
 			$actual,
 			'tests/fixtures/tabs-page.client.json is stale: run `php tools/dev/dump-slice.php tabs > tests/fixtures/tabs-page.client.json`.'
 		);
+	}
+
+	public function test_the_config_carries_both_kinds_of_page_the_forms_and_the_rest_roots(): void {
+		$GLOBALS['__fyldo_test_caps'] = array( 'manage_options' );
+
+		$instance = new Instance( 'acme-slice', array( 'title' => 'Acme Slice' ) );
+		$instance->add_page( 'general', require dirname( __DIR__, 2 ) . '/fixtures/slice-page.php' );
+		$instance->add_page( 'books', array( 'type' => 'custom', 'title' => 'Books', 'module' => '/wp-content/plugins/acme/books.js' ) );
+		$instance->add_form( 'book', ( new BookTable() )->form() );
+
+		$client = json_decode( (string) wp_json_encode( ClientConfig::build( $instance ) ), true );
+
+		$this->assertSame( array( 'type', 'id', 'title', 'description', 'icon', 'group', 'badge', 'save', 'tabs', 'sections', 'values', 'revision' ), array_keys( $client['pages'][0] ) );
+		$this->assertSame(
+			array( 'type' => 'custom', 'id' => 'books', 'title' => 'Books', 'description' => '', 'icon' => '', 'group' => '', 'badge' => '', 'module' => '/wp-content/plugins/acme/books.js', 'props' => array() ),
+			$client['pages'][1]
+		);
+		$this->assertSame( '{}', wp_json_encode( ClientConfig::build( $instance )['pages'][1]['props'] ) );
+		$this->assertSame( array( 'id', 'sections' ), array_keys( $client['forms'][0] ) );
+		$this->assertSame( array( 'id', 'tab', 'title', 'description', 'tone', 'fields' ), array_keys( $client['forms'][0]['sections'][0] ) );
+		$this->assertSame( array( 'root', 'base', 'nonce', 'instanceNonce', 'nonceHeader', 'refresh' ), array_keys( $client['rest'] ) );
+		$this->assertSame( 'https://example.com/wp-json/', $client['rest']['base'] );
 	}
 }

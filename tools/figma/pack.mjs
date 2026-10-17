@@ -127,7 +127,7 @@ if (cmd === 'code') {
     const index = readJson(join(pack, 'index.json'));
     const tokens = readJson(join(root, 'tokens/figma.tokens.json'));
     const problems = [];
-    if (index.variableCount !== 166) problems.push(`variableCount ${index.variableCount} != 166`);
+    if (index.variableCount !== 192) problems.push(`variableCount ${index.variableCount} != 192`);
     if (index.variableCount !== tokens.tokens.length) problems.push(`variableCount ${index.variableCount} != tokens/figma.tokens.json ${tokens.tokens.length}`);
     for (const c of index.components) {
       if (!existsSync(join(pack, c.json))) problems.push(`${c.name}: missing ${c.json}`);

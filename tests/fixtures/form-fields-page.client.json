@@ -1,4 +1,5 @@
 {
+    "type": "settings",
     "id": "fields",
     "title": "Content",
     "description": "How your content is described, shown and indexed.",

@@ -1500,3 +1500,270 @@ msgstr "می‌تواند از نیمه‌شب بگذرد: پایانِ پیش �
 
 msgid "Campaign"
 msgstr "کمپین"
+
+# Custom pages and forms (docs/custom-pages.md)
+msgid "This page couldn’t be loaded."
+msgstr "این صفحه بارگذاری نشد."
+
+msgid "This form couldn’t be loaded."
+msgstr "این فرم بارگذاری نشد."
+
+msgid "Loading…"
+msgstr "در حال بارگذاری…"
+
+msgid "Couldn’t load this item. Check your connection and try again."
+msgstr "این مورد بارگذاری نشد. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+msgid "This item doesn’t exist. It may have been deleted."
+msgstr "این مورد وجود ندارد. ممکن است حذف شده باشد."
+
+msgid "This item was changed somewhere else"
+msgstr "این مورد در جای دیگری تغییر کرده است"
+
+msgid "It was saved in another tab or by another person after you opened it, so your changes were not saved. Reload the latest values to continue; your unsaved changes will be lost."
+msgstr "این مورد پس از باز کردن شما در زبانه‌ی دیگری یا توسط شخص دیگری ذخیره شده است، بنابراین تغییرات شما ذخیره نشد. برای ادامه، آخرین مقادیر را بارگذاری کنید؛ تغییرات ذخیره‌نشده‌ی شما از بین می‌روند."
+
+msgid "Couldn’t save: this item was changed somewhere else."
+msgstr "ذخیره نشد: این مورد در جای دیگری تغییر کرده است."
+
+msgid "This form does not exist."
+msgstr "این فرم وجود ندارد."
+
+msgid "This record does not exist."
+msgstr "این رکورد وجود ندارد."
+
+msgid "You are not allowed to change these records."
+msgstr "اجازه‌ی تغییر این رکوردها را ندارید."
+
+msgid "This record was changed somewhere else. Reload to see the latest values."
+msgstr "این رکورد در جای دیگری تغییر کرده است. برای دیدن آخرین مقادیر، دوباره بارگذاری کنید."
+
+msgid "The record could not be saved."
+msgstr "رکورد ذخیره نشد."
+
+# Pagination, Stat Card
+msgid "Pagination"
+msgstr "صفحه‌بندی"
+
+msgid "Previous page"
+msgstr "صفحه‌ی قبل"
+
+msgid "Next page"
+msgstr "صفحه‌ی بعد"
+
+msgid "Page %1$s of %2$s"
+msgstr "صفحه‌ی %1$s از %2$s"
+
+msgid "Up"
+msgstr "افزایش"
+
+msgid "Down"
+msgstr "کاهش"
+
+# Demo: the Announcements custom page (demo/announcements.php)
+msgid "Announcements"
+msgstr "اطلاعیه‌ها"
+
+msgid "Short messages shown at the top of your site. A custom page: the plugin draws the list and stores the records in its own table."
+msgstr "پیام‌های کوتاهی که بالای سایت نمایش داده می‌شوند. این یک صفحه‌ی سفارشی است: افزونه فهرست را خودش می‌سازد و رکوردها را در جدول خودش ذخیره می‌کند."
+
+msgid "Free shipping this week"
+msgstr "ارسال رایگان در این هفته"
+
+msgid "Every order ships free until Sunday."
+msgstr "همه‌ی سفارش‌ها تا یکشنبه رایگان ارسال می‌شوند."
+
+msgid "New opening hours"
+msgstr "ساعت‌های کاری جدید"
+
+msgid "From November we open at 9 and close at 18."
+msgstr "از آبان ساعت ۹ باز می‌کنیم و ساعت ۱۸ می‌بندیم."
+
+msgid "Autumn sale"
+msgstr "حراج پاییزه"
+
+msgid "A third off coats and boots, this month only."
+msgstr "یک‌سوم تخفیف برای کاپشن و بوت، فقط همین ماه."
+
+msgid "Summer workshop"
+msgstr "کارگاه تابستانی"
+
+msgid "Thanks to everyone who joined us in July."
+msgstr "از همه‌ی کسانی که تیرماه همراه ما بودند سپاسگزاریم."
+
+msgid "Announcement"
+msgstr "اطلاعیه"
+
+msgid "What visitors see at the top of the site."
+msgstr "آنچه بازدیدکنندگان بالای سایت می‌بینند."
+
+msgid "Message"
+msgstr "پیام"
+
+msgid "One or two sentences, up to 200 characters."
+msgstr "یک یا دو جمله، حداکثر ۲۰۰ نویسه."
+
+msgid "Image"
+msgstr "تصویر"
+
+msgid "Shown on the card in this list and next to the message."
+msgstr "روی کارت همین فهرست و کنار پیام نمایش داده می‌شود."
+
+msgid "Where “Read more” leads. Leave empty for none."
+msgstr "مقصد «بیشتر بخوانید». برای نداشتن لینک خالی بگذارید."
+
+msgid "Publishing"
+msgstr "انتشار"
+
+msgid "Whether the announcement shows, and until when."
+msgstr "اینکه اطلاعیه نمایش داده شود یا نه، و تا کی."
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Published"
+msgstr "منتشرشده"
+
+msgid "Draft"
+msgstr "پیش‌نویس"
+
+msgid "Archived"
+msgstr "بایگانی‌شده"
+
+msgid "Pin to the top"
+msgstr "سنجاق در بالای فهرست"
+
+msgid "Pinned announcements come first, whatever the sort order."
+msgstr "اطلاعیه‌های سنجاق‌شده همیشه اول می‌آیند، ترتیب هرچه باشد."
+
+msgid "Show until"
+msgstr "نمایش تا"
+
+msgid "Leave empty to keep it up until you archive it."
+msgstr "برای نمایش تا زمان بایگانی، خالی بگذارید."
+
+msgid "Couldn’t save the announcement. Try again in a moment."
+msgstr "اطلاعیه ذخیره نشد. کمی بعد دوباره تلاش کنید."
+
+msgid "This announcement no longer exists."
+msgstr "این اطلاعیه دیگر وجود ندارد."
+
+msgid "%s (copy)"
+msgstr "%s (رونوشت)"
+
+msgid "Couldn’t copy the announcement. Try again in a moment."
+msgstr "از اطلاعیه رونوشت گرفته نشد. کمی بعد دوباره تلاش کنید."
+
+msgid "Add announcement"
+msgstr "افزودن اطلاعیه"
+
+msgid "Write a short message for the top of your site."
+msgstr "یک پیام کوتاه برای بالای سایت بنویسید."
+
+msgid "New announcement"
+msgstr "اطلاعیه‌ی جدید"
+
+msgid "Edit announcement"
+msgstr "ویرایش اطلاعیه"
+
+msgid "Changes show on the site as soon as you save."
+msgstr "تغییرات به‌محض ذخیره در سایت دیده می‌شوند."
+
+msgid "All announcements"
+msgstr "همه‌ی اطلاعیه‌ها"
+
+msgid "Search announcements…"
+msgstr "جستجوی اطلاعیه‌ها…"
+
+msgid "Sort"
+msgstr "مرتب‌سازی"
+
+msgid "Newest first"
+msgstr "جدیدترین اول"
+
+msgid "Oldest first"
+msgstr "قدیمی‌ترین اول"
+
+msgid "By title"
+msgstr "بر اساس عنوان"
+
+msgid "All"
+msgstr "همه"
+
+msgid "Pinned"
+msgstr "سنجاق‌شده"
+
+msgid "No end date"
+msgstr "بدون تاریخ پایان"
+
+msgid "Until %s"
+msgstr "تا %s"
+
+msgid "Ended"
+msgstr "پایان‌یافته"
+
+msgid "%s views"
+msgstr "%s بازدید"
+
+msgid "Edit"
+msgstr "ویرایش"
+
+msgid "Duplicate"
+msgstr "تکثیر"
+
+msgid "Delete"
+msgstr "حذف"
+
+msgid "No announcements yet"
+msgstr "هنوز اطلاعیه‌ای ندارید"
+
+msgid "Write your first one and publish it to show it at the top of the site."
+msgstr "اولین اطلاعیه را بنویسید و منتشرش کنید تا بالای سایت نمایش داده شود."
+
+msgid "No announcements found"
+msgstr "اطلاعیه‌ای پیدا نشد"
+
+msgid "Try another word, or clear the search."
+msgstr "کلمه‌ی دیگری را امتحان کنید یا جستجو را پاک کنید."
+
+msgid "Couldn’t load the announcements. Check your connection and try again."
+msgstr "اطلاعیه‌ها بارگذاری نشدند. اتصال خود را بررسی کنید و دوباره تلاش کنید."
+
+msgid "Loading announcements…"
+msgstr "در حال بارگذاری اطلاعیه‌ها…"
+
+msgid "Delete “%s”?"
+msgstr "«%s» حذف شود؟"
+
+msgid "It disappears from the site and from this list. This can’t be undone; to only hide it, archive it."
+msgstr "از سایت و از این فهرست حذف می‌شود. این کار برگشت‌پذیر نیست؛ اگر فقط می‌خواهید پنهان شود، بایگانی‌اش کنید."
+
+msgid "Also delete its image"
+msgstr "تصویرش را هم حذف کن"
+
+msgid "Otherwise the image stays in the Media Library."
+msgstr "در غیر این صورت، تصویر در کتابخانه‌ی رسانه می‌ماند."
+
+msgid "Announcement deleted"
+msgstr "اطلاعیه حذف شد"
+
+msgid "Copy saved as a draft"
+msgstr "رونوشت به‌صورت پیش‌نویس ذخیره شد"
+
+msgid "Announcement created"
+msgstr "اطلاعیه ساخته شد"
+
+msgid "Couldn’t do that. Try again in a moment."
+msgstr "این کار انجام نشد. کمی بعد دوباره تلاش کنید."
+
+msgid "Showing %1$s–%2$s of %3$s"
+msgstr "نمایش %1$s تا %2$s از %3$s"
+
+msgid "Drafts"
+msgstr "پیش‌نویس‌ها"
+
+msgid "Views"
+msgstr "بازدیدها"
+
+msgid "all time"
+msgstr "از ابتدا تا امروز"

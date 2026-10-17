@@ -1,7 +1,7 @@
 // from shadcn base-nova dialog + alert-dialog @2026-09-30, restyled for Fyldo (Base UI Dialog / AlertDialog; Figma "Modal")
 import { AlertDialog } from '@base-ui/react/alert-dialog';
 import { Dialog } from '@base-ui/react/dialog';
-import { useEffect, useRef, useState, type FormEvent, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type FormEvent, type ReactElement, type ReactNode } from 'react';
 import { __, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { usePortalContainer } from '../../lib/portal';
@@ -35,6 +35,11 @@ export interface ModalProps {
   confirmKeyword?: string;
   /** Where focus goes once the modal has closed after Confirm (e.g. the heading of the page it led to). Default: stays put. */
   focusAfterConfirm?: () => HTMLElement | null;
+  /**
+   * Figma `Content`: a few controls between the text and the buttons, such as an option that changes what the action
+   * does (a Checkbox "Also delete its media files"). Keep it short: a dialog is not a form.
+   */
+  children?: ReactNode;
 }
 
 /**
@@ -48,11 +53,14 @@ export interface ModalProps {
  * or Esc (Esc is Cancel: it never confirms) — not a click on the scrim — and never while its action is running (design
  * rule 9). A Default one also closes on the scrim.
  *
+ * `children` fill the Figma `Content` slot, right after the header (before the keyword field): a column 12 apart,
+ * padding 0/32/24/32.
+ *
  * Focus moves in on open — to Cancel, the safe choice, or to the keyword field — is trapped, the page behind is inert,
  * and focus returns to the trigger on close, except after Confirm, whose action decides where focus goes next (e.g.
  * the next page's heading). Portals into the Fyldo root.
  */
-export function Modal({ open, onOpenChange, type = 'default', title, description, cancelLabel, confirmLabel, onConfirm, confirmKeyword, focusAfterConfirm }: ModalProps): ReactElement {
+export function Modal({ open, onOpenChange, type = 'default', title, description, cancelLabel, confirmLabel, onConfirm, confirmKeyword, focusAfterConfirm, children }: ModalProps): ReactElement {
   const container = usePortalContainer();
   const popup = useRef<HTMLDivElement>(null);
   const confirmed = useRef(false);
@@ -132,6 +140,11 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
                 {/* Figma Icon Button Tertiary Small: its Tooltip repeats its name (design rule 10). */}
                 <IconButton icon="close-circle" label={__('Close', 'fyldo')} data-slot="fy-modal-close" disabled={busy} onClick={() => onOpenChange(false)} />
               </div>
+              {children !== undefined && children !== null ? (
+                <div data-slot="fy-modal-content" className="fy:flex fy:flex-col fy:gap-3 fy:px-8 fy:pb-6">
+                  {children}
+                </div>
+              ) : null}
               {keyword ? (
                 <div className="fy:px-8 fy:pb-8">
                   {/* Figma "Confirmation": a labelled Medium Input whose placeholder is the keyword itself. */}

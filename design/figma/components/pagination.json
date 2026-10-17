@@ -1,0 +1,1459 @@
+{
+ "source": {
+  "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
+  "page": "Components",
+  "nodeId": "431:21103"
+ },
+ "set": {
+  "id": "431:21103",
+  "name": "Pagination",
+  "kebab": "pagination",
+  "width": 688,
+  "height": 144,
+  "variantCount": 2,
+  "componentPropertyDefinitions": {
+   "Summary#431:1444": {
+    "type": "TEXT",
+    "defaultValue": "Showing 1–8 of 24 items"
+   },
+   "Summary (FA)#431:1447": {
+    "type": "TEXT",
+    "defaultValue": "نمایش ۱ تا ۸ از ۲۴ مورد"
+   },
+   "Page#431:1450": {
+    "type": "TEXT",
+    "defaultValue": "Page 1 of 3"
+   },
+   "Page (FA)#431:1453": {
+    "type": "TEXT",
+    "defaultValue": "صفحه‌ی ۱ از ۳"
+   },
+   "Show summary#431:1456": {
+    "type": "BOOLEAN",
+    "defaultValue": true
+   },
+   "Locale": {
+    "type": "VARIANT",
+    "defaultValue": "EN",
+    "variantOptions": [
+     "EN",
+     "FA"
+    ]
+   }
+  }
+ },
+ "variants": [
+  {
+   "id": "431:21079",
+   "name": "Locale=EN",
+   "file": "locale-en",
+   "variantProperties": {
+    "Locale": "EN"
+   },
+   "node": {
+    "name": "Locale=EN",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 0,
+     "primaryAxisAlignItems": "SPACE_BETWEEN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Summary",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 10,
+      "width": 146,
+      "height": 16,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#5c5f71",
+        "token": "text/secondary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "en/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show summary#431:1456",
+       "characters": "Summary#431:1444"
+      },
+      "text": {
+       "characters": "Showing 1–8 of 24 items",
+       "textStyle": "EN/Label/13",
+       "fontFamily": "Geist",
+       "fontStyle": "Regular",
+       "fontSize": 13,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 16
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "LEFT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/secondary"
+      }
+     },
+     {
+      "name": "Controls",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 486,
+      "y": 0,
+      "width": 154,
+      "height": 36,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "children": [
+       {
+        "name": "Previous",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 486,
+        "y": 0,
+        "width": 36,
+        "height": 36,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 6,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#f1f3fa",
+          "token": "action/disabled"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/sm",
+         "topRightRadius": "radius/sm",
+         "bottomLeftRadius": "radius/sm",
+         "bottomRightRadius": "radius/sm"
+        },
+        "instance": {
+         "component": "Icon Button",
+         "variant": "Type=Secondary, Size=Small, State=Disabled",
+         "componentProperties": {
+          "Icon#43:207": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8217",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-left / Property 1=linear"
+          },
+          "Type": {
+           "value": "Secondary",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "State": {
+           "value": "Disabled",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         }
+        }
+       },
+       {
+        "name": "Page",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 530,
+        "y": 10,
+        "width": 66,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Page#431:1450"
+        },
+        "text": {
+         "characters": "Page 1 of 3",
+         "textStyle": "EN/Label/13",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Next",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 604,
+        "y": 0,
+        "width": 36,
+        "height": 36,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 6,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "action/secondary"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/sm",
+         "topRightRadius": "radius/sm",
+         "bottomLeftRadius": "radius/sm",
+         "bottomRightRadius": "radius/sm"
+        },
+        "instance": {
+         "component": "Icon Button",
+         "variant": "Type=Secondary, Size=Small, State=Default",
+         "componentProperties": {
+          "Icon#43:207": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8180",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-right / Property 1=linear"
+          },
+          "Type": {
+           "value": "Secondary",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "State": {
+           "value": "Default",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         }
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "431:21091",
+   "name": "Locale=FA",
+   "file": "locale-fa",
+   "variantProperties": {
+    "Locale": "FA"
+   },
+   "node": {
+    "name": "Locale=FA",
+    "type": "COMPONENT",
+    "visible": true,
+    "opacity": 1,
+    "x": 0,
+    "y": 0,
+    "width": 640,
+    "height": 36,
+    "layout": {
+     "layoutMode": "HORIZONTAL",
+     "paddingTop": 0,
+     "paddingRight": 0,
+     "paddingBottom": 0,
+     "paddingLeft": 0,
+     "itemSpacing": 0,
+     "primaryAxisAlignItems": "SPACE_BETWEEN",
+     "counterAxisAlignItems": "CENTER",
+     "primaryAxisSizingMode": "FIXED",
+     "counterAxisSizingMode": "FIXED",
+     "clipsContent": false
+    },
+    "children": [
+     {
+      "name": "Controls",
+      "type": "FRAME",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "width": 162,
+      "height": 36,
+      "layout": {
+       "layoutMode": "HORIZONTAL",
+       "paddingTop": 0,
+       "paddingRight": 0,
+       "paddingBottom": 0,
+       "paddingLeft": 0,
+       "itemSpacing": 8,
+       "primaryAxisAlignItems": "MIN",
+       "counterAxisAlignItems": "CENTER",
+       "primaryAxisSizingMode": "AUTO",
+       "counterAxisSizingMode": "AUTO",
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT",
+       "clipsContent": false
+      },
+      "bound": {
+       "itemSpacing": "space/8"
+      },
+      "children": [
+       {
+        "name": "Next",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 0,
+        "y": 0,
+        "width": 36,
+        "height": 36,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 6,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#ffffff",
+          "token": "action/secondary"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/sm",
+         "topRightRadius": "radius/sm",
+         "bottomLeftRadius": "radius/sm",
+         "bottomRightRadius": "radius/sm"
+        },
+        "instance": {
+         "component": "Icon Button",
+         "variant": "Type=Secondary, Size=Small, State=Default",
+         "componentProperties": {
+          "Icon#43:207": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8217",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-left / Property 1=linear"
+          },
+          "Type": {
+           "value": "Secondary",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "State": {
+           "value": "Default",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         }
+        }
+       },
+       {
+        "name": "Page",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 44,
+        "y": 8,
+        "width": 74,
+        "height": 20,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#5c5f71",
+          "token": "text/secondary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "fa/font-family/sans"
+        },
+        "propertyReferences": {
+         "characters": "Page (FA)#431:1453"
+        },
+        "text": {
+         "characters": "صفحه‌ی ۱ از ۳",
+         "textStyle": "FA/Label/13",
+         "fontFamily": "IRANYekanX",
+         "fontStyle": "Regular",
+         "fontSize": 13,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 20
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "RIGHT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/secondary"
+        }
+       },
+       {
+        "name": "Previous",
+        "type": "INSTANCE",
+        "visible": true,
+        "opacity": 1,
+        "x": 126,
+        "y": 0,
+        "width": 36,
+        "height": 36,
+        "layout": {
+         "layoutMode": "HORIZONTAL",
+         "paddingTop": 0,
+         "paddingRight": 0,
+         "paddingBottom": 0,
+         "paddingLeft": 0,
+         "itemSpacing": 0,
+         "primaryAxisAlignItems": "CENTER",
+         "counterAxisAlignItems": "CENTER",
+         "primaryAxisSizingMode": "FIXED",
+         "counterAxisSizingMode": "FIXED",
+         "layoutSizingHorizontal": "FIXED",
+         "layoutSizingVertical": "FIXED",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT",
+         "clipsContent": false
+        },
+        "cornerRadius": 6,
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#f1f3fa",
+          "token": "action/disabled"
+         }
+        ],
+        "strokes": {
+         "paints": [
+          {
+           "type": "SOLID",
+           "hex": "#dadef4",
+           "token": "border/default"
+          }
+         ],
+         "weight": 1,
+         "align": "INSIDE"
+        },
+        "bound": {
+         "topLeftRadius": "radius/sm",
+         "topRightRadius": "radius/sm",
+         "bottomLeftRadius": "radius/sm",
+         "bottomRightRadius": "radius/sm"
+        },
+        "instance": {
+         "component": "Icon Button",
+         "variant": "Type=Secondary, Size=Small, State=Disabled",
+         "componentProperties": {
+          "Icon#43:207": {
+           "type": "INSTANCE_SWAP",
+           "value": "409:8180",
+           "preferredValues": [
+            {
+             "type": "COMPONENT_SET",
+             "key": "2aa4a1bcdad7c66ee6d1a26637376d9dbdd1e8e3"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00da37392bee7c1d9e80af624b66c16dd49b462b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ee99c7f9e8f34868f7a6e5dce78301276f12762e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "9fe971c57d13f20d2950c5d0054502060d3c443b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c923f38668f093f799f8ee2badba1780c2b48a5a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f589da14bbb715653e839db31e4bb111a6b9e180"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b19e4ec195348834c3e5cf8ac403c9b558bb6175"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "22698850649cc69c43d4b0cad07867b0bf970e7b"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "670e88b90215166ecd0fa246178bcdb9a0368b35"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "5bd0bfb8e863463d65b45e3025d4890e46c5d477"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7832ad8865dd05a6175815bff337ece92c3e07ac"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c2af71f087c9d205a544c2cbd018a219572ccc8d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "6d867b0a874ca92cdea4cf8ff8a578a91c453c30"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a0ab8e365c093b3419098fd9c2c0de768eef7d45"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "cb6080800b9a5b141c7f45d40198aedb2bfb9ae2"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "bcb3c545a4f0b0ba55002805ccab1afe26b7d99a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "fd00cb6d9238af5553d88f26d4f7a2a086b7eeba"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1778206613f75f7308b1e5a42b472cb787940037"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0827652c23947cfc8b6daf823ea05d9d7388f81d"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f1687631f4b626155d8e4250cdbe186d5341bdd8"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8ecb6091d03a2aba60d0956c793bf0f6f95f1c98"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "feac20d4f951a989f484d08f16813a25ce3b82c5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "7f96582a07cacc6e24789118adb2817c2db5bbaf"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "49013a66d70414c05e854b3750c9102dc3e9d53e"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "afd552441d7aae15c2f816d1765a4ad0d386baa4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "e9ee97a6852a2be94eaa44933adfbc2a5ba30a85"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c5940f239c46fa96470413b2fb9b479ee627f278"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "2fe41336058cbbec23659d29ccc3d7bf3ad334f0"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "1b1d725163056750a57c9966f69d116bfd66563a"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "741034250b12d4c2fd6de59e86411e49114536bd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "ac3483a404f9e57784dc0069bc5fe7a17e84b9b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "a1d3ce0d89ce97b75deacd73aad0148f7f617eff"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "96ec3f4601fb57d5c83e725f7e0e58cce3e3890c"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "92c6edda4449cfda1849f35de365b90411b67b15"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "432ac9fbff46c3f7effc5cdd0689e79d2576c5b4"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "123e9ad7311725b3119a69ed7308e21af0795a34"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d7bab455f097941ade10d63fdc5cf4e898d482b5"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "c631c391837da2540585f790faa38d54bb0d8218"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "105e05d9da7d4fbe4581fbc4d5a6278a8aafb899"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "b06d6dc7c12f0bd76b190d4c35001486b91b02b1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "d523ff6dea03dc3e6f3aabc0d1769da314c18a54"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "8723839e152377b637c22a10f5d4b77f4b58acec"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "540dfc195cca26369319f2f98a234745024601d1"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "f4ba82de6fd6c8d4fcdd68f002fa7d6b3e128c33"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "402aaac08ae413a9996eaf39bd71a01c41fce86f"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "00902d07be53a1509624435fecef105219a0c3cd"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "559272b7879c9c9d4b2a3f0ff9567999b0f12c55"
+            },
+            {
+             "type": "COMPONENT_SET",
+             "key": "0b8c7141f5a93cbf846104584335f03ebd5a43f2"
+            }
+           ],
+           "valueName": "arrow-right / Property 1=linear"
+          },
+          "Type": {
+           "value": "Secondary",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "Size": {
+           "value": "Small",
+           "type": "VARIANT",
+           "boundVariables": {}
+          },
+          "State": {
+           "value": "Disabled",
+           "type": "VARIANT",
+           "boundVariables": {}
+          }
+         }
+        }
+       }
+      ]
+     },
+     {
+      "name": "Summary",
+      "type": "TEXT",
+      "visible": true,
+      "opacity": 1,
+      "x": 520,
+      "y": 8,
+      "width": 120,
+      "height": 20,
+      "layout": {
+       "layoutSizingHorizontal": "HUG",
+       "layoutSizingVertical": "HUG",
+       "layoutGrow": 0,
+       "layoutAlign": "INHERIT"
+      },
+      "fills": [
+       {
+        "type": "SOLID",
+        "hex": "#5c5f71",
+        "token": "text/secondary"
+       }
+      ],
+      "bound": {
+       "fontFamily": "fa/font-family/sans"
+      },
+      "propertyReferences": {
+       "visible": "Show summary#431:1456",
+       "characters": "Summary (FA)#431:1447"
+      },
+      "text": {
+       "characters": "نمایش ۱ تا ۸ از ۲۴ مورد",
+       "textStyle": "FA/Label/13",
+       "fontFamily": "IRANYekanX",
+       "fontStyle": "Regular",
+       "fontSize": 13,
+       "lineHeight": {
+        "unit": "PIXELS",
+        "value": 20
+       },
+       "letterSpacing": {
+        "unit": "PIXELS",
+        "value": 0
+       },
+       "textAlignHorizontal": "RIGHT",
+       "textAlignVertical": "TOP",
+       "textAutoResize": "WIDTH_AND_HEIGHT",
+       "fillToken": "text/secondary"
+      }
+     }
+    ]
+   }
+  }
+ ]
+}

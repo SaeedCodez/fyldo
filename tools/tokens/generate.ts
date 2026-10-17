@@ -11,7 +11,7 @@
  * Sizes are px on purpose: another plugin/theme changing the root font-size must not resize the UI.
  */
 import { createHash } from 'node:crypto';
-import type { StyleSnapshot, Token, TokenSnapshot } from './snapshot.ts';
+import type { EffectLayer, StyleSnapshot, Token, TokenSnapshot } from './snapshot.ts';
 
 export interface GenerateOptions {
   rootSelector: string;
@@ -158,6 +158,7 @@ export function generate(
 
   // Fonts and weights are handled separately; everything else is emitted 1:1.
   emitGroup('Primitives', where('primitives.'));
+  emitGroup('Theme (a plugin overrides these per instance: docs/theming.md)', where('theme.'));
   emitGroup('Semantic colour', where('color.'));
   emitGroup('Spacing', where('spacing.space.'));
   emitGroup('Radius', where('spacing.radius.'));
@@ -174,7 +175,13 @@ export function generate(
   const effectVar = (name: string) => '--fyldo-shadow-' + name.replace(/^Shadow\//, '').replace(/[\s/]+/g, '-').toLowerCase();
   root.push('  /* Effects */');
   for (const e of effects) {
-    root.push(`  ${effectVar(e.name)}: ${e.layers.map((l) => `${px(l.x)} ${px(l.y)} ${px(l.blur)} ${px(l.spread)} ${l.color}`).join(', ')};`);
+    const color = (l: EffectLayer) => {
+      if (!l.token) return l.color;
+      const token = tokens.get(l.token);
+      if (!token) throw new Error(`Effect style "${e.name}" is bound to unknown token ${l.token}`);
+      return `var(${cssName(token)})`;
+    };
+    root.push(`  ${effectVar(e.name)}: ${e.layers.map((l) => `${px(l.x)} ${px(l.y)} ${px(l.blur)} ${px(l.spread)} ${color(l)}`).join(', ')};`);
   }
 
   // Active font family (switches with direction)

@@ -88,9 +88,9 @@
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 20,
-       "paddingRight": 28,
+       "paddingRight": 16,
        "paddingBottom": 20,
-       "paddingLeft": 28,
+       "paddingLeft": 16,
        "itemSpacing": 12,
        "primaryAxisAlignItems": "MIN",
        "counterAxisAlignItems": "CENTER",
@@ -108,7 +108,7 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 28,
+        "x": 16,
         "y": 20,
         "width": 36,
         "height": 36,
@@ -125,7 +125,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 35.99,
+          "x": 23.99,
           "y": 23,
           "width": 20.02,
           "height": 30,
@@ -143,9 +143,9 @@
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 76,
+        "x": 64,
         "y": 25,
-        "width": 151,
+        "width": 148,
         "height": 26,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -182,6 +182,51 @@
          "textAutoResize": "HEIGHT",
          "fillToken": "text/primary"
         }
+       },
+       {
+        "name": "Version label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 224,
+        "y": 30,
+        "width": 15,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "text": {
+         "characters": "1.0",
+         "textStyle": "EN/Label/12",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
        }
       ]
      },
@@ -193,7 +238,7 @@
       "x": 0,
       "y": 76,
       "width": 255,
-      "height": 583,
+      "height": 609,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -2865,9 +2910,9 @@
       "visible": true,
       "opacity": 1,
       "x": 0,
-      "y": 659,
+      "y": 685,
       "width": 255,
-      "height": 141,
+      "height": 115,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 12,
@@ -2908,7 +2953,7 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 672,
+        "y": 698,
         "width": 223,
         "height": 44,
         "layout": {
@@ -3212,7 +3257,7 @@
         "visible": true,
         "opacity": 1,
         "x": 16,
-        "y": 718,
+        "y": 744,
         "width": 223,
         "height": 44,
         "layout": {
@@ -3509,83 +3554,6 @@
           "Label": "3"
          }
         }
-       },
-       {
-        "name": "Version",
-        "type": "FRAME",
-        "visible": true,
-        "opacity": 1,
-        "x": 16,
-        "y": 764,
-        "width": 223,
-        "height": 24,
-        "layout": {
-         "layoutMode": "HORIZONTAL",
-         "paddingTop": 8,
-         "paddingRight": 14,
-         "paddingBottom": 0,
-         "paddingLeft": 14,
-         "itemSpacing": 0,
-         "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MIN",
-         "primaryAxisSizingMode": "FIXED",
-         "counterAxisSizingMode": "AUTO",
-         "layoutSizingHorizontal": "FILL",
-         "layoutSizingVertical": "HUG",
-         "layoutGrow": 0,
-         "layoutAlign": "STRETCH",
-         "clipsContent": true
-        },
-        "bound": {
-         "paddingTop": "space/8"
-        },
-        "children": [
-         {
-          "name": "Version label",
-          "type": "TEXT",
-          "visible": true,
-          "opacity": 1,
-          "x": 30,
-          "y": 772,
-          "width": 195,
-          "height": 16,
-          "layout": {
-           "layoutSizingHorizontal": "FILL",
-           "layoutSizingVertical": "HUG",
-           "layoutGrow": 1,
-           "layoutAlign": "INHERIT"
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "hex": "#6c6f80",
-            "token": "text/tertiary"
-           }
-          ],
-          "bound": {
-           "fontFamily": "en/font-family/sans"
-          },
-          "text": {
-           "characters": "Version 1.0",
-           "textStyle": "EN/Label/12",
-           "fontFamily": "Geist",
-           "fontStyle": "Regular",
-           "fontSize": 12,
-           "lineHeight": {
-            "unit": "PIXELS",
-            "value": 16
-           },
-           "letterSpacing": {
-            "unit": "PIXELS",
-            "value": 0
-           },
-           "textAlignHorizontal": "LEFT",
-           "textAlignVertical": "TOP",
-           "textAutoResize": "HEIGHT",
-           "fillToken": "text/tertiary"
-          }
-         }
-        ]
        }
       ]
      }
@@ -3657,9 +3625,9 @@
       "layout": {
        "layoutMode": "HORIZONTAL",
        "paddingTop": 20,
-       "paddingRight": 28,
+       "paddingRight": 16,
        "paddingBottom": 20,
-       "paddingLeft": 28,
+       "paddingLeft": 16,
        "itemSpacing": 12,
        "primaryAxisAlignItems": "MAX",
        "counterAxisAlignItems": "CENTER",
@@ -3673,13 +3641,58 @@
       },
       "children": [
        {
+        "name": "Version label",
+        "type": "TEXT",
+        "visible": true,
+        "opacity": 1,
+        "x": 17,
+        "y": 30,
+        "width": 15,
+        "height": 16,
+        "layout": {
+         "layoutSizingHorizontal": "HUG",
+         "layoutSizingVertical": "HUG",
+         "layoutGrow": 0,
+         "layoutAlign": "INHERIT"
+        },
+        "fills": [
+         {
+          "type": "SOLID",
+          "hex": "#6c6f80",
+          "token": "text/tertiary"
+         }
+        ],
+        "bound": {
+         "fontFamily": "en/font-family/sans"
+        },
+        "text": {
+         "characters": "1.0",
+         "textStyle": "EN/Label/12",
+         "fontFamily": "Geist",
+         "fontStyle": "Regular",
+         "fontSize": 12,
+         "lineHeight": {
+          "unit": "PIXELS",
+          "value": 16
+         },
+         "letterSpacing": {
+          "unit": "PIXELS",
+          "value": 0
+         },
+         "textAlignHorizontal": "LEFT",
+         "textAlignVertical": "TOP",
+         "textAutoResize": "WIDTH_AND_HEIGHT",
+         "fillToken": "text/tertiary"
+        }
+       },
+       {
         "name": "فیلدو",
         "type": "TEXT",
         "visible": true,
         "opacity": 1,
-        "x": 29,
+        "x": 44,
         "y": 22,
-        "width": 151,
+        "width": 148,
         "height": 32,
         "layout": {
          "layoutSizingHorizontal": "FILL",
@@ -3711,7 +3724,7 @@
           "unit": "PIXELS",
           "value": 0
          },
-         "textAlignHorizontal": "LEFT",
+         "textAlignHorizontal": "RIGHT",
          "textAlignVertical": "TOP",
          "textAutoResize": "HEIGHT",
          "fillToken": "text/primary"
@@ -3722,7 +3735,7 @@
         "type": "FRAME",
         "visible": true,
         "opacity": 1,
-        "x": 192,
+        "x": 204,
         "y": 20,
         "width": 36,
         "height": 36,
@@ -3739,7 +3752,7 @@
           "type": "VECTOR",
           "visible": true,
           "opacity": 1,
-          "x": 199.99,
+          "x": 211.99,
           "y": 23,
           "width": 20.02,
           "height": 30,
@@ -3762,7 +3775,7 @@
       "x": 1,
       "y": 76,
       "width": 255,
-      "height": 581,
+      "height": 609,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 8,
@@ -6434,9 +6447,9 @@
       "visible": true,
       "opacity": 1,
       "x": 1,
-      "y": 657,
+      "y": 685,
       "width": 255,
-      "height": 143,
+      "height": 115,
       "layout": {
        "layoutMode": "VERTICAL",
        "paddingTop": 12,
@@ -6477,7 +6490,7 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 670,
+        "y": 698,
         "width": 223,
         "height": 44,
         "layout": {
@@ -6781,7 +6794,7 @@
         "visible": true,
         "opacity": 1,
         "x": 17,
-        "y": 716,
+        "y": 744,
         "width": 223,
         "height": 44,
         "layout": {
@@ -7078,83 +7091,6 @@
           "Label": "راهنما و پشتیبانی"
          }
         }
-       },
-       {
-        "name": "Version",
-        "type": "FRAME",
-        "visible": true,
-        "opacity": 1,
-        "x": 17,
-        "y": 762,
-        "width": 223,
-        "height": 26,
-        "layout": {
-         "layoutMode": "HORIZONTAL",
-         "paddingTop": 8,
-         "paddingRight": 14,
-         "paddingBottom": 0,
-         "paddingLeft": 14,
-         "itemSpacing": 0,
-         "primaryAxisAlignItems": "MIN",
-         "counterAxisAlignItems": "MIN",
-         "primaryAxisSizingMode": "FIXED",
-         "counterAxisSizingMode": "AUTO",
-         "layoutSizingHorizontal": "FILL",
-         "layoutSizingVertical": "HUG",
-         "layoutGrow": 0,
-         "layoutAlign": "STRETCH",
-         "clipsContent": true
-        },
-        "bound": {
-         "paddingTop": "space/8"
-        },
-        "children": [
-         {
-          "name": "Version label",
-          "type": "TEXT",
-          "visible": true,
-          "opacity": 1,
-          "x": 31,
-          "y": 770,
-          "width": 195,
-          "height": 18,
-          "layout": {
-           "layoutSizingHorizontal": "FILL",
-           "layoutSizingVertical": "HUG",
-           "layoutGrow": 1,
-           "layoutAlign": "INHERIT"
-          },
-          "fills": [
-           {
-            "type": "SOLID",
-            "hex": "#6c6f80",
-            "token": "text/tertiary"
-           }
-          ],
-          "bound": {
-           "fontFamily": "fa/font-family/sans"
-          },
-          "text": {
-           "characters": "نسخه ۱٫۰",
-           "textStyle": "FA/Label/12",
-           "fontFamily": "IRANYekanX",
-           "fontStyle": "Regular",
-           "fontSize": 12,
-           "lineHeight": {
-            "unit": "PIXELS",
-            "value": 18
-           },
-           "letterSpacing": {
-            "unit": "PIXELS",
-            "value": 0
-           },
-           "textAlignHorizontal": "RIGHT",
-           "textAlignVertical": "TOP",
-           "textAutoResize": "HEIGHT",
-           "fillToken": "text/tertiary"
-          }
-         }
-        ]
        }
       ]
      }

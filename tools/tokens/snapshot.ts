@@ -51,6 +51,8 @@ export interface EffectLayer {
   spread: number;
   /** `#rrggbb` or `#rrggbbaa` */
   color: string;
+  /** The colour variable the layer is bound to in Figma (`color.focus.border`): the shadow follows it, and the theme. */
+  token?: string;
 }
 
 export interface EffectStyle {
@@ -119,7 +121,7 @@ export function normalizeStyles(raw: {
   }>;
   effectStyles: Array<{
     name: string;
-    effects: Array<{ x: number; y: number; blur: number; spread: number; color: string | null }>;
+    effects: Array<{ x: number; y: number; blur: number; spread: number; color: string | null; token?: string }>;
   }>;
 }): StyleSnapshot {
   return {
@@ -135,7 +137,14 @@ export function normalizeStyles(raw: {
       name: s.name,
       layers: s.effects
         .filter((e) => e.color)
-        .map((e) => ({ x: e.x, y: e.y, blur: e.blur, spread: e.spread, color: normalizeHex(e.color as string) })),
+        .map((e) => ({
+          x: e.x,
+          y: e.y,
+          blur: e.blur,
+          spread: e.spread,
+          color: normalizeHex(e.color as string),
+          ...(e.token ? { token: e.token } : {}),
+        })),
     })),
   };
 }

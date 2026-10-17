@@ -41,6 +41,7 @@ if ( ! function_exists( 'did_action' ) ) {
 
 if ( ! function_exists( 'apply_filters' ) ) {
 	function apply_filters( $hook, $value, ...$args ) {
+		$GLOBALS['__fyldo_test_filtered'][] = $hook;
 		return $value;
 	}
 }
@@ -82,6 +83,18 @@ if ( ! function_exists( '_n' ) ) {
 
 if ( ! function_exists( 'esc_html' ) ) {
 	function esc_html( $text ) {
+		return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return esc_html( $text );
+	}
+}
+
+if ( ! function_exists( 'esc_attr' ) ) {
+	function esc_attr( $text ) {
 		return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' );
 	}
 }
@@ -313,5 +326,32 @@ if ( ! function_exists( 'size_format' ) ) {
 if ( ! function_exists( 'current_user_can' ) ) {
 	function current_user_can( $capability ) {
 		return in_array( $capability, $GLOBALS['__fyldo_test_caps'] ?? array( 'manage_options' ), true );
+	}
+}
+
+// The client config (Assets\ClientConfig::build): URLs, direction and locale of a plain English site.
+if ( ! function_exists( 'rest_url' ) ) {
+	function rest_url( $path = '' ) {
+		return 'https://example.com/wp-json/' . ltrim( (string) $path, '/' );
+	}
+}
+if ( ! function_exists( 'admin_url' ) ) {
+	function admin_url( $path = '' ) {
+		return 'https://example.com/wp-admin/' . ltrim( (string) $path, '/' );
+	}
+}
+if ( ! function_exists( 'is_rtl' ) ) {
+	function is_rtl() {
+		return false;
+	}
+}
+if ( ! function_exists( 'determine_locale' ) ) {
+	function determine_locale() {
+		return 'en_US';
+	}
+}
+if ( ! function_exists( 'get_locale' ) ) {
+	function get_locale() {
+		return 'en_US';
 	}
 }

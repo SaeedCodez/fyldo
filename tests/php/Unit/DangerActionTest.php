@@ -108,15 +108,15 @@ final class DangerActionTest extends TestCase {
 		foreach ( $GLOBALS['__fyldo_test_routes'] as $route ) {
 			$routes[ $route[1] ] = $route;
 		}
-		// The page routes, the action route and the search route of the post, term and user fields.
-		$this->assertCount( 3, $routes );
+		// The page routes, the action route and the search route of the post, term and user fields; a form's two (FormRestTest).
+		$this->assertCount( 5, $routes );
 		$action = current( array_filter( $routes, static fn( array $route ): bool => false !== strpos( $route[1], '/actions/' ) ) );
 		$this->assertSame( 'fyldo-acme-seo/v1', $action[0] );
 		$this->assertStringEndsWith( '/actions/(?P<action>[a-z0-9_-]+)', $action[1] );
 		$this->assertSame( 'POST', $action[2][0]['methods'] );
 		$this->assertSame( array( $controller, 'authorize' ), $action[2][0]['permission_callback'] );
 
-		$items = current( array_filter( $routes, static fn( array $route ): bool => false !== strpos( $route[1], '/items' ) ) );
+		$items = current( array_filter( $routes, static fn( array $route ): bool => 0 === strpos( $route[1], '/pages/' ) && false !== strpos( $route[1], '/items' ) ) );
 		$this->assertSame( 'GET', $items[2][0]['methods'] );
 		$this->assertSame( array( $controller, 'authorize' ), $items[2][0]['permission_callback'] );
 	}

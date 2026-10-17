@@ -1,7 +1,7 @@
 <?php
 /**
- * The demo dashboard: four pages of sample settings, shown only when Fyldo is installed as a plugin
- * (`wp-content/plugins/fyldo/`), never as a drop-in folder or a Composer package. `fyldo.php` decides that; this
+ * The demo dashboard: pages of sample settings plus one custom page (demo/announcements.php), shown only when Fyldo is
+ * installed as a plugin (`wp-content/plugins/fyldo/`), never as a drop-in folder or a Composer package. `fyldo.php` decides that; this
  * file only declares the pages with the public API, exactly as a consumer plugin would (PHP, plus three tiny SVGs for the Choice Card demo).
  *
  * Strings use Fyldo's own text domain, so the demo follows the site (or profile) language: English or فارسی.
@@ -23,6 +23,44 @@ final class Demo {
 
 	const SLUG = 'fyldo-demo';
 
+	/**
+	 * A sample theme (docs/theming.md): the "Pelk" mode of the Theme collection in Fyldo's Figma file, a coral brand on
+	 * warm neutrals. The demo uses Fyldo's own colours; to see it in this theme instead:
+	 * `add_filter( 'fyldo/fyldo-demo/theme', fn() => \Fyldo\V1\Demo\Demo::SAMPLE_THEME );`
+	 */
+	const SAMPLE_THEME = array(
+		'brand'   => array(
+			'50'  => '#fff7f4',
+			'100' => '#fff1ec',
+			'200' => '#ffdcd2',
+			'300' => '#ffc0b0',
+			'400' => '#ffa18a',
+			'500' => '#ff8566',
+			'600' => '#ff6b4a',
+			'700' => '#c8401f',
+			'800' => '#a33317',
+			'900' => '#82290f',
+			'950' => '#4a170a',
+		),
+		'neutral' => array(
+			'background-100' => '#ffffff',
+			'background-200' => '#faf7f5',
+			'100'            => '#f4f1ef',
+			'200'            => '#ede8e5',
+			'300'            => '#e8e2de',
+			'400'            => '#d9d4d0',
+			'500'            => '#bdb6bb',
+			'600'            => '#a39dae',
+			'700'            => '#8a8494',
+			'800'            => '#7a7484',
+			'850'            => '#6b6675',
+			'900'            => '#4a4557',
+			'1000'           => '#1c1a2b',
+			'1000-hover'     => '#2a2738',
+			'overlay'        => '#15131f73',
+		),
+	);
+
 	/** @var string Main plugin file (for the "Open demo" link on the Plugins screen). */
 	private static $main_file = '';
 
@@ -33,6 +71,9 @@ final class Demo {
 	 */
 	public static function boot( string $main_file ): void {
 		self::$main_file = $main_file;
+
+		require_once __DIR__ . '/announcements.php';
+		Announcements::boot();
 
 		add_action( 'init', array( self::class, 'register' ) );
 		add_filter( 'plugin_action_links', array( self::class, 'action_links' ), 10, 2 );
@@ -71,6 +112,8 @@ final class Demo {
 			array(
 				'title'   => __( 'Fyldo demo', 'fyldo' ),
 				'version' => (string) Loader::loaded_version(),
+				// Fyldo's own colours unless a theme is set through the filter (see SAMPLE_THEME).
+				'theme'   => apply_filters( Naming::hook( self::SLUG, 'theme' ), array() ),
 				'links'   => array(
 					array(
 						'label'    => __( 'Documentation', 'fyldo' ),
@@ -90,6 +133,7 @@ final class Demo {
 
 		$fyldo->add_group( 'settings', __( 'Settings', 'fyldo' ) );
 		$fyldo->add_group( 'tools', __( 'Tools', 'fyldo' ) );
+		$fyldo->add_group( 'manage', __( 'Content', 'fyldo' ) );
 
 		$fyldo->add_page( 'overview', self::overview() );
 		$fyldo->add_page( 'general', self::general() );
@@ -99,6 +143,9 @@ final class Demo {
 		$fyldo->add_page( 'dates', self::dates() );
 		$fyldo->add_page( 'security', self::security() );
 		$fyldo->add_page( 'hours', self::hours() );
+
+		// A custom page (the plugin draws it) with a form whose records live in the demo's own table.
+		Announcements::register( $fyldo, self::$main_file );
 
 		$fyldo->admin_notice(
 			__( 'This demo is only added when Fyldo is installed as a plugin. Return false from the fyldo/fyldo-demo/enabled filter to hide it.', 'fyldo' ),

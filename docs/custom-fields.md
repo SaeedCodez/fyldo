@@ -75,9 +75,9 @@ export default function workingHours({ React, ui }) {
 
 | | |
 |---|---|
-| `version` | `1`. Within v1, members are only ever added, never removed. |
+| `version` | `1`. Within v1, members are only ever added, never removed. Custom pages get the same object, with `Form` too. |
 | `React` | Fyldo's own React 19. Use it for hooks and `createElement`. **Do not bundle React yourself**: a second copy breaks hooks. |
-| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`. Their props are the same as in `app/components/ui/*` and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
+| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`, and since custom pages every other public one (`Badge`, `MultiSelect`, `RadioGroup`, `SegmentedControl`, `Tag`, `Tooltip`… — the full list is in [custom-pages.md](custom-pages.md)). Their props are the same as in `app/components/ui/*` and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
 
 ### The definition (return value)
 

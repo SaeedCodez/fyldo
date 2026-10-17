@@ -37,6 +37,12 @@
  *   ?c=save-bar&state=dirty|saving|saved|error   (800 wide, as in the pack; the texts are Fyldo's own strings)
  *   ?c=modal&title=…&description=…&cancel=…&confirm=…   (the Default modal, open)
  *   ?c=modal&type=danger&keyword=RESET&…   (the Danger modal with its typed confirmation; Confirm stays disabled)
+ *   ?c=modal&…&content=<checkbox label>&content_description=…   (the Figma `Content` slot: a Checkbox with its description)
+ *   ?c=item-card&spec=<json>&names=gallery   (304 wide; spec: {title, meta, description, media, status: {label, tone}, flag: {label, tone},
+ *       tags: [..], details: [{icon, label}], actions: [{icon, label}]}; media = true draws the pack's placeholder icon box)
+ *   ?c=item-card&type=add&title=…&description=…&names=add   (the Add card, 304 × 279 as in the pack)
+ *   ?c=pagination&page=1&count=3&summary=…   (640 wide, as in the pack; the page text is Fyldo's own string)
+ *   ?c=stat-card&label=…&value=…&icon=chart-21&trend=up|down|neutral&delta=12%&comparison=…   (222 wide, as in the pack)
  *   ?c=toast&tone=neutral|success|error|loading&title=…&description=…&action=…   (one toast, queued without a timeout)
  *   ?c=tooltip&placement=top|bottom|start|end&label=…   (an Icon Button whose tooltip is opened by keyboard focus)
  *   ?c=icon-button&variant=tertiary&size=sm&icon=more&label=…
@@ -97,7 +103,10 @@ import { RelationSelect } from '../../../app/components/ui/relation-select';
 import type { RelationSearch } from '../../../app/lib/relation';
 import { EmptyState } from '../../../app/components/ui/empty-state';
 import { IconButton } from '../../../app/components/ui/icon-button';
+import { AddItemCard, ItemCard } from '../../../app/components/ui/item-card';
 import { Modal } from '../../../app/components/ui/modal';
+import { Pagination } from '../../../app/components/ui/pagination';
+import { StatCard, type StatTrend } from '../../../app/components/ui/stat-card';
 import { ToastProvider } from '../../../app/components/ui/toast';
 import { TooltipProvider, type TooltipSide } from '../../../app/components/ui/tooltip';
 import { createToaster, type ToastTone } from '../../../app/lib/toast';
@@ -663,6 +672,62 @@ function SectionCardDemo({ spec, tone }: { spec: CardSpec; tone: 'default' | 'da
   );
 }
 
+interface ItemCardSpec {
+  title: string;
+  meta?: string;
+  description?: string;
+  media?: boolean;
+  status?: { label: string; tone: BadgeTone };
+  flag?: { label: string; tone: BadgeTone };
+  tags?: string[];
+  details?: Array<{ icon: string; label: string }>;
+  actions?: Array<{ icon: string; label: string }>;
+}
+
+/** The Item Card from a spec; the media area holds the pack's placeholder (a 56px icon box with `gallery`), not product art. */
+function ItemCardDemo() {
+  if (q.get('type') === 'add') {
+    return (
+      <div style={{ width: 304, height: 279, display: 'flex' }}>
+        <AddItemCard title={param('title')} description={param('description') || undefined} onClick={() => undefined} />
+      </div>
+    );
+  }
+  const spec = JSON.parse(param('spec', '{}')) as ItemCardSpec;
+  const badge = (b?: { label: string; tone: BadgeTone }) => (b ? <Badge tone={b.tone}>{b.label}</Badge> : undefined);
+  return (
+    <div style={{ width: 304 }}>
+      <ItemCard
+        title={spec.title}
+        meta={spec.meta}
+        description={spec.description}
+        media={
+          spec.media ? (
+            <span className="fy:flex fy:size-14 fy:items-center fy:justify-center fy:rounded-lg fy:border fy:border-border-default fy:bg-background-default fy:text-icon-tertiary">
+              <Icon name="gallery" size={24} />
+            </span>
+          ) : undefined
+        }
+        status={badge(spec.status)}
+        flag={badge(spec.flag)}
+        tags={spec.tags}
+        details={spec.details}
+        actions={spec.actions?.map((a) => <IconButton key={a.label} icon={a.icon} label={a.label} />)}
+        onOpen={() => undefined}
+      />
+    </div>
+  );
+}
+
+function PaginationDemo() {
+  const [page, setPage] = useState(Number(param('page', '1')));
+  return (
+    <div style={{ width: 640 }}>
+      <Pagination page={page} pageCount={Number(param('count', '3'))} onPageChange={setPage} summary={param('summary') || undefined} />
+    </div>
+  );
+}
+
 /** One toast, queued without a timeout so it stays put for the screenshot (the stack is fixed at the bottom-end corner). */
 function ToastDemo() {
   const [toaster] = useState(createToaster);
@@ -856,7 +921,9 @@ function Variant() {
             onConfirm={() => undefined}
             type={param('type', 'default') as 'default' | 'danger'}
             confirmKeyword={param('keyword') || undefined}
-          />
+          >
+            {param('content') ? <Checkbox label={param('content')} description={param('content_description') || undefined} /> : undefined}
+          </Modal>
         </div>
       );
     case 'section-card':
@@ -866,6 +933,24 @@ function Variant() {
           tone={param('tone', 'default') as 'default' | 'danger'}
         />
       );
+    case 'item-card':
+      return <ItemCardDemo />;
+    case 'pagination':
+      return <PaginationDemo />;
+    case 'stat-card': {
+      const trend = param('trend', 'up') as StatTrend;
+      return (
+        <div style={{ width: 222 }}>
+          <StatCard
+            label={param('label')}
+            value={param('value')}
+            icon={param('icon') || undefined}
+            delta={param('delta') ? { value: param('delta'), trend } : undefined}
+            comparison={param('comparison') || undefined}
+          />
+        </div>
+      );
+    }
     case 'textarea':
       return <TextareaDemo />;
     case 'tag':

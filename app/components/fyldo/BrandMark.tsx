@@ -51,7 +51,7 @@ function Logo({ logo, large }: { logo?: BrandLogo; large: boolean }): ReactEleme
 
 /**
  * Figma Top Navigation "Brand" (design/figma/brand/README.md): logo (24) · name (Heading/16) · version Badge, gap 10.
- * `large` is the Sidebar header: logo 36 · name Heading/20, gap 12 — no version (the Sidebar shows it in its footer).
+ * `large` is the Sidebar header: logo 36 · name Heading/20, gap 12 — no version (the Sidebar header shows it after the brand).
  */
 export function BrandMark({ brand, locale, large = false }: { brand: Brand; locale: string; large?: boolean }): ReactElement {
   return (

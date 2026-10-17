@@ -1,4 +1,5 @@
 {
+    "type": "settings",
     "id": "advanced",
     "title": "Advanced",
     "description": "Caching and troubleshooting options for developers.",

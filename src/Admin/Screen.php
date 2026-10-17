@@ -9,6 +9,7 @@ namespace Fyldo\V1\Admin;
 
 use Fyldo\V1\Instance;
 use Fyldo\V1\Support\Naming;
+use Fyldo\V1\Support\Theme;
 
 /**
  * One admin screen per instance (pages and tabs are client-side routes).
@@ -54,16 +55,20 @@ final class Screen {
 
 	/**
 	 * Root element. It is deliberately NOT wrapped in `.wrap`: core JS relocates `.notice` elements to just
-	 * after the first heading inside `.wrap`, and must never touch the React tree.
+	 * after the first heading inside `.wrap`, and must never touch the React tree. The plugin's theme is set on it as
+	 * custom properties: an inline style beats the token defaults, and reaches everything Fyldo draws (its popovers and
+	 * dialogs portal into the root) and nothing outside.
 	 */
 	public static function render( Instance $instance ): void {
+		$style = Theme::style( $instance->theme() );
 		printf(
-			'<div id="%1$s" %2$s="%3$s" dir="%4$s" lang="%5$s" class="fyldo-root"></div>',
+			'<div id="%1$s" %2$s="%3$s" dir="%4$s" lang="%5$s" class="fyldo-root"%6$s></div>',
 			esc_attr( Naming::dom_id( $instance->slug() ) ),
 			esc_attr( Naming::root_attribute() ),
 			esc_attr( $instance->slug() ),
 			esc_attr( is_rtl() ? 'rtl' : 'ltr' ),
-			esc_attr( str_replace( '_', '-', determine_locale() ) )
+			esc_attr( str_replace( '_', '-', determine_locale() ) ),
+			'' === $style ? '' : ' style="' . esc_attr( $style ) . '"'
 		);
 
 		echo '<noscript><p style="padding:24px">' . esc_html__( 'This settings screen needs JavaScript. Please enable it and reload the page.', 'fyldo' ) . '</p></noscript>';
