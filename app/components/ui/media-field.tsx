@@ -3,6 +3,7 @@ import { useEffect, useId, useRef, useState, type FocusEvent, type ReactElement 
 import { Icon } from '../../icons/Icon';
 import { __, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import { checkChoice, describeItem, itemFromAttachment, libraryFilter, wpMedia, type MediaKind, type WpFrame } from '../../lib/wp-media';
 import type { MediaItem } from '../../types';
 import { Button } from './button';
@@ -94,20 +95,24 @@ export interface MediaPickerProps {
   label: string;
   /** The attachment ID (0 = nothing chosen). */
   value: number;
-  /** What to draw for `value`; null while nothing is chosen. */
-  media: MediaItem | null;
+  /**
+   * What to draw for `value`; null while nothing is chosen. Left out, the picker asks `wp.media` about the attachment
+   * itself (a custom page or field that keeps only the ID).
+   */
+  media?: MediaItem | null;
   /** MIME types the field accepts; null = every image (`image`), or every type (`file`). */
   mimes?: readonly string[] | null;
   /** Largest file in bytes; null / omitted = no limit. */
   maxSize?: number | null;
-  /** A usable attachment was chosen in the media modal. */
-  onSelect: (item: MediaItem) => void;
-  /** "Remove" was pressed: the caller sets the value to 0. Nothing is deleted from the media library. */
-  onRemove: () => void;
+  /**
+   * A usable attachment was chosen in the media modal (its ID and what it is), or "Remove" was pressed (0 and null).
+   * Nothing is deleted from the media library.
+   */
+  onValueChange: (value: number, item: MediaItem | null) => void;
   /** The chosen attachment is the wrong type or too large: the caller shows the message; the value stays. */
   onError: (message: string) => void;
   disabled?: boolean;
-  /** The page's locale: sizes and dimensions are written in its numerals. */
+  /** The page's locale (default: the screen's): sizes and dimensions are written in its numerals. */
   locale?: string;
   /** Focus left the field (the caller validates), or the media modal closed. */
   onBlur?: () => void;
@@ -120,20 +125,26 @@ export interface MediaPickerProps {
  * allowed types, the current attachment preselected); the trash button only clears the value. Use inside a Field (Setting Row
  * `group`, MediaField).
  */
-export function MediaPicker({ kind, label, value, media, mimes = null, maxSize = null, onSelect, onRemove, onError, disabled, locale = 'en', onBlur, className }: MediaPickerProps): ReactElement {
+export function MediaPicker({ kind, label, value, media, mimes = null, maxSize = null, onValueChange, onError, disabled, locale: localeProp, onBlur, className }: MediaPickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const labels = useGroupLabels();
   const root = useRef<HTMLDivElement>(null);
   const frame = useRef<WpFrame | null>(null);
+  // The attachment last chosen here: drawn at once when the caller keeps only the ID (`media` left out).
+  const [chosen, setChosen] = useState<MediaItem | null>(null);
+  const known = media !== undefined ? media : chosen !== null && chosen.id === value ? chosen : null;
+  const found = useAttachment(media === undefined && known === null ? value : 0, kind);
   // What the frame's handlers need: they are created once, on the first click, and must see the latest props.
-  const current = useRef({ value, rules: { kind, mimes, maxSize }, locale, onSelect, onError, onBlur });
+  const current = useRef({ value, rules: { kind, mimes, maxSize }, locale, onValueChange, onError, onBlur });
   useEffect(() => {
-    current.current = { value, rules: { kind, mimes, maxSize }, locale, onSelect, onError, onBlur };
+    current.current = { value, rules: { kind, mimes, maxSize }, locale, onValueChange, onError, onBlur };
   });
   const modalOpen = useRef(false);
   // The first button (Select … / Replace) is where focus belongs after the media modal closes or an attachment is removed.
   const focusPrimary = (): void => root.current?.querySelector<HTMLElement>('[data-slot=fy-button]')?.focus();
 
-  const item: MediaItem | null = value > 0 ? (media !== null && media.id === value ? media : placeholderItem(value)) : null;
+  const described = known ?? found;
+  const item: MediaItem | null = value > 0 ? (described !== null && described.id === value ? described : placeholderItem(value)) : null;
   const filled = item !== null;
 
   const show = (): void => {
@@ -157,10 +168,14 @@ export function MediaPicker({ kind, label, value, media, mimes = null, maxSize =
       created.on('select', () => {
         const attachment = created.state().get('selection').first()?.toJSON();
         if (!attachment) return;
-        const chosen = itemFromAttachment(attachment, current.current.rules.kind);
-        const problem = checkChoice(chosen, current.current.rules, current.current.locale);
-        if (problem !== null) current.current.onError(problem);
-        else current.current.onSelect(chosen);
+        const picked = itemFromAttachment(attachment, current.current.rules.kind);
+        const problem = checkChoice(picked, current.current.rules, current.current.locale);
+        if (problem !== null) {
+          current.current.onError(problem);
+          return;
+        }
+        setChosen(picked);
+        current.current.onValueChange(picked.id, picked);
       });
       created.on('close', () => {
         modalOpen.current = false;
@@ -180,7 +195,7 @@ export function MediaPicker({ kind, label, value, media, mimes = null, maxSize =
   };
 
   const remove = (): void => {
-    onRemove();
+    onValueChange(0, null);
     // The trash button goes away: keep the keyboard where it was working.
     focusPrimary();
     onBlur?.();
@@ -192,7 +207,8 @@ export function MediaPicker({ kind, label, value, media, mimes = null, maxSize =
 
   return (
     <div
-      {...labels}
+      // Named by its row (a Setting Row's title); on its own, by its label.
+      {...(labels['aria-labelledby'] ? labels : { 'aria-label': label })}
       ref={root}
       role="group"
       data-slot="fy-media-field"
@@ -220,6 +236,32 @@ export function MediaPicker({ kind, label, value, media, mimes = null, maxSize =
       </div>
     </div>
   );
+}
+
+/**
+ * What `wp.media` knows about attachment `id` (0 = nothing to look up): asked once per ID, null until it answers, and null
+ * for good where there is no `wp.media` or no such attachment (the ID then stands in for the name).
+ */
+function useAttachment(id: number, kind: MediaKind): MediaItem | null {
+  const [found, setFound] = useState<MediaItem | null>(null);
+  useEffect(() => {
+    const api = id > 0 ? wpMedia() : null;
+    if (api === null) return undefined;
+    let live = true;
+    const model = api.attachment(id);
+    // A model the media library already holds is complete at once; another one is complete after `fetch`.
+    const read = (): void => {
+      const attachment = model.toJSON();
+      if (live && attachment.filename) setFound(itemFromAttachment(attachment, kind));
+    };
+    read();
+    Promise.resolve(model.fetch?.()).then(read, () => undefined);
+    return () => {
+      live = false;
+    };
+  }, [id, kind]);
+
+  return found !== null && found.id === id ? found : null;
 }
 
 /** A value with no attachment data (the harness, a stored ID the server could not describe): the ID stands in for the name. */

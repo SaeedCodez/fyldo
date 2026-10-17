@@ -4,10 +4,12 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FieldRenderer } from '../../app/components/fyldo/FieldRenderer';
+import { MediaPicker } from '../../app/components/ui/media-field';
 import { SelectFileField } from '../../app/components/ui/select-file-field';
 import { UploadImageField } from '../../app/components/ui/upload-image-field';
 import { setLocaleData } from '../../app/i18n';
 import { resetIconCache, setIconLoader } from '../../app/icons/registry';
+import { PortalContainerContext } from '../../app/lib/portal';
 import { checkChoice, describeItem, formatBytes, itemFromAttachment, type WpAttachment } from '../../app/lib/wp-media';
 import type { FieldValue, ImageFieldDef, MediaItem, MediaMap } from '../../app/types';
 
@@ -98,16 +100,11 @@ function Field({
           error={error}
           disabled={disabled}
           locale={locale}
-          onSelect={(item) => {
-            setValue(item.id);
+          onValueChange={(id, item) => {
+            setValue(id);
             setMedia(item);
             setError(undefined);
-            onValue?.(item.id);
-          }}
-          onRemove={() => {
-            setValue(0);
-            setMedia(null);
-            onValue?.(0);
+            onValue?.(id);
           }}
           onError={setError}
         />
@@ -128,6 +125,82 @@ afterEach(() => {
   resetIconCache();
   Reflect.deleteProperty(window, 'wp');
   vi.restoreAllMocks();
+});
+
+describe('MediaPicker with only the ID (a custom page or field)', () => {
+  /** `wp.media` whose attachment models are empty until `fetch` answers, as for one the media library has not loaded yet. */
+  function stubLookup(known: Record<number, WpAttachment>) {
+    const wp = stubWpMedia();
+    wp.attachment.mockImplementation((id: number) => {
+      let json: WpAttachment = { id };
+      return {
+        id,
+        fetch: vi.fn(() => {
+          json = known[id] ?? { id };
+          return Promise.resolve();
+        }),
+        toJSON: () => json,
+      };
+    });
+    return wp;
+  }
+
+  function Picker({ initial, onChange }: { initial: number; onChange?: (id: number, item: MediaItem | null) => void }) {
+    const [value, setValue] = useState(initial);
+    return (
+      <MediaPicker
+        kind="image"
+        label="Cover"
+        value={value}
+        onValueChange={(id, item) => {
+          setValue(id);
+          onChange?.(id, item);
+        }}
+        onError={() => undefined}
+      />
+    );
+  }
+
+  it('asks wp.media about the attachment and draws its name, dimensions and size in the screen’s numerals', async () => {
+    const wp = stubLookup({ 7: PNG });
+    const root = document.createElement('div');
+    root.setAttribute('lang', 'fa-IR');
+    document.body.append(root);
+    render(
+      <PortalContainerContext.Provider value={root}>
+        <Picker initial={7} />
+      </PortalContainerContext.Provider>,
+      { container: root.appendChild(document.createElement('div')) },
+    );
+
+    expect(screen.getByText('#7')).toBeInTheDocument(); // the ID stands in while wp.media answers
+    expect(await screen.findByText('logo-mark.png')).toBeInTheDocument();
+    expect(screen.getByText(/۵۱۲ × ۵۱۲/)).toBeInTheDocument();
+    expect(wp.attachment).toHaveBeenCalledWith(7);
+    root.remove();
+  });
+
+  it('gives the ID and the attachment on choosing, draws the choice without a lookup, and 0 and null on removing', async () => {
+    const wp = stubLookup({});
+    const onChange = vi.fn();
+    render(<Picker initial={0} onChange={onChange} />);
+
+    await userEvent.click(screen.getByRole('button', { name: 'Select image: Cover' }));
+    wp.choose(PNG);
+    expect(onChange).toHaveBeenLastCalledWith(7, expect.objectContaining({ id: 7, filename: 'logo-mark.png' }));
+    expect(screen.getByText('logo-mark.png')).toBeInTheDocument();
+    expect(wp.attachment).not.toHaveBeenCalled(); // the choice is drawn as it came: no lookup
+
+    await userEvent.click(screen.getByRole('button', { name: 'Remove Cover' }));
+    expect(onChange).toHaveBeenLastCalledWith(0, null);
+    expect(screen.getByText('No image selected')).toBeInTheDocument();
+  });
+
+  it('keeps the ID as the name where there is no wp.media (or no such attachment)', () => {
+    delete (window as unknown as { wp?: unknown }).wp;
+    render(<Picker initial={12} />);
+    expect(screen.getByText('#12')).toBeInTheDocument();
+  });
 });
 
 describe('Upload Image', () => {

@@ -327,8 +327,7 @@ export function FieldRenderer({
             maxSize={field.max_size}
             disabled={disabled}
             locale={locale}
-            onSelect={(item) => onChange(field.id, item.id, item)}
-            onRemove={() => onChange(field.id, 0, null)}
+            onValueChange={(id, item) => onChange(field.id, id, item)}
             onError={(message) => onError?.(field.id, message)}
             onBlur={() => onBlur(field.id)}
           />

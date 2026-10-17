@@ -18,6 +18,7 @@ import { StatCard } from '../../app/components/ui/stat-card';
 import { TooltipProvider } from '../../app/components/ui/tooltip';
 import { RTL_FLIP } from '../../app/icons/rtl-flip';
 import { PortalContainerContext } from '../../app/lib/portal';
+import { sdk } from '../../app/lib/sdk';
 
 function mount(node: ReactNode, dir: 'ltr' | 'rtl' = 'ltr') {
   const root = document.createElement('div');
@@ -252,5 +253,38 @@ describe('Modal: Content slot', () => {
   it('has no Content frame without children', () => {
     mount(<Modal open onOpenChange={() => undefined} title="Discard?" cancelLabel="Cancel" confirmLabel="Discard" onConfirm={() => undefined} />);
     expect(screen.getByRole('dialog').querySelector('[data-slot=fy-modal-content]')).toBeNull();
+  });
+});
+
+describe('Field controls on a custom page', () => {
+  const { ui } = sdk;
+
+  it('work outside a Setting Row (a toolbar, a card of the page’s own)', () => {
+    mount(
+      <>
+        <ui.ColorPicker value="#ff6b4a" onValueChange={() => undefined} aria-label="Colour" />
+        <ui.DatePicker value="2026-10-17" calendar="gregorian" onValueChange={() => undefined} aria-label="From" />
+        <ui.TimePicker value="09:30" onValueChange={() => undefined} aria-label="At" />
+        <ui.DateRangePicker value={{ start: '2026-10-01', end: '2026-10-05' }} calendar="gregorian" onValueChange={() => undefined} />
+        <ui.MediaPicker kind="image" label="Cover" value={0} onValueChange={() => undefined} onError={() => undefined} />
+        <ui.GroupItem title="Slide 1" open onOpenChange={() => undefined}>
+          Body
+        </ui.GroupItem>
+      </>,
+    );
+
+    // On its own the date field links the line in the other calendar itself (in a Setting Row the row does).
+    const date = screen.getByRole('button', { name: 'From' });
+    expect(date).toHaveAccessibleDescription(screen.getByText((_, node) => node?.getAttribute('data-slot') === 'fy-date-equivalent').textContent ?? '');
+    expect(screen.getByRole('button', { name: 'Colour' })).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: 'Cover' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Slide 1' })).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('write in the screen’s language without being given one (the root’s lang)', () => {
+    const root = mount(<ui.DatePicker value="2026-10-17" calendar="gregorian" onValueChange={() => undefined} aria-label="Start" />, 'rtl');
+    expect(root.textContent).toContain('۲۰۲۶');
+    expect(root.textContent).not.toContain('2026');
+    root.remove();
   });
 });

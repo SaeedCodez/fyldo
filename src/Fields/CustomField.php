@@ -33,12 +33,17 @@ final class CustomField extends AbstractField {
 	}
 
 	protected function extra_keys(): array {
-		return array( 'module', 'style', 'props' );
+		return array( 'module', 'style', 'props', 'media' );
 	}
 
 	/** URL of the stylesheet to enqueue with the screen; '' = none. */
 	public function style(): string {
 		return (string) $this->config['style'];
+	}
+
+	/** Whether the module opens the media library (`ui.MediaPicker`): the screen then loads `wp.media`. */
+	public function media(): bool {
+		return true === $this->config['media'];
 	}
 
 	protected function normalize_type( array $config ): array {
@@ -62,9 +67,15 @@ final class CustomField extends AbstractField {
 			throw new ConfigException( sprintf( 'Custom field "%s": `props` must be an array keyed by name, holding only text, numbers, booleans, null and arrays.', $id ) );
 		}
 
+		$media = $config['media'] ?? false;
+		if ( ! is_bool( $media ) ) {
+			throw new ConfigException( sprintf( 'Custom field "%s": `media` must be true (the module opens the media library) or false.', $id ) );
+		}
+
 		$config['module'] = $module;
 		$config['style']  = $style;
 		$config['props']  = $props;
+		$config['media']  = $media;
 		if ( array_key_exists( 'default', $config ) ) {
 			$config['default'] = $this->sanitize_value( $config['default'] );
 		}

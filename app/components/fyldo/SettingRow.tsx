@@ -1,7 +1,7 @@
 import { Field } from '@base-ui/react/field';
 import { useId, type ReactElement, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import { FieldError } from '../ui/field-shell';
+import { FieldError, InFieldRoot } from '../ui/field-shell';
 import { GroupLabelProvider } from '../ui/group-field';
 
 export interface SettingRowProps {
@@ -144,13 +144,15 @@ export function SettingRow({
           inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item || full ? 'fy:w-full' : wide ? 'fy:w-112' : cards ? 'fy:w-144' : range ? 'fy:w-120' : 'fy:w-100', 'fy:max-w-full'),
         )}
       >
-        {group ? (
-          <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
-            {children}
-          </GroupLabelProvider>
-        ) : (
-          children
-        )}
+        <InFieldRoot.Provider value>
+          {group ? (
+            <GroupLabelProvider titleId={titleId} descriptionId={groupDescribedBy || undefined}>
+              {children}
+            </GroupLabelProvider>
+          ) : (
+            children
+          )}
+        </InFieldRoot.Provider>
         {error && !inline && !errorInControl && !ownError ? <FieldError>{error}</FieldError> : null}
         {helperBelow && description && !error ? (
           group ? (

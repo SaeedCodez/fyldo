@@ -396,8 +396,7 @@ function MediaDemo({ kind }: { kind: MediaKind }) {
         value={filled ? 7 : 0}
         media={media}
         locale={locale}
-        onSelect={() => undefined}
-        onRemove={() => undefined}
+        onValueChange={() => undefined}
         onError={() => undefined}
         error={state === 'error' ? param('error') : undefined}
         disabled={state === 'disabled'}

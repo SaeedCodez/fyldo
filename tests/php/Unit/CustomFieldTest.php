@@ -167,6 +167,7 @@ final class CustomFieldTest extends TestCase {
 			'props not an array'      => array( array( 'props' => 'x' ), '`props` must be an array keyed by name' ),
 			'props with a callback'   => array( array( 'props' => array( 'cb' => static function () {} ) ), '`props` must be an array keyed by name' ),
 			'unknown key'             => array( array( 'component' => 'x' ), 'unknown key(s): component' ),
+			'media not a boolean'     => array( array( 'media' => 'yes' ), '`media` must be true (the module opens the media library) or false' ),
 		);
 	}
 }

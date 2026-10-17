@@ -3,6 +3,7 @@ import { useId, useRef, type ReactElement } from 'react';
 import { Icon } from '../../icons/Icon';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import { durationText, rangeEndMin, type CalendarKind, type MomentKind } from '../../lib/datetime';
 import type { DateRangeValue } from '../../types';
 import type { ControlSize } from './control';
@@ -34,6 +35,7 @@ export interface DateRangePickerProps {
   error?: string;
   /** The end the error is about, drawn in red (Figma: the end). */
   invalid?: RangeEnd;
+  /** The page's locale (default: the screen's): its numerals, and Persian month names in Persian. */
   locale?: string;
   /** Focus left the range (both inputs and their popups): the caller validates. */
   onBlur?: () => void;
@@ -67,10 +69,11 @@ export function DateRangePicker({
   disabled,
   error,
   invalid = 'end',
-  locale = 'en',
+  locale: localeProp,
   onBlur,
   className,
 }: DateRangePickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const root = useRef<HTMLDivElement | null>(null);
   const labels = useGroupLabels();
   const ids = { start: useId(), end: useId(), startName: useId(), endName: useId(), duration: useId(), error: useId() };

@@ -37,6 +37,7 @@ $acme->add_page( 'stories', array(
 		'text' => array( 'add' => __( 'Add story', 'acme' ) ),
 	),
 	'capability'  => 'edit_posts',                               // optional, as for any page
+	'media'       => true,                                       // optional: the module opens the media library
 ) );
 ```
 
@@ -46,6 +47,7 @@ $acme->add_page( 'stories', array(
 | `module` | **Required.** URL of an ES module, `http(s)://…` or a path starting with `/`. Fyldo `import()`s it before the first render. |
 | `style` | URL of a stylesheet, enqueued on the Fyldo screen after Fyldo's own CSS, once per URL. |
 | `props` | Plain data (text, numbers, booleans, null, arrays). Put translated strings here: the module has no text domain. |
+| `media` | `true` when the module uses `ui.MediaPicker`: the screen then loads the WordPress media library (`wp.media`). Without it, the library loads only when a settings page or form has an `image` or `file` field. |
 | `title`, `description`, `icon`, `group`, `badge`, `capability` | As for a settings page. The page shows in the navigation like any other. |
 
 A custom page has no sections, tabs, option or values. `sections`, `tabs`, `save` and `option_name` are errors.
@@ -82,7 +84,7 @@ breaking the screen.
 |---|---|
 | `version` | `1`. Within v1 members are only added, never removed or changed. |
 | `React` | Fyldo's React 19. |
-| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, and for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`. |
+| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `GroupItem` ([below](#field-controls)). |
 | `Form` | A Fyldo form for one record (below). |
 
 Custom fields get the same object.
@@ -181,6 +183,29 @@ nothing moves when the values arrive; when the record cannot be loaded it says s
 no record says the item doesn't exist. It registers its unsaved edits with the guard by itself. Changing `record` from
 `'new'` to the key `onSaved` just gave does not reload the form, as long as the `Form` stays at the same place in the
 tree (a remount reloads). `Form` is a React component: use it from a `Component` page, not from `mount`.
+
+## Field controls
+
+The controls Fyldo's `color`, `date`, `time`, `datetime`, the range fields and `image` / `file` draw, and the Group Item
+a `group` draws, for a page that keeps its record in its own state (an editor whose fields depend on each other, with a
+live preview). They are the same components, so they look and behave exactly like Fyldo's fields.
+
+Put each control in a `ui.SettingRow` (inside a `ui.SectionCard`), as Fyldo does: the row's `title` names it, its
+`description` and `error` describe it. On its own (a filter in a toolbar), give it an `aria-label`. Every control writes
+in the screen's language (Persian numerals and month names on a Persian screen) unless you pass `locale`.
+
+| Component | Value | Props |
+|---|---|---|
+| `ColorPicker` | `#rrggbb` (lower case), `''` for none | `value`, `onValueChange`, `presets` (hex list, or `false`), `placeholder`, `size` (`sm`, `md`, `lg`; `md` in a Setting Row), `disabled`, `onBlur` |
+| `DatePicker` | `Y-m-d`; with `kind: 'datetime'`, `Y-m-d H:i:s` in UTC, shown in the site's time | `value`, `onValueChange`, `kind`, `calendar` (`auto`, `gregorian`, `jalali`), `min`, `max` (a value, or `today` / `now`), `step` (minutes), `placeholder`, `size`, `disabled`, `onBlur` |
+| `TimePicker` | `H:i` (24-hour) | `value`, `onValueChange`, `step`, `placeholder`, `size`, `disabled`, `onBlur` |
+| `DateRangePicker` | `{ start, end }`, each as above | `value`, `onValueChange`, `kind` (`date`, `time`, `datetime`), `calendar`, `min`, `max`, `step`, `placeholder`, `startPlaceholder`, `endPlaceholder`, `size`, `disabled`, `error` (shown under it), `invalid` (the end drawn red: `start` or `end`), `onBlur`. In a Setting Row, pass the row `group`, `ownError` and `range`. |
+| `MediaPicker` | The attachment ID, `0` for none | `kind` (`image` or `file`), `label` (the media library's title), `value`, `onValueChange(id, item)` (`item` describes the attachment; `0` and `null` on Remove), `onError(message)` (the chosen file is the wrong type or too large: show it as the row's `error`), `mimes` (e.g. `['video/mp4', 'video/webm']`), `maxSize` (bytes), `disabled`, `onBlur`. It looks the attachment up by its ID, so keeping the ID is enough. Set `'media' => true` on the page (or the custom field) so the media library is loaded. In a Setting Row, pass the row `group` and `wide`. |
+| `GroupItem` | | `title`, `summary` (a line under it), `preview` (an Iconsax name for the tile, `''` for an empty one), `open`, `onOpenChange`, `errorCount` (a red border and "2 errors" while it is invalid), `actions` (your `ui.IconButton`s: move, duplicate, remove), `children` (the item's fields, drawn while open). The list (adding, moving, removing items) is yours. |
+
+`onValueChange` gives the new value, `onBlur` says the person has left the control (the moment Fyldo's fields validate).
+The values are the formats Fyldo's own fields store, so PHP reads them the same way (`Support\Dates::to_site()` for a
+datetime).
 
 ## Components for list and dashboard pages
 
