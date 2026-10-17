@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Changed
+
+- **Design**: the info tone (Blue Badge and Notice, the Setting Row badge, anything on `status/info/*`) uses the blue scale again instead of the brand violet: bg `blue/100`, border `blue/400`, subtle `blue/300`, solid `blue/700`, text `blue/800`. Synced from Figma with the rest of the design pack.
+
 ## [1.0.0-beta.5] - 2026-10-17
 
 ### Added
