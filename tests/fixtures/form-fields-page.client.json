@@ -414,6 +414,52 @@
                     ]
                 },
                 {
+                    "id": "start_date",
+                    "type": "date",
+                    "label": "Start date",
+                    "description": "The first day the offer runs.",
+                    "default": "2026-10-20",
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "date": true
+                    },
+                    "calendar": "gregorian",
+                    "placeholder": ""
+                },
+                {
+                    "id": "report_at",
+                    "type": "time",
+                    "label": "Send the report at",
+                    "description": "",
+                    "default": "09:00",
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "time": {
+                            "step": 15
+                        }
+                    },
+                    "calendar": "gregorian",
+                    "placeholder": ""
+                },
+                {
+                    "id": "publish_at",
+                    "type": "datetime",
+                    "label": "Publish at",
+                    "description": "",
+                    "default": "",
+                    "disabled": false,
+                    "layout": "field",
+                    "validate": {
+                        "datetime": {
+                            "step": 5
+                        }
+                    },
+                    "calendar": "auto",
+                    "placeholder": ""
+                },
+                {
                     "id": "header_buttons",
                     "type": "group",
                     "label": "Header buttons",
@@ -613,6 +659,9 @@
         "image_quality": 75,
         "accent_color": "#2271b1",
         "menu_icon": "home-2",
+        "start_date": "2026-10-20",
+        "report_at": "09:00",
+        "publish_at": "",
         "header_buttons": [
             {
                 "label": "Docs",

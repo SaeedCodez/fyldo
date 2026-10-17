@@ -34,6 +34,8 @@ export interface SegmentedControlProps {
   onValueChange: (value: string) => void;
   disabled?: boolean;
   name?: string;
+  /** The track takes the whole width and the segments share it equally (the Calendar Panel's calendar switch). */
+  fill?: boolean;
   className?: string;
   /** Focus left the control (bubbled `blur`; the caller decides whether it moved between segments). */
   onBlur?: (event: FocusEvent<HTMLDivElement>) => void;
@@ -47,7 +49,7 @@ export interface SegmentedControlProps {
  * (`role="radiogroup"`, roving focus, arrow keys: mirrored in RTL), drawn as a track of segments. The first option sits on the
  * start side: left in English, right in Persian.
  */
-export function SegmentedControl({ options, value, onValueChange, disabled, name, className, ...aria }: SegmentedControlProps): ReactElement {
+export function SegmentedControl({ options, value, onValueChange, disabled, name, fill = false, className, ...aria }: SegmentedControlProps): ReactElement {
   const labels = useGroupLabels();
   return (
     <BaseRadioGroup
@@ -58,10 +60,10 @@ export function SegmentedControl({ options, value, onValueChange, disabled, name
       disabled={disabled}
       data-slot="fy-segmented-control"
       onValueChange={(next) => onValueChange(String(next))}
-      className={cn('fy:inline-flex fy:w-fit fy:max-w-full fy:items-center fy:gap-0.5 fy:rounded-lg fy:bg-surface-default fy:p-1', className)}
+      className={cn('fy:inline-flex fy:max-w-full fy:items-center fy:gap-0.5 fy:rounded-lg fy:bg-surface-default fy:p-1', fill ? 'fy:w-full' : 'fy:w-fit', className)}
     >
       {options.map((option) => (
-        <BaseRadio.Root key={option.value} value={option.value} disabled={disabled || option.disabled} data-slot="fy-segment" className={SEGMENT}>
+        <BaseRadio.Root key={option.value} value={option.value} disabled={disabled || option.disabled} data-slot="fy-segment" className={cn(SEGMENT, fill && 'fy:flex-1')}>
           {option.label}
         </BaseRadio.Root>
       ))}

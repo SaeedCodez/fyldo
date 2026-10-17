@@ -63,6 +63,15 @@
   }
 }
 
+/* A scroll area without a visible scrollbar (the Time Panel's columns: they scroll by wheel, touch and the keyboard). */
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Neutral, never-blue keyboard focus (docs/ARCHITECTURE.md §11): 2px white gap + 2px ring. :focus-visible only. */
 @utility focus-ring {
   &:focus-visible {

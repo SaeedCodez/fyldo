@@ -10,17 +10,30 @@
 
 namespace Fyldo\V1\Validation;
 
+use Fyldo\V1\Support\Dates;
+
 /**
  * Rule engine.
  */
 final class Rules {
 
 	/**
-	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number`, `color`, `media` and `relation` are
-	 * implied by the field type (the value must be an address / a number / `#rrggbb` / an attachment ID / a post, term or user
-	 * ID or a list of them); the others are declared by the developer.
+	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number`, `color`, `date`, `time`, `datetime`,
+	 * `media` and `relation` are implied by the field type (the value must be an address / a number / `#rrggbb` / a day, a time
+	 * or a UTC datetime within the field's `min`, `max` and minute `step` / an attachment ID / a post, term or user ID or a list
+	 * of them); the others are declared by the developer.
 	 */
-	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
+	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'date', 'time', 'datetime', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
+
+	/** The date and time rules: `true`, or an array of `min`, `max` (stored format, or `today` / `now`) and `step` (minutes). */
+	const MOMENTS = array( 'date', 'time', 'datetime' );
+
+	/** How a bound of each looks, for the developer's error messages. */
+	const MOMENT_EXAMPLES = array(
+		'date'     => 'a date like 2026-10-20, or "today"',
+		'time'     => 'a time like 09:30 (24-hour)',
+		'datetime' => 'a UTC datetime like 2026-10-20 11:00:00, or "now"',
+	);
 
 	/**
 	 * @param array<string,mixed> $rules Field `validate` array.
@@ -77,6 +90,15 @@ final class Rules {
 			// A color field stores `#rrggbb`; text the server could not read as a colour stays text and lands here.
 			if ( ! empty( $rules['color'] ) && 1 !== preg_match( '/^#[0-9a-f]{6}$/D', $value ) ) {
 				return self::fail( 'color', array() );
+			}
+		}
+
+		foreach ( self::MOMENTS as $kind ) {
+			if ( isset( $rules[ $kind ] ) && false !== $rules[ $kind ] ) {
+				$failure = self::moment( $kind, is_array( $rules[ $kind ] ) ? $rules[ $kind ] : array(), $value );
+				if ( null !== $failure ) {
+					return $failure;
+				}
 			}
 		}
 
@@ -161,6 +183,112 @@ final class Rules {
 		foreach ( array( 'schemes', 'allowed' ) as $key ) {
 			if ( isset( $rules[ $key ] ) && ( ! is_array( $rules[ $key ] ) || ( 'schemes' === $key && array() === $rules[ $key ] ) ) ) {
 				return sprintf( '`%s` must be a list (and `schemes` cannot be empty).', $key );
+			}
+		}
+
+		foreach ( self::MOMENTS as $kind ) {
+			if ( ! isset( $rules[ $kind ] ) || is_bool( $rules[ $kind ] ) ) {
+				continue;
+			}
+			if ( ! is_array( $rules[ $kind ] ) || array() !== array_diff( array_keys( $rules[ $kind ] ), array( 'min', 'max', 'step' ) ) ) {
+				return sprintf( '`%s` must be true, or an array of `min`, `max` and `step`.', $kind );
+			}
+			$problem = self::moment_config_error( $kind, $rules[ $kind ] );
+			if ( null !== $problem ) {
+				return $problem;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * What is wrong with the `min`, `max` and `step` of a date, time or datetime field, or null.
+	 *
+	 * @param string              $kind `date`, `time` or `datetime`.
+	 * @param array<string,mixed> $rule The field's `min`, `max` and `step`.
+	 */
+	public static function moment_config_error( string $kind, array $rule ): ?string {
+		// The keyword a bound may be instead of a value (resolved in the site's time zone when a value is checked).
+		$keywords = array(
+			'date'     => 'today',
+			'datetime' => 'now',
+		);
+
+		$keyword = $keywords[ $kind ] ?? '';
+
+		foreach ( array( 'min', 'max' ) as $key ) {
+			if ( ! isset( $rule[ $key ] ) ) {
+				continue;
+			}
+			$bound = $rule[ $key ];
+			if ( ! is_string( $bound ) || '' === $bound || ( $keyword !== $bound && ! Dates::is_valid( $kind, $bound ) ) ) {
+				return sprintf( '`%1$s` must be %2$s.', $key, self::MOMENT_EXAMPLES[ $kind ] ?? 'a stored value' );
+			}
+		}
+
+		// Two fixed bounds can be compared now (a keyword moves with the clock).
+		if ( isset( $rule['min'], $rule['max'] ) && $rule['min'] !== $keyword && $rule['max'] !== $keyword && strcmp( (string) $rule['min'], (string) $rule['max'] ) > 0 ) {
+			return '`min` is later than `max`.';
+		}
+
+		if ( isset( $rule['step'] ) ) {
+			if ( 'date' === $kind ) {
+				return '`step` is for time and datetime fields (minutes).';
+			}
+			if ( ! is_int( $rule['step'] ) || $rule['step'] < 1 || $rule['step'] > 60 || 0 !== 60 % $rule['step'] ) {
+				return '`step` must be a whole number of minutes that divides an hour: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30 or 60.';
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * A date, time or datetime value: the strict stored format (a real day, 00:00–23:59), then `min` / `max` (`today` and
+	 * `now` in the site's time zone), then the minute step (a datetime's counted on the site's clock). Mirrors
+	 * `momentFailure` in app/lib/validation.ts.
+	 *
+	 * @param string              $kind  `date`, `time` or `datetime`.
+	 * @param array<string,mixed> $rule  `min`, `max`, `step`.
+	 * @param mixed               $value Sanitized value.
+	 * @return array{rule:string,params:array<string,mixed>}|null
+	 */
+	private static function moment( string $kind, array $rule, $value ): ?array {
+		if ( ! is_string( $value ) || ! Dates::is_valid( $kind, $value ) ) {
+			return self::fail( $kind, array() );
+		}
+
+		if ( isset( $rule['min'] ) ) {
+			$min = Dates::resolve( $kind, (string) $rule['min'] );
+			if ( strcmp( $value, $min ) < 0 ) {
+				return self::fail(
+					'too_early',
+					array(
+						'bound' => $min,
+						'kind'  => $kind,
+					)
+				);
+			}
+		}
+		if ( isset( $rule['max'] ) ) {
+			$max = Dates::resolve( $kind, (string) $rule['max'] );
+			if ( strcmp( $value, $max ) > 0 ) {
+				return self::fail(
+					'too_late',
+					array(
+						'bound' => $max,
+						'kind'  => $kind,
+					)
+				);
+			}
+		}
+
+		if ( 'date' !== $kind ) {
+			$step   = isset( $rule['step'] ) ? max( 1, (int) $rule['step'] ) : 1;
+			$minute = Dates::minute_of_day( $kind, $value );
+			if ( $minute < 0 || 0 !== $minute % $step ) {
+				return self::fail( 'minute_step', array( 'step' => $step ) );
 			}
 		}
 

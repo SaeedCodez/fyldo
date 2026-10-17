@@ -7,19 +7,27 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Support\Dates;
 use Fyldo\V1\Validation\Rules;
 use PHPUnit\Framework\TestCase;
 
 final class RulesTest extends TestCase {
 
+	protected function tearDown(): void {
+		Dates::pin( null );
+	}
+
 	/**
 	 * @dataProvider cases
 	 *
-	 * @param array<string,mixed> $rules  Rules.
-	 * @param mixed               $value  Value.
-	 * @param string|null         $expect Expected failing rule id.
+	 * @param array<string,mixed> $rules    Rules.
+	 * @param mixed               $value    Value.
+	 * @param string|null         $expect   Expected failing rule id.
+	 * @param string|null         $now      The pinned clock (UTC), for `today` / `now`.
+	 * @param string              $timezone The site's time zone.
 	 */
-	public function test_shared_fixture( array $rules, $value, ?string $expect ): void {
+	public function test_shared_fixture( array $rules, $value, ?string $expect, ?string $now, string $timezone ): void {
+		Dates::pin( $now, $timezone );
 		$failure = Rules::check( $rules, $value );
 
 		$this->assertSame( $expect, null === $failure ? null : $failure['rule'] );
@@ -31,7 +39,7 @@ final class RulesTest extends TestCase {
 
 		$out = array();
 		foreach ( $json['cases'] as $case ) {
-			$out[ $case['name'] ] = array( $case['rules'], $case['value'], $case['expect'] );
+			$out[ $case['name'] ] = array( $case['rules'], $case['value'], $case['expect'], $case['now'] ?? null, $case['timezone'] ?? 'UTC' );
 		}
 
 		return $out;

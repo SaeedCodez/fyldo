@@ -96,6 +96,7 @@ final class Demo {
 		$fyldo->add_page( 'content', self::content() );
 		$fyldo->add_page( 'header', self::header() );
 		$fyldo->add_page( 'links', self::links() );
+		$fyldo->add_page( 'dates', self::dates() );
 		$fyldo->add_page( 'security', self::security() );
 		$fyldo->add_page( 'hours', self::hours() );
 
@@ -661,6 +662,136 @@ final class Demo {
 									'type'     => 'url',
 									'label'    => __( 'Link', 'fyldo' ),
 									'validate' => array( 'required' => true ),
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+	}
+
+	/**
+	 * Date, time and datetime fields: Jalali and Gregorian, `today` / `now` bounds, minute steps, and the fields inside a group.
+	 * Stored Gregorian (`Y-m-d`, `H:i`) and a datetime in UTC, whatever the calendar on screen.
+	 */
+	private static function dates(): array {
+		return array(
+			'title'       => __( 'Dates and times', 'fyldo' ),
+			'description' => __( 'Dates show in the Jalali or the Gregorian calendar; what is saved is always Gregorian, a datetime in UTC.', 'fyldo' ),
+			'icon'        => 'calendar',
+			'group'       => 'settings',
+			'save'        => 'global',
+			'sections'    => array(
+				array(
+					'id'          => 'sale',
+					'title'       => __( 'Sale', 'fyldo' ),
+					'description' => __( 'When the next sale starts and ends, in the site’s time zone.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'launch_date',
+							'type'        => 'date',
+							'label'       => __( 'Launch date', 'fyldo' ),
+							'description' => __( 'Today or later.', 'fyldo' ),
+							'min'         => 'today',
+						),
+						array(
+							'id'          => 'sale_starts',
+							'type'        => 'datetime',
+							'label'       => __( 'Sale starts', 'fyldo' ),
+							'description' => __( 'In steps of 5 minutes. Saved in UTC.', 'fyldo' ),
+							'step'        => 5,
+							'validate'    => array( 'required' => true ),
+						),
+						array(
+							'id'          => 'sale_ends',
+							'type'        => 'datetime',
+							'label'       => __( 'Sale ends', 'fyldo' ),
+							'description' => __( 'Leave empty to keep the sale running.', 'fyldo' ),
+						),
+					),
+				),
+				array(
+					'id'          => 'calendars',
+					'title'       => __( 'Calendars', 'fyldo' ),
+					'description' => __( 'A field can follow the site language (with a switch) or be locked to one calendar.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'birthday',
+							'type'        => 'date',
+							'label'       => __( 'Birthday', 'fyldo' ),
+							'description' => __( 'Always in the Jalali calendar.', 'fyldo' ),
+							'calendar'    => 'jalali',
+						),
+						array(
+							'id'          => 'invoice_date',
+							'type'        => 'date',
+							'label'       => __( 'Invoice date', 'fyldo' ),
+							'description' => __( 'Always in the Gregorian calendar.', 'fyldo' ),
+							'calendar'    => 'gregorian',
+						),
+						array(
+							'id'          => 'holiday',
+							'type'        => 'date',
+							'label'       => __( 'Next holiday', 'fyldo' ),
+							'description' => __( 'Follows the site language; switch the calendar in the panel.', 'fyldo' ),
+							'calendar'    => 'auto',
+						),
+					),
+				),
+				array(
+					'id'          => 'times',
+					'title'       => __( 'Times', 'fyldo' ),
+					'description' => __( 'Type a time (24-hour) or pick it from the hour and minute columns.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'report_time',
+							'type'        => 'time',
+							'label'       => __( 'Send the daily report at', 'fyldo' ),
+							'description' => __( 'In steps of 15 minutes.', 'fyldo' ),
+							'step'        => 15,
+							'default'     => '09:00',
+						),
+						array(
+							'id'          => 'quiet_from',
+							'type'        => 'time',
+							'label'       => __( 'Quiet hours start at', 'fyldo' ),
+							'description' => __( 'No notifications are sent after this time.', 'fyldo' ),
+							'default'     => '22:00',
+						),
+					),
+				),
+				array(
+					'id'          => 'events',
+					'title'       => __( 'Events', 'fyldo' ),
+					'description' => __( 'Date and time fields work inside a group too.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'events',
+							'type'        => 'group',
+							'label'       => __( 'Events', 'fyldo' ),
+							'description' => __( 'Shown on the events page, in this order.', 'fyldo' ),
+							'item_title'  => 'title',
+							'sortable'    => true,
+							'addable'     => true,
+							'add_label'   => __( 'Add event', 'fyldo' ),
+							'fields'      => array(
+								array(
+									'id'       => 'title',
+									'type'     => 'text',
+									'label'    => __( 'Title', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+								array(
+									'id'       => 'day',
+									'type'     => 'date',
+									'label'    => __( 'Day', 'fyldo' ),
+									'validate' => array( 'required' => true ),
+								),
+								array(
+									'id'    => 'at',
+									'type'  => 'time',
+									'label' => __( 'Time', 'fyldo' ),
 								),
 							),
 						),

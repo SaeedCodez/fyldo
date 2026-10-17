@@ -8,6 +8,7 @@ import { useRelationSearch } from '../../lib/relation';
 import { length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { ColorPicker } from '../ui/color-picker';
+import { DatePicker, TimePicker } from '../ui/date-picker';
 import { IconPicker } from '../ui/icon-picker';
 import { Input } from '../ui/input';
 import { MediaPicker } from '../ui/media-field';
@@ -220,6 +221,46 @@ export function FieldRenderer({
           />
         </SettingRow>
       );
+
+    case 'date':
+    case 'datetime':
+    case 'time': {
+      // min / max / step live in the field's implied rule (src/Fields/AbstractDateTimeField.php).
+      const rule = field.validate[field.type];
+      const bounds = rule === true || rule === undefined ? {} : rule;
+      const text = typeof value === 'string' ? value : '';
+      return (
+        <SettingRow {...common}>
+          {field.type === 'time' ? (
+            <TimePicker
+              size="md"
+              value={text}
+              step={bounds.step}
+              placeholder={field.placeholder}
+              disabled={disabled}
+              locale={locale}
+              onValueChange={(next) => onChange(field.id, next)}
+              onBlur={() => onBlur(field.id)}
+            />
+          ) : (
+            <DatePicker
+              size="md"
+              kind={field.type}
+              value={text}
+              calendar={field.calendar}
+              min={bounds.min}
+              max={bounds.max}
+              step={bounds.step}
+              placeholder={field.placeholder}
+              disabled={disabled}
+              locale={locale}
+              onValueChange={(next) => onChange(field.id, next)}
+              onBlur={() => onBlur(field.id)}
+            />
+          )}
+        </SettingRow>
+      );
+    }
 
     case 'icon':
       return (
