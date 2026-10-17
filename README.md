@@ -154,6 +154,33 @@ Call it before the screen loads (`init`, `admin_init`). Fyldo draws it in its ow
 
 A section with `'tone' => 'danger'` has no fields, only an `action`. The only built-in action id is `reset` (restore the page's defaults). A `keyword` in `confirm` makes the user type it before the button enables. The server checks nonce, capability and keyword. `$fyldo->reset( 'general' )` does the same from code.
 
+### Custom pages and forms
+
+Screens that are not settings (a list of records, an editor for one, a dashboard) are drawn by your plugin, inside
+Fyldo's screen, with Fyldo's components:
+
+```php
+$fyldo->add_page( 'stories', [
+	'type'   => 'custom',                                        // your module draws the page
+	'title'  => __( 'Stories', 'acme' ),
+	'module' => plugins_url( 'admin/stories.js', __FILE__ ),     // default export: ({ React, ui, Form }) => ({ Component })
+	'style'  => plugins_url( 'admin/stories.css', __FILE__ ),
+	'props'  => [ 'rest' => 'acme/v1/stories' ],
+] );
+
+$fyldo->add_form( 'story', [                                     // fields validated by Fyldo, records stored by you
+	'sections' => [ /* as on a page */ ],
+	'load'     => 'acme_story_load',                             // ( string $key ): ?array
+	'save'     => 'acme_story_save',                             // ( array $values, string $key ): string|WP_Error
+] );
+```
+
+The page's component gets `path` (`#/stories/42` → `['42']`), `navigate`, `request` (your REST routes, with the nonce),
+`toast`, `setDirty` and `headingRef`; `ui` has Fyldo's components (including `ItemCard`, `Pagination`, `StatCard`) and
+`Form` draws a form for one record with the Save Bar and validation. The demo's "Announcements" page is a complete
+example (a list with search, tabs, paging and a delete dialog, an editor, its own database table). See
+[docs/custom-pages.md](docs/custom-pages.md).
+
 ### Uninstall
 
 Fyldo never deletes your data. In your plugin's `uninstall.php`, load Fyldo, register your instance and pages the same way as on `init` (keep that code in a function you can call), then call `delete_data()`. It deletes every registered page's option and Fyldo's own `{slug}__fyldo`, and fires no hooks.
@@ -219,6 +246,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 - **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `icon` `date` `time` `datetime` (تاریخ با تقویم شمسی یا میلادی؛ آنچه ذخیره می‌شود همیشه میلادی است: `Y-m-d`، `H:i` و تاریخ‌وزمان به وقت UTC)، `date_range` `time_range` `datetime_range` (بازهٔ شروع ← پایان با دو ورودی؛ مقدار ذخیره‌شده `array( 'start' => …, 'end' => … )` است؛ بازهٔ ساعت می‌تواند از نیمه‌شب بگذرد؛ `Dates::range_to_site()` و `Dates::time_in_range()` برای خواندن آن) `image` `file` `select` `multi_select`، `post` `term` `user` (جستجو و انتخاب یک یا چند نوشته، واژه یا کاربر سایت؛ مقدار ذخیره‌شده شناسه است)، `group` (فهرستی از آیتم‌ها با زیرفیلدهای یکسان؛ با `sortable` قابل جابه‌جایی و با `addable` قابل افزودن و حذف) و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP. فیلد `custom` هم دارید: کنترل را خودتان با React یا جاوااسکریپت ساده می‌سازید (`module` نشانی یک ES module است که React و چند کامپوننت خود فیلدو را می‌گیرد)؛ راهنما در [docs/custom-fields.md](docs/custom-fields.md).
 - **صفحه‌ها و ناوبری:** `navigation` برابر `sidebar` (پیش‌فرض) یا `top`؛ گروه‌ها با `add_group`؛ زبانه‌ها با `tabs`؛ نشان عددی با `badge`.
 - **تغییر مقدار پیش‌فرض:** فیلدی که کسی ذخیره‌اش نکرده، `default` را از کد می‌خواند؛ پس تغییر `default` در نسخهٔ جدید روی همهٔ این سایت‌ها اثر می‌گذارد. با `'default_before' => [ '2.0.0' => 10, '3.0.0' => 20 ]` (کلید: نسخه‌ای که پیش‌فرض جدید را آورد؛ مقدار: پیش‌فرض قبل از آن) Fyldo برای سایت‌های قدیمی همان مقدار قبلی را نگه می‌دارد. به `version` در نمونه نیاز دارد. جزئیات در [docs/default-history.md](docs/default-history.md).
+- **صفحه‌ی سفارشی و فرم:** صفحه‌ای که تنظیمات نیست (فهرست رکوردها، ویرایشگر یک رکورد، داشبورد) را افزونه‌ی شما خودش می‌کشد، داخل صفحه‌ی فیلدو و با کامپوننت‌های آن: `add_page( $id, [ 'type' => 'custom', 'module' => … ] )`. با `add_form()` فیلدها را مثل یک صفحه تعریف می‌کنید و فیلدو اعتبارسنجی و نوار ذخیره را انجام می‌دهد، ولی ذخیره و خواندن رکورد با `load` و `save` خود شماست (مثلاً در جدول خودتان). نمونه‌ی کامل: صفحه‌ی «اطلاعیه‌ها» در دموی فیلدو؛ راهنما در [docs/custom-pages.md](docs/custom-pages.md).
 - **حذف افزونه:** Fyldo هیچ‌وقت داده‌ها را خودش پاک نمی‌کند. در `uninstall.php` نمونه و صفحه‌ها را مثل `init` ثبت کنید و `Fyldo::instance( 'acme-seo' )->delete_data()` را صدا بزنید؛ گزینهٔ همهٔ صفحه‌ها و `{slug}__fyldo` پاک می‌شوند.
 - **حالت ذخیره:** `'save' => 'global'` (نوار ذخیره برای کل صفحه) یا `'section'` (دکمهٔ ذخیره در هر کارت)؛ یکی برای هر صفحه.
 - **لوگو و عنوان:** `title` نام برند است و `logo` نام یک آیکون Iconsax یا نشانی تصویر.
