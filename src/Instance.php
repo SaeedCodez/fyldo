@@ -18,6 +18,7 @@ use Fyldo\V1\Storage\DefaultHistory;
 use Fyldo\V1\Storage\OptionStore;
 use Fyldo\V1\Storage\Saver;
 use Fyldo\V1\Support\Naming;
+use Fyldo\V1\Support\Theme;
 use Fyldo\V1\Support\Version;
 
 /**
@@ -25,7 +26,7 @@ use Fyldo\V1\Support\Version;
  */
 final class Instance {
 
-	const KEYS = array( 'title', 'logo', 'version', 'capability', 'navigation', 'menu', 'links' );
+	const KEYS = array( 'title', 'logo', 'theme', 'version', 'capability', 'navigation', 'menu', 'links' );
 
 	/** @var string */
 	private $slug;
@@ -47,6 +48,9 @@ final class Instance {
 
 	/** @var array{icon:string}|array{url:string}|null The brand logo; null = the Fyldo mark. */
 	private $logo;
+
+	/** @var array<string,string> The plugin's colours: custom property → hex (Theme::normalize()); empty = Fyldo's. */
+	private $theme;
 
 	/** @var array<string,array<string,mixed>> Notices for the screen, by id (the same notice added twice is shown once). */
 	private $notices = array();
@@ -70,6 +74,8 @@ final class Instance {
 			throw new ConfigException( sprintf( 'Fyldo "%s": title must be a non-empty string (omit it for "Fyldo").', $slug ) );
 		}
 		$logo = self::normalize_logo( $slug, $config['logo'] ?? null );
+		// The plugin's colours (docs/theming.md).
+		$theme = Theme::normalize( $slug, $config['theme'] ?? null );
 
 		$navigation = isset( $config['navigation'] ) ? (string) $config['navigation'] : 'sidebar';
 		if ( ! in_array( $navigation, array( 'sidebar', 'top' ), true ) ) {
@@ -112,6 +118,7 @@ final class Instance {
 
 		$this->slug   = $slug;
 		$this->logo   = $logo;
+		$this->theme  = $theme;
 		$this->store  = new OptionStore();
 		$this->config = array(
 			'title'      => isset( $config['title'] ) ? trim( (string) $config['title'] ) : '',
@@ -125,6 +132,15 @@ final class Instance {
 
 	public function slug(): string {
 		return $this->slug;
+	}
+
+	/**
+	 * The plugin's colours as custom properties for the root element (empty = Fyldo's own).
+	 *
+	 * @return array<string,string>
+	 */
+	public function theme(): array {
+		return $this->theme;
 	}
 
 	/** The brand name: the configured title, or "Fyldo" (translated, so it is read when shown, not at `init`). */

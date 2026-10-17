@@ -129,7 +129,7 @@ final class FyldoTest extends TestCase {
 			'empty logo'      => array( array( 'logo' => '' ), 'logo must be' ),
 			'logo not text'   => array( array( 'logo' => 42 ), 'logo must be' ),
 			'bad logo URL'    => array( array( 'logo' => 'javascript://alert(1)' ), 'is not valid' ),
-			'unknown key'     => array( array( 'title' => 'x', 'theme' => 'dark' ), 'unknown config key' ),
+			'unknown key'     => array( array( 'title' => 'x', 'skin' => 'dark' ), 'unknown config key' ),
 			'bad navigation'  => array( array( 'title' => 'x', 'navigation' => 'left' ), 'navigation' ),
 			'bad menu type'   => array( array( 'title' => 'x', 'menu' => array( 'type' => 'floating' ) ), 'menu.type' ),
 			'link w/o url'    => array( array( 'title' => 'x', 'links' => array( array( 'label' => 'Docs' ) ) ), 'label` and `url' ),

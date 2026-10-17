@@ -331,6 +331,24 @@ test.describe('top navigation layout', () => {
     await expect(h1(page)).toHaveText('General');
     await page.screenshot({ path: 'test-results/wp-top-nav.png' });
   });
+
+  test('a plugin theme recolours its own screen only (acme-gamma sets brand 600/700 and neutral 1000)', async ({ page }) => {
+    const colours = () =>
+      page.evaluate(() => {
+        const root = document.querySelector<HTMLElement>('[data-fyldo-v1]')!;
+        return {
+          primary: getComputedStyle(root).getPropertyValue('--fyldo-action-primary').trim(),
+          heading: getComputedStyle(root.querySelector('h1')!).color,
+        };
+      });
+    await page.goto(TOP);
+    await expect(h1(page)).toHaveText('General');
+    expect(await colours()).toEqual({ primary: '#c8401f', heading: 'rgb(28, 26, 43)' });
+
+    await page.goto(SIDEBAR); // no theme: Fyldo's own colours
+    await expect(h1(page)).toHaveText('General');
+    expect(await colours()).toEqual({ primary: '#6e62fe', heading: 'rgb(26, 29, 44)' });
+  });
 });
 
 test.describe('Persian (RTL)', () => {

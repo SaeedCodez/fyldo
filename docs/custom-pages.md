@@ -119,7 +119,9 @@ element, so **start each selector of your stylesheet the way Fyldo's rules start
 
 Fyldo's tokens are CSS custom properties on the Fyldo root: `var(--fyldo-space-24)`, `var(--fyldo-radius-lg)`,
 `var(--fyldo-text-secondary)`, `var(--fyldo-border-default)` (the full list is `app/styles/tokens.generated.css`). Use
-them, with logical properties (`padding-inline-start`, `inset-inline-end`) so the page mirrors in RTL. Size the layout
+them, with logical properties (`padding-inline-start`, `inset-inline-end`) so the page mirrors in RTL. Use the semantic
+tokens (`--fyldo-action-primary`, `--fyldo-text-secondary`), not the primitives (`--fyldo-gray-400`): only the semantic
+tokens follow the plugin's theme ([theming.md](theming.md)). Size the layout
 with container queries (`container-type: inline-size`) rather than media queries: wp-admin's menu and Fyldo's sidebar
 take a varying share of the window. Fyldo's own utility classes are not an API: they only exist for what Fyldo itself
 uses.

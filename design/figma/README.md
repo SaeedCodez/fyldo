@@ -9,7 +9,7 @@ cloud sessions never need Figma access. Exported 2026-10-11 (after the redesign:
 
 | Path | What |
 |---|---|
-| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (166 = `tokens/figma.tokens.json`), `componentCount` (51), `variantCount` (1005). Start here. |
+| `index.json` | Every component set (node id, variant count, JSON path, all PNG paths), every usage/template frame, export date, `variableCount` (192 = `tokens/figma.tokens.json`; project palettes reached only by a non-default Theme mode, such as `color/pelk/*`, are left out), `componentCount` (51), `variantCount` (1005). Start here. |
 | `components/<kebab-name>.json` | One file per COMPONENT_SET (40): property definitions and, per variant, the full node tree. |
 | `png/<kebab-name>/<variant>.png` | Every variant at **2x** (839 files). File name = `axis-value` pairs joined by `--`, in axis order, e.g. `locale-en--type-primary--size-small--state-default.png`. |
 | `png/usage/*.png` | The 19 "· Usage" frames and the 4 full "Settings page" templates (EN/FA, sidebar and top-nav) at **1x**; 23 in all. |

@@ -10,6 +10,10 @@
  * Path rule (identical to the exporter): `<collection name, lower-case>.<variable name split on "/">`.
  * Aliases become `{path}`, colours `#RRGGBB` (`#RRGGBBAA` when translucent), numbers `dimension`, strings `fontFamily`
  * (scope FONT_FAMILY) or `string`.
+ *
+ * Only default modes are read: the Theme collection's default mode ("Fyldo") is Fyldo's theme; its other modes are
+ * projects (Pelk…) whose colours a plugin passes in PHP (docs/theming.md). A variable that only such a mode reaches (a
+ * project palette such as `color/pelk/*`) belongs to that project and is left out.
  */
 const hex = (c) => {
   const b = (x) => Math.round(x * 255).toString(16).padStart(2, '0').toUpperCase();
@@ -21,16 +25,35 @@ const variables = await figma.variables.getLocalVariablesAsync();
 const byId = new Map(variables.map((v) => [v.id, v]));
 const collectionOf = new Map(collections.map((c) => [c.id, c]));
 
+// Which variables a default mode aliases, and which only another (project) mode does.
+const reached = new Set();
+const isAlias = (raw) => raw && typeof raw === 'object' && raw.type === 'VARIABLE_ALIAS';
+const usedByProjectMode = new Set();
+for (const v of variables) {
+  const collection = collectionOf.get(v.variableCollectionId);
+  for (const [mode, raw] of Object.entries(v.valuesByMode)) {
+    if (!isAlias(raw)) continue;
+    if (mode === collection.defaultModeId) reached.add(raw.id);
+    else usedByProjectMode.add(raw.id);
+  }
+}
+const projectOnly = (v) => usedByProjectMode.has(v.id) && !reached.has(v.id);
+
 const pathOf = (v) => [collectionOf.get(v.variableCollectionId).name.toLowerCase(), ...v.name.split('/')];
 
 const tree = {};
+let skipped = 0;
 for (const v of variables) {
+  if (projectOnly(v)) {
+    skipped++;
+    continue;
+  }
   const collection = collectionOf.get(v.variableCollectionId);
   const raw = v.valuesByMode[collection.defaultModeId];
   const path = pathOf(v);
 
   let value;
-  if (raw && typeof raw === 'object' && raw.type === 'VARIABLE_ALIAS') value = '{' + pathOf(byId.get(raw.id)).join('.') + '}';
+  if (isAlias(raw)) value = '{' + pathOf(byId.get(raw.id)).join('.') + '}';
   else if (v.resolvedType === 'COLOR') value = hex(raw);
   else value = raw;
 
@@ -52,4 +75,4 @@ for (const v of variables) {
 }
 
 tree.$extensions = { 'figma-console-mcp': { figmaFileKey: figma.fileKey || 'Pg3Ni7eqTLQYIG6hfNVPt6', source: 'plugin-api' } };
-return { count: variables.length, tree };
+return { count: variables.length - skipped, skipped, tree };

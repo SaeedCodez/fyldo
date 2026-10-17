@@ -82,7 +82,10 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
 
 ### B. Change or add a design token
 
-1. Change the variable in Figma (collections: Primitives, Color, Spacing, Typography; one mode only on the Starter plan; EN/FA are `en/` `fa/` prefixes).
+1. Change the variable in Figma (collections: Primitives, Theme, Color, Spacing, Typography; EN/FA are `en/` `fa/` prefixes). Only
+   default modes reach the code. The Theme collection's other modes are projects (Pelk), and the palettes only they use are left
+   out of the export (docs/theming.md). A new Theme step also needs `Theme::STEPS` in `src/Support/Theme.php`; ThemeTest fails
+   until the two lists match.
 2. Local session: follow `docs/figma-token-fixes.md` §3 (run `extract-variables.js` + `extract-styles.js`, save the raw files,
    `npm run tokens:snapshot`). **`git diff tokens/` must show only the change you intended**; check the variable count too.
 3. `npm run tokens`, run the unit tests (the contrast test catches WCAG failures), open a PR.
@@ -135,5 +138,6 @@ draw them in Figma, export the affected components (playbook A step 2), delete t
   `npx wp-env start --runtime=playground`, Playwright via `PLAYWRIGHT_CHANNEL=chrome`.
 - **Cloud sandbox:** PHPStan can't be installed (see CLAUDE.md); CI runs it.
 - **Figma:** a `figma_execute` call that times out may still finish later, so check for duplicates before retrying. The
-  Starter plan allows 3 pages and 1 variable mode. `figma_export_tokens` can serve stale data.
+  Starter plan allows 3 pages. `figma_export_tokens` can serve stale data, and it exports project palettes
+  (`color/pelk/*`) that `extract-variables.js` leaves out.
 - **Composer autoload:** `fyldo.php` returns (not exits) when WordPress isn't loaded, so PHPUnit/PHPCS can load it.

@@ -23,6 +23,44 @@ final class Demo {
 
 	const SLUG = 'fyldo-demo';
 
+	/**
+	 * A sample theme (docs/theming.md): the "Pelk" mode of the Theme collection in Fyldo's Figma file, a coral brand on
+	 * warm neutrals. The demo uses Fyldo's own colours; to see it in this theme instead:
+	 * `add_filter( 'fyldo/fyldo-demo/theme', fn() => \Fyldo\V1\Demo\Demo::SAMPLE_THEME );`
+	 */
+	const SAMPLE_THEME = array(
+		'brand'   => array(
+			'50'  => '#fff7f4',
+			'100' => '#fff1ec',
+			'200' => '#ffdcd2',
+			'300' => '#ffc0b0',
+			'400' => '#ffa18a',
+			'500' => '#ff8566',
+			'600' => '#ff6b4a',
+			'700' => '#c8401f',
+			'800' => '#a33317',
+			'900' => '#82290f',
+			'950' => '#4a170a',
+		),
+		'neutral' => array(
+			'background-100' => '#ffffff',
+			'background-200' => '#faf7f5',
+			'100'            => '#f4f1ef',
+			'200'            => '#ede8e5',
+			'300'            => '#e8e2de',
+			'400'            => '#d9d4d0',
+			'500'            => '#bdb6bb',
+			'600'            => '#a39dae',
+			'700'            => '#8a8494',
+			'800'            => '#7a7484',
+			'850'            => '#6b6675',
+			'900'            => '#4a4557',
+			'1000'           => '#1c1a2b',
+			'1000-hover'     => '#2a2738',
+			'overlay'        => '#15131f73',
+		),
+	);
+
 	/** @var string Main plugin file (for the "Open demo" link on the Plugins screen). */
 	private static $main_file = '';
 
@@ -74,6 +112,8 @@ final class Demo {
 			array(
 				'title'   => __( 'Fyldo demo', 'fyldo' ),
 				'version' => (string) Loader::loaded_version(),
+				// Fyldo's own colours unless a theme is set through the filter (see SAMPLE_THEME).
+				'theme'   => apply_filters( Naming::hook( self::SLUG, 'theme' ), array() ),
 				'links'   => array(
 					array(
 						'label'    => __( 'Documentation', 'fyldo' ),

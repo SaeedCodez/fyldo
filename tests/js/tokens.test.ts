@@ -52,7 +52,32 @@ describe('generator', () => {
       expect(css, t.name).toContain(`  ${cssName(t)}: `);
       expect(css, t.name).toContain(`--color-${t.name.slice('color.'.length).replace(/\./g, '-')}: var(${cssName(t)})`);
     }
-    expect(css).toContain('--fyldo-action-primary: var(--fyldo-primary-600);');
+    expect(css).toContain('--fyldo-action-primary: var(--fyldo-theme-brand-600);');
+  });
+
+  it('the Theme layer sits between the primitives and the semantic colours, so a plugin can override it', () => {
+    const { css } = dev();
+    const theme = snapshot.tokens.filter((t) => t.name.startsWith('theme.'));
+    // The names PHP accepts in `theme` (src/Support/Theme.php, tested against this snapshot in ThemeTest).
+    expect(theme.map((t) => t.name.slice('theme.'.length)).sort()).toEqual(
+      [
+        ...['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'].map((s) => `brand.${s}`),
+        ...['100', '200', '300', '400', '500', '600', '700', '800', '850', '900', '1000', '1000-hover', 'background-100', 'background-200', 'overlay'].map((s) => `neutral.${s}`),
+      ].sort(),
+    );
+    expect(css).toContain('--fyldo-theme-brand-600: var(--fyldo-primary-600);');
+    expect(css).toContain('--fyldo-theme-neutral-overlay: #181a3873;');
+    // Every brand or neutral colour reaches the semantic layer through the theme, never straight from a primitive.
+    for (const t of snapshot.tokens.filter((t) => t.name.startsWith('color.'))) {
+      expect(String(t.value), t.name).not.toMatch(/^\{primitives\.color\.(primary|gray|background)\./);
+    }
+  });
+
+  it('an effect layer bound to a variable follows it (the input focus colour follows the theme)', () => {
+    const { css } = dev();
+    expect(css).toContain('--fyldo-shadow-focus-input: 0px 0px 0px 0.5px var(--fyldo-focus-border);');
+    const broken = { ...styles, effectStyles: [{ name: 'Shadow/X', layers: [{ x: 0, y: 0, blur: 0, spread: 1, color: '#000000', token: 'color.nope' }] }] };
+    expect(() => generate(snapshot, broken)).toThrow(/unknown token color\.nope/);
   });
 
   it('uses Figma’s own code-syntax names (--fyldo-*) and derives the rest by the same rule', () => {

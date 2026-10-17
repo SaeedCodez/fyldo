@@ -87,6 +87,18 @@ if ( ! function_exists( 'esc_html' ) ) {
 	}
 }
 
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return esc_html( $text );
+	}
+}
+
+if ( ! function_exists( 'esc_attr' ) ) {
+	function esc_attr( $text ) {
+		return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
 if ( ! function_exists( 'sanitize_text_field' ) ) {
 	function sanitize_text_field( $str ) {
 		$str = strip_tags( (string) $str );

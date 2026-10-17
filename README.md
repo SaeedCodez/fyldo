@@ -54,6 +54,7 @@ Create instances on `init` (by then the winning copy is chosen). Values are stor
 $fyldo = Fyldo::create( 'acme-seo', [                // slug: a-z, 0-9, "-", 3–40 characters, unique per site
 	'title'      => 'Acme SEO',                       // brand name (default "Fyldo")
 	'logo'       => 'chart-2',                        // an Iconsax name or an image URL (default: the Fyldo mark)
+	'theme'      => [ 'brand' => [ 600 => '#ff6b4a', 700 => '#c8401f' ] ], // your own colours (default: Fyldo's)
 	'version'    => ACME_SEO_VERSION,                 // shown in the sidebar; also lets `default_before` keep old defaults
 	'capability' => 'manage_options',                 // default for every page and REST route
 	'navigation' => 'sidebar',                        // 'sidebar' (default) | 'top'
@@ -136,6 +137,10 @@ Fyldo remembers the version each page last ran (option `{slug}__fyldo`) and, whe
 ### Logo and title
 
 `title` is the brand name and the default admin-menu label. `logo` is an [Iconsax](https://iconsax.io) name (drawn at 24px) or an image URL (drawn 24×24). Without one, the Fyldo mark is shown.
+
+### Theme
+
+`theme` gives the screen your own colours: a `brand` ramp (`50`–`950`; `600` is the primary button, toggles and focus, `700` links and hovers) and a `neutral` ramp (backgrounds, borders, text, the dialog scrim). Leave out any step to keep Fyldo's colour. Every field, component and custom page follows the theme; the status colours do not. The steps are the variables of the Theme collection in Fyldo's Figma file. A project adds its own mode there and passes its values: [docs/theming.md](docs/theming.md).
 
 ### Notices
 
@@ -250,6 +255,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 - **حذف افزونه:** Fyldo هیچ‌وقت داده‌ها را خودش پاک نمی‌کند. در `uninstall.php` نمونه و صفحه‌ها را مثل `init` ثبت کنید و `Fyldo::instance( 'acme-seo' )->delete_data()` را صدا بزنید؛ گزینهٔ همهٔ صفحه‌ها و `{slug}__fyldo` پاک می‌شوند.
 - **حالت ذخیره:** `'save' => 'global'` (نوار ذخیره برای کل صفحه) یا `'section'` (دکمهٔ ذخیره در هر کارت)؛ یکی برای هر صفحه.
 - **لوگو و عنوان:** `title` نام برند است و `logo` نام یک آیکون Iconsax یا نشانی تصویر.
+- **رنگ‌های افزونه (تم):** با `theme` صفحه‌ی فیلدو رنگ‌های خود افزونه را می‌گیرد: طیف `brand` (پله‌های `50` تا `950`؛ `600` رنگ دکمه‌ی اصلی، کلیدها و فوکوس است و `700` رنگ لینک‌ها) و طیف `neutral` (پس‌زمینه، حاشیه، متن و پرده‌ی پشت پنجره‌ها). هر پله‌ای را ندهید، رنگ خود فیلدو می‌ماند. همه‌ی فیلدها، کامپوننت‌ها و صفحه‌های سفارشی از تم پیروی می‌کنند؛ رنگ‌های وضعیت (خطا، هشدار، موفقیت، اطلاع) نه. پله‌ها همان متغیرهای مجموعه‌ی Theme در فایل فیگمای فیلدو هستند: هر پروژه یک mode برای خودش آنجا می‌سازد و مقدارهای آن را در PHP می‌دهد. راهنما در [docs/theming.md](docs/theming.md).
 - **اعلان‌ها:** `$fyldo->admin_notice( $message, [ 'tone' => 'amber', 'page' => 'general' ] )` پیش از بارگذاری صفحه (`init` یا `admin_init`).
 - **عملیات خطرناک:** بخشی با `'tone' => 'danger'` بدون فیلد و فقط با یک `action` (شناسهٔ `reset` برای بازگردانی پیش‌فرض‌ها). با `keyword` کاربر باید کلمه را تایپ کند؛ سرور نانس، سطح دسترسی و کلمه را بررسی می‌کند.
 

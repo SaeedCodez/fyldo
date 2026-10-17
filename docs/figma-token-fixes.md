@@ -42,7 +42,8 @@ All numbers below are WCAG 2.x contrast ratios computed from the Figma values (`
 1. `figma_export_tokens` with `format: dtcg`, `colorFormat: hex8`, `outputPath: <repo>/tokens/.raw/all.tokens.json`.
    **Check the variable count** against `figma_get_variables` (`overview.total_variables`). On 2026-09-29 the exporter kept serving a
    cached variable set (145 instead of 150; `refreshCache`, `figma_get_variables` refresh and `figma_reconnect` did not help). In that case run
-   `tools/figma/extract-variables.js` with `figma_execute` instead — it reads the live document through the Plugin API and returns the same
+   `tools/figma/extract-variables.js` with `figma_execute` instead (prefer it anyway: it also leaves out project palettes, the
+   variables only a non-default Theme mode reaches, which `figma_export_tokens` would include) — it reads the live document through the Plugin API and returns the same
    nested DTCG tree — and save its `tree` as `tokens/.raw/all.tokens.json`.
 2. `figma_execute` with `tools/figma/extract-styles.js`; save its result as `tokens/.raw/styles.json`.
 3. `npm run tokens:snapshot && git diff tokens/` — the diff must contain **only** the intended token changes (it is the check that the raw export is complete) — then

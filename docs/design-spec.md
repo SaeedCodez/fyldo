@@ -16,7 +16,14 @@
 
 ## 1. Tokens
 
-Four variable collections. Aliases: `Color/*` → `Primitives/*`. `Spacing`, `Typography` hold raw values.
+Five variable collections. Aliases: `Color/*` → `Theme/*` → `Primitives/*` (the status tones and `action/danger` alias
+`Primitives/*` directly). `Spacing`, `Typography` hold raw values.
+
+**Theme** (26 variables, synced 2026-10-17): `brand/50`–`950` → `color/primary/*`, and `neutral/background-100`,
+`background-200`, `100`–`1000` (with `850`), `1000-hover` → `color/background/*` and `color/gray/*`, `neutral/overlay`
+#181a3873. Mode **Fyldo** (default) is Fyldo's theme. Mode **Pelk** points at Pelk's palette, which stays in Figma. A
+plugin sets its own mode's values with `theme` (docs/theming.md). The primitive in the tables below is what the
+Fyldo mode resolves to: `action/primary` → `brand/600` → `primary/600`.
 
 ### 1.1 Primitives (67) — never used directly by components
 

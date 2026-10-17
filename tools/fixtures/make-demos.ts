@@ -27,12 +27,21 @@ interface Demo {
   kind: Kind;
   /** Layout of the settings screen (M3): the Sidebar (default) or the Top Navigation. */
   navigation?: 'sidebar' | 'top';
+  /** The plugin's own colours (docs/theming.md): ramp → step → hex. */
+  theme?: Record<'brand' | 'neutral', Record<string, string>>;
 }
 
 export const DEMOS: Demo[] = [
   { slug: 'acme-alpha', title: 'Acme Alpha', fyldoVersion: '1.0.0', kind: 'v1' },
   { slug: 'acme-beta', title: 'Acme Beta', fyldoVersion: '1.1.0', kind: 'v1' },
-  { slug: 'acme-gamma', title: 'Acme Gamma', fyldoVersion: '1.1.0', kind: 'v1', navigation: 'top' },
+  {
+    slug: 'acme-gamma',
+    title: 'Acme Gamma',
+    fyldoVersion: '1.1.0',
+    kind: 'v1',
+    navigation: 'top',
+    theme: { brand: { '600': '#c8401f', '700': '#a33317' }, neutral: { '1000': '#1c1a2b' } },
+  },
   { slug: 'acme-delta', title: 'Acme Delta', fyldoVersion: '2.0.0', kind: 'v2' },
   { slug: 'acme-omega', title: 'Acme Omega', fyldoVersion: '1.1.0', kind: 'strauss' },
 ];
@@ -132,6 +141,15 @@ function strauss(pluginDir: string, version: string): void {
   rmSync(work, { recursive: true, force: true });
 }
 
+/** The `theme` config line of a demo, or nothing. */
+function themeConfig(demo: Demo): string {
+  if (!demo.theme) return '';
+  const ramps = Object.entries(demo.theme).map(
+    ([ramp, steps]) => `'${ramp}' => array( ${Object.entries(steps).map(([step, hex]) => `'${step}' => '${hex}'`).join(', ')} )`,
+  );
+  return `\n\t\t\t\t'theme'      => array( ${ramps.join(', ')} ),`;
+}
+
 function pluginFile(demo: Demo, namespace: string, bootstrap: string): string {
   return `<?php
 /**
@@ -152,7 +170,7 @@ add_action(
 			array(
 				'title'      => '${demo.title}',
 				'version'    => '1.0.0',
-				'navigation' => '${demo.navigation ?? 'sidebar'}',
+				'navigation' => '${demo.navigation ?? 'sidebar'}',${themeConfig(demo)}
 				'menu'       => array(
 					'type'   => 'submenu',
 					'parent' => 'options-general.php',

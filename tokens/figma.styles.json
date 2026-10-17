@@ -429,7 +429,8 @@
           "y": 0,
           "blur": 0,
           "spread": 4,
-          "color": "#7f78ff"
+          "color": "#7f78ff",
+          "token": "color.focus.ring"
         }
       ]
     },
@@ -441,7 +442,8 @@
           "y": 0,
           "blur": 0,
           "spread": 0.5,
-          "color": "#6e62fe"
+          "color": "#6e62fe",
+          "token": "color.focus.border"
         }
       ]
     },
