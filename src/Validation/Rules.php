@@ -461,10 +461,6 @@ final class Rules {
 	}
 
 	/**
-	 * @param array<string,mixed> $params Parameters.
-	 * @return array{rule:string,params:array<string,mixed>}
-	 */
-	/**
 	 * The implied rule of a `code` field.
 	 *
 	 * @param string $language `json` or `css` (others are not checked).
@@ -489,6 +485,11 @@ final class Rules {
 		return null;
 	}
 
+	/**
+	 * @param string              $rule   Rule id.
+	 * @param array<string,mixed> $params Parameters.
+	 * @return array{rule:string,params:array<string,mixed>}
+	 */
 	private static function fail( string $rule, array $params ): array {
 		return array(
 			'rule'   => $rule,
