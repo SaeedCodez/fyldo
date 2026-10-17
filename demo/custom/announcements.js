@@ -257,7 +257,7 @@ export default function announcements({ React, ui, Form }) {
     );
   }
 
-  function Editor({ path, props, dir, navigate, toast, headingRef }) {
+  function Editor({ path, props, navigate, toast, headingRef }) {
     const t = props.text;
     const record = path[0];
     return h(
@@ -269,7 +269,7 @@ export default function announcements({ React, ui, Form }) {
         headingRef,
         actions: h(
           ui.Button,
-          { variant: 'secondary', size: 'sm', leadingIcon: dir === 'rtl' ? 'arrow-right' : 'arrow-left', onClick: () => navigate([]) },
+          { variant: 'secondary', size: 'sm', leadingIcon: 'arrow-left', onClick: () => navigate([]) },
           t.back,
         ),
       }),

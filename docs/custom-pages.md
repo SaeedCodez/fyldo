@@ -103,6 +103,9 @@ Custom fields get the same object.
 Your REST routes are your own (`register_rest_route`). Protect them with a `permission_callback` (a capability check);
 WordPress checks the nonce that `request` sends.
 
+Icons are Iconsax names (`ui.Icon`, and the `icon`, `leadingIcon`… props). Directional icons (`arrow-left`,
+`arrow-right`…) mirror themselves under RTL: always pass the left-to-right name.
+
 #### Styling
 
 Fyldo's tokens are CSS custom properties on the Fyldo root: `var(--fyldo-space-24)`, `var(--fyldo-radius-lg)`,
