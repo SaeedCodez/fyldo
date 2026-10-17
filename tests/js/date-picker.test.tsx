@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FieldRenderer } from '../../app/components/fyldo/FieldRenderer';
+import { calendarCellClass } from '../../app/components/ui/calendar-cell';
 import { CalendarPanel } from '../../app/components/ui/calendar-panel';
 import { DateField, TimeField } from '../../app/components/ui/date-field';
 import { TimePanel } from '../../app/components/ui/time-panel';
@@ -331,5 +332,20 @@ describe('in a Setting Row', () => {
     expect(screen.queryByRole('radiogroup', { name: 'Calendar' })).toBeNull();
     expect(cell('Friday, 24 Mehr 1405')).toHaveAttribute('aria-disabled', 'true'); // 16 October
     expect(cell('Saturday, 25 Mehr 1405')).not.toHaveAttribute('aria-disabled'); // today
+  });
+});
+
+describe('Calendar Cell classes', () => {
+  // Classes are composed without tailwind-merge: two text colours on one cell would be decided by stylesheet order.
+  const colours = (c: string) => c.split(' ').filter((n) => /^fy:text-(text|brand)-/.test(n));
+
+  it('gives each state exactly one text colour, white on the selected fill', () => {
+    expect(colours(calendarCellClass('day', { selected: true }))).toEqual(['fy:text-text-inverse']);
+    expect(colours(calendarCellClass('wide', { selected: true, today: true }))).toEqual(['fy:text-text-inverse']);
+    expect(colours(calendarCellClass('day', { today: true }))).toEqual(['fy:text-brand-text']);
+    expect(colours(calendarCellClass('day', { outside: true }))).toEqual(['fy:text-text-tertiary']);
+    expect(colours(calendarCellClass('day', { disabled: true, outside: true }))).toEqual(['fy:text-text-disabled']);
+    expect(colours(calendarCellClass('day', {}))).toEqual(['fy:text-text-primary']);
+    expect(calendarCellClass('day', { selected: true }).split(' ')).not.toContain('fy:text-label-14');
   });
 });

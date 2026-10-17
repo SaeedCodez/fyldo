@@ -19,13 +19,17 @@ export interface CalendarCellState {
  * Today = a 1px `brand/border` outline + `brand/text` Label/14 Strong; Outside = `text/tertiary`; Disabled = `text/disabled`.
  */
 export function calendarCellClass(kind: CalendarCellKind, { selected, today, outside, disabled }: CalendarCellState): string {
+  // One text colour and one text style per state: Fyldo composes classes without tailwind-merge, so two colour utilities on
+  // one element would be decided by their order in the stylesheet, not by the state (a selected day came out dark).
+  const color = selected ? 'fy:text-text-inverse' : disabled ? 'fy:text-text-disabled' : today ? 'fy:text-brand-text' : outside ? 'fy:text-text-tertiary' : 'fy:text-text-primary';
   return cn(
-    'fy:box-border fy:inline-flex fy:h-9 fy:shrink-0 fy:select-none fy:items-center fy:justify-center fy:rounded-md fy:text-label-14 fy:text-text-primary fy:motion-base fy:focus-ring',
+    'fy:box-border fy:inline-flex fy:h-9 fy:shrink-0 fy:select-none fy:items-center fy:justify-center fy:rounded-md fy:motion-base fy:focus-ring',
     kind === 'day' ? 'fy:w-9' : 'fy:min-w-0 fy:px-2',
-    outside && 'fy:text-text-tertiary',
-    today && !selected && 'fy:border fy:border-brand-border fy:text-label-14-strong fy:text-brand-text',
-    selected && 'fy:bg-action-primary fy:text-label-14-strong fy:text-text-inverse',
-    disabled ? 'fy:cursor-not-allowed fy:text-text-disabled fy:line-through' : 'fy:cursor-pointer',
+    selected || (today && !disabled) ? 'fy:text-label-14-strong' : 'fy:text-label-14',
+    color,
+    today && !selected && 'fy:border fy:border-brand-border',
+    selected && 'fy:bg-action-primary',
+    disabled ? 'fy:cursor-not-allowed fy:line-through' : 'fy:cursor-pointer',
     !selected && !disabled && 'fy:hover:bg-brand-subtle fy:hover:text-brand-text',
   );
 }
