@@ -8,11 +8,13 @@
 namespace Fyldo\V1\Fields;
 
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Schema\Dependency;
 
 /**
  * The value is a list of items; each item is an array keyed by the sub-field ids. A fixed group (`addable` off) keeps
  * exactly the items of its `default`; `sortable` lets people reorder them, `addable` lets them add, duplicate and remove.
  * Sub-fields are ordinary fields, validated on their own; their errors are keyed `<group>.<index>.<sub-field>`.
+ * A sub-field's `dependency` reads the other sub-fields of its item, or the fields of the page.
  */
 final class GroupField extends AbstractField {
 
@@ -45,6 +47,65 @@ final class GroupField extends AbstractField {
 		return $this->subs;
 	}
 
+	/**
+	 * The ids the sub-fields' conditions read that are not sub-fields: fields of the page.
+	 *
+	 * @return string[]
+	 */
+	public function outside_references(): array {
+		$refs = array();
+		foreach ( $this->subs as $sub ) {
+			$dependency = $sub->dependency();
+			foreach ( null === $dependency ? array() : Dependency::fields( $dependency ) as $ref ) {
+				if ( ! isset( $this->subs[ $ref ] ) ) {
+					$refs[] = $ref;
+				}
+			}
+		}
+
+		return array_values( array_unique( $refs ) );
+	}
+
+	/**
+	 * The sub-fields of one item that are hidden, as keys. `$outside` resolves a field of the page (Schema\Visibility).
+	 *
+	 * @param array<string,mixed> $item    Sanitized item.
+	 * @param callable            $outside `fn( string $id ): array{visible:bool,value:mixed}`.
+	 * @return array<string,true>
+	 */
+	public function hidden_subs( array $item, callable $outside ): array {
+		$known   = array();
+		$visible = function ( string $sub_id ) use ( &$visible, &$known, $item, $outside ): bool {
+			if ( ! array_key_exists( $sub_id, $known ) ) {
+				$known[ $sub_id ] = false; // Cycles are ruled out at config time.
+				$dependency       = $this->subs[ $sub_id ]->dependency();
+				$known[ $sub_id ] = null === $dependency || Dependency::matches(
+					$dependency,
+					function ( string $ref ) use ( $visible, $item, $outside ): array {
+						$sub = $this->subs[ $ref ] ?? null;
+						if ( null === $sub ) {
+							return $outside( $ref );
+						}
+						return array(
+							'visible' => $visible( $ref ),
+							'value'   => Dependency::subject( $sub, array_key_exists( $ref, $item ) ? $item[ $ref ] : $sub->default_value() ),
+						);
+					}
+				);
+			}
+			return $known[ $sub_id ];
+		};
+
+		$hidden = array();
+		foreach ( array_keys( $this->subs ) as $sub_id ) {
+			if ( ! $visible( (string) $sub_id ) ) {
+				$hidden[ (string) $sub_id ] = true;
+			}
+		}
+
+		return $hidden;
+	}
+
 	public function is_addable(): bool {
 		return true === $this->config['addable'];
 	}
@@ -72,6 +133,21 @@ final class GroupField extends AbstractField {
 			}
 			$this->subs[ $sub->id() ] = $sub;
 		}
+
+		// A sub-field's condition reads a sibling of the same item first; any other id is a field of the page (Page checks it).
+		$graph = array();
+		foreach ( $this->subs as $sub_id => $sub ) {
+			$dependency = $sub->dependency();
+			foreach ( null === $dependency ? array() : Dependency::fields( $dependency ) as $ref ) {
+				if ( $ref === $sub_id ) {
+					throw new ConfigException( sprintf( 'Field "%s" cannot depend on itself.', $sub_id ) );
+				}
+				if ( isset( $this->subs[ $ref ] ) ) {
+					$graph[ 'field:' . $sub_id ][] = 'field:' . $ref;
+				}
+			}
+		}
+		Dependency::assert_acyclic( $graph, sprintf( 'Group field "%s"', $id ) );
 
 		foreach ( array( 'sortable', 'addable' ) as $key ) {
 			$config[ $key ] = $config[ $key ] ?? false;
@@ -215,9 +291,33 @@ final class GroupField extends AbstractField {
 	 * @return array<string,string>
 	 */
 	public function errors( $value ): array {
+		return $this->item_errors( $value, null );
+	}
+
+	/**
+	 * errors(), without the messages of the sub-fields an item hides.
+	 *
+	 * @param mixed    $value   Sanitized value.
+	 * @param callable $outside `fn( string $id ): array{visible:bool,value:mixed}`: a field of the page.
+	 * @return array<string,string>
+	 */
+	public function page_errors( $value, callable $outside ): array {
+		return $this->item_errors( $value, $outside );
+	}
+
+	/**
+	 * @param mixed         $value   Sanitized value.
+	 * @param callable|null $outside Resolves a field of the page; null: every sub-field shows.
+	 * @return array<string,string>
+	 */
+	private function item_errors( $value, ?callable $outside ): array {
 		$errors = array();
 		foreach ( is_array( $value ) ? array_values( $value ) : array() as $index => $item ) {
+			$hidden = null !== $outside && is_array( $item ) ? $this->hidden_subs( $item, $outside ) : array();
 			foreach ( $this->subs as $sub_id => $sub ) {
+				if ( isset( $hidden[ $sub_id ] ) ) {
+					continue;
+				}
 				$message = $sub->validate( is_array( $item ) && array_key_exists( $sub_id, $item ) ? $item[ $sub_id ] : $sub->default_value() );
 				if ( null !== $message ) {
 					$errors[ $this->id() . '.' . $index . '.' . $sub_id ] = $message;

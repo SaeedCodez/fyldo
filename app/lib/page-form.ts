@@ -13,6 +13,7 @@ import { ApiError, LOGGED_OUT, type Api, type ItemsQuery, type ItemsResult, type
 import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
 import { check, messageFor, validateValue } from './validation';
+import { visibilityOf, type Resolve } from './dependency';
 
 export type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
@@ -176,14 +177,15 @@ export interface FormStore {
   get(pageId: string): FormState;
   dispatch(pageId: string, action: Action): void;
   subscribe(listener: () => void): () => void;
-  /** Whether a page has unsaved edits. */
+  /** Whether a page has unsaved edits (not counting those of fields its `dependency` hides, when the store knows its sections). */
   isDirty(pageId: string): boolean;
   /** Runs `task` after every save already queued for the page: one request at a time, each with the latest revision. */
   enqueue<T>(pageId: string, task: () => Promise<T>): Promise<T>;
 }
 
-export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 'revision' | 'media'>>): FormStore {
+export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 'revision' | 'media'> & { sections?: SectionDef[] }>): FormStore {
   const states = new Map(pages.map((p) => [p.id, initialState(p)]));
+  const shapes = new Map(pages.flatMap((p) => (p.sections ? [[p.id, p.sections] as const] : [])));
   const listeners = new Set<() => void>();
   const timers = new Map<string, number>();
   const queues = new Map<string, Promise<unknown>>();
@@ -218,7 +220,12 @@ export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 're
       listeners.add(listener);
       return () => listeners.delete(listener);
     },
-    isDirty: (pageId) => dirtyIds(get(pageId)).length > 0,
+    isDirty: (pageId) => {
+      const state = get(pageId);
+      const sections = shapes.get(pageId);
+      const hidden = sections ? visibilityOf(sections, state.values).hidden : null;
+      return dirtyIds(state).some((id) => !hidden?.has(id));
+    },
     enqueue(pageId, task) {
       const run = (queues.get(pageId) ?? Promise.resolve()).then(task, task);
       queues.set(
@@ -271,9 +278,12 @@ export interface FormOptions {
 /** Fields that hold a value; a `notice` is display only and never part of the form. */
 const valueFields = (form: Pick<FormShape, 'sections'>): ValueFieldDef[] => form.sections.flatMap((s) => s.fields).filter(isValueField);
 
-/** Every message of a field's value, keyed like the server's (a group: per sub-field). A stored password the user has not touched is `null` ("keep"): nothing to validate. */
-function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Record<string, string> {
-  if (field.type === 'group') return groupErrors(field, value);
+/**
+ * Every message of a field's value, keyed like the server's (a group: per sub-field, without those its items hide;
+ * `outside` resolves the page's fields). A stored password the user has not touched is `null` ("keep"): nothing to validate.
+ */
+function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined, outside: Resolve): Record<string, string> {
+  if (field.type === 'group') return groupErrors(field, value, outside);
   // A code field's CSS message is at its line, keyed `<field>.<line>` as the server keys it.
   if (field.type === 'code') {
     const failure = check(field.validate, value);
@@ -313,7 +323,10 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
   const latest = useRef(options);
   latest.current = options;
   const state = useSyncExternalStore(store.subscribe, () => store.get(form.id));
-  const dirty = useMemo(() => dirtyIds(state), [state]);
+  // What the fields' `dependency` shows right now. A hidden field is not part of the form: its edits wait (they are not
+  // "unsaved changes" the Save Bar offers), it is never checked nor sent, and the server keeps what is stored.
+  const visibility = useMemo(() => visibilityOf(form.sections, state.values), [form.sections, state.values]);
+  const dirty = useMemo(() => dirtyIds(state).filter((id) => !visibility.hidden.has(id)), [state, visibility]);
   const fields = useMemo(() => new Map(valueFields(form).map((f) => [f.id, f])), [form]);
   const scopes = useMemo(() => scopeOf(form), [form]);
   const dispatch = useCallback((action: Action) => store.dispatch(form.id, action), [store, form.id]);
@@ -336,32 +349,34 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
     (id: string, only?: string): boolean => {
       const field = fields.get(id);
       if (!field) return true;
-      const all = fieldErrors(field, store.get(form.id).values[id]);
+      const values = store.get(form.id).values;
+      const all = fieldErrors(field, values[id], visibilityOf(form.sections, values).resolve);
       const errors = only === undefined ? all : only in all ? { [only]: all[only] as string } : {};
       dispatch({ type: 'invalid', errors, ids: [only ?? id] });
       return Object.keys(errors).length === 0;
     },
-    [fields, store, form.id, dispatch],
+    [fields, store, form.id, form.sections, dispatch],
   );
 
   /**
    * Save one scope (the page, or a section): validate its changed fields, then PATCH only those. A `whole` form sends
-   * (and checks) every field it holds a value for, once anything changed.
+   * (and checks) every field it holds a value for, once anything changed. Hidden fields are left out.
    */
   const save = useCallback(
     (scope: string = PAGE_SCOPE): Promise<boolean> =>
       store.enqueue(form.id, async () => {
         const current = store.get(form.id);
-        const changed = dirtyIds(current).filter((id) => scopes.get(id) === scope);
+        const shown = visibilityOf(form.sections, current.values);
+        const changed = dirtyIds(current).filter((id) => scopes.get(id) === scope && !shown.hidden.has(id));
         if (changed.length === 0) return true;
         // A disabled field cannot be changed (the server ignores it too): it is never validated nor sent.
-        const ids = (whole ? Object.keys(current.values) : changed).filter((id) => fields.get(id)?.disabled === false);
+        const ids = (whole ? Object.keys(current.values) : changed).filter((id) => fields.get(id)?.disabled === false && !shown.hidden.has(id));
         if (ids.length === 0) return true;
 
         const errors: Record<string, string> = {};
         for (const id of ids) {
           const field = fields.get(id);
-          if (field) Object.assign(errors, fieldErrors(field, current.values[id]));
+          if (field) Object.assign(errors, fieldErrors(field, current.values[id], shown.resolve));
         }
         if (Object.keys(errors).length > 0) {
           dispatch({ type: 'invalid', errors, ids, scope });
@@ -386,7 +401,7 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
           return false;
         }
       }),
-    [source, fields, scopes, store, form.id, dispatch, whole],
+    [source, fields, scopes, store, form.id, form.sections, dispatch, whole],
   );
 
   /** Replace every value with what is stored now (after a conflict). Unsaved edits on this page are dropped. */
@@ -424,5 +439,5 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
     [run, store, form.id, dispatch],
   );
 
-  return { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction };
+  return { state, dirty, scopes, visibility, setValue, setError, discard, save, validateField, reload, runAction };
 }

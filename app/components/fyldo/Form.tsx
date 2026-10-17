@@ -4,7 +4,8 @@ import { Spinner } from '../../icons/Spinner';
 import { ApiError, LOGGED_OUT, type RecordsApi } from '../../lib/api';
 import { cn } from '../../lib/cn';
 import { useDirtyScope } from '../../lib/dirty';
-import { belongsTo } from '../../lib/group';
+import { hiddenSubs } from '../../lib/dependency';
+import { belongsTo, itemsOf } from '../../lib/group';
 import { useFormHost } from '../../lib/host';
 import { createFormStore, PAGE_SCOPE, scopeState, useForm as useFormController, type FormController, type FormShape, type FormSource } from '../../lib/page-form';
 import type { RelationSearch } from '../../lib/relation';
@@ -83,8 +84,8 @@ interface RecordEngine {
 function useRecordEngine(def: FormDef | null, api: RecordsApi | null, record: string, onSaved: FormProps['onSaved']): RecordEngine {
   const formId = def?.id ?? '';
   // One form per engine: `Form` remounts for another form; a page using `useForm` gives another form another component.
-  const [store] = useState(() => createFormStore([]));
   const sections = def?.sections ?? NO_SECTIONS;
+  const [store] = useState(() => createFormStore([{ id: STATE, values: {}, revision: '', sections }]));
   const shape = useMemo<FormShape>(() => ({ id: STATE, save: 'global', sections }), [sections]);
   // The record the values belong to: `record`, until saving a new one gives it its key.
   const key = useRef<string | null>(null);
@@ -302,6 +303,11 @@ export interface RecordFormApi {
   error: (path: string) => string | undefined;
   /** How many messages a field or a path holds, its own and those inside it (a Group Item's `errorCount`). */
   errorCount: (path: string) => number;
+  /**
+   * Whether a field shows for the current values (its `dependency`, and its section's): draw it only then. A hidden field
+   * is neither checked nor saved. `<group>.<index>.<sub-field>` asks about a sub-field of one item.
+   */
+  visible: (path: string) => boolean;
   /** There are unsaved edits. */
   dirty: boolean;
   saving: boolean;
@@ -443,6 +449,14 @@ export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormA
     errors: state.errors,
     error: (path) => state.errors[path],
     errorCount: (path) => Object.keys(state.errors).filter((key) => belongsTo(key, path)).length,
+    visible: (path) => {
+      const { visibility } = controller;
+      const [id = '', index, sub] = path.split('.');
+      if (sub === undefined) return visibility.field(id);
+      const group = fields.get(id);
+      const item = itemsOf(values[id])[Number(index)];
+      return visibility.field(id) && group?.type === 'group' && item !== undefined && !hiddenSubs(group, item, visibility.resolve).has(sub);
+    },
     dirty: controller.dirty.length > 0,
     saving: scopeState(state, PAGE_SCOPE).status === 'saving',
     invalidSaves: state.reveal,

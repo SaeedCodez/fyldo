@@ -8,6 +8,7 @@
 namespace Fyldo\V1\Fields;
 
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Schema\Dependency;
 use Fyldo\V1\Support\Version;
 use Fyldo\V1\Validation\Messages;
 use Fyldo\V1\Validation\Rules;
@@ -29,6 +30,7 @@ abstract class AbstractField {
 		'layout',
 		'icon',
 		'badge',
+		'dependency',
 		'validate',
 		'validate_cb',
 		'sanitize_cb',
@@ -234,6 +236,27 @@ abstract class AbstractField {
 	}
 
 	/**
+	 * errors() of a field on a page whose other fields are known: `$outside( $id )` says whether a field of the page
+	 * shows and what it holds (Schema\Visibility::resolve()). A group skips its hidden sub-fields.
+	 *
+	 * @param mixed    $value   Sanitized value.
+	 * @param callable $outside `fn( string $id ): array{visible:bool,value:mixed}`.
+	 * @return array<string,string>
+	 */
+	public function page_errors( $value, callable $outside ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- used by the group.
+		return $this->errors( $value );
+	}
+
+	/**
+	 * When the field shows (Schema\Dependency), or null: always.
+	 *
+	 * @return array{relation:string,conditions:array<int,array{field:string,operator:string,value:mixed}>}|null
+	 */
+	public function dependency(): ?array {
+		return $this->config['dependency'] ?? null;
+	}
+
+	/**
 	 * The messages of `validate_cb`: `true`, `false`, a message, or messages by path inside the value
 	 * (`array( '2.link' => '…' )` → `<field>.2.link`; the key `''` is the field itself). For the fields whose values have
 	 * parts (custom, code).
@@ -339,7 +362,21 @@ abstract class AbstractField {
 			}
 		}
 
-		return array_merge( $out, $this->client_extra() );
+		return $this->with_dependency( array_merge( $out, $this->client_extra() ) );
+	}
+
+	/**
+	 * `$out` with the field's dependency, when it has one.
+	 *
+	 * @param array<string,mixed> $out Client description.
+	 * @return array<string,mixed>
+	 */
+	protected function with_dependency( array $out ): array {
+		if ( null !== $this->dependency() ) {
+			$out['dependency'] = $this->dependency();
+		}
+
+		return $out;
 	}
 
 	/** Type-specific keys for the browser. */
@@ -413,6 +450,7 @@ abstract class AbstractField {
 		$normalized['layout']         = $layout;
 		$normalized['validate']       = $rules;
 		$normalized['disabled']       = $disabled;
+		$normalized['dependency']     = isset( $config['dependency'] ) ? Dependency::normalize( $config['dependency'], $id ) : null;
 
 		$normalized = $this->normalize_type( $normalized );
 

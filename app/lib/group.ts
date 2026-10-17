@@ -5,6 +5,7 @@
  */
 import type { FieldValue, GroupFieldDef, GroupItemValue } from '../types';
 import { customError } from './custom-fields';
+import { hiddenSubs, type Resolve } from './dependency';
 import { check, messageFor, type Failure } from './validation';
 
 export const itemsOf = (value: FieldValue | undefined): GroupItemValue[] =>
@@ -40,15 +41,18 @@ export function countFailure(field: GroupFieldDef, count: number): Failure | nul
   return null;
 }
 
-/** Every message of a group's value; {} when it is valid. */
+/** Every message of a group's value; {} when it is valid. With `outside` (the page's fields), an item's hidden sub-fields are not checked. */
 export function groupErrors(
   field: GroupFieldDef,
   value: FieldValue | undefined,
+  outside?: Resolve,
 ): Record<string, string> {
   const errors: Record<string, string> = {};
   const items = itemsOf(value);
   items.forEach((item, index) => {
+    const hidden = outside ? hiddenSubs(field, item, outside) : null;
     for (const sub of field.fields) {
+      if (hidden?.has(sub.id)) continue;
       const value = sub.id in item ? item[sub.id] : sub.default;
       const failure = check(sub.validate, value);
       const message = failure ? messageFor(failure) : sub.type === 'custom' ? customError(sub, value) : null;
