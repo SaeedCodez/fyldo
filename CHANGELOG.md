@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.5] - 2026-10-17
+
 ### Added
 
 - **Fields**: `date_range`, `time_range` and `datetime_range` (Figma Date Range Field), built on the single date and time pickers: two inputs, start → end, each opening the single picker's own panel and setting only its end (no range calendar). The value is one array `array( 'start' => …, 'end' => … )`, each end in the single type's stored format (a datetime in UTC); empty is both `''`. Config: the single type's `calendar`, `min`, `max`, `step` and `placeholder` for both ends, plus `start_placeholder` / `end_placeholder`. A date or datetime end opens on the start's month with the days before the start disabled; moving the start past the end clears the end. A time range may cross midnight (22:00 → 06:00 = 8 hours, "ends the next day"). Under the inputs, the duration once both ends are set ("Duration: 7 days", "Duration: 6 days, 9 hours and 30 minutes"; a datetime range counts real time across a daylight-saving change). The server re-validates the pair on every save (each end's format, `min`, `max`, `step`; both ends or neither; the order); the implied rule gains `range`. New helpers `Support\Dates::range_to_site()` and `Dates::time_in_range()`. Layout default `stacked`. The demo's "Dates and times" page has a "Ranges" section and a date range in its group.
