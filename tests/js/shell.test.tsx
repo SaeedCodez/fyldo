@@ -386,7 +386,7 @@ describe('at 782px and below', () => {
 });
 
 describe('Persian', () => {
-  it('badges and the version use Persian numerals; the Sidebar footer shows "نسخه ۱٫۰"', () => {
+  it('badges and the version use Persian numerals; the Sidebar header ends with "۱٫۰", read as "نسخه ۱٫۰"', () => {
     const jed = JSON.parse(
       readFileSync(resolve(__dirname, '../../languages/fyldo-fa_IR.json'), 'utf8'),
     );
@@ -394,8 +394,11 @@ describe('Persian', () => {
     mount({ dir: 'rtl', locale: 'fa-IR', version: '1.0' });
     const nav = screen.getByRole('navigation', { name: 'Acme SEO' });
     expect(within(nav).getByRole('link', { name: /Content/ })).toHaveTextContent('Content۳');
-    expect(document.querySelector('[data-slot=fy-sidebar-version]')).toHaveTextContent(/^نسخه ۱٫۰$/);
-    expect(document.querySelector('[data-slot=fy-brand] [data-slot=fy-badge]')).toBeNull(); // the version left the header
+    const version = document.querySelector('[data-slot=fy-sidebar-header] [data-slot=fy-sidebar-version]');
+    expect(version?.querySelector('.fy\\:sr-only')).toHaveTextContent(/^نسخه ۱٫۰$/); // what screen readers hear
+    expect(version?.querySelector('[aria-hidden=true]')).toHaveTextContent(/^۱٫۰$/); // what is drawn
+    expect(document.querySelector('[data-slot=fy-sidebar-footer] [data-slot=fy-sidebar-version]')).toBeNull(); // not in the footer any more
+    expect(document.querySelector('[data-slot=fy-brand] [data-slot=fy-badge]')).toBeNull(); // no version Badge in the brand
     expect(screen.getByRole('navigation', { name: 'منابع' })).toBeInTheDocument();
   });
 });

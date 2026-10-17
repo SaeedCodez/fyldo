@@ -209,7 +209,7 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     await expect(page.locator('#wpfooter')).toBeHidden();
 
     // the utility links sit at the bottom of the column
-    const footer = await page.locator('[data-slot=fy-sidebar-footer]').boundingBox(); // the links and the version line
+    const footer = await page.locator('[data-slot=fy-sidebar-footer]').boundingBox(); // the utility links (the version is in the header since 2026-10-17)
     expect(Math.round(footer!.y + footer!.height)).toBe(900);
 
     // the content area scrolls inside the shell (Fyldo's own scrollbar): the document itself does not, and the sidebar stays

@@ -23,10 +23,10 @@ export interface SidebarProps {
 
 /*
  * Figma Sidebar (256 wide, background/subtle, 1px end border):
- *   Header      padding 20/28, gap 12: brand (76 high), version Badge at the far end
+ *   Header      padding 20/16, gap 12: brand (76 high), then the version number (Label/12 text/tertiary) at the end
  *   Navigation  padding 8/16/0/16, groups 20 apart; a group = Group label (Label/12 text/tertiary, padding 0/8/6/8) +
  *               Nav Items 2 apart
- *   Footer      padding 12/16, gap 2, 1px top border: utility Nav Items
+ *   Footer      padding 12/16, gap 2, 1px top border: utility Nav Items (only when there are links)
  */
 export function Sidebar({
   brand,
@@ -55,9 +55,25 @@ export function Sidebar({
       {drawer ? null : (
         <div
           data-slot="fy-sidebar-header"
-          className="fy:flex fy:shrink-0 fy:items-center fy:px-7 fy:py-5"
+          className="fy:flex fy:shrink-0 fy:items-center fy:gap-3 fy:px-4 fy:py-5"
         >
           <BrandMark brand={brand} locale={locale} large />
+          {brand.version ? (
+            <p
+              data-slot="fy-sidebar-version"
+              className="fy:shrink-0 fy:text-label-12 fy:text-text-tertiary"
+            >
+              {/* The bare number is drawn; screen readers hear the whole "Version 1.0". */}
+              <span className="fy:sr-only">
+                {/* translators: %s: version number of the plugin, e.g. 1.0 */}
+                {sprintf(
+                  _x('Version %s', 'sidebar version', 'fyldo'),
+                  localizeDigits(brand.version, locale),
+                )}
+              </span>
+              <span aria-hidden="true">{localizeDigits(brand.version, locale)}</span>
+            </p>
+          ) : null}
         </div>
       )}
 
@@ -66,7 +82,7 @@ export function Sidebar({
         data-slot="fy-sidebar-nav"
         className={cn(
           'fy:flex fy:flex-col fy:gap-5 fy:px-4 fy:pt-2',
-          drawer ? 'fy:pb-3' : 'fy:min-h-0 fy:flex-1 fy:overflow-y-auto fy:pb-0',
+          drawer ? 'fy:pb-3' : 'fy:min-h-0 fy:flex-1 fy:overflow-y-auto fy:scrollbar-slim fy:pb-0',
         )}
       >
         {groups.map((group) => {
@@ -104,40 +120,26 @@ export function Sidebar({
         })}
       </nav>
 
-      {links.length > 0 || (brand.version && !drawer) ? (
+      {links.length > 0 ? (
         <div
           data-slot="fy-sidebar-footer"
           className="fy:flex fy:shrink-0 fy:flex-col fy:gap-0.5 fy:border-t fy:border-border-default fy:px-4 fy:py-3"
         >
-          {links.length > 0 ? (
-            <nav aria-label={__('Resources', 'fyldo')}>
-              <ul className="fy:flex fy:flex-col fy:gap-0.5">
-                {links.map((link) => (
-                  <li key={link.href}>
-                    <NavItem
-                      label={link.label}
-                      href={link.href}
-                      icon={link.icon}
-                      external={link.external}
-                      locale={locale}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ) : null}
-          {brand.version && !drawer ? (
-            <p
-              data-slot="fy-sidebar-version"
-              className="fy:px-3.5 fy:pt-2 fy:text-label-12 fy:break-words fy:text-text-tertiary"
-            >
-              {/* translators: %s: version number of the plugin, e.g. 1.0 */}
-              {sprintf(
-                _x('Version %s', 'sidebar version', 'fyldo'),
-                localizeDigits(brand.version, locale),
-              )}
-            </p>
-          ) : null}
+          <nav aria-label={__('Resources', 'fyldo')}>
+            <ul className="fy:flex fy:flex-col fy:gap-0.5">
+              {links.map((link) => (
+                <li key={link.href}>
+                  <NavItem
+                    label={link.label}
+                    href={link.href}
+                    icon={link.icon}
+                    external={link.external}
+                    locale={locale}
+                  />
+                </li>
+              ))}
+            </ul>
+          </nav>
         </div>
       ) : null}
     </div>
