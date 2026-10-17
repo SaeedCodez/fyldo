@@ -7,6 +7,7 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Fields\CustomField;
 use Fyldo\V1\Fields\FieldFactory;
 use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Schema\ConfigException;
@@ -210,6 +211,66 @@ final class CustomFieldTest extends TestCase {
 			)
 		);
 		$this->assertArrayHasKey( 'slides', $form->schema()->fields() );
+	}
+
+	/** A settings page holding `$fields` in one section. */
+	private static function page( array $fields ): Page {
+		return new Page( 'acme-shop', 'appearance', array( 'title' => 'Appearance', 'sections' => array( array( 'id' => 's', 'title' => 'S', 'fields' => $fields ) ) ) );
+	}
+
+	public function test_watch_names_fields_of_the_same_page_and_reaches_the_browser(): void {
+		$page = self::page(
+			array(
+				array( 'id' => 'brand', 'type' => 'color', 'label' => 'Brand colour' ),
+				array( 'id' => 'theme', 'type' => 'select', 'label' => 'Theme', 'options' => array( 'light' => 'Light', 'dark' => 'Dark' ) ),
+				array( 'id' => 'preview', 'type' => 'custom', 'label' => 'Preview', 'module' => '/preview.js', 'watch' => array( 'brand', 'theme', 'brand' ) ),
+				array(
+					'id'      => 'rows',
+					'type'    => 'group',
+					'label'   => 'Rows',
+					'addable' => true,
+					'fields'  => array( array( 'id' => 'sample', 'type' => 'custom', 'label' => 'Sample', 'module' => '/sample.js', 'watch' => array( 'theme' ) ) ),
+				),
+			)
+		);
+
+		$preview = $page->field( 'preview' );
+		$this->assertInstanceOf( CustomField::class, $preview );
+		$this->assertSame( array( 'brand', 'theme' ), $preview->watch(), 'each id once, in order' );
+		$this->assertSame( array( 'brand', 'theme' ), $preview->to_client()['watch'] );
+		$this->assertSame( array(), $this->custom()->to_client()['watch'], 'nothing watched: an empty list' );
+	}
+
+	/**
+	 * @dataProvider invalid_watches
+	 *
+	 * @param array<int,array<string,mixed>> $fields  The page's fields.
+	 * @param string                         $message Expected part of the message.
+	 */
+	public function test_watch_errors( array $fields, string $message ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( $message );
+		self::page( $fields );
+	}
+
+	public function invalid_watches(): array {
+		$preview = static fn( $watch ): array => array( 'id' => 'preview', 'type' => 'custom', 'label' => 'Preview', 'module' => '/preview.js', 'watch' => $watch );
+		$brand   = array( 'id' => 'brand', 'type' => 'color', 'label' => 'Brand colour' );
+		return array(
+			'not a list'         => array( array( $brand, $preview( 'brand' ) ), '`watch` must be a list of field ids of the same page' ),
+			'keyed'              => array( array( $brand, $preview( array( 'a' => 'brand' ) ) ), '`watch` must be a list of field ids' ),
+			'not text'           => array( array( $brand, $preview( array( 1 ) ) ), '`watch` must be a list of field ids' ),
+			'unknown field'      => array( array( $brand, $preview( array( 'logo' ) ) ), 'Custom field "preview" watches "logo", which is not a field of page "appearance"' ),
+			'itself'             => array( array( $preview( array( 'preview' ) ) ), 'Custom field "preview" cannot watch itself' ),
+			'a password'         => array( array( array( 'id' => 'key', 'type' => 'password', 'label' => 'Key' ), $preview( array( 'key' ) ) ), 'cannot watch password field "key"' ),
+			'a group sub-field'  => array(
+				array(
+					array( 'id' => 'rows', 'type' => 'group', 'label' => 'Rows', 'addable' => true, 'fields' => array( array( 'id' => 'label', 'type' => 'text', 'label' => 'Label' ) ) ),
+					$preview( array( 'label' ) ),
+				),
+				'watches "label", which is not a field of page',
+			),
+		);
 	}
 
 	/**

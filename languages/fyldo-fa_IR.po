@@ -891,6 +891,24 @@ msgstr "در یک روز عادی چه ساعتی باز می‌کنید و چه
 msgid "Special days"
 msgstr "روزهای خاص"
 
+msgid "Preview"
+msgstr "پیش‌نمایش"
+
+msgid "A custom field that watches the fields above: it changes as you edit them and saves nothing of its own."
+msgstr "یک فیلد سفارشی که فیلدهای بالا را دنبال می‌کند: با ویرایش آن‌ها تغییر می‌کند و خودش چیزی ذخیره نمی‌کند."
+
+msgid "On your site"
+msgstr "در سایت شما"
+
+msgid "How visitors will read your hours."
+msgstr "بازدیدکننده‌ها ساعت‌های کاری شما را این‌طور می‌بینند."
+
+msgid "Every day"
+msgstr "هر روز"
+
+msgid "Not set"
+msgstr "تعیین نشده"
+
 msgid "The same custom field inside a group."
 msgstr "همان فیلد سفارشی، درون یک گروه."
 

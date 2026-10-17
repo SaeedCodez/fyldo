@@ -19,6 +19,9 @@ use Fyldo\V1\Validation\Messages;
  * In a form whose page draws its own fields (`useForm`, docs/custom-pages.md), `module` may be `false`: Fyldo then
  * keeps, sanitizes and validates the value and draws nothing. `validate_cb` may answer with messages by path inside the
  * value (`array( '2.link' => '…' )`), shown under `<field>.<path>`.
+ *
+ * `watch` names other fields of the same page whose current values the module receives (`values`), as the person edits
+ * them: a live preview of the page's settings. Page checks that they exist.
  */
 final class CustomField extends AbstractField {
 
@@ -38,7 +41,7 @@ final class CustomField extends AbstractField {
 	}
 
 	protected function extra_keys(): array {
-		return array( 'module', 'style', 'props', 'media' );
+		return array( 'module', 'style', 'props', 'media', 'watch' );
 	}
 
 	/** URL of the stylesheet to enqueue with the screen; '' = none. */
@@ -49,6 +52,15 @@ final class CustomField extends AbstractField {
 	/** Whether the module opens the media library (`ui.MediaPicker`): the screen then loads `wp.media`. */
 	public function media(): bool {
 		return true === $this->config['media'];
+	}
+
+	/**
+	 * The ids of the fields of the same page whose values the module receives as they change.
+	 *
+	 * @return array<int,string>
+	 */
+	public function watch(): array {
+		return $this->config['watch'];
 	}
 
 	/** False for `'module' => false`: the page that uses `useForm` draws the field, Fyldo does not. */
@@ -83,10 +95,16 @@ final class CustomField extends AbstractField {
 			throw new ConfigException( sprintf( 'Custom field "%s": `media` must be true (the module opens the media library) or false.', $id ) );
 		}
 
+		$watch = $config['watch'] ?? array();
+		if ( ! is_array( $watch ) || array_values( $watch ) !== $watch || array() !== array_filter( $watch, static fn( $one ) => ! is_string( $one ) || '' === $one ) ) {
+			throw new ConfigException( sprintf( 'Custom field "%s": `watch` must be a list of field ids of the same page.', $id ) );
+		}
+
 		$config['module'] = $module;
 		$config['style']  = $style;
 		$config['props']  = $props;
 		$config['media']  = $media;
+		$config['watch']  = array_values( array_unique( $watch ) );
 		if ( array_key_exists( 'default', $config ) ) {
 			$config['default'] = $this->sanitize_value( $config['default'] );
 		}
@@ -150,6 +168,7 @@ final class CustomField extends AbstractField {
 	protected function client_extra(): array {
 		return array(
 			'module' => (string) $this->config['module'],
+			'watch'  => $this->config['watch'],
 			// An object even when empty, so the browser always gets `{}`, never `[]`.
 			'props'  => (object) $this->config['props'],
 		);

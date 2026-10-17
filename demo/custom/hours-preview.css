@@ -1,0 +1,35 @@
+/*
+ * The opening-hours preview: a small sign. Selectors start like Fyldo's own rules (`[data-fyldo-v1][data-fyldo-v1]:not(#\#)`),
+ * so they win over Fyldo's scoped reset and wp-admin's CSS; tokens only, logical properties only (docs/custom-fields.md).
+ */
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-sign {
+	display: flex;
+	flex-direction: column;
+	gap: var(--fyldo-space-12);
+	padding: var(--fyldo-space-16);
+	border: var(--fyldo-border-width) solid var(--fyldo-border-default);
+	border-radius: var(--fyldo-radius-md);
+	background: var(--fyldo-background-subtle);
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-sign-title {
+	font-weight: 600;
+	color: var(--fyldo-text-primary);
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-sign dl {
+	display: flex;
+	flex-direction: column;
+	gap: var(--fyldo-space-8);
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-sign-row {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--fyldo-space-16);
+	color: var(--fyldo-text-secondary);
+}
+
+[data-fyldo-v1][data-fyldo-v1]:not(#\#) .fyldo-demo-sign-row dd {
+	color: var(--fyldo-text-primary);
+}

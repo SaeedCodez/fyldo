@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement, t
 import { __ } from '../../i18n';
 import { ApiError } from '../../lib/api';
 import { cn } from '../../lib/cn';
+import { FormValuesContext } from '../../lib/form-values';
 import { firstErrorKey } from '../../lib/group';
 import { PAGE_SCOPE, scopeState, type FormController, type FormShape, type FormState } from '../../lib/page-form';
 import { RelationSearchContext, type RelationSearch } from '../../lib/relation';
@@ -116,6 +117,12 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
   if (danger) lastDanger.current = danger;
   const focusAfterErrors = useRef(false);
   const tabs = useMemo(() => form.tabs ?? [], [form.tabs]);
+  // Every value as the fields show it (the defaults where the stored values hold none): what a custom field's `watch` reads.
+  const current = useMemo(() => {
+    const values: Record<string, FieldValue> = {};
+    for (const field of form.sections.flatMap((s) => s.fields)) if (isValueField(field)) values[field.id] = field.id in state.values ? (state.values[field.id] as FieldValue) : field.default;
+    return values;
+  }, [form.sections, state.values]);
 
   const pageScope = scopeState(state, PAGE_SCOPE);
   const bar = saveBarState(state, dirty);
@@ -271,49 +278,51 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
   );
 
   return (
-    <RelationSearchContext.Provider value={search}>
-      {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
+    <FormValuesContext.Provider value={current}>
+      <RelationSearchContext.Provider value={search}>
+        {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
 
-      {tabs.length > 0 ? (
-        <Tabs
-          className="fy:mt-6"
-          label={form.title ?? ''}
-          locale={locale}
-          value={tab || (tabs[0]?.id ?? '')}
-          onValueChange={(next) => onTabChange?.(next)}
-          tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
-        >
-          {cards}
-        </Tabs>
-      ) : (
-        cards('')
-      )}
+        {tabs.length > 0 ? (
+          <Tabs
+            className="fy:mt-6"
+            label={form.title ?? ''}
+            locale={locale}
+            value={tab || (tabs[0]?.id ?? '')}
+            onValueChange={(next) => onTabChange?.(next)}
+            tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
+          >
+            {cards}
+          </Tabs>
+        ) : (
+          cards('')
+        )}
 
-      {form.save === 'global' ? (
-        <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
-      ) : null}
-      {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
+        {form.save === 'global' ? (
+          <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
+        ) : null}
+        {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
 
-      {runAction ? (
-        <Modal
-          open={danger !== null}
-          onOpenChange={(open) => {
-            if (!open) setDanger(null);
-          }}
-          type="danger"
-          title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
-          description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
-          cancelLabel={__('Cancel', 'fyldo')}
-          confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
-          confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
-          onConfirm={async () => {
-            if (danger) await attempt(danger);
-            setDanger(null);
-          }}
-          // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
-          focusAfterConfirm={() => dangerTrigger.current}
-        />
-      ) : null}
-    </RelationSearchContext.Provider>
+        {runAction ? (
+          <Modal
+            open={danger !== null}
+            onOpenChange={(open) => {
+              if (!open) setDanger(null);
+            }}
+            type="danger"
+            title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
+            description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
+            cancelLabel={__('Cancel', 'fyldo')}
+            confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
+            confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
+            onConfirm={async () => {
+              if (danger) await attempt(danger);
+              setDanger(null);
+            }}
+            // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
+            focusAfterConfirm={() => dangerTrigger.current}
+          />
+        ) : null}
+      </RelationSearchContext.Provider>
+    </FormValuesContext.Provider>
   );
 }

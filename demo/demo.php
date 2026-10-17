@@ -1006,6 +1006,28 @@ final class Demo {
 						),
 					),
 				),
+				array(
+					'id'          => 'preview',
+					'title'       => __( 'Preview', 'fyldo' ),
+					'description' => __( 'A custom field that watches the fields above: it changes as you edit them and saves nothing of its own.', 'fyldo' ),
+					'fields'      => array(
+						array(
+							'id'          => 'hours_preview',
+							'type'        => 'custom',
+							'label'       => __( 'On your site', 'fyldo' ),
+							'description' => __( 'How visitors will read your hours.', 'fyldo' ),
+							'layout'      => 'stacked',
+							'module'      => plugins_url( 'demo/custom/hours-preview.js', self::$main_file ),
+							'style'       => plugins_url( 'demo/custom/hours-preview.css', self::$main_file ),
+							'watch'       => array( 'working_hours', 'special_days' ),
+							'props'       => array(
+								'title'   => __( 'Opening hours', 'fyldo' ),
+								'regular' => __( 'Every day', 'fyldo' ),
+								'none'    => __( 'Not set', 'fyldo' ),
+							),
+						),
+					),
+				),
 			),
 		);
 	}

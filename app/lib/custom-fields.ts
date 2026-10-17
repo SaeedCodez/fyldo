@@ -26,6 +26,11 @@ export interface CustomFieldProps {
   field: { id: string; label: string; description: string };
   /** The page's locale (`fa_IR`…). The direction is the one of the page: `element.closest('[dir]')`. */
   locale: string;
+  /**
+   * The current values of the fields named in PHP's `watch`, keyed by id, with the person's edits as they happen (a live
+   * preview). Read-only: `{}` when the field watches nothing. The object is new only when one of them changes.
+   */
+  values: Readonly<Record<string, JsonValue>>;
 }
 
 export interface CustomFieldMountHandle {
