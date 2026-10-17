@@ -354,7 +354,7 @@ describe('the SDK', () => {
       expect.arrayContaining(['Button', 'Checkbox', 'Icon', 'Input', 'NumberInput', 'Select', 'Textarea', 'Toggle', 'ButtonLink', 'IconButton', 'RadioGroup', 'MultiSelect', 'SegmentedControl', 'Badge', 'Tag', 'Notice', 'EmptyState', 'Modal', 'Tooltip', 'Tabs', 'PageHeader', 'SectionCard', 'SettingRow']),
     );
     // The field controls a record editor needs, the same components Fyldo's own fields draw.
-    expect(Object.keys(sdk.ui)).toEqual(expect.arrayContaining(['ColorPicker', 'DatePicker', 'TimePicker', 'DateRangePicker', 'MediaPicker', 'GroupItem']));
+    expect(Object.keys(sdk.ui)).toEqual(expect.arrayContaining(['ColorPicker', 'DatePicker', 'TimePicker', 'DateRangePicker', 'MediaPicker', 'GroupItem', 'GroupList', 'ChoiceCards', 'CodeEditor']));
     expect(typeof sdk.Form).toBe('function');
   });
 

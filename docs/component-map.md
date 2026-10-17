@@ -566,7 +566,7 @@ Base: ➕ custom `<header>`: `h1` (Heading/32), description (Copy/16 `text/secon
 | `multi_select` | `MultiSelectField` | stacked | subset of allowed keys, option order | required, allowed, min/max selected |
 | `post` `term` `user` | `RelationSelect` (one value: Select + Select Menu `Type=Search`; `multiple`: Multi Select tags + Select Menu `Type=Multi`; status rows: `MenuMessage`) | field | IDs of existing items that fit the source (`post_type`/`post_status`, `taxonomy`, `role`), readable by the current user when saving; one ID or a list in pick order | relation, required, min/max items |
 | `notice` (static) | `Notice` | full width, own row | — (no value: not stored, not in REST) | — |
-| `group` | `FieldGroup` + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
+| `group` | `FieldGroup` (the schema) on `GroupList` (the list, reordering, adding, removing; public as `ui.GroupList`) + `GroupItem` (sub-fields: `FieldRenderer` `item` variant) | stacked, full width | a list of complete items, each sub-field sanitized; fixed groups keep their `default` items | each sub-field's rules; required, `min` / `max` items |
 | `code` | `CodeEditor` (Figma `Code Editor` 420:11198: toolbar, line numbers, a textarea over its syntax-coloured copy) | stacked, full width | the code as typed: valid UTF-8, `\n` line ends, no NUL; `html` through `wp_kses_post` without `unfiltered_html` | code (JSON parses, CSS has no markup: keyed `<field>.<line>`), required, max_length |
 
 ## 6. Shared gaps summary (design silent — proposals in ARCHITECTURE §15)

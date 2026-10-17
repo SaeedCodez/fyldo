@@ -19,7 +19,7 @@ final class Attachments {
 	 * The name, size, type and dimensions come from the attachment itself, never from its URL.
 	 *
 	 * @param int $id Attachment id.
-	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool}|null
+	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool,duration:?int}|null
 	 */
 	public static function find( int $id ): ?array {
 		$post = get_post( $id );
@@ -41,17 +41,21 @@ final class Attachments {
 
 		$image = (bool) wp_attachment_is_image( $post );
 		$thumb = $image ? wp_get_attachment_image_url( $id, 'thumbnail' ) : false;
+		$mime  = (string) get_post_mime_type( $post );
+		// A video's or an audio file's length in seconds, as WordPress read it on upload (null when it could not).
+		$media = 0 === strpos( $mime, 'video/' ) || 0 === strpos( $mime, 'audio/' );
 
 		return array(
 			'id'        => $id,
 			'filename'  => $filename,
 			'filesize'  => $size,
-			'mime'      => (string) get_post_mime_type( $post ),
+			'mime'      => $mime,
 			'extension' => strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) ),
 			'width'     => $image && isset( $meta['width'] ) ? (int) $meta['width'] : null,
 			'height'    => $image && isset( $meta['height'] ) ? (int) $meta['height'] : null,
 			'thumbnail' => is_string( $thumb ) && '' !== $thumb ? $thumb : null,
 			'image'     => $image,
+			'duration'  => $media && isset( $meta['length'] ) && is_numeric( $meta['length'] ) ? (int) $meta['length'] : null,
 		);
 	}
 

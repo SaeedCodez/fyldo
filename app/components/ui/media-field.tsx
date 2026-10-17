@@ -265,7 +265,7 @@ function useAttachment(id: number, kind: MediaKind): MediaItem | null {
 }
 
 /** A value with no attachment data (the harness, a stored ID the server could not describe): the ID stands in for the name. */
-const placeholderItem = (id: number): MediaItem => ({ id, filename: '', filesize: 0, mime: '', extension: '', width: null, height: null, thumbnail: null });
+const placeholderItem = (id: number): MediaItem => ({ id, filename: '', filesize: 0, mime: '', extension: '', width: null, height: null, thumbnail: null, duration: null });
 
 export interface MediaFieldProps extends Omit<MediaPickerProps, 'label' | 'disabled' | 'className'> {
   label: string;

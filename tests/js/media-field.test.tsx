@@ -113,8 +113,8 @@ function Field({
   );
 }
 
-const PNG_ITEM: MediaItem = { id: 7, filename: 'logo-mark.png', filesize: 38912, mime: 'image/png', extension: 'png', width: 512, height: 512, thumbnail: 'https://example.com/logo-150x150.png' };
-const PDF_ITEM: MediaItem = { id: 9, filename: 'brand-guidelines.pdf', filesize: 1258291, mime: 'application/pdf', extension: 'pdf', width: null, height: null, thumbnail: null };
+const PNG_ITEM: MediaItem = { id: 7, filename: 'logo-mark.png', filesize: 38912, mime: 'image/png', extension: 'png', width: 512, height: 512, thumbnail: 'https://example.com/logo-150x150.png', duration: null };
+const PDF_ITEM: MediaItem = { id: 9, filename: 'brand-guidelines.pdf', filesize: 1258291, mime: 'application/pdf', extension: 'pdf', width: null, height: null, thumbnail: null, duration: null };
 
 beforeEach(() => {
   setLocaleData(null);
@@ -435,6 +435,15 @@ describe('what the picker makes of an attachment', () => {
     expect(itemFromAttachment(PDF, 'file')).toEqual(PDF_ITEM);
     expect(itemFromAttachment(PNG, 'file')).toEqual({ ...PNG_ITEM, thumbnail: null }); // a file field draws a tile, not a thumbnail
     expect(itemFromAttachment({ ...PNG, sizes: { full: { url: 'https://example.com/logo.png' } } }, 'image').thumbnail).toBe('https://example.com/logo.png');
+  });
+
+  it('a video or an audio file brings its length in seconds', () => {
+    const video: WpAttachment = { id: 12, type: 'video', mime: 'video/mp4', filename: 'stretch.mp4', filesizeInBytes: 4194304, fileLength: '1:12' };
+    expect(itemFromAttachment(video, 'file').duration).toBe(72);
+    expect(itemFromAttachment({ ...video, fileLength: '1:02:03' }, 'file').duration).toBe(3723);
+    expect(itemFromAttachment({ ...video, fileLength: undefined }, 'file').duration).toBeNull();
+    expect(itemFromAttachment({ ...video, type: 'audio', mime: 'audio/mpeg', fileLength: '0:09' }, 'file').duration).toBe(9);
+    expect(itemFromAttachment({ ...PNG, fileLength: '0:05' }, 'image').duration).toBeNull();
   });
 
   it('checks the type and size with the wording PHP uses', () => {

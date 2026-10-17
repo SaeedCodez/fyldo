@@ -48,7 +48,7 @@ abstract class AbstractMediaField extends AbstractField {
 	 * The attachment behind an id, or null when it does not exist. A seam to WordPress: unit tests override it.
 	 *
 	 * @param int $id Attachment id.
-	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool}|null
+	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool,duration?:?int}|null
 	 */
 	protected function attachment( int $id ): ?array {
 		return Attachments::find( $id );
@@ -248,7 +248,7 @@ abstract class AbstractMediaField extends AbstractField {
 	 * chosen, the attachment is gone or the current user may not read it.
 	 *
 	 * @param mixed $value Stored value.
-	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string}|null
+	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,duration:?int}|null
 	 */
 	public function media( $value ): ?array {
 		$id = (int) $value;
@@ -270,6 +270,7 @@ abstract class AbstractMediaField extends AbstractField {
 			'width'     => $attachment['width'],
 			'height'    => $attachment['height'],
 			'thumbnail' => 'image' === $this->kind() ? $attachment['thumbnail'] : null,
+			'duration'  => $attachment['duration'] ?? null,
 		);
 	}
 

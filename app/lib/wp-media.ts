@@ -17,6 +17,8 @@ export interface WpAttachment {
   width?: number;
   height?: number;
   sizes?: Record<string, { url: string }>;
+  /** A video's or an audio file's length as WordPress shows it: `0:12`, `1:05`, `1:02:03`. */
+  fileLength?: string;
 }
 
 interface WpModel {
@@ -82,7 +84,17 @@ export function itemFromAttachment(attachment: WpAttachment, kind: MediaKind): M
     width: image ? (attachment.width ?? null) : null,
     height: image ? (attachment.height ?? null) : null,
     thumbnail: kind === 'image' && image ? (sizes.thumbnail?.url ?? sizes.full?.url ?? null) : null,
+    duration: attachment.type === 'video' || attachment.type === 'audio' ? secondsOf(attachment.fileLength) : null,
   };
+}
+
+/** `1:05` → 65, `1:02:03` → 3723; null for anything else. */
+function secondsOf(length: string | undefined): number | null {
+  if (!length || !/^\d+(?::\d{1,2}){1,2}$/.test(length.trim())) return null;
+  return length
+    .trim()
+    .split(':')
+    .reduce((total, part) => total * 60 + Number(part), 0);
 }
 
 /**

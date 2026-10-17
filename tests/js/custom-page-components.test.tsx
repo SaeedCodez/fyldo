@@ -15,10 +15,12 @@ import { AddItemCard, ItemCard } from '../../app/components/ui/item-card';
 import { Modal } from '../../app/components/ui/modal';
 import { Pagination } from '../../app/components/ui/pagination';
 import { StatCard } from '../../app/components/ui/stat-card';
+import { ToastProvider } from '../../app/components/ui/toast';
 import { TooltipProvider } from '../../app/components/ui/tooltip';
 import { RTL_FLIP } from '../../app/icons/rtl-flip';
 import { PortalContainerContext } from '../../app/lib/portal';
 import { sdk } from '../../app/lib/sdk';
+import { createToaster } from '../../app/lib/toast';
 
 function mount(node: ReactNode, dir: 'ltr' | 'rtl' = 'ltr') {
   const root = document.createElement('div');
@@ -309,5 +311,85 @@ describe('Field controls on a custom page', () => {
     expect(root.textContent).toContain('۲۰۲۶');
     expect(root.textContent).not.toContain('2026');
     root.remove();
+  });
+});
+
+describe('GroupList on a custom page (the page’s own items)', () => {
+  type Slide = { title: string; hidden?: boolean; link?: string };
+
+  function Slides({ initial, errors = {}, reveal = 0 }: { initial: Slide[]; errors?: Record<number, number>; reveal?: number }) {
+    const [slides, setSlides] = useState(initial);
+    const { ui } = sdk;
+    return (
+      <ToastProvider toaster={createToaster()}>
+        <ui.GroupList<Slide>
+          aria-label="Slides"
+          items={slides}
+          onChange={setSlides}
+          title={(slide) => slide.title}
+          summary={(slide) => (slide.link ? { text: slide.link, mono: true } : null)}
+          status={(slide) => (slide.hidden ? [{ label: 'Inactive' }] : [])}
+          inactive={(slide) => Boolean(slide.hidden)}
+          errorCount={(_, index) => errors[index] ?? 0}
+          sortable
+          addable
+          create={() => ({ title: '' })}
+          max={4}
+          addLabel="Add slide"
+          reveal={reveal}
+        >
+          {(slide, index, update) => <ui.Input aria-label={`Title of slide ${index + 1}`} value={slide.title} onValueChange={(title: string) => update({ ...slide, title })} />}
+        </ui.GroupList>
+        <p data-testid="order">{slides.map((s) => s.title || '·').join(',')}</p>
+      </ToastProvider>
+    );
+  }
+
+  const order = () => screen.getByTestId('order').textContent;
+
+  it('draws the items with their titles, status and fade, named on its own', () => {
+    mount(<Slides initial={[{ title: 'Breakfast', link: '/a' }, { title: 'Stretch', hidden: true }]} />);
+    expect(screen.getByRole('group', { name: 'Slides' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Stretch' })).toHaveAccessibleDescription('Inactive');
+    expect(screen.getByRole('button', { name: 'Stretch' }).closest('[data-slot=fy-group-item]')).toHaveAttribute('data-inactive');
+    expect(screen.getByText('2 of 4')).toBeVisible();
+  });
+
+  it('reorders with the keyboard, announcing each step; Escape puts it back', async () => {
+    mount(<Slides initial={[{ title: 'A' }, { title: 'B' }, { title: 'C' }]} />);
+    const handle = screen.getByRole('button', { name: 'Reorder A' });
+    handle.focus();
+    await userEvent.keyboard(' ');
+    expect(screen.getByText(/A picked up\. Position 1 of 3\./)).toBeInTheDocument();
+    await userEvent.keyboard('{ArrowDown}{ArrowDown} ');
+    expect(order()).toBe('B,C,A');
+    expect(screen.getByRole('button', { name: 'Reorder A' })).toHaveFocus();
+
+    await userEvent.keyboard(' {ArrowUp}{Escape}');
+    expect(order()).toBe('B,C,A');
+  });
+
+  it('adds (opening it, focus in its body), duplicates, edits through `update`, and removes with Undo', async () => {
+    mount(<Slides initial={[{ title: 'A' }]} />);
+    await userEvent.click(screen.getByRole('button', { name: 'Add slide' }));
+    expect(order()).toBe('A,·');
+    expect(screen.getByRole('textbox', { name: 'Title of slide 2' })).toHaveFocus();
+    await userEvent.keyboard('New');
+    expect(order()).toBe('A,New');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Duplicate A' }));
+    expect(order()).toBe('A,A,New');
+    await userEvent.click(screen.getAllByRole('button', { name: 'Remove A' })[0] as HTMLElement);
+    expect(order()).toBe('A,New');
+    await userEvent.click(await screen.findByRole('button', { name: 'Undo' }));
+    expect(order()).toBe('A,A,New');
+  });
+
+  it('a refused save opens the first item with errors', () => {
+    const { rerender } = render(<Slides initial={[{ title: 'A' }, { title: 'B' }]} errors={{ 1: 2 }} />);
+    expect(screen.queryByRole('textbox', { name: 'Title of slide 2' })).toBeNull();
+    rerender(<Slides initial={[{ title: 'A' }, { title: 'B' }]} errors={{ 1: 2 }} reveal={1} />);
+    expect(screen.getByRole('textbox', { name: 'Title of slide 2' })).toBeVisible();
+    expect(screen.getByText('2 errors')).toBeVisible();
   });
 });

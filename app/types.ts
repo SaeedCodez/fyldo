@@ -245,6 +245,8 @@ export interface MediaItem {
   height: number | null;
   /** An image field's thumbnail; null for a file or an image without one. */
   thumbnail: string | null;
+  /** A video's or an audio file's length in seconds, as WordPress read it; null (or absent) for anything else or unknown. */
+  duration?: number | null;
 }
 
 /** One post, term or user as a relation field draws it (PHP: src/Support/Relations.php). */
