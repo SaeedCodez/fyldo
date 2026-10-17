@@ -73,11 +73,13 @@ import { TopNavigation } from '../../../app/components/fyldo/TopNavigation';
 import type { NavGroup } from '../../../app/components/fyldo/nav-model';
 import { Badge, type BadgeSize, type BadgeTone } from '../../../app/components/ui/badge';
 import { Input } from '../../../app/components/ui/input';
+import { DragHandle } from '../../../app/icons/DragHandle';
 import { Icon } from '../../../app/icons/Icon';
 import { Button, type ButtonSize, type ButtonVariant } from '../../../app/components/ui/button';
 import { Checkbox, CheckboxGroup } from '../../../app/components/ui/checkbox';
 import { FieldShell } from '../../../app/components/ui/field-shell';
 import { GroupField } from '../../../app/components/ui/group-field';
+import { GroupItem, type GroupItemStatus } from '../../../app/components/ui/group-item';
 import { RadioGroup } from '../../../app/components/ui/radio';
 import { ChoiceCard, type ChoiceCardContent } from '../../../app/components/ui/choice-card';
 import { ChoiceCardGroup } from '../../../app/components/ui/choice-card-group';
@@ -368,6 +370,38 @@ function GroupDemo() {
   return (
     <div style={{ width: 894 }}>
       <FieldRenderer field={field} value={value} divider onChange={(_, next) => setValue(next)} onBlur={() => undefined} locale={locale} />
+    </div>
+  );
+}
+
+/** One Group Item on its own (Figma "Group Item"), collapsed, with `status` labels (JSON) and `inactive=1`. */
+function GroupItemDemo() {
+  const title = param('title');
+  return (
+    <div style={{ width: 894 }}>
+      <GroupItem
+        title={title}
+        summary={param('summary') || undefined}
+        mono
+        preview={param('preview')}
+        open={false}
+        onOpenChange={() => undefined}
+        status={JSON.parse(param('status', '[]')) as GroupItemStatus[]}
+        inactive={q.get('inactive') === '1'}
+        handle={
+          <span data-slot="fy-group-item-handle" className="fy:flex fy:size-5 fy:items-center fy:justify-center fy:rounded-xs fy:text-icon-tertiary">
+            <DragHandle size={20} />
+          </span>
+        }
+        actions={
+          <>
+            <IconButton icon="copy" label={`Duplicate ${title}`} />
+            <IconButton icon="trash" label={`Remove ${title}`} />
+          </>
+        }
+      >
+        {null}
+      </GroupItem>
     </div>
   );
 }
@@ -999,6 +1033,8 @@ function Variant() {
       return <IconPickerModalDemo />;
     case 'group':
       return <GroupDemo />;
+    case 'group-item':
+      return <GroupItemDemo />;
     case 'upload-image':
       return <MediaDemo kind="image" />;
     case 'select-file':

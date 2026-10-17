@@ -323,6 +323,10 @@
            "preferredValues": [],
            "valueName": "dollar-circle / Property 1=linear"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -430,6 +434,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -541,6 +549,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -1660,6 +1672,10 @@
            "preferredValues": [],
            "valueName": "dollar-circle / Property 1=linear"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -1767,6 +1783,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -1878,6 +1898,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -2223,6 +2247,10 @@
            "preferredValues": [],
            "valueName": "dollar-circle / Property 1=linear"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -2330,6 +2358,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -2441,6 +2473,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -2786,6 +2822,10 @@
            "preferredValues": [],
            "valueName": "dollar-circle / Property 1=linear"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -2891,6 +2931,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -3002,6 +3046,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -3113,6 +3161,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -3224,6 +3276,10 @@
          "component": "Group Item",
          "variant": "Locale=EN, State=Collapsed",
          "componentProperties": {
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -5503,6 +5559,10 @@
            "type": "TEXT",
            "value": "Pricing"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -5616,6 +5676,10 @@
            "type": "TEXT",
            "value": "Docs"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -5662,7 +5726,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "مستندات",
           "Summary": "/docs"
          }
@@ -5727,6 +5791,10 @@
            "type": "TEXT",
            "value": "Get started"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -5773,7 +5841,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "شروع کنید",
           "Summary": "/signup"
          }
@@ -6840,6 +6908,10 @@
            "type": "TEXT",
            "value": "Pricing"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -6953,6 +7025,10 @@
            "type": "TEXT",
            "value": "Docs"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -6999,7 +7075,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "مستندات",
           "Summary": "/docs"
          }
@@ -7064,6 +7140,10 @@
            "type": "TEXT",
            "value": "Get started"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -7110,7 +7190,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "شروع کنید",
           "Summary": "/signup"
          }
@@ -7403,6 +7483,10 @@
            "type": "TEXT",
            "value": "Pricing"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -7516,6 +7600,10 @@
            "type": "TEXT",
            "value": "Docs"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -7562,7 +7650,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "مستندات",
           "Summary": "/docs"
          }
@@ -7627,6 +7715,10 @@
            "type": "TEXT",
            "value": "Get started"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": false
@@ -7673,7 +7765,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "شروع کنید",
           "Summary": "/signup"
          }
@@ -7966,6 +8058,10 @@
            "type": "TEXT",
            "value": "Pricing"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -8012,7 +8108,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "قیمت‌ها",
           "Summary": "/pricing"
          }
@@ -8077,6 +8173,10 @@
            "type": "TEXT",
            "value": "Docs"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -8123,7 +8223,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "مستندات",
           "Summary": "/docs"
          }
@@ -8188,6 +8288,10 @@
            "type": "TEXT",
            "value": "Blog"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -8234,7 +8338,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "وبلاگ",
           "Summary": "/blog"
          }
@@ -8299,6 +8403,10 @@
            "type": "TEXT",
            "value": "Contact"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -8345,7 +8453,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "تماس با ما",
           "Summary": "/contact"
          }
@@ -8410,6 +8518,10 @@
            "type": "TEXT",
            "value": "Get started"
           },
+          "Status#434:1768": {
+           "type": "BOOLEAN",
+           "value": false
+          },
           "Remove#385:17": {
            "type": "BOOLEAN",
            "value": true
@@ -8456,7 +8568,7 @@
           }
          },
          "texts": {
-          "Label": "۱ خطا",
+          "Label": "زمان‌دار",
           "Title": "شروع کنید",
           "Summary": "/signup"
          }

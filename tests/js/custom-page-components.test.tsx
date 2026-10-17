@@ -281,6 +281,29 @@ describe('Field controls on a custom page', () => {
     expect(screen.getByRole('button', { name: 'Slide 1' })).toHaveAttribute('aria-expanded', 'true');
   });
 
+  it('Group Item: status labels describe the item’s button, and an inactive item is marked', () => {
+    mount(
+      <>
+        <ui.GroupItem title="Weekend offer" open={false} onOpenChange={() => undefined} status={[{ label: 'Scheduled', tone: 'blue', icon: 'clock' }]}>
+          Body
+        </ui.GroupItem>
+        <ui.GroupItem title="Morning stretch" open={false} onOpenChange={() => undefined} inactive status={[{ label: 'Inactive' }, { label: '' }]}>
+          Body
+        </ui.GroupItem>
+        <ui.GroupItem title="Spring sale" open={false} onOpenChange={() => undefined}>
+          Body
+        </ui.GroupItem>
+      </>,
+    );
+
+    expect(screen.getByRole('button', { name: 'Weekend offer' })).toHaveAccessibleDescription('Scheduled');
+    const stretch = screen.getByRole('button', { name: 'Morning stretch' });
+    expect(stretch).toHaveAccessibleDescription('Inactive'); // an empty label is not drawn
+    expect(stretch.closest('[data-slot=fy-group-item]')).toHaveAttribute('data-inactive');
+    expect(screen.getByRole('button', { name: 'Spring sale' })).not.toHaveAttribute('aria-describedby');
+    expect(screen.getAllByText('Scheduled')[0]?.closest('[data-slot=fy-group-item-status]')).not.toBeNull();
+  });
+
   it('write in the screen’s language without being given one (the root’s lang)', () => {
     const root = mount(<ui.DatePicker value="2026-10-17" calendar="gregorian" onValueChange={() => undefined} aria-label="Start" />, 'rtl');
     expect(root.textContent).toContain('۲۰۲۶');

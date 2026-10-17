@@ -2,7 +2,17 @@ import { forwardRef, useId, type CSSProperties, type ReactElement, type ReactNod
 import { _n, sprintf } from '../../i18n';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
-import { Badge } from './badge';
+import { Badge, type BadgeTone } from './badge';
+
+/** One Figma `Status` label of a Group Item: what holds for the item ("Scheduled", "Ended") without opening it. */
+export interface GroupItemStatus {
+  /** One or two words. */
+  label: string;
+  /** Figma Badge `Tone`; default gray. */
+  tone?: BadgeTone;
+  /** Iconsax name of the Badge's 12px icon. */
+  icon?: string;
+}
 
 export interface GroupItemProps {
   /** The item's name in its header ("Pricing", or "Item 2" when it has none). */
@@ -14,6 +24,13 @@ export interface GroupItemProps {
   preview?: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Figma `Status`: Small Subtle Badges after the title, before the error count. Usually one. */
+  status?: readonly GroupItemStatus[];
+  /**
+   * Figma `State=Inactive`: the item is kept but not in effect (the site does not show it), so its preview, title and
+   * summary fade. It stays editable. Fading says nothing to a screen reader: give it a `status` label too ("Inactive").
+   */
+  inactive?: boolean;
   /** Invalid sub-fields inside: red border and a count in the header (shown while collapsed too). */
   errorCount?: number;
   /** Figma `State=Dragging`: lifted while it is being moved. */
@@ -41,6 +58,8 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
     preview,
     open,
     onOpenChange,
+    status,
+    inactive = false,
     errorCount = 0,
     dragging = false,
     handle,
@@ -52,7 +71,9 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
   ref,
 ): ReactElement {
   const bodyId = useId();
+  const statusId = useId();
   const invalid = errorCount > 0;
+  const labels = status?.filter((one) => one.label !== '') ?? [];
 
   return (
     <div
@@ -61,6 +82,7 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
       data-open={open ? '' : undefined}
       data-dragging={dragging ? '' : undefined}
       data-invalid={invalid ? '' : undefined}
+      data-inactive={inactive ? '' : undefined}
       style={style}
       className={cn(
         'fy:motion-base fy:overflow-hidden fy:rounded-md fy:border fy:bg-background-default',
@@ -81,6 +103,8 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
           type="button"
           aria-expanded={open}
           aria-controls={open ? bodyId : undefined}
+          // The labels sit outside the button (beside the actions), so they describe it.
+          aria-describedby={labels.length ? statusId : undefined}
           onClick={() => onOpenChange(!open)}
           data-slot="fy-group-item-toggle"
           // The button's box covers the whole header (after:inset-0): the chevron and the empty space toggle too.
@@ -92,12 +116,13 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
               className={cn(
                 'fy:flex fy:size-9 fy:shrink-0 fy:items-center fy:justify-center fy:rounded-sm fy:border fy:bg-background-subtle fy:text-icon-primary',
                 preview ? 'fy:border-border-subtle' : 'fy:border-dashed fy:border-border-default',
+                inactive && 'fy:opacity-50',
               )}
             >
               {preview ? <Icon name={preview} size={18} /> : null}
             </span>
           ) : null}
-          <span className="fy:flex fy:min-w-0 fy:flex-1 fy:flex-col fy:gap-0.5">
+          <span className={cn('fy:flex fy:min-w-0 fy:flex-1 fy:flex-col fy:gap-0.5', inactive && 'fy:opacity-50')}>
             <span
               data-slot="fy-group-item-title"
               className="fy:truncate fy:text-label-14-strong fy:text-text-primary"
@@ -118,6 +143,15 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function Gro
             ) : null}
           </span>
         </button>
+        {labels.length ? (
+          <span id={statusId} data-slot="fy-group-item-status" className="fy:flex fy:shrink-0 fy:items-center fy:gap-1">
+            {labels.map((one, i) => (
+              <Badge key={i} tone={one.tone ?? 'gray'} size="sm" icon={one.icon}>
+                {one.label}
+              </Badge>
+            ))}
+          </span>
+        ) : null}
         {invalid ? (
           <Badge tone="red" size="sm" className="fy:shrink-0">
             {sprintf(_n('%d error', '%d errors', errorCount, 'fyldo'), errorCount)}

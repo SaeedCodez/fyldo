@@ -674,6 +674,54 @@ for (const locale of ['EN', 'FA'] as const) {
     await close();
   });
 
+  // Inactive: the collapsed item with its preview, title and summary faded (Figma `State=Inactive`; the Status label is off
+  // in the variant). EN compares the whole item, FA its handle and its faded preview tile.
+  test(`Group Item ${locale} · inactive`, async ({ browser }, testInfo) => {
+    const v = variant('group-item', { Locale: locale, State: 'Inactive' });
+    const root = v.node;
+    const preview = layer(root, 'Preview', 'Icon').icon?.name ?? 'dollar-circle';
+    const { page, close } = await newPage(browser, SCALE);
+    const stage = await open(page, {
+      c: 'group-item',
+      dir: locale === 'FA' ? 'rtl' : 'ltr',
+      title: layer(root, 'Title').text?.characters ?? '',
+      summary: layer(root, 'Summary').text?.characters ?? '',
+      preview,
+      inactive: '1',
+      names: [preview, 'copy', 'trash', 'arrow-down-2'].join(','),
+    });
+    await still(page);
+    const item = stage.locator('[data-slot=fy-group-item]');
+    const b = await box(item);
+    expect([Math.round(b.width), Math.round(b.height)]).toEqual([root.width, root.height]);
+    // The fade is too light for the pixel tolerance: its opacity is checked against the pack.
+    const opacity = (locator: Locator) => locator.evaluate((el) => Number(getComputedStyle(el).opacity));
+    expect(await opacity(item.locator('[data-slot=fy-group-item-title]').locator('..'))).toBe(layer(root, 'Text').opacity);
+    expect(await opacity(item.locator('[data-slot=fy-group-item-preview]'))).toBe(layer(root, 'Preview').opacity);
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('group-item', v), scale: SCALE, stage: item, maxDiffRatio: 0.08 });
+    } else {
+      for (const [name, locator] of [
+        ['Handle', item.locator('[data-slot=fy-group-item-handle]')],
+        ['Preview', item.locator('[data-slot=fy-group-item-preview]')],
+      ] as const) {
+        const region = rect(layer(root, name), root);
+        const at = await box(locator);
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('group-item', v),
+          scale: SCALE,
+          stage: item,
+          referenceRegion: region,
+          actualRegion: { x: at.x - b.x, y: at.y - b.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+    }
+    await close();
+  });
+
   test(`Group ${locale} · empty`, async ({ browser }, testInfo) => {
     const v = variant('group', { Locale: locale, Type: 'Repeatable', State: 'Empty' });
     const root = v.node;

@@ -23,6 +23,8 @@ export interface Node {
   name: string;
   type: string;
   visible: boolean;
+  /** Layer opacity, 0–1. */
+  opacity: number;
   x: number;
   y: number;
   width: number;

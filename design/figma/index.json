@@ -7,7 +7,7 @@
  },
  "variableCount": 192,
  "componentCount": 51,
- "variantCount": 1005,
+ "variantCount": 1007,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1232,18 +1232,20 @@
   {
    "name": "Group Item",
    "nodeId": "385:8925",
-   "variantCount": 8,
+   "variantCount": 10,
    "json": "components/group-item.json",
-   "jsonVariantCount": 8,
+   "jsonVariantCount": 10,
    "png": [
     "png/group-item/locale-en--state-collapsed.png",
     "png/group-item/locale-en--state-dragging.png",
     "png/group-item/locale-en--state-error.png",
     "png/group-item/locale-en--state-expanded.png",
+    "png/group-item/locale-en--state-inactive.png",
     "png/group-item/locale-fa--state-collapsed.png",
     "png/group-item/locale-fa--state-dragging.png",
     "png/group-item/locale-fa--state-error.png",
-    "png/group-item/locale-fa--state-expanded.png"
+    "png/group-item/locale-fa--state-expanded.png",
+    "png/group-item/locale-fa--state-inactive.png"
    ]
   },
   {
@@ -1675,7 +1677,7 @@
    "name": "Group · Usage",
    "nodeId": "385:10545",
    "width": 960,
-   "height": 6819,
+   "height": 7683,
    "png": "png/usage/group-usage.png",
    "scale": 1
   },
@@ -1691,7 +1693,7 @@
    "name": "Date Range Field · Usage",
    "nodeId": "427:20278",
    "width": 960,
-   "height": 4597,
+   "height": 4617,
    "png": "png/usage/date-range-field-usage.png",
    "scale": 1
   },
