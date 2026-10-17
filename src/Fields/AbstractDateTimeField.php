@@ -91,14 +91,14 @@ abstract class AbstractDateTimeField extends AbstractField {
 	/**
 	 * The developer's `default`, in the stored format.
 	 *
-	 * @param mixed  $default The configured default.
-	 * @param string $name    The kind, capitalised, for the message.
-	 * @param string $id      The field id, for the message.
+	 * @param mixed  $configured The configured default.
+	 * @param string $name       The kind, capitalised, for the message.
+	 * @param string $id         The field id, for the message.
 	 * @return mixed
 	 * @throws ConfigException When it is not a value of the field's kind.
 	 */
-	protected function normalize_default( $default, string $name, string $id ) {
-		$value = is_string( $default ) ? Dates::read( $default ) : null;
+	protected function normalize_default( $configured, string $name, string $id ) {
+		$value = is_string( $configured ) ? Dates::read( $configured ) : null;
 		if ( null === $value || ( '' !== $value && ! Dates::is_valid( $this->kind(), $value ) ) ) {
 			throw new ConfigException( sprintf( '%1$s field "%2$s": `default` must be %3$s, or "".', $name, $id, $this->example() ) );
 		}

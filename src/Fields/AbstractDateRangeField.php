@@ -53,14 +53,14 @@ abstract class AbstractDateRangeField extends AbstractDateTimeField {
 	/**
 	 * A range default: both ends in the single type's format, or both empty.
 	 *
-	 * @param mixed  $default The configured default.
-	 * @param string $name    The kind, capitalised, for the message.
-	 * @param string $id      The field id, for the message.
+	 * @param mixed  $configured The configured default.
+	 * @param string $name       The kind, capitalised, for the message.
+	 * @param string $id         The field id, for the message.
 	 * @return array{start:string,end:string}
 	 * @throws ConfigException When it is not such a pair.
 	 */
-	protected function normalize_default( $default, string $name, string $id ) {
-		$pair = is_array( $default ) && array() === array_diff( array_keys( $default ), array( 'start', 'end' ) ) ? $this->sanitize_value( $default ) : null;
+	protected function normalize_default( $configured, string $name, string $id ) {
+		$pair = is_array( $configured ) && array() === array_diff( array_keys( $configured ), array( 'start', 'end' ) ) ? $this->sanitize_value( $configured ) : null;
 		$ok   = null !== $pair && ( '' === $pair['start'] ) === ( '' === $pair['end'] )
 			&& ( '' === $pair['start'] || ( Dates::is_valid( $this->kind(), $pair['start'] ) && Dates::is_valid( $this->kind(), $pair['end'] ) ) );
 		if ( null === $pair || ! $ok ) {

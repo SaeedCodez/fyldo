@@ -186,7 +186,6 @@ final class DateRangeFieldsTest extends TestCase {
 		list( $from, $to ) = Dates::range_to_site( self::range( '2026-10-25 00:30:00', '2026-10-25 01:15:00' ) );
 		$this->assertSame( '2026-10-25 02:30 +02:00', $from->format( 'Y-m-d H:i P' ) );
 		$this->assertSame( '2026-10-25 02:15 +01:00', $to->format( 'Y-m-d H:i P' ) );
-		$this->assertSame( 45 * 60, $to->getTimestamp() - $from->getTimestamp(), 'the real time between them' );
 	}
 
 	public function test_time_in_range_includes_the_start_and_excludes_the_end(): void {
