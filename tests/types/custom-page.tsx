@@ -11,15 +11,13 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
     record,
     headingRef,
     navigate,
-  }: { record: string } & Pick<CustomPageProps, 'headingRef' | 'navigate'>) {
+    toast,
+  }: { record: string } & Pick<CustomPageProps, 'headingRef' | 'navigate' | 'toast'>) {
     const form = useForm({
       form: 'story',
       record,
       onSaved: (key) => navigate([key], { replace: true }),
     });
-    const title = form.values.title;
-    // `field(id)` is typed as the union of its shapes (by field type): narrow it, or bind the value yourself.
-    const pinned = form.field('pinned');
     return (
       <form.Frame>
         <ui.PageHeader
@@ -27,13 +25,16 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
           headingRef={headingRef}
           actions={<ui.Button onClick={() => void form.save()}>Save</ui.Button>}
         />
-        <ui.Input
-          size="md"
-          value={typeof title === 'string' ? title : ''}
-          onValueChange={(v) => form.set('title', v)}
-          onBlur={() => form.validate('title')}
+        {/* `field(id, kind)`: the props of that kind of control, typed, so they spread as they are. */}
+        <ui.Input size="md" {...form.field('title', 'text')} />
+        <ui.Toggle {...form.field('pinned', 'toggle')} />
+        <ui.MultiSelect size="md" options={[]} {...form.field('tags', 'list')} />
+        <ui.MediaPicker
+          kind="image"
+          label="Cover"
+          onError={(message) => toast.error(message)}
+          {...form.field('cover', 'media')}
         />
-        {'checked' in pinned && <ui.Toggle {...pinned} />}
       </form.Frame>
     );
   }
@@ -51,7 +52,7 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
     if (path[0] === 'new')
       return <Form form="story" record="new" onSaved={(key) => navigate(key)} />;
     if (path[0] !== undefined)
-      return <Editor record={path[0]} headingRef={headingRef} navigate={navigate} />;
+      return <Editor record={path[0]} headingRef={headingRef} navigate={navigate} toast={toast} />;
     return (
       <>
         <ui.PageHeader title={page.title} description={page.description} headingRef={headingRef} />

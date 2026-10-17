@@ -138,9 +138,22 @@ export default stories;
 ```
 
 `request<T>()` types the JSON it resolves with; Fyldo does not check it. `useForm`'s `field(id)` is typed as the union
-of its three shapes ([below](#drawing-the-fields-yourself-useform)), since the type of a field is only known in PHP:
-narrow it (`'checked' in binding` for a toggle) or bind the value yourself
-(`value={…} onValueChange={(v) => form.set('title', v)} onBlur={() => form.validate('title')}`).
+of its three shapes ([below](#drawing-the-fields-yourself-useform)), since the type of a field is only known in PHP.
+Name the kind of control instead, `field(id, kind)`, and the props are that control's, ready to spread:
+
+```tsx
+function Editor({ record, toast }: { record: string } & Pick<CustomPageProps, 'toast'>) {
+  const form = useForm({ form: 'story', record });
+  return (
+    <form.Frame>
+      <ui.Input size="md" {...form.field('title', 'text')} />
+      <ui.Toggle {...form.field('pinned', 'toggle')} />
+      <ui.MultiSelect size="md" options={tagOptions} {...form.field('tags', 'list')} />
+      <ui.MediaPicker kind="image" label="Cover" onError={(message) => toast.error(message)} {...form.field('cover', 'media')} />
+    </form.Frame>
+  );
+}
+```
 
 #### Styling
 
@@ -253,6 +266,7 @@ function StoryEditor({ record, navigate }) {
 | `status` | `loading` (the defaults are in `values`, `Frame` makes the fields inert), `ready`, `missing` or `failed` (`Frame` says why, with Retry). |
 | `values` | Every field's current value: the record's, with the edits, and the defaults while it loads. |
 | `field(id)` | Props for the control of a field, by its type: `{ value, onValueChange, onBlur, disabled }`, `{ checked, onCheckedChange, disabled }` for `toggle` and `checkbox`, and `ui.MediaPicker`'s `{ value, media, onValueChange, onBlur, disabled }` for `image` and `file`. `onBlur` checks the field, as Fyldo's fields do. |
+| `field(id, kind)` | The props of one kind of control, the value in that control's type (`text`: `''` for a value that is not a string, and so on), so TypeScript needs no narrowing: `text` (`{ value: string, … }`: Input, Textarea, Select, RadioGroup, SegmentedControl, ChoiceCards, ColorPicker, DatePicker, TimePicker, CodeEditor), `number` (`number \| string`: NumberInput), `list` (`string[]`: MultiSelect, CheckboxGroup), `range` (`{ start, end }`: DateRangePicker), `toggle` (as `field(id)` for a toggle: Toggle, Checkbox) and `media` (as for an image: MediaPicker). A kind that does not match the field's type is reported in the console; a `custom` value binds as any kind. |
 | `set(id, value, { clear })` | Set a value the page manages itself. `clear`: the message keys the edit makes stale (`['slides.2.link']`); default every message of the field. |
 | `error(path)`, `errorCount(path)`, `errors` | A message, and how many there are at or under a path (`slides.2` for a slide's Group Item). Messages come from the field's `validate` rules (on blur and on save) and from the server (422). |
 | `validate(id, path)` | Check a field now (on blur of a control the page draws itself); `path` checks one message key. |

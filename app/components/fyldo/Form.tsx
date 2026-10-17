@@ -8,7 +8,7 @@ import { belongsTo } from '../../lib/group';
 import { useFormHost } from '../../lib/host';
 import { createFormStore, PAGE_SCOPE, scopeState, useForm as useFormController, type FormController, type FormShape, type FormSource } from '../../lib/page-form';
 import type { RelationSearch } from '../../lib/relation';
-import { isValueField, mediaItem, type FieldValue, type FormDef, type MediaItem, type SectionDef } from '../../types';
+import { isValueField, mediaItem, type DateRangeValue, type FieldDef, type FieldValue, type FormDef, type MediaItem, type SectionDef } from '../../types';
 import { Button } from '../ui/button';
 import { Notice } from '../ui/notice';
 import { ConflictNotice, FormBody, saveBarState, useSaveShortcut } from './FormBody';
@@ -241,14 +241,54 @@ function RecordForm({ def, api, locale, record, onSaved }: RecordFormProps): Rea
 
 // ── useForm: the same form, drawn by the page ──────────────────────────────────────────────────────────────────────────
 
+/**
+ * The props of each kind of control, with the value in the control's own type (`field(id, kind)`): spread one onto its
+ * control (`<ui.Input {...form.field('title', 'text')} />`) with no narrowing in TypeScript.
+ */
+export interface FieldBindings {
+  /** `ui.Input`, `Textarea`, `Select`, `RadioGroup`, `SegmentedControl`, `ChoiceCards`, `ColorPicker`, `DatePicker`, `TimePicker`, `CodeEditor`: not a string = ''. */
+  text: { value: string; onValueChange: (value: string) => void; onBlur: () => void; disabled: boolean };
+  /** `ui.NumberInput` (a number, or the text being typed): neither = ''. */
+  number: { value: number | string; onValueChange: (value: number | string) => void; onBlur: () => void; disabled: boolean };
+  /** `ui.MultiSelect`, `CheckboxGroup`: the strings of the list; not a list = []. */
+  list: { value: string[]; onValueChange: (value: string[]) => void; onBlur: () => void; disabled: boolean };
+  /** `ui.DateRangePicker`: each end a string; a missing end = ''. */
+  range: { value: DateRangeValue; onValueChange: (value: DateRangeValue) => void; onBlur: () => void; disabled: boolean };
+  /** `ui.Toggle`, `Checkbox`: Base UI's checked state; anything but `true` = off. */
+  toggle: { checked: boolean; onCheckedChange: (checked: boolean) => void; disabled: boolean };
+  /** `ui.MediaPicker`: the attachment ID (not a number = 0), the attachment it draws, and its change. */
+  media: { value: number; media: MediaItem | null; onValueChange: (value: number, item: MediaItem | null) => void; onBlur: () => void; disabled: boolean };
+}
+
+/** A kind of control `field(id, kind)` binds. */
+export type FieldKind = keyof FieldBindings;
+
 /** What a control needs from the form, spread onto it (`h(ui.Input, form.field('title'))`): depends on the field's type. */
 export type FieldBinding =
   /** `toggle`, `checkbox`: Base UI's checked state. */
-  | { checked: boolean; onCheckedChange: (checked: boolean) => void; disabled: boolean }
+  | FieldBindings['toggle']
   /** `image`, `file`: `ui.MediaPicker`'s value, the attachment it draws, and its change. */
-  | { value: number; media: MediaItem | null; onValueChange: (value: number, item: MediaItem | null) => void; onBlur: () => void; disabled: boolean }
+  | FieldBindings['media']
   /** Every other type: the value and its change, and blur (the moment Fyldo's fields check a value). */
   | { value: FieldValue; onValueChange: (value: FieldValue) => void; onBlur: () => void; disabled: boolean };
+
+/** The kind of control each field type is drawn with; the others (`post`, `group`, `custom`…) bind as any kind. */
+const KIND_OF: Partial<Record<FieldDef['type'], FieldKind>> = {
+  text: 'text', url: 'text', email: 'text', password: 'text', textarea: 'text', code: 'text', select: 'text', radio: 'text',
+  choice: 'text', segmented: 'text', color: 'text', icon: 'text', date: 'text', time: 'text', datetime: 'text',
+  number: 'number', slider: 'number',
+  multi_select: 'list', checkbox_group: 'list',
+  date_range: 'range', time_range: 'range', datetime_range: 'range',
+  toggle: 'toggle', checkbox: 'toggle',
+  image: 'media', file: 'media',
+};
+
+const asList = (value: FieldValue): string[] => (Array.isArray(value) ? (value as unknown[]).filter((v): v is string => typeof v === 'string') : []);
+
+function asRange(value: FieldValue): DateRangeValue {
+  const pair = value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+  return { start: typeof pair.start === 'string' ? pair.start : '', end: typeof pair.end === 'string' ? pair.end : '' };
+}
 
 /** A record form whose page draws the fields itself (the SDK's `useForm`); Fyldo keeps loading, checking and saving. */
 export interface RecordFormApi {
@@ -269,8 +309,14 @@ export interface RecordFormApi {
   invalidSaves: number;
   /** Set a field's value. `clear`: the message keys the edit makes stale (default: all of the field's). */
   set: (id: string, value: FieldValue, options?: { clear?: string[] }) => void;
-  /** Props for the control of field `id`. */
-  field: (id: string) => FieldBinding;
+  /**
+   * Props for the control of field `id`: by its type, or with `kind`, the props of that kind of control, its value in
+   * the control's type (TypeScript then needs no narrowing). A kind that does not match the field's type is reported.
+   */
+  field: {
+    (id: string): FieldBinding;
+    <K extends FieldKind>(id: string, kind: K): FieldBindings[K];
+  };
   /** Check a field now (on blur); `path` checks one message key of it. Returns whether it is valid. */
   validate: (id: string, path?: string) => boolean;
   /** Check every field, then save the record; false when it was refused or failed (the Save Bar says why). */
@@ -356,14 +402,17 @@ export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormA
   });
 
   const loading = load.status === 'loading';
-  const field = (id: string): FieldBinding => {
+  const bind = (id: string, kind?: FieldKind): FieldBindings[FieldKind] | FieldBinding => {
     const f = fields.get(id);
     if (!f) console.error(`Fyldo: form "${form}" has no field "${id}".`);
+    const own = f ? KIND_OF[f.type] : undefined;
+    if (kind !== undefined && own !== undefined && own !== kind) console.error(`Fyldo: field "${id}" of form "${form}" is a ${f!.type} field, bound as "${kind}" (its kind is "${own}").`);
+    const as = kind ?? own;
     const disabled = Boolean(f?.disabled) || loading;
     const value = values[id] ?? null;
-    if (f?.type === 'toggle' || f?.type === 'checkbox') return { checked: value === true, onCheckedChange: (next: boolean) => controller.setValue(id, next), disabled };
+    if (as === 'toggle') return { checked: value === true, onCheckedChange: (next: boolean) => controller.setValue(id, next), disabled };
     const onBlur = (): void => void controller.validateField(id);
-    if (f?.type === 'image' || f?.type === 'file') {
+    if (as === 'media') {
       return {
         value: typeof value === 'number' ? value : 0,
         media: mediaItem(state.media[id]),
@@ -372,8 +421,21 @@ export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormA
         disabled,
       };
     }
-    return { value, onValueChange: (next: FieldValue) => controller.setValue(id, next), onBlur, disabled };
+    const set = (next: FieldValue): void => controller.setValue(id, next);
+    // Only a kind asked for is coerced to its control's type: `field(id)` gives the stored value as it is.
+    switch (kind) {
+      case 'text':
+        return { value: typeof value === 'string' ? value : '', onValueChange: set, onBlur, disabled };
+      case 'number':
+        return { value: typeof value === 'number' || typeof value === 'string' ? value : '', onValueChange: set, onBlur, disabled };
+      case 'list':
+        return { value: asList(value), onValueChange: set, onBlur, disabled };
+      case 'range':
+        return { value: asRange(value), onValueChange: set, onBlur, disabled };
+    }
+    return { value, onValueChange: set, onBlur, disabled };
   };
+  const field = bind as RecordFormApi['field'];
 
   return {
     status: load.status,
