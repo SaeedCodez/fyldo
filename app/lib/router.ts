@@ -1,23 +1,29 @@
 /**
  * Client-side routes (docs/ARCHITECTURE.md O7: one admin screen per instance, pages and tabs are routes).
  *
- * The URL is WordPress's own screen URL plus a hash: `options-general.php?page=<slug>#/<page>/<tab>`. The query string is
+ * The URL is WordPress's own screen URL plus a hash: `options-general.php?page=<slug>#/<page>/<tab>` (a custom page:
+ * `#/<page>/<path…>`, the segments are its own). The query string is
  * never touched (it selects the admin screen, and may carry other arguments), so every nav item has a real href that
  * works for a new tab, a bookmark, a copied link or a reload. Navigating pushes a history entry; Back/Forward restore
  * the route through `popstate`/`hashchange`.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { PageDef } from '../types';
+import { isCustomPage, type AnyPageDef } from '../types';
 
 export interface Route {
   page: string;
-  /** '' when the page has no tabs. */
+  /** '' when the page has no tabs (and on a custom page). */
   tab: string;
+  /** A custom page's own segments after its id (`#/announcements/42/edit` → ['42', 'edit']); [] on a settings page. */
+  path: string[];
 }
 
-/** `#/general/identity` → `{ page: 'general', tab: 'identity' }` (unchecked; see `resolveRoute`). */
+/**
+ * `#/general/identity` → `{ page: 'general', tab: 'identity', path: ['identity'] }` (unchecked; see `resolveRoute`). The
+ * segments after the page are a tab (settings page) or the path (custom page): only the page knows which.
+ */
 export function parseHash(hash: string): Route {
-  const [page = '', tab = ''] = hash
+  const [page = '', ...rest] = hash
     .replace(/^#\/?/, '')
     .split('/')
     .map((part) => {
@@ -27,30 +33,48 @@ export function parseHash(hash: string): Route {
         return '';
       }
     });
-  return { page, tab };
+  return { page, tab: rest[0] ?? '', path: rest.filter((part) => part !== '') };
 }
 
-/** The route the UI shows for a requested one: an unknown page falls back to the first, an unknown tab to the first tab. */
-export function resolveRoute(pages: PageDef[], wanted: Route): Route {
+/**
+ * The route the UI shows for a requested one: an unknown page falls back to the first, an unknown tab to the first tab.
+ * A custom page takes any path (the page itself decides what it shows for it).
+ */
+export function resolveRoute(pages: AnyPageDef[], wanted: Route): Route {
   const page = pages.find((p) => p.id === wanted.page) ?? pages[0];
-  if (!page) return { page: '', tab: '' };
+  if (!page) return { page: '', tab: '', path: [] };
+  if (isCustomPage(page)) return { page: page.id, tab: '', path: page.id === wanted.page ? wanted.path : [] };
   const tab = page.tabs.find((t) => t.id === wanted.tab) ?? page.tabs[0];
-  return { page: page.id, tab: tab?.id ?? '' };
+  return { page: page.id, tab: tab?.id ?? '', path: [] };
 }
 
-/** `#/<page>` for a page's first tab (the short, canonical link), `#/<page>/<tab>` for any other tab. */
-export function routeHash(pages: PageDef[], route: Route): string {
+/**
+ * `#/<page>` for a page's first tab (the short, canonical link), `#/<page>/<tab>` for any other tab, and
+ * `#/<page>/<path…>` on a custom page (each segment encoded).
+ */
+export function routeHash(pages: AnyPageDef[], route: Route): string {
   const page = pages.find((p) => p.id === route.page);
+  const base = `#/${encodeURIComponent(route.page)}`;
+  if (page && isCustomPage(page)) return base + route.path.map((part) => `/${encodeURIComponent(part)}`).join('');
   const first = page?.tabs[0]?.id ?? '';
   const tab = route.tab && route.tab !== first ? `/${encodeURIComponent(route.tab)}` : '';
-  return `#/${encodeURIComponent(route.page)}${tab}`;
+  return `${base}${tab}`;
 }
 
 /** The full link of a route: the current screen (path + query, e.g. `?page=acme-seo`) with the route's hash. */
-export const routeHref = (pages: PageDef[], route: Route): string =>
+export const routeHref = (pages: AnyPageDef[], route: Route): string =>
   `${window.location.pathname}${window.location.search}${routeHash(pages, route)}`;
 
-const sameRoute = (a: Route, b: Route): boolean => a.page === b.page && a.tab === b.tab;
+export const samePath = (a: string[], b: string[]): boolean => a.length === b.length && a.every((part, i) => part === b[i]);
+
+const sameRoute = (a: Route, b: Route): boolean => a.page === b.page && a.tab === b.tab && samePath(a.path, b.path);
+
+/** The URL names something that does not exist: an unknown page or tab, or segments after a settings page's tab. */
+function needsCorrection(pages: AnyPageDef[], wanted: Route, next: Route): boolean {
+  if (wanted.page !== next.page) return true;
+  const page = pages.find((p) => p.id === next.page);
+  return !(page && isCustomPage(page)) && ((wanted.tab !== '' && wanted.tab !== next.tab) || wanted.path.length > 1);
+}
 
 export interface Router {
   route: Route;
@@ -66,7 +90,7 @@ export interface Router {
  */
 export type HistoryGuard = (next: Route) => boolean;
 
-export function useRouter(pages: PageDef[], guard?: HistoryGuard): Router {
+export function useRouter(pages: AnyPageDef[], guard?: HistoryGuard): Router {
   const [state, setState] = useState<{ route: Route; cause: Router['cause'] }>(() => ({
     route: resolveRoute(pages, parseHash(window.location.hash)),
     cause: 'initial',
@@ -89,11 +113,7 @@ export function useRouter(pages: PageDef[], guard?: HistoryGuard): Router {
         window.history.replaceState(window.history.state, '', routeHash(pages, shown.current));
         return;
       }
-      if (
-        hash !== '' &&
-        hash !== '#' &&
-        (wanted.page !== next.page || (wanted.tab !== '' && wanted.tab !== next.tab))
-      ) {
+      if (hash !== '' && hash !== '#' && needsCorrection(pages, wanted, next)) {
         window.history.replaceState(window.history.state, '', routeHash(pages, next));
       }
       setState((current) => (sameRoute(current.route, next) ? current : { route: next, cause }));

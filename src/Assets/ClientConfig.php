@@ -10,6 +10,7 @@ namespace Fyldo\V1\Assets;
 use Fyldo\V1\Bootstrap\Loader;
 use Fyldo\V1\I18n\Textdomain;
 use Fyldo\V1\Instance;
+use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Support\Dates;
 use Fyldo\V1\Support\Naming;
 
@@ -26,13 +27,23 @@ final class ClientConfig {
 		$config = $instance->config();
 		$store  = $instance->store();
 
+		// Both kinds of page, in registration order (the navigation's). Only pages the current user may open are sent.
 		$pages = array();
-		foreach ( $instance->pages() as $page ) {
-			// Only pages the current user may change are sent.
+		foreach ( $instance->all_pages() as $page ) {
 			if ( ! current_user_can( $instance->capability_for( $page ) ) ) {
 				continue;
 			}
-			$pages[] = $page->to_client( $store->client_values( $page ), $store->revision( $page ), $store->client_media( $page ) );
+			$pages[] = $page instanceof Page
+				? $page->to_client( $store->client_values( $page ), $store->revision( $page ), $store->client_media( $page ) )
+				: $page->to_client();
+		}
+
+		// A form's schema only: a custom page reads a record over REST when it opens one.
+		$forms = array();
+		foreach ( $instance->forms() as $form ) {
+			if ( current_user_can( $instance->capability_for( $form ) ) ) {
+				$forms[] = $form->to_client();
+			}
 		}
 
 		$client = array(
@@ -46,11 +57,14 @@ final class ClientConfig {
 			'links'        => $config['links'],
 			'notices'      => $instance->notices(),
 			'pages'        => $pages,
+			'forms'        => $forms,
 			'dir'          => is_rtl() ? 'rtl' : 'ltr',
 			'locale'       => str_replace( '_', '-', determine_locale() ),
 			'rootId'       => Naming::dom_id( $slug ),
 			'rest'         => array(
 				'root'          => rest_url( Naming::rest_namespace( $slug ) . '/' ),
+				// The site's REST root, so a custom page can call the plugin's own routes.
+				'base'          => rest_url(),
 				'nonce'         => wp_create_nonce( 'wp_rest' ),
 				'instanceNonce' => wp_create_nonce( Naming::nonce_action( $slug ) ),
 				'nonceHeader'   => Naming::nonce_header(),

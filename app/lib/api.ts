@@ -51,6 +51,43 @@ export interface Api {
   searchItems?(pageId: string, fieldPath: string, query: ItemsQuery, signal?: AbortSignal): Promise<ItemsResult>;
 }
 
+/** A stored record of a plugin's form (`…/forms/{form}/records/{key}`): its key ('' for a new one not saved yet). */
+export interface RecordResult extends SaveResult {
+  key: string;
+}
+
+/** The records of the plugin's forms, drawn by `<Form>`. */
+export interface RecordsApi {
+  /** `key` 'new': the defaults of a record not created yet (`key` and `revision` are ''). */
+  readRecord(formId: string, key: string): Promise<RecordResult>;
+  /** `key` 'new' creates the record: the result carries its new key. */
+  saveRecord(formId: string, key: string, values: Record<string, FieldValue>, revision: string): Promise<RecordResult>;
+  /** Options of a post, term or user field of the form, like `searchItems` for a page. */
+  searchRecordItems(formId: string, fieldPath: string, query: ItemsQuery, signal?: AbortSignal): Promise<ItemsResult>;
+}
+
+/** A query string value: lists are sent comma-separated (WordPress reads them with `wp_parse_list`); null and undefined are left out. */
+export type QueryValue = string | number | boolean | null | undefined | Array<string | number>;
+
+export interface RequestOptions {
+  /** Default GET. PUT, PATCH and DELETE are sent as POST + `X-HTTP-Method-Override`. */
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  /** Sent as the JSON body. */
+  data?: unknown;
+  query?: Record<string, QueryValue>;
+  signal?: AbortSignal;
+}
+
+/**
+ * A request to any REST route of the site, relative to its REST root (`request('acme/v1/items', { query: { status:
+ * 'draft' } })`). Resolves with the parsed JSON (null when there is none); rejects with an `ApiError`.
+ */
+export type RequestFn = <T = unknown>(path: string, options?: RequestOptions) => Promise<T>;
+
+export interface Client extends Api, RecordsApi {
+  request: RequestFn;
+}
+
 /** The error codes of a nonce WordPress (`X-WP-Nonce`) or Fyldo (instance nonce) no longer accepts. */
 const NONCE_CODES = ['rest_cookie_invalid_nonce', 'fyldo_bad_nonce'];
 
@@ -58,16 +95,38 @@ const NONCE_CODES = ['rest_cookie_invalid_nonce', 'fyldo_bad_nonce'];
 export const LOGGED_OUT = 'fyldo_logged_out';
 export const loggedOutMessage = (): string => __('Your login has expired. Log in again, then try again.', 'fyldo');
 
+/** The site's REST root: `rest.base`, or (older configs) `rest.root` without its namespace (`fyldo-acme/v1/`). */
+export const restBase = (rest: FyldoConfig['rest']): string => rest.base ?? rest.root.replace(/[^/?=]+\/[^/?=]+\/?$/, '');
+
+/** `?a=1&b=2`, or `&a=1…` when the URL already has a query (`?rest_route=/…` on sites without pretty permalinks). */
+function withQuery(url: string, query: Record<string, QueryValue> = {}): string {
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value === null || value === undefined) continue;
+    params.set(key, Array.isArray(value) ? value.join(',') : String(value));
+  }
+  const qs = params.toString();
+  return qs ? `${url}${url.includes('?') ? '&' : '?'}${qs}` : url;
+}
+
+/** The query of a relation field's options: `include` (the titles of IDs) or one page of `search` results. */
+const itemsQuery = (query: ItemsQuery): Record<string, QueryValue> =>
+  query.include?.length ? { include: query.include } : { search: query.search || undefined, paged: query.page && query.page > 1 ? query.page : undefined };
+
+const itemsResult = (body: Body): ItemsResult => ({ items: Array.isArray(body.items) ? (body.items as RelationItem[]) : [], more: body.more === true });
+
 /**
- * REST client for one instance. Every request carries the core cookie nonce (`X-WP-Nonce`) and the per-instance nonce.
- * PATCH is sent as POST + `X-HTTP-Method-Override` because some hosts still block PATCH; WordPress accepts both.
+ * REST client for one instance. Every request to the instance's routes carries the core cookie nonce (`X-WP-Nonce`) and
+ * the per-instance nonce; `request()` (a custom page's own routes) only the core one. PATCH is sent as POST +
+ * `X-HTTP-Method-Override` because some hosts still block PATCH; WordPress accepts both.
  *
  * Both nonces expire (after a day, or with a new login). A request refused for its nonce asks `rest.refresh` (admin-ajax,
  * cookie-authenticated) for fresh ones and is sent once more; when there are none to have, the user is logged out
  * (`LOGGED_OUT`). Unsaved edits are never touched here: the caller keeps them.
  */
-export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof fetch = (...a) => fetch(...a)): Api {
+export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof fetch = (...a) => fetch(...a)): Client {
   const { root, nonceHeader, refresh } = config.rest;
+  const base = restBase(config.rest);
   let { nonce, instanceNonce } = config.rest;
   // One refresh at a time: requests that fail together wait for the same answer.
   let refreshing: Promise<boolean> | null = null;
@@ -92,32 +151,35 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
     return refreshing;
   };
 
-  const send = async (url: string, init: RequestInit): Promise<Response> => {
+  /** `own`: a route of this instance, which also wants the instance nonce. */
+  const send = async (url: string, init: RequestInit, own: boolean): Promise<Response> => {
     try {
       return await fetchImpl(url, {
         credentials: 'same-origin',
         ...init,
-        headers: { 'X-WP-Nonce': nonce, [nonceHeader]: instanceNonce, ...(init.headers as Record<string, string>) },
+        headers: { 'X-WP-Nonce': nonce, ...(own ? { [nonceHeader]: instanceNonce } : {}), ...(init.headers as Record<string, string>) },
       });
-    } catch {
+    } catch (e) {
+      // A request the caller stopped is not a network failure: let it see its own AbortError.
+      if (init.signal?.aborted) throw e;
       throw new ApiError('network', 0, 'fyldo_network');
     }
   };
 
-  /** The JSON body of a request to the page's routes; refreshes the nonces once when they have expired. */
-  const call = async (pageId: string, init: RequestInit, suffix: string): Promise<Body> => {
-    const url = `${root}pages/${encodeURIComponent(pageId)}${suffix}`;
-    let response = await send(url, init);
-    let body = await read(response);
+  /** The JSON of a request (undefined when there is none); refreshes the nonces once when they have expired. */
+  const call = async (url: string, init: RequestInit, own = true): Promise<unknown> => {
+    let response = await send(url, init, own);
+    let json = await parse(response);
 
-    if (response.status === 403 && NONCE_CODES.includes(String(body.code))) {
+    if (response.status === 403 && NONCE_CODES.includes(String(asBody(json).code))) {
       if (!(refresh && (await refreshNonces()))) {
         throw new ApiError(loggedOutMessage(), 401, LOGGED_OUT);
       }
-      response = await send(url, init);
-      body = await read(response);
+      response = await send(url, init, own);
+      json = await parse(response);
     }
 
+    const body = asBody(json);
     if (response.status === 401 || (response.status === 403 && NONCE_CODES.includes(String(body.code)))) {
       throw new ApiError(loggedOutMessage(), 401, LOGGED_OUT);
     }
@@ -129,36 +191,56 @@ export function createApi(config: Pick<FyldoConfig, 'rest'>, fetchImpl: typeof f
       });
     }
 
-    return body;
+    return json;
   };
 
-  const request = async (pageId: string, init: RequestInit, suffix = ''): Promise<SaveResult> => {
-    const body = await call(pageId, init, suffix);
+  const page = (pageId: string, suffix = ''): string => `${root}pages/${encodeURIComponent(pageId)}${suffix}`;
+  const form = (formId: string, suffix: string): string => `${root}forms/${encodeURIComponent(formId)}${suffix}`;
 
-    return { values: body.values as Record<string, FieldValue>, revision: String(body.revision), ...(body.media ? { media: body.media as MediaMap } : {}) };
-  };
+  const saved = (body: Body): SaveResult => ({
+    values: body.values as Record<string, FieldValue>,
+    revision: String(body.revision),
+    ...(body.media ? { media: body.media as MediaMap } : {}),
+  });
+  const record = (body: Body): RecordResult => ({ key: String(body.key ?? ''), ...saved(body) });
+
+  const patch = (values: Record<string, FieldValue>, revision: string): RequestInit => ({
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-HTTP-Method-Override': 'PATCH' },
+    body: JSON.stringify({ values, revision }),
+  });
+  const fresh: RequestInit = { method: 'GET', cache: 'no-store' };
 
   return {
-    savePage: (pageId, values, revision) =>
-      request(pageId, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-HTTP-Method-Override': 'PATCH' },
-        body: JSON.stringify({ values, revision }),
-      }),
-    readPage: (pageId) => request(pageId, { method: 'GET', cache: 'no-store' }),
-    runAction: (pageId, actionId, keyword) =>
-      request(pageId, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ keyword }) }, `/actions/${encodeURIComponent(actionId)}`),
-    searchItems: async (pageId, fieldPath, query, signal) => {
-      const params = new URLSearchParams();
-      if (query.include?.length) params.set('include', query.include.join(','));
-      else {
-        if (query.search) params.set('search', query.search);
-        if (query.page && query.page > 1) params.set('paged', String(query.page));
-      }
-      const qs = params.toString();
-      const body = await call(pageId, { method: 'GET', signal }, `/fields/${encodeURIComponent(fieldPath)}/items${qs ? `?${qs}` : ''}`);
+    savePage: async (pageId, values, revision) => saved(asBody(await call(page(pageId), patch(values, revision)))),
+    readPage: async (pageId) => saved(asBody(await call(page(pageId), fresh))),
+    runAction: async (pageId, actionId, keyword) =>
+      saved(
+        asBody(
+          await call(page(pageId, `/actions/${encodeURIComponent(actionId)}`), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keyword }),
+          }),
+        ),
+      ),
+    searchItems: async (pageId, fieldPath, query, signal) =>
+      itemsResult(asBody(await call(withQuery(page(pageId, `/fields/${encodeURIComponent(fieldPath)}/items`), itemsQuery(query)), { method: 'GET', signal }))),
 
-      return { items: Array.isArray(body.items) ? (body.items as RelationItem[]) : [], more: body.more === true };
+    readRecord: async (formId, key) => record(asBody(await call(form(formId, `/records/${encodeURIComponent(key)}`), fresh))),
+    saveRecord: async (formId, key, values, revision) => record(asBody(await call(form(formId, `/records/${encodeURIComponent(key)}`), patch(values, revision)))),
+    searchRecordItems: async (formId, fieldPath, query, signal) =>
+      itemsResult(asBody(await call(withQuery(form(formId, `/fields/${encodeURIComponent(fieldPath)}/items`), itemsQuery(query)), { method: 'GET', signal }))),
+
+    request: async <T>(path: string, { method = 'GET', data, query, signal }: RequestOptions = {}): Promise<T> => {
+      const verb = method.toUpperCase();
+      const headers: Record<string, string> = {};
+      if (verb !== 'GET' && verb !== 'POST') headers['X-HTTP-Method-Override'] = verb;
+      const body = data === undefined || verb === 'GET' ? undefined : JSON.stringify(data);
+      if (body !== undefined) headers['Content-Type'] = 'application/json';
+      const url = withQuery(`${base}${path.replace(/^\/+/, '')}`, query);
+      const json = await call(url, { method: verb === 'GET' ? 'GET' : 'POST', headers, body, signal }, false);
+      return (json ?? null) as T;
     },
   };
 }
@@ -167,5 +249,8 @@ type Body = Record<string, unknown> & {
   data?: { errors?: Record<string, string>; values?: Record<string, FieldValue>; revision?: string };
 };
 
-/** The JSON body, or `{}` for anything else (a PHP fatal's HTML page, an empty 502 from a proxy). */
-const read = async (response: Response): Promise<Body> => ((await response.json().catch(() => ({}))) ?? {}) as Body;
+/** The JSON of a response; undefined for anything else (a PHP fatal's HTML page, an empty 502 from a proxy, a 204). */
+const parse = async (response: Response): Promise<unknown> => response.json().catch(() => undefined);
+
+/** A JSON object to read fields from; `{}` for anything else. */
+const asBody = (json: unknown): Body => (json && typeof json === 'object' ? json : {}) as Body;

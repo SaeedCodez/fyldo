@@ -8,6 +8,7 @@
 namespace Fyldo\V1\Fields;
 
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Module;
 
 /**
  * Fyldo draws the row (title, description, error) and loads `module`, an ES module whose default export draws the
@@ -43,21 +44,21 @@ final class CustomField extends AbstractField {
 	protected function normalize_type( array $config ): array {
 		$id = (string) $config['id'];
 
-		$module = self::clean_url( $config['module'] ?? '' );
+		$module = Module::url( $config['module'] ?? '' );
 		if ( '' === $module ) {
 			throw new ConfigException( sprintf( 'Custom field "%s": `module` must be the URL of its JavaScript module (http(s), or a path starting with "/").', $id ) );
 		}
 
 		$style = $config['style'] ?? '';
 		if ( '' !== $style ) {
-			$style = self::clean_url( $style );
+			$style = Module::url( $style );
 			if ( '' === $style ) {
 				throw new ConfigException( sprintf( 'Custom field "%s": `style` must be the URL of a stylesheet (http(s), or a path starting with "/").', $id ) );
 			}
 		}
 
 		$props = $config['props'] ?? array();
-		if ( ! is_array( $props ) || ( array() !== $props && array_values( $props ) === $props ) || ! self::is_json( $props ) ) {
+		if ( ! Module::is_props( $props ) ) {
 			throw new ConfigException( sprintf( 'Custom field "%s": `props` must be an array keyed by name, holding only text, numbers, booleans, null and arrays.', $id ) );
 		}
 
@@ -110,40 +111,5 @@ final class CustomField extends AbstractField {
 		}
 
 		return $out;
-	}
-
-	/**
-	 * Whether a value is plain data (what JSON can carry): no objects, no callbacks.
-	 *
-	 * @param mixed $value Value.
-	 */
-	private static function is_json( $value ): bool {
-		if ( is_array( $value ) ) {
-			foreach ( $value as $item ) {
-				if ( ! self::is_json( $item ) ) {
-					return false;
-				}
-			}
-			return true;
-		}
-
-		return null === $value || ( is_scalar( $value ) && ( ! is_float( $value ) || is_finite( $value ) ) );
-	}
-
-	/**
-	 * An http(s) URL or a path from the site root; '' when it is neither.
-	 *
-	 * @param mixed $url Developer value.
-	 */
-	private static function clean_url( $url ): string {
-		if ( ! is_string( $url ) ) {
-			return '';
-		}
-		$url = trim( $url );
-		if ( 1 !== preg_match( '#^(https?://|/(?!/))#i', $url ) ) {
-			return '';
-		}
-
-		return esc_url_raw( $url, array( 'http', 'https' ) );
 	}
 }

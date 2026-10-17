@@ -1,4 +1,5 @@
 {
+    "type": "settings",
     "id": "general",
     "title": "General",
     "description": "Manage your site’s identity, reading and privacy options.",

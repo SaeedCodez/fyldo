@@ -17,6 +17,8 @@ export default defineConfig({
     assetsInlineLimit: 0,
     modulePreload: false,
     sourcemap: false,
+    // The real budget is gzip size, enforced by `npm run size` (.size-limit); Vite's 500 kB minified hint only adds noise.
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       // Base UI ships `'use client'` directives (meaningless in a plain browser bundle): drop that one warning only.
       onwarn(warning, warn) {

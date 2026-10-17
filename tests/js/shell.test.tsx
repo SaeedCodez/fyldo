@@ -81,27 +81,30 @@ afterEach(() => {
 
 describe('router', () => {
   it('reads `#/<page>/<tab>`', () => {
-    expect(parseHash('#/advanced/debug')).toEqual({ page: 'advanced', tab: 'debug' });
-    expect(parseHash('#/general')).toEqual({ page: 'general', tab: '' });
-    expect(parseHash('')).toEqual({ page: '', tab: '' });
-    expect(parseHash('#/a%20b/%E0%A4')).toEqual({ page: 'a b', tab: '' }); // a broken escape is ignored, not thrown
+    // the segments after the page are a tab or a custom page's path: resolveRoute keeps the one the page has
+    expect(parseHash('#/advanced/debug')).toEqual({ page: 'advanced', tab: 'debug', path: ['debug'] });
+    expect(parseHash('#/general')).toEqual({ page: 'general', tab: '', path: [] });
+    expect(parseHash('')).toEqual({ page: '', tab: '', path: [] });
+    expect(parseHash('#/a%20b/%E0%A4')).toEqual({ page: 'a b', tab: '', path: [] }); // a broken escape is ignored, not thrown
   });
 
   it('falls back to the first page / first tab for anything unknown', () => {
-    expect(resolveRoute(pages, { page: 'nope', tab: 'x' })).toEqual({ page: 'general', tab: '' });
-    expect(resolveRoute(pages, { page: 'advanced', tab: 'nope' })).toEqual({
+    expect(resolveRoute(pages, { page: 'nope', tab: 'x', path: ['x'] })).toEqual({ page: 'general', tab: '', path: [] });
+    expect(resolveRoute(pages, { page: 'advanced', tab: 'nope', path: ['nope'] })).toEqual({
       page: 'advanced',
       tab: 'cache',
+      path: [],
     });
-    expect(resolveRoute(pages, { page: 'advanced', tab: 'debug' })).toEqual({
+    expect(resolveRoute(pages, { page: 'advanced', tab: 'debug', path: ['debug'] })).toEqual({
       page: 'advanced',
       tab: 'debug',
+      path: [],
     });
   });
 
   it('the first tab has the short link; other tabs name themselves', () => {
-    expect(routeHash(pages, { page: 'advanced', tab: 'cache' })).toBe('#/advanced');
-    expect(routeHash(pages, { page: 'advanced', tab: 'debug' })).toBe('#/advanced/debug');
+    expect(routeHash(pages, { page: 'advanced', tab: 'cache', path: [] })).toBe('#/advanced');
+    expect(routeHash(pages, { page: 'advanced', tab: 'debug', path: [] })).toBe('#/advanced/debug');
   });
 });
 

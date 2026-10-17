@@ -15,7 +15,7 @@ export function navGroups(config: FyldoConfig, route: Route): NavGroup[] {
   const entry = (page: FyldoConfig['pages'][number]) => ({
     id: page.id,
     label: page.title,
-    href: routeHref(config.pages, { page: page.id, tab: '' }),
+    href: routeHref(config.pages, { page: page.id, tab: '', path: [] }),
     icon: page.icon || undefined,
     badge: page.badge || undefined,
     active: page.id === route.page,

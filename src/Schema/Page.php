@@ -11,9 +11,9 @@ use Fyldo\V1\Fields\AbstractField;
 use Fyldo\V1\Support\Naming;
 
 /**
- * Normalised page.
+ * Normalised page. A form's fields (Schema\Form) are a Page too: the stores and the Saver read the same schema.
  */
-final class Page {
+final class Page implements Guarded {
 
 	const KEYS = array( 'title', 'description', 'icon', 'group', 'badge', 'save', 'tabs', 'sections', 'capability', 'option_name' );
 
@@ -36,9 +36,10 @@ final class Page {
 	 * @param string              $slug   Instance slug (for the default option name).
 	 * @param string              $id     Page id.
 	 * @param array<string,mixed> $config Raw page config.
+	 * @param string              $noun   What messages call it: "Page", or "Form" for the fields of a form.
 	 * @throws ConfigException On invalid configuration.
 	 */
-	public function __construct( string $slug, string $id, array $config ) {
+	public function __construct( string $slug, string $id, array $config, string $noun = 'Page' ) {
 		if ( ! Naming::is_valid_page_id( $id ) ) {
 			throw new ConfigException( sprintf( 'Page id "%s" is invalid: use lower-case letters, digits, "_" or "-" (max 40 characters).', $id ) );
 		}
@@ -93,7 +94,7 @@ final class Page {
 			$section = new Section( (array) $section_config );
 
 			if ( isset( $section_ids[ $section->id() ] ) ) {
-				throw new ConfigException( sprintf( 'Page "%1$s": duplicate section id "%2$s".', $id, $section->id() ) );
+				throw new ConfigException( sprintf( '%1$s "%2$s": duplicate section id "%3$s".', $noun, $id, $section->id() ) );
 			}
 			$section_ids[ $section->id() ] = true;
 
@@ -103,7 +104,7 @@ final class Page {
 
 			foreach ( $section->fields() as $field ) {
 				if ( isset( $field_ids[ $field->id() ] ) ) {
-					throw new ConfigException( sprintf( 'Page "%1$s": duplicate field id "%2$s" (field ids are the storage keys and must be unique per page).', $id, $field->id() ) );
+					throw new ConfigException( sprintf( '%1$s "%2$s": duplicate field id "%3$s" (field ids are the storage keys and must be unique per %4$s).', $noun, $id, $field->id(), strtolower( $noun ) ) );
 				}
 				$field_ids[ $field->id() ] = true;
 
@@ -116,7 +117,7 @@ final class Page {
 		}
 
 		if ( array() === $this->sections ) {
-			throw new ConfigException( sprintf( 'Page "%s" needs at least one section.', $id ) );
+			throw new ConfigException( sprintf( '%1$s "%2$s" needs at least one section.', $noun, $id ) );
 		}
 
 		$this->assert_danger_sections_last();
@@ -181,6 +182,7 @@ final class Page {
 		$tabs = array_values( (array) $this->config['tabs'] );
 
 		$client = array(
+			'type'        => 'settings',
 			'id'          => $this->id,
 			'title'       => (string) $this->config['title'],
 			'description' => (string) $this->config['description'],

@@ -12,6 +12,7 @@ use Fyldo\V1\Fields\AbstractMediaField;
 use Fyldo\V1\Fields\CustomField;
 use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Instance;
+use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Support\Naming;
 
 /**
@@ -56,7 +57,7 @@ final class Assets {
 		wp_register_style( $handle, $base . '/app.css', array( $fonts_handle ), $cache_bust );
 		wp_enqueue_style( $handle );
 
-		// Custom fields' own stylesheets, after Fyldo's (the developer versions them in the URL if they want to).
+		// Custom pages' and custom fields' own stylesheets, after Fyldo's (the developer versions them in the URL if they want to).
 		foreach ( self::custom_styles( $instance ) as $style ) {
 			wp_enqueue_style( $handle . '-custom-' . substr( md5( $style ), 0, 8 ), $style, array( $handle ), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- the URL is the developer's.
 		}
@@ -83,9 +84,9 @@ final class Assets {
 		wp_enqueue_script( $handle );
 	}
 
-	/** Whether any page of the instance has an `image` or `file` field. */
+	/** Whether any settings page or form of the instance has an `image` or `file` field. */
 	private static function has_media_field( Instance $instance ): bool {
-		foreach ( $instance->pages() as $page ) {
+		foreach ( self::schemas( $instance ) as $page ) {
 			foreach ( $page->fields() as $field ) {
 				if ( $field instanceof AbstractMediaField ) {
 					return true;
@@ -97,13 +98,18 @@ final class Assets {
 	}
 
 	/**
-	 * The `style` URLs of the instance's custom fields (a group's too), each once.
+	 * The `style` URLs of the instance's custom pages and custom fields (a group's and a form's too), each once.
 	 *
 	 * @return array<int,string>
 	 */
 	private static function custom_styles( Instance $instance ): array {
 		$styles = array();
-		foreach ( $instance->pages() as $page ) {
+		foreach ( $instance->custom_pages() as $custom ) {
+			if ( '' !== $custom->style() ) {
+				$styles[ $custom->style() ] = true;
+			}
+		}
+		foreach ( self::schemas( $instance ) as $page ) {
 			foreach ( $page->fields() as $field ) {
 				$fields = $field instanceof GroupField ? array_values( $field->sub_fields() ) : array( $field );
 				foreach ( $fields as $one ) {
@@ -115,6 +121,20 @@ final class Assets {
 		}
 
 		return array_keys( $styles );
+	}
+
+	/**
+	 * The field schemas the screen can show: the settings pages', and the forms' (a custom page opens them).
+	 *
+	 * @return array<int,Page>
+	 */
+	private static function schemas( Instance $instance ): array {
+		$schemas = array_values( $instance->pages() );
+		foreach ( $instance->forms() as $form ) {
+			$schemas[] = $form->schema();
+		}
+
+		return $schemas;
 	}
 
 	/** Development builds (`-dev`) bust the cache with the file time. */

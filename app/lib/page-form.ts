@@ -2,11 +2,14 @@
  * The forms of an instance: one per page, held by the APP (not by the mounted page), so a page's values, revision and
  * save status survive tab and page switches. A page saves either as a whole (`save: 'global'`, the Save Bar, scope
  * `page`) or card by card (`save: 'section'`, each Section Card footer, scope = the section id) — never both.
+ *
+ * The same machinery runs a plugin's record form (`<Form>`, app/components/fyldo/Form.tsx): only where the values are
+ * stored differs, which is the form's `FormSource`.
  */
-import { useCallback, useMemo, useState, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { __ } from '../i18n';
-import { isValueField, type FieldValue, type MediaMap, type PageDef, type ValueFieldDef } from '../types';
-import { ApiError, LOGGED_OUT, type Api } from './api';
+import { isValueField, type FieldValue, type MediaMap, type PageDef, type SectionDef, type ValueFieldDef } from '../types';
+import { ApiError, LOGGED_OUT, type Api, type ItemsQuery, type ItemsResult, type SaveResult } from './api';
 import { customError } from './custom-fields';
 import { belongsTo, groupErrors } from './group';
 import { validateValue } from './validation';
@@ -227,8 +230,46 @@ export function createFormStore(pages: Array<Pick<PageDef, 'id' | 'values' | 're
   };
 }
 
+/** What a form is made of: a settings page, or a plugin's form (which always saves as a whole). */
+export interface FormShape {
+  id: string;
+  save: 'global' | 'section';
+  sections: SectionDef[];
+}
+
+/** Where a form's values are stored: a settings page's REST routes, or a record of a plugin's form. */
+export interface FormSource {
+  save(values: Record<string, FieldValue>, revision: string): Promise<SaveResult>;
+  /** The stored values and revision right now (conflict recovery: "Reload latest values"). */
+  read(): Promise<SaveResult>;
+  /** A Danger Section Card's action; a form without one has no Danger card footer. */
+  runAction?(actionId: string, keyword: string): Promise<SaveResult>;
+  /** Options of a post, term or user field: `fieldPath` is the field id, or `<group>.<sub-field>`. */
+  searchItems?(fieldPath: string, query: ItemsQuery, signal?: AbortSignal): Promise<ItemsResult>;
+}
+
+/** A settings page's source: its routes on the instance's REST client. */
+export function pageSource(api: Api, pageId: string): FormSource {
+  const searchItems = api.searchItems;
+  return {
+    save: (values, revision) => api.savePage(pageId, values, revision),
+    read: () => api.readPage(pageId),
+    runAction: (actionId, keyword) => api.runAction(pageId, actionId, keyword),
+    ...(searchItems ? { searchItems: (path: string, query: ItemsQuery, signal?: AbortSignal) => searchItems(pageId, path, query, signal) } : {}),
+  };
+}
+
+export interface FormOptions {
+  /** Send (and check) every value field on each save, not only the changed ones: a record is saved as a whole. */
+  whole?: boolean;
+  /** The Save Bar's text after a 409; default the settings page's. */
+  conflictMessage?: () => string;
+  /** After a save the store already shows (the Save Bar says Saved). */
+  onSaved?: (result: SaveResult) => void;
+}
+
 /** Fields that hold a value; a `notice` is display only and never part of the form. */
-const valueFields = (page: PageDef): ValueFieldDef[] => page.sections.flatMap((s) => s.fields).filter(isValueField);
+const valueFields = (form: Pick<FormShape, 'sections'>): ValueFieldDef[] => form.sections.flatMap((s) => s.fields).filter(isValueField);
 
 /** Every message of a field's value, keyed like the server's (a group: per sub-field). A stored password the user has not touched is `null` ("keep"): nothing to validate. */
 function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Record<string, string> {
@@ -241,7 +282,7 @@ function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined): Recor
 }
 
 /** The save scope a field belongs to: the page, or its section when the page saves per section. */
-export function scopeOf(page: PageDef): Map<string, string> {
+export function scopeOf(page: FormShape): Map<string, string> {
   const map = new Map<string, string>();
   for (const section of page.sections)
     for (const field of section.fields) if (isValueField(field)) map.set(field.id, page.save === 'section' ? section.id : PAGE_SCOPE);
@@ -253,12 +294,23 @@ export function scopeOf(page: PageDef): Map<string, string> {
  */
 export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
   const [own] = useState(() => (shared ? null : createFormStore([page])));
-  const store = shared ?? (own as FormStore);
-  const state = useSyncExternalStore(store.subscribe, () => store.get(page.id));
+  const source = useMemo(() => pageSource(api, page.id), [api, page.id]);
+  return useForm(page, source, shared ?? (own as FormStore));
+}
+
+export type FormController = ReturnType<typeof useForm>;
+
+/** A form's state in `store` (under the form's id) and what can be done with it; `source` stores the values. */
+export function useForm(form: FormShape, source: FormSource, store: FormStore, options: FormOptions = {}) {
+  const { whole = false } = options;
+  // Read when a save ends, so a caller's new callbacks never restart anything.
+  const latest = useRef(options);
+  latest.current = options;
+  const state = useSyncExternalStore(store.subscribe, () => store.get(form.id));
   const dirty = useMemo(() => dirtyIds(state), [state]);
-  const fields = useMemo(() => new Map(valueFields(page).map((f) => [f.id, f])), [page]);
-  const scopes = useMemo(() => scopeOf(page), [page]);
-  const dispatch = useCallback((action: Action) => store.dispatch(page.id, action), [store, page.id]);
+  const fields = useMemo(() => new Map(valueFields(form).map((f) => [f.id, f])), [form]);
+  const scopes = useMemo(() => scopeOf(form), [form]);
+  const dispatch = useCallback((action: Action) => store.dispatch(form.id, action), [store, form.id]);
 
   /** `clear`: the error keys the edit makes stale (a group's sub-field edit clears that sub-field only); default all of the field's. */
   const setValue = useCallback(
@@ -278,82 +330,92 @@ export function usePageForm(page: PageDef, api: Api, shared?: FormStore) {
     (id: string, only?: string): boolean => {
       const field = fields.get(id);
       if (!field) return true;
-      const all = fieldErrors(field, store.get(page.id).values[id]);
+      const all = fieldErrors(field, store.get(form.id).values[id]);
       const errors = only === undefined ? all : only in all ? { [only]: all[only] as string } : {};
       dispatch({ type: 'invalid', errors, ids: [only ?? id] });
       return Object.keys(errors).length === 0;
     },
-    [fields, store, page.id, dispatch],
+    [fields, store, form.id, dispatch],
   );
 
-  /** Save one scope (the page, or a section): validate its changed fields, then PATCH only those. */
+  /**
+   * Save one scope (the page, or a section): validate its changed fields, then PATCH only those. A `whole` form sends
+   * (and checks) every field it holds a value for, once anything changed.
+   */
   const save = useCallback(
     (scope: string = PAGE_SCOPE): Promise<boolean> =>
-      store.enqueue(page.id, async () => {
-        const current = store.get(page.id);
-        // A disabled field cannot be changed (the server ignores it too): it is never validated nor sent.
-        const changed = dirtyIds(current).filter((id) => scopes.get(id) === scope && fields.get(id)?.disabled === false);
+      store.enqueue(form.id, async () => {
+        const current = store.get(form.id);
+        const changed = dirtyIds(current).filter((id) => scopes.get(id) === scope);
         if (changed.length === 0) return true;
+        // A disabled field cannot be changed (the server ignores it too): it is never validated nor sent.
+        const ids = (whole ? Object.keys(current.values) : changed).filter((id) => fields.get(id)?.disabled === false);
+        if (ids.length === 0) return true;
 
         const errors: Record<string, string> = {};
-        for (const id of changed) {
+        for (const id of ids) {
           const field = fields.get(id);
           if (field) Object.assign(errors, fieldErrors(field, current.values[id]));
         }
         if (Object.keys(errors).length > 0) {
-          dispatch({ type: 'invalid', errors, ids: changed, scope });
+          dispatch({ type: 'invalid', errors, ids, scope });
           return false;
         }
 
-        const sent = Object.fromEntries(changed.map((id) => [id, current.values[id] as FieldValue]));
-        dispatch({ type: 'saving', scope, ids: changed });
+        const sent = Object.fromEntries(ids.map((id) => [id, current.values[id] as FieldValue]));
+        dispatch({ type: 'saving', scope, ids });
         try {
-          const result = await api.savePage(page.id, sent, current.revision);
+          const result = await source.save(sent, current.revision);
           dispatch({ type: 'saved', scope, sent, values: result.values, revision: result.revision, media: result.media });
+          latest.current.onSaved?.(result);
           return true;
         } catch (e) {
           if (e instanceof ApiError && e.status === 422) {
-            dispatch({ type: 'invalid', errors: e.errors, ids: changed, scope });
+            dispatch({ type: 'invalid', errors: e.errors, ids, scope });
           } else if (e instanceof ApiError && e.status === 409) {
-            dispatch({ type: 'conflict', scope, message: conflictMessage() });
+            dispatch({ type: 'conflict', scope, message: (latest.current.conflictMessage ?? conflictMessage)() });
           } else {
             dispatch({ type: 'failed', scope, message: saveFailedMessage(e) });
           }
           return false;
         }
       }),
-    [api, fields, scopes, store, page.id, dispatch],
+    [source, fields, scopes, store, form.id, dispatch, whole],
   );
 
   /** Replace every value with what is stored now (after a conflict). Unsaved edits on this page are dropped. */
   const reload = useCallback(
     (): Promise<void> =>
-      store.enqueue(page.id, async () => {
+      store.enqueue(form.id, async () => {
         dispatch({ type: 'reloading' });
         try {
-          const latest = await api.readPage(page.id);
-          dispatch({ type: 'reloaded', values: latest.values, revision: latest.revision, media: latest.media });
+          const stored = await source.read();
+          dispatch({ type: 'reloaded', values: stored.values, revision: stored.revision, media: stored.media });
         } catch (e) {
           const message =
             e instanceof ApiError && e.code === LOGGED_OUT ? e.message : __('Couldn’t load the latest values. Check your connection and try again.', 'fyldo');
           dispatch({ type: 'reload-failed', message });
         }
       }),
-    [api, store, page.id, dispatch],
+    [source, store, form.id, dispatch],
   );
 
   /**
    * A Danger Section Card's action (reset to defaults): runs after any save already queued, then replaces every value
    * with what the server now holds (unsaved edits on the page are dropped: the confirmation says so). Rejects with the
-   * ApiError when it fails, so the caller can say why.
+   * ApiError when it fails, so the caller can say why. Undefined when the source has no actions.
    */
-  const runAction = useCallback(
-    (actionId: string, keyword: string): Promise<void> =>
-      store.enqueue(page.id, async () => {
-        const result = await api.runAction(page.id, actionId, keyword);
-        dispatch({ type: 'reloaded', values: result.values, revision: result.revision, media: result.media });
-      }),
-    [api, store, page.id, dispatch],
+  const run = source.runAction;
+  const runAction = useMemo(
+    () =>
+      run
+        ? (actionId: string, keyword: string): Promise<void> =>
+            store.enqueue(form.id, async () => {
+              const result = await run(actionId, keyword);
+              dispatch({ type: 'reloaded', values: result.values, revision: result.revision, media: result.media });
+            })
+        : undefined,
+    [run, store, form.id, dispatch],
   );
 
   return { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction };

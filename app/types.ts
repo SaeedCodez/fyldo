@@ -376,7 +376,9 @@ export interface TabDef {
   badge: string;
 }
 
+/** A settings page: Fyldo draws its sections and saves its values. `type` is absent in configs from before custom pages. */
 export interface PageDef {
+  type?: 'settings';
   id: string;
   title: string;
   description: string;
@@ -391,6 +393,39 @@ export interface PageDef {
   /** The saved attachments of the page's `image` and `file` fields and the saved items of its `post`, `term` and `user` fields; absent when it has none. */
   media?: MediaMap;
   revision: string;
+}
+
+/**
+ * A page the plugin draws itself (a list of records, a record editor, a dashboard): its own ES module (`module`, loaded
+ * before the first render: app/lib/custom-pages.ts), inside Fyldo's content column. It reaches `#/<page>/<path…>`.
+ */
+export interface CustomPageDef {
+  type: 'custom';
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  group: string;
+  /** Nav Item badge, or '' for none. */
+  badge: string;
+  module: string;
+  /** Passed to the module as they are (translated labels, URLs…). */
+  props: Record<string, JsonValue>;
+}
+
+/** What `config.pages` holds, in registration order. */
+export type AnyPageDef = PageDef | CustomPageDef;
+
+export const isCustomPage = (page: AnyPageDef): page is CustomPageDef => page.type === 'custom';
+export const isSettingsPage = (page: AnyPageDef): page is PageDef => page.type !== 'custom';
+
+/**
+ * Fields whose records the plugin stores (REST `…/forms/{form}/records/{key}`), drawn by `<Form>` (the SDK's `Form`) on
+ * a custom page. Always saved as a whole, through the Save Bar.
+ */
+export interface FormDef {
+  id: string;
+  sections: SectionDef[];
 }
 
 export interface LinkDef {
@@ -430,11 +465,16 @@ export interface FyldoConfig {
   groups: { id: string; label: string }[];
   links: LinkDef[];
   notices: NoticeDef[];
-  pages: PageDef[];
+  pages: AnyPageDef[];
+  /** Absent in configs from before custom pages: none. */
+  forms?: FormDef[];
   dir: 'ltr' | 'rtl';
   locale: string;
   rootId: string;
   rest: {
+    /** The site's REST root (`rest_url()`): what a custom page's `request()` paths are relative to. Derived from `root` when absent. */
+    base?: string;
+    /** This instance's namespace (`…/wp-json/fyldo-<slug>/v1/`). */
     root: string;
     nonce: string;
     instanceNonce: string;

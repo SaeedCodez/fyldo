@@ -10,6 +10,9 @@ namespace Fyldo\V1;
 
 use Fyldo\V1\Admin\Notice;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Schema\CustomPage;
+use Fyldo\V1\Schema\Form;
+use Fyldo\V1\Schema\Guarded;
 use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Storage\DefaultHistory;
 use Fyldo\V1\Storage\OptionStore;
@@ -33,8 +36,11 @@ final class Instance {
 	/** @var array<int,array{id:string,label:string}> */
 	private $groups = array();
 
-	/** @var array<string,array{page:Page,group:string}> */
+	/** @var array<string,Page|CustomPage> Both kinds of page, in registration order (the navigation's); ids are unique across them. */
 	private $pages = array();
+
+	/** @var array<string,Form> Forms have ids of their own: a form may share an id with a page. */
+	private $forms = array();
 
 	/** @var OptionStore */
 	private $store;
@@ -170,21 +176,68 @@ final class Instance {
 				throw new ConfigException( sprintf( 'Page "%s" is already registered.', $id ) );
 			}
 
-			$page = new Page( $this->slug, $id, $config );
-			$this->assert_default_history( $page );
-
-			$this->pages[ $id ] = array(
-				'page'  => $page,
-				'group' => isset( $config['group'] ) ? (string) $config['group'] : '',
-			);
+			$page = $this->make_page( $id, $config );
 		} catch ( ConfigException $e ) {
 			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
 
 			return $this;
 		}
 
+		$this->pages[ $id ] = $page;
+
 		// Before anything reads the page: a plugin update keeps the defaults this site already had.
-		( new DefaultHistory( $this ) )->apply( $page );
+		if ( $page instanceof Page ) {
+			( new DefaultHistory( $this ) )->apply( $page );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * `type`: "settings" (the default: sections → fields, stored in an option) or "custom" (drawn by the developer's
+	 * module; see Schema\CustomPage).
+	 *
+	 * @param string              $id     Page id.
+	 * @param array<string,mixed> $config Page config.
+	 * @return Page|CustomPage
+	 * @throws ConfigException On invalid configuration.
+	 */
+	private function make_page( string $id, array $config ) {
+		$type = $config['type'] ?? 'settings';
+		if ( 'custom' === $type ) {
+			return new CustomPage( $id, $config );
+		}
+		if ( 'settings' !== $type ) {
+			throw new ConfigException( sprintf( 'Page "%s": type must be "settings" (the default) or "custom".', $id ) );
+		}
+
+		unset( $config['type'] );
+		$page = new Page( $this->slug, $id, $config );
+		$this->assert_default_history( $page );
+
+		return $page;
+	}
+
+	/**
+	 * Registers a form: a field schema whose records the plugin stores (a row in its own table, a post…). Fyldo
+	 * sanitizes, validates and checks the revision like on a settings page; `load` and `save` read and write. A custom
+	 * page opens a record over REST. Configuration mistakes are reported with _doing_it_wrong() and the form is skipped.
+	 *
+	 * @param string              $id     Form id (the rules of a page id; forms have ids of their own).
+	 * @param array<string,mixed> $config `sections` (as on a page: no tabs, no danger section), `load`
+	 *                                    ( string $key ): ?array, `save` ( array $values, string $key ): string|WP_Error,
+	 *                                    `capability` (default: the instance's).
+	 */
+	public function add_form( string $id, array $config ): self {
+		try {
+			if ( isset( $this->forms[ $id ] ) ) {
+				throw new ConfigException( sprintf( 'Form "%s" is already registered.', $id ) );
+			}
+
+			$this->forms[ $id ] = new Form( $this->slug, $id, $config );
+		} catch ( ConfigException $e ) {
+			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
+		}
 
 		return $this;
 	}
@@ -210,18 +263,62 @@ final class Instance {
 		}
 	}
 
-	/** @return array<string,Page> */
+	/**
+	 * The settings pages (the ones with values). Custom pages: custom_pages(); both, in order: all_pages().
+	 *
+	 * @return array<string,Page>
+	 */
 	public function pages(): array {
-		return array_map(
-			static function ( array $entry ): Page {
-				return $entry['page'];
-			},
-			$this->pages
-		);
+		$pages = array();
+		foreach ( $this->pages as $id => $page ) {
+			if ( $page instanceof Page ) {
+				$pages[ $id ] = $page;
+			}
+		}
+
+		return $pages;
 	}
 
 	public function page( string $id ): ?Page {
-		return isset( $this->pages[ $id ] ) ? $this->pages[ $id ]['page'] : null;
+		$page = $this->pages[ $id ] ?? null;
+
+		return $page instanceof Page ? $page : null;
+	}
+
+	/** @return array<string,CustomPage> */
+	public function custom_pages(): array {
+		$pages = array();
+		foreach ( $this->pages as $id => $page ) {
+			if ( $page instanceof CustomPage ) {
+				$pages[ $id ] = $page;
+			}
+		}
+
+		return $pages;
+	}
+
+	public function custom_page( string $id ): ?CustomPage {
+		$page = $this->pages[ $id ] ?? null;
+
+		return $page instanceof CustomPage ? $page : null;
+	}
+
+	/**
+	 * Every page, settings and custom, in registration order: the navigation.
+	 *
+	 * @return array<string,Page|CustomPage>
+	 */
+	public function all_pages(): array {
+		return $this->pages;
+	}
+
+	/** @return array<string,Form> */
+	public function forms(): array {
+		return $this->forms;
+	}
+
+	public function form( string $id ): ?Form {
+		return $this->forms[ $id ] ?? null;
 	}
 
 	/** @return array<int,array{id:string,label:string}> */
@@ -233,9 +330,9 @@ final class Instance {
 		return $this->store;
 	}
 
-	/** Capability required for a page (page override, else the instance default). */
-	public function capability_for( Page $page ): string {
-		return '' !== $page->capability() ? $page->capability() : (string) $this->config['capability'];
+	/** Capability required for a page of either kind or a form (its override, else the instance default). */
+	public function capability_for( Guarded $target ): string {
+		return '' !== $target->capability() ? $target->capability() : (string) $this->config['capability'];
 	}
 
 	/**

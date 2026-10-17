@@ -43,7 +43,9 @@ final class DemoTest extends TestCase {
 		$this->assertSame( array(), $GLOBALS['__fyldo_test_wrong'], 'a bad page is reported with _doing_it_wrong and skipped' );
 		$instance = Fyldo::instance( Demo::SLUG );
 		$this->assertSame( array( 'overview', 'general', 'content', 'header', 'links', 'dates', 'security', 'hours' ), array_keys( $instance->pages() ) );
-		$this->assertSame( array( 'settings', 'tools' ), array_column( $instance->groups(), 'id' ) );
+		$this->assertSame( array( 'settings', 'tools', 'manage' ), array_column( $instance->groups(), 'id' ) );
+		$this->assertSame( array( 'announcements' ), array_keys( $instance->custom_pages() ), 'a custom page, drawn by the demo' );
+		$this->assertSame( array( 'announcement' ), array_keys( $instance->forms() ), 'with a form whose records live in the demo\'s table' );
 		$this->assertSame( 'fyldo-demo_general', $instance->page( 'general' )->option_name() );
 		$this->assertSame( 'global', $instance->page( 'general' )->save_mode() );
 		$this->assertSame( 'section', $instance->page( 'content' )->save_mode() );
