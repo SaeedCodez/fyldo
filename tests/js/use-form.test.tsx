@@ -3,12 +3,12 @@
  * as `<Form>`. Bindings by field type, a value drawn only by the page (`'module' => false`), errors at paths inside a
  * value (422), focus on the first invalid control, the Save Bar, and what `Form` does with a field it cannot draw.
  */
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { Form, useRecordForm, type FormProps } from '../../app/components/fyldo/Form';
+import { Form, useRecordForm, type FormProps, type RecordFormApi } from '../../app/components/fyldo/Form';
 import { SectionCard } from '../../app/components/fyldo/SectionCard';
 import { SettingRow } from '../../app/components/fyldo/SettingRow';
 import { Input } from '../../app/components/ui/input';
@@ -17,13 +17,27 @@ import { ApiError, type RecordResult, type RecordsApi } from '../../app/lib/api'
 import { FormHostContext } from '../../app/lib/host';
 import { PortalContainerContext } from '../../app/lib/portal';
 import { sdk } from '../../app/lib/sdk';
-import type { CustomFieldDef, FieldDef, FieldValue, FormDef, PageDef } from '../../app/types';
+import type { CustomFieldDef, FieldDef, FieldValue, FormDef, MediaItem, PageDef } from '../../app/types';
 
 const page = JSON.parse(readFileSync(resolve(__dirname, '../fixtures/slice-page.client.json'), 'utf8')) as PageDef;
 const [siteTitle, , maintenance] = page.sections[0]!.fields as [FieldDef, FieldDef, FieldDef];
 const slidesField: CustomFieldDef = { id: 'slides', type: 'custom', label: 'Slides', description: '', default: [], disabled: false, layout: 'field', validate: {}, module: '', props: {} };
 
+/** A field of each kind `field(id, kind)` binds, built by hand: only what the bindings read. */
+const kindField = (id: string, type: string, value: FieldValue): FieldDef =>
+  ({ id, type, label: id, description: '', default: value, disabled: false, layout: 'field', validate: {} }) as unknown as FieldDef;
+const kindFields = [
+  kindField('title', 'text', ''),
+  kindField('count', 'number', ''),
+  kindField('tags', 'multi_select', []),
+  kindField('when', 'date_range', { start: '', end: '' }),
+  kindField('pinned', 'toggle', false),
+  kindField('cover', 'image', 0),
+  { ...slidesField, id: 'extra' },
+];
+
 const forms: FormDef[] = [
+  { id: 'kinds', sections: [{ id: 'all', tab: '', title: 'All', description: '', tone: 'default', fields: kindFields }] },
   {
     id: 'story',
     sections: [
@@ -180,6 +194,69 @@ describe('useForm', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('This form couldn’t be loaded.');
     expect(screen.queryByRole('button', { name: 'Retry' })).toBeNull();
     expect(error).toHaveBeenCalledWith(expect.stringContaining('there is no form "nope"'));
+    error.mockRestore();
+  });
+});
+
+describe('useForm field(id, kind)', () => {
+  /** Hands the form's API to the test, as a page's own component would use it. */
+  function probe(stored: Record<string, FieldValue>) {
+    const form: { current?: RecordFormApi } = {};
+    function Probe() {
+      form.current = useRecordForm({ form: 'kinds', record: '7' });
+      return <form.current.Frame />;
+    }
+    const cover: MediaItem = { id: 12, filename: 'cover.jpg', filesize: 0, mime: 'image/jpeg', extension: 'jpg', width: 800, height: 600, thumbnail: null };
+    setup({ readRecord: async () => ({ key: '7', values: stored, revision: 'r1', media: { cover } }) }, <Probe />);
+    return form as { current: RecordFormApi };
+  }
+
+  it('gives each kind its control’s value type, whatever the record stores', async () => {
+    const form = probe({ title: 7, count: null, tags: ['a', 3, 'b'], when: { start: '2026-01-02' }, pinned: 'yes', cover: 12, extra: 'x' });
+    await waitFor(() => expect(form.current.status).toBe('ready'));
+
+    expect(form.current.field('title', 'text')).toMatchObject({ value: '', disabled: false });
+    expect(form.current.field('count', 'number').value).toBe('');
+    expect(form.current.field('tags', 'list').value).toEqual(['a', 'b']);
+    expect(form.current.field('when', 'range').value).toEqual({ start: '2026-01-02', end: '' });
+    expect(form.current.field('pinned', 'toggle')).toEqual({ checked: false, onCheckedChange: expect.any(Function), disabled: false });
+    expect(form.current.field('cover', 'media')).toMatchObject({ value: 12, media: { id: 12, filename: 'cover.jpg' } });
+    // A value only the page draws binds as any kind.
+    expect(form.current.field('extra', 'text').value).toBe('x');
+    expect(form.current.field('extra', 'list').value).toEqual([]);
+    // `field(id)` is unchanged: the stored value as it is.
+    expect(form.current.field('title')).toMatchObject({ value: 7 });
+    expect(form.current.field('tags')).toMatchObject({ value: ['a', 3, 'b'] });
+  });
+
+  it('keeps a value of the right type, and sets and checks the field like field(id)', async () => {
+    const form = probe({ title: 'Breakfast', count: 3, tags: ['a'], when: { start: '2026-01-02', end: '2026-01-09' }, pinned: true, cover: 0, extra: null });
+    await waitFor(() => expect(form.current.status).toBe('ready'));
+    expect(form.current.field('title', 'text').value).toBe('Breakfast');
+    expect(form.current.field('count', 'number').value).toBe(3);
+    expect(form.current.field('pinned', 'toggle').checked).toBe(true);
+    expect(form.current.field('cover', 'media').value).toBe(0);
+
+    act(() => form.current.field('title', 'text').onValueChange('Lunch'));
+    act(() => form.current.field('tags', 'list').onValueChange(['a', 'c']));
+    act(() => form.current.field('when', 'range').onValueChange({ start: '', end: '' }));
+    act(() => form.current.field('pinned', 'toggle').onCheckedChange(false));
+    expect(form.current.values).toMatchObject({ title: 'Lunch', tags: ['a', 'c'], when: { start: '', end: '' }, pinned: false });
+    expect(form.current.dirty).toBe(true);
+  });
+
+  it('reports a kind that does not match the field’s type, and still binds that kind', async () => {
+    const error = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const form = probe({ title: 'Breakfast', count: 3, tags: [], when: { start: '', end: '' }, pinned: false, cover: 0, extra: null });
+    await waitFor(() => expect(form.current.status).toBe('ready'));
+    error.mockClear();
+
+    expect(form.current.field('title', 'toggle')).toMatchObject({ checked: false });
+    expect(error).toHaveBeenCalledWith('Fyldo: field "title" of form "kinds" is a text field, bound as "toggle" (its kind is "text").');
+    error.mockClear();
+    form.current.field('title', 'text');
+    form.current.field('extra', 'range');
+    expect(error).not.toHaveBeenCalled();
     error.mockRestore();
   });
 });

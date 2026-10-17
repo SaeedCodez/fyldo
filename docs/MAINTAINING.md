@@ -48,6 +48,7 @@ Do **not** use `figma_export_tokens`: it can return a stale cache.
 | `demo/` | Demo dashboard, loaded only when Fyldo is installed as a plugin |
 | `languages/` | `.pot`, Persian `fyldo-fa_IR.po` (+ generated `.mo`/`.json`) |
 | `tests/php`, `tests/js`, `e2e/` | PHPUnit, Vitest, Playwright (`e2e/harness` = no WordPress, `e2e/wp` = real WordPress) |
+| `app/sdk-types.ts`, `tests/types/` | The module SDK's public types: `npm run build` bundles them into `assets/dist/fyldo-sdk.d.ts` (shipped; `tools/types/build.ts`) and type-checks the sample modules in `tests/types` against it. A component's props are public API, so a prop type from a new package must be inlined there |
 | `tests/fixtures/validation-cases.json` | Shared validation cases, run by both PHPUnit and Vitest |
 | `tools/` | Token generator, icon codegen, Figma export, release build |
 | `docs/` | `ARCHITECTURE.md` (design, storage contract, decisions), `component-map.md`, `design-spec.md`, `default-history.md` (how `default_before` keeps old defaults across plugin updates), `custom-fields.md` (the `custom` field: a developer's own React or JS control), `custom-pages.md` (custom pages and forms: screens a plugin draws itself, records it stores itself) |

@@ -146,6 +146,72 @@ export default ({ React, ui }) => ({
 });
 ```
 
+### TypeScript
+
+Fyldo ships the SDK's types in one file, `assets/dist/fyldo-sdk.d.ts` (Composer: `vendor/fyldo/fyldo/assets/dist/…`,
+the plugin ZIP or drop-in folder: `fyldo/assets/dist/…`). It is built from the source with every release, so it
+matches the Fyldo next to it: the API object (`FyldoSdk`: `React`, every `ui` component with its props, `Form`,
+`useForm`), `CustomFieldExport`, `CustomFieldDefinition`, `CustomFieldProps`, `JsonValue`, and the custom page types
+(`CustomPageExport`, `CustomPageProps`…). It needs `@types/react` 19 and nothing else: the only import in it is
+`react`, and only for types.
+
+The file is a module, not a global declaration, so `types` / `typeRoots` do not apply: point `paths` at it and import
+its types under that name.
+
+```json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react",
+    "strict": true,
+    "noEmit": true,
+    "paths": { "fyldo": ["./vendor/fyldo/fyldo/assets/dist/fyldo-sdk.d.ts"] }
+  },
+  "include": ["fields"]
+}
+```
+
+```tsx
+// fields/working-hours.tsx
+import type { CustomFieldExport, CustomFieldProps } from 'fyldo';
+
+const workingHours: CustomFieldExport = ({ React, ui }) => {
+  function WorkingHours({ value, onChange, onBlur, disabled, labelledBy, props }: CustomFieldProps) {
+    const [opens = '', closes = ''] = typeof value === 'string' ? value.split('-') : [];
+    const times = Array.isArray(props.times) ? props.times.map(String) : [];
+    const options = times.map((time) => ({ value: time, label: time }));
+    const pick = (a: string, b: string) => { onChange(`${a}-${b}`); onBlur(); };
+
+    return (
+      <div role="group" aria-labelledby={labelledBy}>
+        <ui.Select size="md" options={options} value={opens} aria-label="Opens" disabled={disabled} onValueChange={(v) => pick(v, closes)} />
+        <ui.Select size="md" options={options} value={closes} aria-label="Closes" disabled={disabled} onValueChange={(v) => pick(opens, v)} />
+      </div>
+    );
+  }
+  return { Component: WorkingHours, validate: (value) => (value === '' ? 'Pick both times' : null) };
+};
+
+export default workingHours;
+```
+
+```sh
+tsc -p .                                                   # type-check only (noEmit)
+esbuild fields/working-hours.tsx --bundle --format=esm --jsx=transform --external:react --outfile=fields/working-hours.js
+```
+
+- Import Fyldo's types with `import type` only: they are erased, and nothing of Fyldo or React ends up in your bundle.
+  React comes from the API at run time (`({ React, ui }) => …`). `--external:react` is a safety net: a value import
+  of `react` would bundle a second React, which breaks hooks.
+- `jsx: "react"` (TypeScript) and `--jsx=transform` (esbuild, the default) compile JSX to `React.createElement`, so
+  the `React` you destructure from the API must be in scope wherever you write JSX: define your components inside the
+  default export, as above. Do not use the automatic runtime (`react-jsx`): it imports `react/jsx-runtime`.
+- A component's props: `React.ComponentProps<FyldoSdk['ui']['Select']>`.
+- The file has the version it came from in its first comment. Inside v1 the SDK only grows, so a module typed against
+  an older Fyldo keeps compiling against a newer one.
+
 ## Styling
 
 The field lives inside Fyldo's root. A scoped reset and selectors raised to ID level (docs/ARCHITECTURE.md §8.2) protect

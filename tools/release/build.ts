@@ -65,12 +65,13 @@ function verifyFolder(): void {
   const expected = [...new Set(RUNTIME.map((entry) => entry.split('/')[0]))].sort();
   if (JSON.stringify(top) !== JSON.stringify(expected)) fail(`unexpected top-level entries: ${top.join(', ')} (expected ${expected.join(', ')}).`);
 
+  // TypeScript sources are dev files; assets/dist/fyldo-sdk.d.ts (the SDK's types for plugins) is runtime.
   const dev = /(\.(tsx?|map|log)$|^\.|node_modules|\.generated\.)/;
   const files = [...walk(folder)].map((f) => relative(folder, f));
-  const stray = files.filter((f) => f.split('/').some((part) => dev.test(part)));
+  const stray = files.filter((f) => f !== 'assets/dist/fyldo-sdk.d.ts' && f.split('/').some((part) => dev.test(part)));
   if (stray.length > 0) fail(`dev files in the release tree:\n  ${stray.join('\n  ')}`);
 
-  for (const required of ['assets/dist/boot.js', 'assets/dist/app.js', 'assets/dist/app.css', 'languages/fyldo-fa_IR.mo', 'languages/fyldo-fa_IR.json']) {
+  for (const required of ['assets/dist/boot.js', 'assets/dist/app.js', 'assets/dist/app.css', 'assets/dist/fyldo-sdk.d.ts', 'languages/fyldo-fa_IR.mo', 'languages/fyldo-fa_IR.json']) {
     if (!existsSync(resolve(folder, required))) fail(`the release tree lacks ${required}.`);
   }
   const php = files.filter((f) => f.endsWith('.php'));
