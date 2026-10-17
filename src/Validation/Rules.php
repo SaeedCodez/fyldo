@@ -21,11 +21,15 @@ final class Rules {
 	 * Rules understood by both PHP and the client, in evaluation order. `email`, `number`, `color`, `date`, `time`, `datetime`,
 	 * `media` and `relation` are implied by the field type (the value must be an address / a number / `#rrggbb` / a day, a time
 	 * or a UTC datetime within the field's `min`, `max` and minute `step` / an attachment ID / a post, term or user ID or a list
-	 * of them); the others are declared by the developer.
+	 * of them); the others are declared by the developer. A range field (`date_range`, `time_range`, `datetime_range`) implies
+	 * its single type's rule with `range` on: the value is `array( 'start' => …, 'end' => … )`, see range().
 	 */
 	const KNOWN = array( 'required', 'min_length', 'max_length', 'pattern', 'schemes', 'email', 'number', 'color', 'date', 'time', 'datetime', 'media', 'relation', 'allowed', 'min', 'max', 'step' );
 
-	/** The date and time rules: `true`, or an array of `min`, `max` (stored format, or `today` / `now`) and `step` (minutes). */
+	/**
+	 * The date and time rules: `true`, or an array of `min`, `max` (stored format, or `today` / `now`), `step` (minutes) and
+	 * `range` (true: a start → end pair, each end checked against the others).
+	 */
 	const MOMENTS = array( 'date', 'time', 'datetime' );
 
 	/** How a bound of each looks, for the developer's error messages. */
@@ -41,6 +45,11 @@ final class Rules {
 	 * @return array{rule:string,params:array<string,mixed>}|null
 	 */
 	public static function check( array $rules, $value ): ?array {
+		// A range with neither end set is nothing: `required` rejects it, an optional one has nothing else to check.
+		if ( self::is_range( $rules ) && is_array( $value ) && self::is_empty( $value['start'] ?? '' ) && self::is_empty( $value['end'] ?? '' ) ) {
+			$value = '';
+		}
+
 		// A media field stores the attachment ID, a post, term or user field the item's ID: 0 means nothing is chosen, which
 		// `required` does not accept.
 		$by_id = ! empty( $rules['media'] ) || ! empty( $rules['relation'] );
@@ -95,7 +104,8 @@ final class Rules {
 
 		foreach ( self::MOMENTS as $kind ) {
 			if ( isset( $rules[ $kind ] ) && false !== $rules[ $kind ] ) {
-				$failure = self::moment( $kind, is_array( $rules[ $kind ] ) ? $rules[ $kind ] : array(), $value );
+				$rule    = is_array( $rules[ $kind ] ) ? $rules[ $kind ] : array();
+				$failure = empty( $rule['range'] ) ? self::moment( $kind, $rule, $value ) : self::range( $kind, $rule, $value );
 				if ( null !== $failure ) {
 					return $failure;
 				}
@@ -190,8 +200,11 @@ final class Rules {
 			if ( ! isset( $rules[ $kind ] ) || is_bool( $rules[ $kind ] ) ) {
 				continue;
 			}
-			if ( ! is_array( $rules[ $kind ] ) || array() !== array_diff( array_keys( $rules[ $kind ] ), array( 'min', 'max', 'step' ) ) ) {
+			if ( ! is_array( $rules[ $kind ] ) || array() !== array_diff( array_keys( $rules[ $kind ] ), array( 'min', 'max', 'step', 'range' ) ) ) {
 				return sprintf( '`%s` must be true, or an array of `min`, `max` and `step`.', $kind );
+			}
+			if ( isset( $rules[ $kind ]['range'] ) && ! is_bool( $rules[ $kind ]['range'] ) ) {
+				return sprintf( '`%s` `range` must be true or false.', $kind );
 			}
 			$problem = self::moment_config_error( $kind, $rules[ $kind ] );
 			if ( null !== $problem ) {
@@ -293,6 +306,70 @@ final class Rules {
 		}
 
 		return null;
+	}
+
+	/**
+	 * A start → end pair of a range field (`range` on). Both ends set (one alone: `range_missing`, `end` names the missing
+	 * one), each end passes the single rule (its failure, with `end` naming the end), then the order: a date range's end on
+	 * or after the start, a datetime range's strictly after (`range_order`), a time range's different from the start
+	 * (`range_equal`; an earlier end is the next day). Stored values compare as text. Mirrors `rangeFailure` in
+	 * app/lib/validation.ts.
+	 *
+	 * @param string              $kind  `date`, `time` or `datetime`.
+	 * @param array<string,mixed> $rule  `min`, `max`, `step`, `range`.
+	 * @param mixed               $value Sanitized value.
+	 * @return array{rule:string,params:array<string,mixed>}|null
+	 */
+	private static function range( string $kind, array $rule, $value ): ?array {
+		if ( ! is_array( $value ) ) {
+			return self::fail( $kind, array() );
+		}
+		$ends = array(
+			'start' => $value['start'] ?? '',
+			'end'   => $value['end'] ?? '',
+		);
+
+		foreach ( $ends as $which => $end ) {
+			if ( self::is_empty( $end ) ) {
+				return self::fail(
+					'range_missing',
+					array(
+						'kind' => $kind,
+						'end'  => $which,
+					)
+				);
+			}
+		}
+
+		foreach ( $ends as $which => $end ) {
+			$failure = self::moment( $kind, $rule, $end );
+			if ( null !== $failure ) {
+				$failure['params']['end'] = $which;
+				return $failure;
+			}
+		}
+
+		$order = strcmp( (string) $ends['end'], (string) $ends['start'] );
+		if ( 'time' === $kind ) {
+			return 0 === $order ? self::fail( 'range_equal', array( 'end' => 'end' ) ) : null;
+		}
+
+		return $order < 0 || ( 0 === $order && 'datetime' === $kind ) ? self::fail( 'range_order', array( 'end' => 'end' ) ) : null;
+	}
+
+	/**
+	 * Whether a rule set is a range field's (a date or time rule with `range` on).
+	 *
+	 * @param array<string,mixed> $rules Field `validate` array.
+	 */
+	public static function is_range( array $rules ): bool {
+		foreach ( self::MOMENTS as $kind ) {
+			if ( isset( $rules[ $kind ] ) && is_array( $rules[ $kind ] ) && ! empty( $rules[ $kind ]['range'] ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

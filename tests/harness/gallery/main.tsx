@@ -15,6 +15,8 @@
  *   ?c=color-picker-panel&value=#2271b1   (the 280px panel on its own, EN or FA; presets = the 16 defaults)
  *   ?c=date-field&kind=date|datetime|time&size=sm|md|lg&state=default|error|disabled&calendar=auto|jalali|gregorian&label=…&placeholder=…&value=2026-10-20&helper=…&error=…
  *       (320 wide; preload names=calendar,arrow-down-2)
+ *   ?c=date-range-field&kind=date|datetime|time&size=sm|md|lg&state=default|error|disabled&label=…&start_placeholder=…&end_placeholder=…&start=2026-10-20&end=2026-10-26&helper=…&error=…
+ *       (480 wide; preload names=calendar,arrow-right)
  *   ?c=calendar-cell&kind=day|wide&state=default|hover|selected|today|outside|disabled&label=17
  *   ?c=calendar-panel&kind=date|datetime&calendar=gregorian|jalali&switch=1|0&value=2026-10-20   (the panel on its own; a datetime value is UTC)
  *   ?c=time-panel&type=popup|embedded&value=14:30&step=5
@@ -79,6 +81,7 @@ import { ColorPickerPanel } from '../../../app/components/ui/color-picker-panel'
 import { CalendarCell, type CalendarCellKind } from '../../../app/components/ui/calendar-cell';
 import { CalendarPanel } from '../../../app/components/ui/calendar-panel';
 import { DateField, TimeField } from '../../../app/components/ui/date-field';
+import { DateRangeField } from '../../../app/components/ui/date-range-field';
 import { TimePanel } from '../../../app/components/ui/time-panel';
 import { parseTime, setClock, setDateSettings, type CalendarKind } from '../../../app/lib/datetime';
 import { IconPickerField } from '../../../app/components/ui/icon-picker-field';
@@ -430,6 +433,29 @@ function DateFieldDemo() {
       ) : (
         <DateField {...common} kind={kind === 'datetime' ? 'datetime' : 'date'} calendar={param('calendar', 'auto') as CalendarKind | 'auto'} />
       )}
+    </div>
+  );
+}
+
+function DateRangeFieldDemo() {
+  const [value, setValue] = useState({ start: param('start'), end: param('end') });
+  const kind = param('kind', 'date');
+  return (
+    <div style={{ width: 480 }}>
+      <DateRangeField
+        label={param('label')}
+        description={param('helper') || undefined}
+        kind={kind === 'time' || kind === 'datetime' ? kind : 'date'}
+        startPlaceholder={param('start_placeholder') || undefined}
+        endPlaceholder={param('end_placeholder') || undefined}
+        size={size}
+        value={value}
+        onValueChange={setValue}
+        calendar="gregorian"
+        locale={locale}
+        error={state === 'error' ? param('error') : undefined}
+        disabled={state === 'disabled'}
+      />
     </div>
   );
 }
@@ -875,6 +901,8 @@ function Variant() {
       return <ColorPickerPanelDemo />;
     case 'date-field':
       return <DateFieldDemo />;
+    case 'date-range-field':
+      return <DateRangeFieldDemo />;
     case 'calendar-cell':
       return <CalendarCellDemo />;
     case 'calendar-panel':

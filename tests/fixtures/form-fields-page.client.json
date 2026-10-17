@@ -460,6 +460,71 @@
                     "placeholder": ""
                 },
                 {
+                    "id": "offer_period",
+                    "type": "date_range",
+                    "label": "Offer period",
+                    "description": "",
+                    "default": {
+                        "start": "2026-10-20",
+                        "end": "2026-10-26"
+                    },
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "date": {
+                            "range": true
+                        }
+                    },
+                    "calendar": "gregorian",
+                    "placeholder": "",
+                    "start_placeholder": "",
+                    "end_placeholder": ""
+                },
+                {
+                    "id": "support_hours",
+                    "type": "time_range",
+                    "label": "Support hours",
+                    "description": "",
+                    "default": {
+                        "start": "09:00",
+                        "end": "17:00"
+                    },
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "time": {
+                            "step": 15,
+                            "range": true
+                        }
+                    },
+                    "calendar": "gregorian",
+                    "placeholder": "",
+                    "start_placeholder": "",
+                    "end_placeholder": ""
+                },
+                {
+                    "id": "campaign_window",
+                    "type": "datetime_range",
+                    "label": "Campaign window",
+                    "description": "",
+                    "default": {
+                        "start": "",
+                        "end": ""
+                    },
+                    "disabled": false,
+                    "layout": "stacked",
+                    "validate": {
+                        "datetime": {
+                            "step": 5,
+                            "range": true
+                        }
+                    },
+                    "calendar": "auto",
+                    "placeholder": "",
+                    "start_placeholder": "",
+                    "end_placeholder": ""
+                },
+                {
                     "id": "header_buttons",
                     "type": "group",
                     "label": "Header buttons",
@@ -662,6 +727,18 @@
         "start_date": "2026-10-20",
         "report_at": "09:00",
         "publish_at": "",
+        "offer_period": {
+            "start": "2026-10-20",
+            "end": "2026-10-26"
+        },
+        "support_hours": {
+            "start": "09:00",
+            "end": "17:00"
+        },
+        "campaign_window": {
+            "start": "",
+            "end": ""
+        },
         "header_buttons": [
             {
                 "label": "Docs",

@@ -3,7 +3,8 @@
  * Both sides run tests/fixtures/validation-cases.json, so they cannot drift silently.
  *
  * Rule order: required, min_length, max_length, pattern, schemes, email, number, color, date, time, datetime, media, relation, allowed,
- * min, max, step. `date`, `time` and `datetime` check the format, then their own `min`, `max` and minute `step`.
+ * min, max, step. `date`, `time` and `datetime` check the format, then their own `min`, `max` and minute `step`; with `range`
+ * on (the range fields) the value is a start → end pair and each end is checked, then the order.
  */
 import { __, _n, sprintf } from '../i18n';
 import type { MomentRule, RuleSet } from '../types';
@@ -13,9 +14,10 @@ import { dateSettings, formatBound, isValid, minuteOfDay, resolveBound, type Mom
 export interface Failure {
   /**
    * A declarative rule, a `group` field's item count (`items_min`, `items_max`: src/Fields/GroupField.php), or a date /
-   * time bound (`too_early`, `too_late`: params `bound` in the stored format and `kind`) or minute step (`minute_step`).
+   * time bound (`too_early`, `too_late`: params `bound` in the stored format and `kind`) or minute step (`minute_step`), or
+   * a range's pair (`range_missing`, `range_order`, `range_equal`). A range's failures name the end at fault (`end`).
    */
-  rule: keyof RuleSet | 'items_min' | 'items_max' | 'too_early' | 'too_late' | 'minute_step';
+  rule: keyof RuleSet | 'items_min' | 'items_max' | 'too_early' | 'too_late' | 'minute_step' | 'range_missing' | 'range_order' | 'range_equal';
   params: Record<string, unknown>;
 }
 
@@ -89,7 +91,33 @@ function momentFailure(kind: MomentKind, rule: MomentRule, value: unknown): Fail
   return null;
 }
 
-export function check(rules: RuleSet, value: unknown): Failure | null {
+/** A range field's rules: a date or time rule with `range` on. */
+export const isRange = (rules: RuleSet): boolean => MOMENTS.some((kind) => typeof rules[kind] === 'object' && (rules[kind] as MomentRule).range === true);
+
+/** A range's end, as PHP reads `$value['start'] ?? ''`. */
+const endOf = (value: object, end: 'start' | 'end'): unknown => (value as Record<string, unknown>)[end] ?? '';
+
+/**
+ * A start → end pair (`range` on): both ends set (one alone: `range_missing`, `end` names the missing one), each end passes
+ * the single rule (its failure, with `end`), then the order: a date range's end on or after the start, a datetime range's
+ * strictly after (`range_order`), a time range's different from the start (`range_equal`; an earlier end is the next day).
+ */
+function rangeFailure(kind: MomentKind, rule: MomentRule, value: unknown): Failure | null {
+  if (typeof value !== 'object' || value === null) return fail(kind);
+  const ends = ['start', 'end'] as const;
+  for (const end of ends) if (isEmpty(endOf(value, end))) return fail('range_missing', { kind, end });
+  for (const end of ends) {
+    const failure = momentFailure(kind, rule, endOf(value, end));
+    if (failure) return fail(failure.rule, { ...failure.params, end });
+  }
+  const [start, end] = [String(endOf(value, 'start')), String(endOf(value, 'end'))];
+  if (kind === 'time') return end === start ? fail('range_equal', { end: 'end' }) : null;
+  return end < start || (end === start && kind === 'datetime') ? fail('range_order', { end: 'end' }) : null;
+}
+
+export function check(rules: RuleSet, raw: unknown): Failure | null {
+  // A range with neither end set is nothing: `required` rejects it, an optional one has nothing else to check.
+  const value = isRange(rules) && typeof raw === 'object' && raw !== null && isEmpty(endOf(raw, 'start')) && isEmpty(endOf(raw, 'end')) ? '' : raw;
   // A media field stores the attachment ID, a post, term or user field the item's ID: 0 means nothing is chosen, which
   // `required` does not accept.
   if (rules.required && (isEmpty(value) || ((rules.media || rules.relation) && value === 0))) return fail('required');
@@ -115,7 +143,8 @@ export function check(rules: RuleSet, value: unknown): Failure | null {
   for (const kind of MOMENTS) {
     const rule = rules[kind];
     if (!rule) continue;
-    const failure = momentFailure(kind, rule === true ? {} : rule, value);
+    const own = rule === true ? {} : rule;
+    const failure = own.range ? rangeFailure(kind, own, value) : momentFailure(kind, own, value);
     if (failure) return failure;
   }
 
@@ -179,6 +208,13 @@ export function messageFor(failure: Failure): string {
       const step = Number(failure.params.step ?? 1);
       return sprintf(_n('Choose a time in steps of %d minute.', 'Choose a time in steps of %d minutes.', step, 'fyldo'), step);
     }
+    case 'range_missing':
+      if (failure.params.end === 'start') return failure.params.kind === 'time' ? __('Choose a start time.', 'fyldo') : __('Choose a start date.', 'fyldo');
+      return failure.params.kind === 'time' ? __('Choose an end time.', 'fyldo') : __('Choose an end date.', 'fyldo');
+    case 'range_order':
+      return __('Choose an end after the start.', 'fyldo');
+    case 'range_equal':
+      return __('Choose an end different from the start.', 'fyldo');
     case 'allowed':
       return __('Choose one of the available options.', 'fyldo');
     case 'media':

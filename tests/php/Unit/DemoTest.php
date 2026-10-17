@@ -62,7 +62,7 @@ final class DemoTest extends TestCase {
 			}
 		}
 
-		$expected = array( 'text', 'url', 'email', 'password', 'number', 'textarea', 'toggle', 'checkbox', 'checkbox_group', 'radio', 'choice', 'segmented', 'slider', 'color', 'icon', 'date', 'time', 'datetime', 'image', 'file', 'select', 'multi_select', 'post', 'term', 'user', 'group', 'notice', 'custom' );
+		$expected = array( 'text', 'url', 'email', 'password', 'number', 'textarea', 'toggle', 'checkbox', 'checkbox_group', 'radio', 'choice', 'segmented', 'slider', 'color', 'icon', 'date', 'time', 'datetime', 'date_range', 'time_range', 'datetime_range', 'image', 'file', 'select', 'multi_select', 'post', 'term', 'user', 'group', 'notice', 'custom' );
 		$this->assertSame( array(), array_diff( $expected, array_keys( $types ) ) );
 	}
 

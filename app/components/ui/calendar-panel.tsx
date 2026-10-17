@@ -64,6 +64,8 @@ export interface CalendarPanelProps {
   /** The earliest and latest value (stored format, `today` / `now` already resolved): days outside are disabled. */
   min?: string;
   max?: string;
+  /** A stored value whose month is shown while there is no value (a range's end opens on its start's month). */
+  openOn?: string;
   /** Minutes between the offered minutes (datetime). */
   step?: number;
   locale?: string;
@@ -85,6 +87,7 @@ export function CalendarPanel({
   switchable = true,
   min,
   max,
+  openOn,
   step = 1,
   locale = 'en',
   className,
@@ -113,7 +116,7 @@ export function CalendarPanel({
 
   const [calendar, setCalendar] = useState<CalendarKind>(initial);
   const [view, setView] = useState<View>('days');
-  const [active, setActive] = useState<number>(selectedJdn ?? todayJdn);
+  const [active, setActive] = useState<number>(selectedJdn ?? bound(openOn) ?? todayJdn);
   const [firstYear, setFirstYear] = useState(0);
   const [seen, setSeen] = useState(value);
 

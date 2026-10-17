@@ -316,6 +316,26 @@ Keyboard (grid, WAI-ARIA date picker dialog): arrows move a day (mirrored in RTL
 
 PHP: `date`, `time`, `datetime` (`src/Fields/AbstractDateTimeField.php` + `DateField`, `TimeField`, `DateTimeField`), layout `field`, config `calendar` (`auto` | `jalali` | `gregorian`; not for `time`), `min`, `max` (stored format, or `today` / `now`), `step` (minutes dividing an hour; time and datetime), `placeholder`. They become the implied `date` / `time` / `datetime` rule (`Rules::check`, mirrored by `app/lib/validation.ts`, cases in `tests/fixtures/validation-cases.json`): the strict format and a real day (`checkdate`), then `min` / `max` (`too_early` / `too_late`), then the step (`minute_step`, a datetime's in site time). Sanitize: trim and ASCII digits, nothing else (a wrong format is reported, never fixed up). `Support/Dates` holds the formats, the site's zone (`wp_timezone()`, never the request) and `to_site()` for developers. The boot config carries `dates: { timezone, startOfWeek, calendar }`.
 
+### 2.14c Date Range Field — Figma `Date Range Field` (Locale × Size Small | Medium | Large × State Default / Hover / Start open / End open / Filled / Error / Disabled)
+
+No new popup: two single pickers (§2.14b), start → end, each opening its own Calendar Panel (date, datetime) or Time Panel (time) and setting only its end.
+```ts
+type DateRangePickerProps = { kind?: 'date'|'time'|'datetime'; value: { start: string; end: string }; onValueChange(value): void; calendar?; min?; max?; step?; size?; placeholder?; startPlaceholder?; endPlaceholder?; disabled?; error?: string; invalid?: 'start'|'end'; locale?; onBlur?(): void };
+```
+| Figma | Code |
+|---|---|
+| Label / Controls (Start, Arrow, End; gap 8) / Meta (Duration) / Helper or Error; 480 wide | `DateRangeField` (label as the group's name) around `DateRangePicker` (`app/components/ui/date-range-field.tsx`); in a Setting Row `SettingRow group ownError range` (480 wide) |
+| Start / End: Icon (`calendar`, `clock` for time) + Value or Placeholder, no chevron; heights 36 / 44 / 52 | `DatePicker` / `TimePicker` with `bare` (no chevron, no Equivalent line; a time's clock opens its panel); each end in its own `Field.Root` so only the end at fault is red |
+| Arrow `arrow-right` 16 `icon/tertiary`; FA: start on the right, `arrow-left` | DOM order start → end in a flex row (RTL mirrors it); `arrow-right` with `rtl:-scale-x-100` |
+| Start open / End open (focus border + halo) | the picker's own `data-popup-open` look |
+| Duration: Copy/13 `text/secondary` ("Duration: 7 days", «مدت: ۷ روز») | `durationText()` in `app/lib/datetime.ts` (`_n` plurals, zero parts left out, joined by translatable `%1$s, %2$s` / `%1$s and %2$s`; overnight "…, ends the next day") |
+| Error: end in red, "Choose an end after the start." | the failure's `end` param picks the red end (`check()` in FieldRenderer); the error row is the group's description |
+| Disabled | both ends and the arrow `text/disabled` |
+
+Behaviour: a date or datetime end gets `min = max(field min, start)` (`rangeEndMin()`) and `openOn = start`, so its popup opens on the start's month with the days before the start disabled; a start moved past the end clears the end. A time range's end is not limited (overnight). Validation reports only when focus leaves both inputs and their popups.
+
+PHP: `date_range`, `time_range`, `datetime_range` (`src/Fields/AbstractDateRangeField.php`, extending `AbstractDateTimeField` + `DateRangeField`, `TimeRangeField`, `DateTimeRangeField`), layout `stacked`, the single type's config plus `start_placeholder` / `end_placeholder`; the implied rule is the single one with `range: true` (`Rules::range()`, mirrored by `rangeFailure()`): one end alone `range_missing`, each end's own failure (with `end`), then `range_order` (date: end before start; datetime: end not after start) or `range_equal` (time). Sanitize: `start` / `end` read like the single value, other keys dropped, a non-array is empty. `Support\Dates::range_to_site()` and `time_in_range()` for developers.
+
 ### 2.15 Upload Image / Select File — Figma `Upload Image` and `Select File` (Locale × Preview Empty | Filled × State Default / Hover / Focus / Error / Disabled)
 
 Two field types (`image`, `file`) over one control: `MediaPicker` / `MediaField` (`app/components/ui/media-field.tsx`, `kind` `'image' | 'file'`) with the thin wrappers `UploadImageField` and `SelectFileField`. The control is a group (`role="group"`, named by the label, described by the helper text); it never builds an uploader: its buttons open the native WordPress media modal through `wp.media` (`app/lib/wp-media.ts`), and stay inert (one console warning) where `window.wp.media` is missing (the harness, the unit tests).

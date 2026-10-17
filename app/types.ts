@@ -33,7 +33,16 @@ export interface MomentRule {
   max?: string;
   /** Minutes (time, datetime); 1 when absent. */
   step?: number;
+  /** A range field (`date_range`, `time_range`, `datetime_range`): the value is a `DateRangeValue`, each end checked. */
+  range?: boolean;
 }
+
+/** The value of a range field: both ends in the single type's stored format; nothing = both ''. */
+// A type, not an interface: it must fit `JsonValue` (a field value).
+export type DateRangeValue = {
+  start: string;
+  end: string;
+};
 
 /** One item of a `group` field: the values of its sub-fields, keyed by sub-field id. */
 export interface GroupItemValue {
@@ -197,6 +206,18 @@ export interface DateTimeFieldDef extends FieldBase {
   placeholder: string;
 }
 
+/**
+ * `date_range`, `time_range` or `datetime_range`: a `DateRangeValue`, each end like the single type's value. `min`, `max`
+ * and `step` (both ends) are in `validate` (the `date` / `time` / `datetime` rule, with `range` on).
+ */
+export interface DateRangeFieldDef extends FieldBase {
+  type: 'date_range' | 'time_range' | 'datetime_range';
+  calendar: 'auto' | 'jalali' | 'gregorian';
+  placeholder: string;
+  start_placeholder: string;
+  end_placeholder: string;
+}
+
 /** What the browser draws for a saved attachment (PHP: AbstractMediaField::media). The name, size and type come from the attachment, never from its URL. */
 export interface MediaItem {
   id: number;
@@ -307,6 +328,7 @@ export type ValueFieldDef =
   | ColorFieldDef
   | IconFieldDef
   | DateTimeFieldDef
+  | DateRangeFieldDef
   | ImageFieldDef
   | FileFieldDef
   | SelectFieldDef

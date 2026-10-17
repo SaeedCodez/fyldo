@@ -1417,3 +1417,86 @@ msgid "Choose a time in steps of %d minute."
 msgid_plural "Choose a time in steps of %d minutes."
 msgstr[0] "زمانی با گام‌های %d دقیقه‌ای انتخاب کنید."
 msgstr[1] "زمانی با گام‌های %d دقیقه‌ای انتخاب کنید."
+
+msgid "Start date"
+msgstr "تاریخ شروع"
+
+msgid "End date"
+msgstr "تاریخ پایان"
+
+msgid "Start time"
+msgstr "ساعت شروع"
+
+msgid "End time"
+msgstr "ساعت پایان"
+
+msgid "Choose a start date."
+msgstr "تاریخ شروع را انتخاب کنید."
+
+msgid "Choose an end date."
+msgstr "تاریخ پایان را انتخاب کنید."
+
+msgid "Choose a start time."
+msgstr "ساعت شروع را انتخاب کنید."
+
+msgid "Choose an end time."
+msgstr "ساعت پایان را انتخاب کنید."
+
+msgid "Choose an end after the start."
+msgstr "پایان باید بعد از شروع باشد."
+
+msgid "Choose an end different from the start."
+msgstr "پایان باید با شروع فرق داشته باشد."
+
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d روز"
+msgstr[1] "%d روز"
+
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] "%d ساعت"
+msgstr[1] "%d ساعت"
+
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] "%d دقیقه"
+msgstr[1] "%d دقیقه"
+
+msgctxt "duration parts"
+msgid "%1$s, %2$s"
+msgstr "%1$s و %2$s"
+
+msgctxt "duration parts"
+msgid "%1$s and %2$s"
+msgstr "%1$s و %2$s"
+
+msgid "Duration: %s"
+msgstr "مدت: %s"
+
+msgid "Duration: %s, ends the next day"
+msgstr "مدت: %s، پایان روز بعد"
+
+msgid "Booking open"
+msgstr "باز بودن رزرو"
+
+msgid "Ranges"
+msgstr "بازه‌ها"
+
+msgid "Two inputs, start and end; each opens the same picker as a single field."
+msgstr "دو ورودی، شروع و پایان؛ هر کدام همان انتخابگر فیلد تکی را باز می‌کند."
+
+msgid "Sale period"
+msgstr "دوره فروش"
+
+msgid "Both days are counted. Today or later."
+msgstr "هر دو روز شمرده می‌شوند. امروز یا بعد از آن."
+
+msgid "Quiet hours"
+msgstr "ساعات سکوت"
+
+msgid "May cross midnight: an end before the start is the next day."
+msgstr "می‌تواند از نیمه‌شب بگذرد: پایانِ پیش از شروع یعنی روز بعد."
+
+msgid "Campaign"
+msgstr "کمپین"

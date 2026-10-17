@@ -88,6 +88,9 @@ export function collectIconNames(config: unknown): string[] {
         // The date and time fields draw their own glyph in the closed field.
         else if (k === 'type' && (v === 'date' || v === 'datetime')) names.push('calendar');
         else if (k === 'type' && v === 'time') names.push('clock');
+        // A range field: the same glyph at both ends, and the arrow between them.
+        else if (k === 'type' && (v === 'date_range' || v === 'datetime_range')) names.push('calendar', 'arrow-right');
+        else if (k === 'type' && v === 'time_range') names.push('clock', 'arrow-right');
         else walk(v);
       }
     }

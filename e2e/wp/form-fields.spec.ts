@@ -2,7 +2,7 @@
  * Milestone 2 fields on a real WordPress: Textarea (counter), Checkbox, Checkbox group (parent), Radio group, Multi Select,
  * and the input fields: URL, email, password (write-only), number, notice, a disabled field with its reason, plus a
  * Segmented Control, a Slider, a Color Picker and an Icon Picker (their panel / modal are lazily loaded chunks), a date, a time
- * and a datetime (Calendar Panel and Time Panel, also lazily loaded), and the Upload Image
+ * and a datetime (Calendar Panel and Time Panel, also lazily loaded) and their three ranges, and the Upload Image
  * and Select File fields (the native media modal is stubbed; the attachments are real), and a Group (header buttons: reordered
  * with the keyboard, one added), a custom field (the demo's working-hours module: two selects, one stored value) and a post
  * field (pages found by searching the site, several picked; the pages are real).
@@ -146,7 +146,7 @@ test.describe('English', () => {
 
     // Date, time and datetime (their panels are a lazily loaded chunk): a day picked with the keyboard, a typed time, and a
     // moment picked through the Years and Months views (the site's time zone is UTC, so it is stored as picked)
-    const start = page.getByRole('button', { name: 'Start date' });
+    const start = page.getByRole('button', { name: 'Start date', exact: true });
     await expect(start).toHaveText('Oct 20, 2026');
     await expect(page.getByText('28 Mehr 1405 · Jalali')).toBeVisible();
     await start.click();
@@ -178,6 +178,44 @@ test.describe('English', () => {
     await page.keyboard.press('Escape');
     await expect(picker).toBeHidden();
     await expect(publish).toHaveText('Nov 3, 2026, 08:05');
+
+    // Ranges: each end is the single picker. The date range's end opens on the start's month with the days before it
+    // disabled; the time range crosses midnight; the datetime range's end opens on the start's month too.
+    const offer = page.getByRole('group', { name: 'Offer period' });
+    await expect(offer).toContainText('Duration: 7 days');
+    await offer.getByRole('button', { name: /^End date/ }).click();
+    const offerEnd = page.getByRole('dialog', { name: 'Choose a date' });
+    await expect(offerEnd.getByRole('gridcell', { name: 'Monday, Oct 19, 2026' })).toHaveAttribute('aria-disabled', 'true');
+    await offerEnd.getByRole('gridcell', { name: 'Wednesday, Oct 28, 2026' }).click();
+    await expect(offerEnd).toBeHidden();
+    await expect(offer).toContainText('Duration: 9 days');
+    const support = page.getByRole('group', { name: 'Support hours' });
+    await support.getByRole('textbox', { name: 'Start time' }).fill('22:00');
+    await support.getByRole('textbox', { name: 'End time' }).fill('0600');
+    await support.getByRole('textbox', { name: 'End time' }).blur();
+    await expect(support).toContainText('Duration: 8 hours, ends the next day');
+    const campaign = page.getByRole('group', { name: 'Campaign window' });
+    await campaign.getByRole('button', { name: /^Start date/ }).click();
+    const campaignStart = page.getByRole('dialog', { name: 'Choose a date and time' });
+    await campaignStart.locator('[data-calendar-title]').click(); // Months
+    await campaignStart.locator('[data-calendar-title]').click(); // Years
+    await campaignStart.getByRole('gridcell', { name: '2026', exact: true }).click();
+    await campaignStart.getByRole('gridcell', { name: 'November' }).click();
+    await campaignStart.getByRole('gridcell', { name: 'Tuesday, Nov 3, 2026' }).click();
+    await campaignStart.getByRole('listbox', { name: 'Hour' }).getByRole('option', { name: '08' }).click();
+    await campaignStart.getByRole('listbox', { name: 'Minute' }).getByRole('option', { name: '05' }).click();
+    await page.keyboard.press('Escape');
+    await expect(campaignStart).toBeHidden();
+    await campaign.getByRole('button', { name: /^End date/ }).click();
+    const campaignEnd = page.getByRole('dialog', { name: 'Choose a date and time' });
+    await expect(campaignEnd.getByRole('grid')).toHaveAccessibleName('November 2026');
+    await expect(campaignEnd.getByRole('gridcell', { name: 'Monday, Nov 2, 2026' })).toHaveAttribute('aria-disabled', 'true');
+    await campaignEnd.getByRole('gridcell', { name: 'Thursday, Nov 5, 2026' }).click();
+    await campaignEnd.getByRole('listbox', { name: 'Hour' }).getByRole('option', { name: '10' }).click();
+    await campaignEnd.getByRole('listbox', { name: 'Minute' }).getByRole('option', { name: '35' }).click();
+    await page.keyboard.press('Escape');
+    await expect(campaignEnd).toBeHidden();
+    await expect(campaign).toContainText('Duration: 2 days, 2 hours and 30 minutes');
 
     // Upload Image and Select File: empty, then "Select …" takes what the (stubbed) media modal hands over
     const logoField = page.getByRole('group', { name: 'Site logo' });
@@ -234,14 +272,18 @@ test.describe('English', () => {
     await expect(page.getByRole('slider', { name: 'Image quality' })).toHaveAttribute('aria-valuetext', '85');
     await expect(page.getByRole('button', { name: 'Accent color' })).toHaveText('#D63638');
     await expect(page.getByRole('button', { name: 'Menu icon' })).toHaveText('star');
-    await expect(page.getByRole('button', { name: 'Start date' })).toHaveText('Oct 21, 2026');
+    await expect(page.getByRole('button', { name: 'Start date', exact: true })).toHaveText('Oct 21, 2026');
     await expect(page.getByRole('textbox', { name: 'Send the report at' })).toHaveValue('17:45');
     await expect(page.getByRole('button', { name: 'Publish at' })).toHaveText('Nov 3, 2026, 08:05');
     expect((await readConfig(page, 'acme-beta')).pages.find((p: { id: string }) => p.id === 'fields').values).toMatchObject({
       start_date: '2026-10-21',
       report_at: '17:45',
       publish_at: '2026-11-03 08:05:00',
+      offer_period: { start: '2026-10-20', end: '2026-10-28' },
+      support_hours: { start: '22:00', end: '06:00' },
+      campaign_window: { start: '2026-11-03 08:05:00', end: '2026-11-05 10:35:00' },
     });
+    await expect(page.getByRole('group', { name: 'Support hours' })).toContainText('Duration: 8 hours, ends the next day');
     await expect(page.getByRole('group', { name: 'Header buttons' }).locator('[data-slot=fy-group-item-title]')).toHaveText(['Get started', 'Docs', 'Blog']);
     await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Opens' })).toHaveText('09:00');
     await expect(page.getByRole('group', { name: 'Opening hours' }).getByRole('combobox', { name: 'Closes' })).toHaveText('18:00');
@@ -680,6 +722,31 @@ test.describe('REST (server is authoritative)', () => {
     response = await patch(request, { start_date: '۲۰۲۴-۰۲-۲۹', report_at: '17:45', publish_at: '2026-11-03 08:05:00' });
     expect(response.status()).toBe(200);
     expect((await response.json()).values).toMatchObject({ start_date: '2024-02-29', report_at: '17:45', publish_at: '2026-11-03 08:05:00' });
+  });
+
+  test('ranges: the server checks the pair; unknown keys are dropped and anything but a pair is empty', async ({ request }) => {
+    let response = await patch(request, {
+      offer_period: { start: '2026-10-20', end: '2026-10-19' },
+      support_hours: { start: '09:00', end: '09:00' },
+      campaign_window: { start: '2026-11-03 08:05:00', end: '' },
+    });
+    expect(response.status()).toBe(422);
+    expect((await response.json()).data.errors).toEqual({
+      offer_period: 'Choose an end after the start.',
+      support_hours: 'Choose an end different from the start.',
+      campaign_window: 'Choose an end date.',
+    });
+
+    response = await patch(request, {
+      offer_period: { start: '۲۰۲۶-۱۰-۲۰', end: '2026-10-26', extra: 'dropped' },
+      support_hours: { start: '22:00', end: '06:00' },
+      campaign_window: 'not a pair',
+    });
+    expect(response.status()).toBe(200);
+    const values = (await response.json()).values;
+    expect(values.offer_period).toEqual({ start: '2026-10-20', end: '2026-10-26' });
+    expect(values.support_hours).toEqual({ start: '22:00', end: '06:00' });
+    expect(values.campaign_window).toEqual({ start: '', end: '' });
   });
 
   test('url and email: digits are read as ASCII; the https-only rule and email format are enforced', async ({ request }) => {
