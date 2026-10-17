@@ -94,6 +94,17 @@ export default function announcements({ React, ui, Form }) {
       return date.getTime() < Date.now() ? t.ended : format(t.until, day.format(date));
     };
 
+    const viewsLabel = (views) => {
+      const [before, after] = t.views.split('%s');
+      return h(
+        React.Fragment,
+        null,
+        before ? h('span', { className: 'fyldo-demo-ann-sr' }, before) : null,
+        number.format(views),
+        after ? h('span', { className: 'fyldo-demo-ann-sr' }, after) : null,
+      );
+    };
+
     const data = state.data;
     const counts = data ? data.counts : null;
     const filtered = query !== '';
@@ -110,7 +121,8 @@ export default function announcements({ React, ui, Form }) {
         flag: item.pinned ? h(ui.Badge, { tone: 'gray', size: 'sm' }, t.pinned) : undefined,
         details: [
           { icon: 'clock', label: ends(item) },
-          { icon: 'chart-21', label: format(t.views, number.format(item.views)) },
+          // The number only, as in the design; screen readers hear "1,240 views".
+          { icon: 'chart-21', label: viewsLabel(item.views) },
         ],
         actions: [
           h(ui.IconButton, { key: 'edit', icon: 'edit-2', label: t.edit, variant: 'tertiary', size: 'sm', onClick: () => navigate([item.id]) }),

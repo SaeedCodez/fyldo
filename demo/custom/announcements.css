@@ -4,6 +4,8 @@
  * Logical properties only: the page mirrors in RTL by itself.
  */
 .fyldo-demo-ann {
+  /* The column's width, not the window's, decides the grid: wp-admin's menu and Fyldo's sidebar take a varying share. */
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: var(--fyldo-space-24);
@@ -67,6 +69,16 @@
   color: var(--fyldo-icon-tertiary);
 }
 
+/* Read by screen readers only (the words around a number the design shows bare). */
+.fyldo-demo-ann-sr {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .fyldo-demo-ann-status {
   margin: 0;
   padding-block: var(--fyldo-space-48);
@@ -74,14 +86,14 @@
   color: var(--fyldo-text-secondary);
 }
 
-@media (max-width: 960px) {
+@container (max-width: 760px) {
   .fyldo-demo-ann-stats,
   .fyldo-demo-ann-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 600px) {
+@container (max-width: 480px) {
   .fyldo-demo-ann-stats,
   .fyldo-demo-ann-grid {
     grid-template-columns: minmax(0, 1fr);

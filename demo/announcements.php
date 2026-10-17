@@ -119,12 +119,14 @@ final class Announcements {
 
 	/** A few announcements, so the list has something to show. */
 	private static function seed(): void {
-		$day     = DAY_IN_SECONDS;
+		$day = DAY_IN_SECONDS;
+		// On a whole hour: the `ends_at` field steps by 5 minutes, and a stored value off its step reads as empty.
+		$now     = (int) ( floor( time() / HOUR_IN_SECONDS ) * HOUR_IN_SECONDS );
 		$samples = array(
-			array( __( 'Free shipping this week', 'fyldo' ), 'published', 1, gmdate( 'Y-m-d H:i:s', time() + 5 * $day ), 1240, __( 'Every order ships free until Sunday.', 'fyldo' ) ),
+			array( __( 'Free shipping this week', 'fyldo' ), 'published', 1, gmdate( 'Y-m-d H:i:s', $now + 5 * $day ), 1240, __( 'Every order ships free until Sunday.', 'fyldo' ) ),
 			array( __( 'New opening hours', 'fyldo' ), 'published', 0, null, 860, __( 'From November we open at 9 and close at 18.', 'fyldo' ) ),
 			array( __( 'Autumn sale', 'fyldo' ), 'draft', 0, null, 0, __( 'A third off coats and boots, this month only.', 'fyldo' ) ),
-			array( __( 'Summer workshop', 'fyldo' ), 'archived', 0, gmdate( 'Y-m-d H:i:s', time() - 30 * $day ), 2105, __( 'Thanks to everyone who joined us in July.', 'fyldo' ) ),
+			array( __( 'Summer workshop', 'fyldo' ), 'archived', 0, gmdate( 'Y-m-d H:i:s', $now - 30 * $day ), 2105, __( 'Thanks to everyone who joined us in July.', 'fyldo' ) ),
 		);
 
 		foreach ( $samples as $sample ) {
