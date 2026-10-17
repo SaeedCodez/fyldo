@@ -5,10 +5,11 @@ import { mediaItem, type FieldDef, type FieldValue, type GroupItemValue, type Me
 import { cn } from '../../lib/cn';
 import { sanitizeMediaId } from '../../lib/wp-media';
 import { useRelationSearch } from '../../lib/relation';
-import { length } from '../../lib/validation';
+import { check, length } from '../../lib/validation';
 import { Checkbox, CheckboxGroup } from '../ui/checkbox';
 import { ColorPicker } from '../ui/color-picker';
 import { DatePicker, TimePicker } from '../ui/date-picker';
+import { DateRangePicker } from '../ui/date-range-field';
 import { IconPicker } from '../ui/icon-picker';
 import { Input } from '../ui/input';
 import { MediaPicker } from '../ui/media-field';
@@ -258,6 +259,41 @@ export function FieldRenderer({
               onBlur={() => onBlur(field.id)}
             />
           )}
+        </SettingRow>
+      );
+    }
+
+    case 'date_range':
+    case 'time_range':
+    case 'datetime_range': {
+      // The single type's rule with `range` on (src/Fields/AbstractDateRangeField.php); min / max / step apply to both ends.
+      const kind = field.type === 'date_range' ? 'date' : field.type === 'time_range' ? 'time' : 'datetime';
+      const rule = field.validate[kind];
+      const bounds = rule === true || rule === undefined ? {} : rule;
+      const pair = value !== null && typeof value === 'object' && !Array.isArray(value) ? (value as Record<string, unknown>) : {};
+      const range = { start: typeof pair.start === 'string' ? pair.start : '', end: typeof pair.end === 'string' ? pair.end : '' };
+      // The end at fault is drawn in red: the one the failure names (the server's message has the same cause).
+      const fault = error && check(field.validate, range)?.params.end === 'start' ? 'start' : 'end';
+      return (
+        <SettingRow {...common} group ownError range>
+          <DateRangePicker
+            size="md"
+            kind={kind}
+            value={range}
+            calendar={field.calendar}
+            min={bounds.min}
+            max={bounds.max}
+            step={bounds.step}
+            placeholder={field.placeholder}
+            startPlaceholder={field.start_placeholder}
+            endPlaceholder={field.end_placeholder}
+            disabled={disabled}
+            error={error}
+            invalid={fault}
+            locale={locale}
+            onValueChange={(next) => onChange(field.id, next)}
+            onBlur={() => onBlur(field.id)}
+          />
         </SettingRow>
       );
     }

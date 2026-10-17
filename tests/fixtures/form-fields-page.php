@@ -2,7 +2,7 @@
 /**
  * The Milestone-2 page: Textarea (with counter), Checkbox, Checkbox group (with a parent), Radio group, Multi Select,
  * and the input fields (URL, email, password, number, a notice and a disabled field with its reason), a date, a time and a
- * datetime, and a custom field.
+ * datetime, their three ranges, and a custom field.
  * Used by: the PHPUnit contract test, tools/dev/dump-slice.php (→ form-fields-page.client.json for the Vitest save
  * flow) and every e2e demo plugin (page id `fields`).
  *
@@ -204,6 +204,33 @@ return array(
 					'id'    => 'publish_at',
 					'type'  => 'datetime',
 					'label' => 'Publish at',
+					'step'  => 5,
+				),
+				// Ranges: two single pickers, stored as `array( 'start' => …, 'end' => … )`; a time range may cross midnight.
+				array(
+					'id'       => 'offer_period',
+					'type'     => 'date_range',
+					'label'    => 'Offer period',
+					'calendar' => 'gregorian',
+					'default'  => array(
+						'start' => '2026-10-20',
+						'end'   => '2026-10-26',
+					),
+				),
+				array(
+					'id'      => 'support_hours',
+					'type'    => 'time_range',
+					'label'   => 'Support hours',
+					'step'    => 15,
+					'default' => array(
+						'start' => '09:00',
+						'end'   => '17:00',
+					),
+				),
+				array(
+					'id'    => 'campaign_window',
+					'type'  => 'datetime_range',
+					'label' => 'Campaign window',
 					'step'  => 5,
 				),
 				// Group: header buttons that can be reordered, added (up to 4) and removed (at least 1).

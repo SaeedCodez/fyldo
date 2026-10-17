@@ -14,7 +14,9 @@ use Fyldo\V1\Validation\Digits;
  * in UTC (like `post_date_gmt`), nothing = ''. Jalali is drawn in the browser only. The site's time zone always comes from
  * WordPress (`wp_timezone()`), never from a request. Mirror of app/lib/datetime.ts.
  *
- * For plugin developers: `Dates::to_site( $utc )` reads a stored datetime in the site's time zone.
+ * For plugin developers: `Dates::to_site( $utc )` reads a stored datetime in the site's time zone,
+ * `Dates::range_to_site( $range )` both ends of a `datetime_range`, and `Dates::time_in_range( $range )` tells whether a
+ * time (now, by default) is inside a `time_range`.
  */
 final class Dates {
 
@@ -52,6 +54,47 @@ final class Dates {
 		$moment = \DateTimeImmutable::createFromFormat( '!Y-m-d H:i:s', $utc, new \DateTimeZone( 'UTC' ) );
 
 		return false === $moment ? null : $moment->setTimezone( self::timezone() );
+	}
+
+	/**
+	 * Both ends of a stored `datetime_range` in the site's time zone: `array( $start, $end )`, each null when empty or
+	 * invalid.
+	 *
+	 *     list( $from, $to ) = Dates::range_to_site( $options['campaign'] );
+	 *     if ( $from && $to ) echo esc_html( $from->format( 'Y-m-d H:i' ) . ' – ' . $to->format( 'Y-m-d H:i' ) );
+	 *
+	 * @param array<string,mixed> $range A value of a `datetime_range` field: `array( 'start' => …, 'end' => … )` in UTC.
+	 * @return array{0:?\DateTimeImmutable,1:?\DateTimeImmutable}
+	 */
+	public static function range_to_site( array $range ): array {
+		$ends = array();
+		foreach ( array( 'start', 'end' ) as $key ) {
+			$ends[] = isset( $range[ $key ] ) && is_string( $range[ $key ] ) ? self::to_site( $range[ $key ] ) : null;
+		}
+
+		return array( $ends[0], $ends[1] );
+	}
+
+	/**
+	 * Whether a time is inside a stored `time_range`: the start included, the end excluded. A range whose end is earlier
+	 * than its start crosses midnight (22:00 → 06:00 holds 23:30 and 05:59, not 06:00). False for an empty or invalid
+	 * range, or one whose ends are equal.
+	 *
+	 *     if ( Dates::time_in_range( $options['quiet_hours'] ) ) return; // no notifications now
+	 *
+	 * @param array<string,mixed> $range A value of a `time_range` field: `array( 'start' => 'H:i', 'end' => 'H:i' )`.
+	 * @param string|null         $time  `H:i`; default: now on the site's clock.
+	 */
+	public static function time_in_range( array $range, ?string $time = null ): bool {
+		$time  = $time ?? self::now()->setTimezone( self::timezone() )->format( 'H:i' );
+		$start = isset( $range['start'] ) && is_string( $range['start'] ) ? self::minute_of_day( 'time', $range['start'] ) : -1;
+		$end   = isset( $range['end'] ) && is_string( $range['end'] ) ? self::minute_of_day( 'time', $range['end'] ) : -1;
+		$at    = self::minute_of_day( 'time', $time );
+		if ( $start < 0 || $end < 0 || $at < 0 || $start === $end ) {
+			return false;
+		}
+
+		return $start < $end ? $at >= $start && $at < $end : $at >= $start || $at < $end;
 	}
 
 	/** The site's time zone: `wp_timezone()` (the "Timezone" setting), UTC without WordPress. */

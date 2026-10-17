@@ -23,12 +23,16 @@ export interface SettingRowProps {
   error?: string;
   /** The control renders its own error row (Textarea: the counter shares it). */
   errorInControl?: boolean;
+  /** The control renders its own error row and marks only the part at fault invalid (Date Range Field: the end in red). */
+  ownError?: boolean;
   /** The control is a group (checkbox group, radio group): the title names the group instead of labelling one control. */
   group?: boolean;
   /** The Textarea control is 448 wide in a Setting Row; every other control 400. */
   wide?: boolean;
   /** Figma Choice Card Group is 576 wide. Like every stacked control it shrinks (`max-w-full`) on narrow containers. */
   cards?: boolean;
+  /** Figma Date Range Field is 480 wide. */
+  range?: boolean;
   /** The control takes the whole width of the row (a Group field's list of items). */
   full?: boolean;
   /**
@@ -57,9 +61,11 @@ export function SettingRow({
   divider = true,
   error,
   errorInControl = false,
+  ownError = false,
   group = false,
   wide = false,
   cards = false,
+  range = false,
   full = false,
   variant = 'row',
   disabled,
@@ -81,7 +87,7 @@ export function SettingRow({
 
   return (
     <Field.Root
-      invalid={Boolean(error)}
+      invalid={Boolean(error) && !ownError}
       disabled={disabled}
       name={name}
       data-slot="fy-setting-row"
@@ -135,7 +141,7 @@ export function SettingRow({
       <div
         className={cn(
           'fy:flex fy:flex-col fy:gap-2',
-          inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item || full ? 'fy:w-full' : wide ? 'fy:w-112' : cards ? 'fy:w-144' : 'fy:w-100', 'fy:max-w-full'),
+          inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item || full ? 'fy:w-full' : wide ? 'fy:w-112' : cards ? 'fy:w-144' : range ? 'fy:w-120' : 'fy:w-100', 'fy:max-w-full'),
         )}
       >
         {group ? (
@@ -145,7 +151,7 @@ export function SettingRow({
         ) : (
           children
         )}
-        {error && !inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
+        {error && !inline && !errorInControl && !ownError ? <FieldError>{error}</FieldError> : null}
         {helperBelow && description && !error ? (
           group ? (
             <p id={descriptionId} className="fy:text-copy-13 fy:text-text-secondary fy:group-data-[disabled]/field:text-text-disabled">
@@ -156,7 +162,7 @@ export function SettingRow({
           )
         ) : null}
       </div>
-      {error && inline && !errorInControl ? <FieldError>{error}</FieldError> : null}
+      {error && inline && !errorInControl && !ownError ? <FieldError>{error}</FieldError> : null}
     </Field.Root>
   );
 }

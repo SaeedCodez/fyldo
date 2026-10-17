@@ -71,6 +71,18 @@ final class Messages {
 				/* translators: %d: minutes between the times that can be chosen. */
 				return sprintf( _n( 'Choose a time in steps of %d minute.', 'Choose a time in steps of %d minutes.', $step, 'fyldo' ), $step );
 
+			case 'range_missing':
+				if ( 'start' === ( $params['end'] ?? 'end' ) ) {
+					return 'time' === ( $params['kind'] ?? 'date' ) ? __( 'Choose a start time.', 'fyldo' ) : __( 'Choose a start date.', 'fyldo' );
+				}
+				return 'time' === ( $params['kind'] ?? 'date' ) ? __( 'Choose an end time.', 'fyldo' ) : __( 'Choose an end date.', 'fyldo' );
+
+			case 'range_order':
+				return __( 'Choose an end after the start.', 'fyldo' );
+
+			case 'range_equal':
+				return __( 'Choose an end different from the start.', 'fyldo' );
+
 			case 'allowed':
 				return __( 'Choose one of the available options.', 'fyldo' );
 

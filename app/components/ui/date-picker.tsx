@@ -61,7 +61,13 @@ interface PickerBase {
   locale?: string;
   /** The popup closed, or focus left the closed field (the caller validates). */
   onBlur?: () => void;
+  /**
+   * One end of a Date Range Field: no chevron and no Equivalent line (Figma draws the icon and the value only). A time's
+   * clock icon then opens its panel.
+   */
+  bare?: boolean;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
   className?: string;
 }
 
@@ -74,6 +80,8 @@ export interface DatePickerProps extends PickerBase {
   /** The earliest / latest value: stored format, or `today` (date) / `now` (datetime). */
   min?: string;
   max?: string;
+  /** A stored value whose month the panel shows while the field is empty (a range's end opens on its start's month). */
+  openOn?: string;
 }
 
 /**
@@ -88,6 +96,7 @@ export function DatePicker({
   calendar: setting = 'auto',
   min,
   max,
+  openOn,
   step = 1,
   size = 'sm',
   placeholder,
@@ -96,6 +105,7 @@ export function DatePicker({
   id,
   locale = 'en',
   onBlur,
+  bare = false,
   className,
   ...aria
 }: DatePickerProps): ReactElement {
@@ -107,7 +117,7 @@ export function DatePicker({
 
   const calendar = initialCalendar(setting);
   const text = formatValue(kind, value, calendar, locale);
-  const equivalent = text === '' ? '' : equivalentText(kind, value, calendar, locale);
+  const equivalent = text === '' || bare ? '' : equivalentText(kind, value, calendar, locale);
 
   const show = (): void => {
     setLoaded(true);
@@ -155,7 +165,7 @@ export function DatePicker({
             {text}
           </span>
         )}
-        <Chevron group="date" />
+        {bare ? null : <Chevron group="date" />}
       </Field.Control>
       {equivalent !== '' ? (
         <Field.Description data-slot="fy-date-equivalent" className="fy:text-copy-13 fy:text-text-tertiary fy:group-data-[disabled]/field:text-text-disabled">
@@ -176,6 +186,7 @@ export function DatePicker({
             switchable={setting === 'auto'}
             min={min === undefined ? undefined : resolveBound(kind, min)}
             max={max === undefined ? undefined : resolveBound(kind, max)}
+            openOn={openOn}
             step={step}
             locale={locale}
             onValueChange={onValueChange}
@@ -213,6 +224,7 @@ export function TimePicker({
   id,
   locale = 'en',
   onBlur,
+  bare = false,
   className,
   ...aria
 }: TimePickerProps): ReactElement {
@@ -251,6 +263,29 @@ export function TimePicker({
 
   const time: Time | null = parseTime(value);
 
+  const clock = (
+    <span className={GLYPH}>
+      <Icon name="clock" size={16} />
+    </span>
+  );
+  // The button that opens the panel: the chevron, or the clock in a range (a text box cannot carry aria-expanded).
+  const toggle = (glyph: ReactElement): ReactElement => (
+    <Tooltip label={__('Choose a time', 'fyldo')}>
+      <button
+        type="button"
+        tabIndex={-1}
+        disabled={disabled}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-label={__('Choose a time', 'fyldo')}
+        onClick={() => (open ? close() : show())}
+        className="fy:flex fy:cursor-pointer fy:outline-none fy:disabled:cursor-not-allowed"
+      >
+        {glyph}
+      </button>
+    </Tooltip>
+  );
+
   return (
     <div
       ref={anchor}
@@ -258,9 +293,7 @@ export function TimePicker({
       data-popup-open={open ? '' : undefined}
       className={cn('fy:group/time fy:cursor-text', CONTROL_BASE, CONTROL_SIZE[size], className)}
     >
-      <span className={GLYPH}>
-        <Icon name="clock" size={16} />
-      </span>
+      {bare ? toggle(clock) : clock}
       <Field.Control
         {...aria}
         ref={input}
@@ -287,21 +320,7 @@ export function TimePicker({
         }}
         className="fy:min-w-0 fy:flex-1 fy:bg-transparent fy:text-start fy:outline-none fy:placeholder:text-text-tertiary fy:focus-none fy:rtl:text-right fy:group-data-[disabled]/field:cursor-not-allowed"
       />
-      <Tooltip label={__('Choose a time', 'fyldo')}>
-        <button
-          type="button"
-          tabIndex={-1}
-          disabled={disabled}
-          // A text box cannot carry aria-expanded: the button that opens the panel does (Alt+Down opens it from the box).
-          aria-haspopup="dialog"
-          aria-expanded={open}
-          aria-label={__('Choose a time', 'fyldo')}
-          onClick={() => (open ? close() : show())}
-          className="fy:flex fy:cursor-pointer fy:outline-none fy:disabled:cursor-not-allowed"
-        >
-          <Chevron group="time" />
-        </button>
-      </Tooltip>
+      {bare ? null : toggle(<Chevron group="time" />)}
 
       {loaded ? (
         <Suspense fallback={null}>

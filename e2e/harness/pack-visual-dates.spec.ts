@@ -1,5 +1,5 @@
 /**
- * Pixel comparison of the date and time picker sets (Date Field, Calendar Cell, Calendar Panel, Time Panel) against the
+ * Pixel comparison of the date and time picker sets (Date Field, Date Range Field, Calendar Cell, Calendar Panel, Time Panel) against the
  * Figma pack, default variant, EN + FA, at deviceScaleFactor 2 — the scale the component PNGs were exported at.
  *
  * The pack draws 17 October 2026 as today and the 20th as the chosen day, so the gallery pins the clock (`today=`). EN is
@@ -62,6 +62,56 @@ for (const locale of ['EN', 'FA'] as const) {
           page,
           testInfo,
           reference: pngPath('date-field', v),
+          scale: SCALE,
+          stage,
+          referenceRegion: region,
+          actualRegion: { x: b.x - s.x, y: b.y - s.y, width: region.width, height: region.height },
+          maxDiffRatio: 0.1,
+        });
+      }
+    }
+    await close();
+  });
+}
+
+// ── Date Range Field ────────────────────────────────────────────────────────────────────────────────────────────────
+// Default variant: Small, Default (both ends empty: the placeholders, the arrow, the helper). EN compares the whole field;
+// FA compares the text-free glyphs (each end's calendar icon and the arrow, which points left with the start on the right).
+for (const locale of ['EN', 'FA'] as const) {
+  test(`Date Range Field ${locale} · default`, async ({ browser }) => {
+    const v = variant('date-range-field', { Locale: locale, Size: 'Small', State: 'Default' });
+    const root = v.node;
+    const { page, close } = await newPage(browser);
+    const stage = await open(page, {
+      c: 'date-range-field',
+      dir: dir(locale),
+      size: 'sm',
+      today: TODAY,
+      label: layer(root, 'Label').text?.characters ?? '',
+      start_placeholder: layer(root, 'Controls', 'Start', 'Placeholder').text?.characters ?? '',
+      end_placeholder: layer(root, 'Controls', 'End', 'Placeholder').text?.characters ?? '',
+      helper: layer(root, 'Helper text').text?.characters ?? '',
+      names: 'calendar,arrow-right',
+    });
+    await still(page);
+    const testInfo = test.info();
+    if (locale === 'EN') {
+      await comparePixels({ page, testInfo, reference: pngPath('date-range-field', v), scale: SCALE, stage, maxDiffRatio: 0.08 });
+    } else {
+      const s = await box(stage);
+      const controls = '[data-slot=fy-date-range-controls]';
+      const ours: Array<[string[], Locator]> = [
+        [['Controls', 'Start', 'Icon'], stage.locator(`${controls} > div:first-child [data-slot=fy-date-field] > span:first-child`)],
+        [['Controls', 'Arrow'], stage.locator(`${controls} > span`)],
+        [['Controls', 'End', 'Icon'], stage.locator(`${controls} > div:last-child [data-slot=fy-date-field] > span:first-child`)],
+      ];
+      for (const [path, locator] of ours) {
+        const region = rect(layer(root, ...path), root);
+        const b = await box(locator);
+        await comparePixels({
+          page,
+          testInfo,
+          reference: pngPath('date-range-field', v),
           scale: SCALE,
           stage,
           referenceRegion: region,

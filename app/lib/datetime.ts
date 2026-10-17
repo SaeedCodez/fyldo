@@ -3,9 +3,10 @@
  * `now`, and the text the field shows in the Jalali or the Gregorian calendar. Mirror of src/Support/Dates.php.
  *
  * What is stored is always Gregorian: a date `Y-m-d`, a time `H:i` (24-hour), a datetime `Y-m-d H:i:s` in UTC (like
- * `post_date_gmt`), nothing = ''. Jalali is only drawn; it never leaves the browser.
+ * `post_date_gmt`), nothing = ''. Jalali is only drawn; it never leaves the browser. A range field stores two of them,
+ * `{ start, end }`; its duration line and its end picker's `min` are at the end of this file.
  */
-import { __, _x, localizeDigits, sprintf } from '../i18n';
+import { __, _n, _x, localizeDigits, sprintf } from '../i18n';
 import { toAsciiDigits } from './digits';
 import { gregorianMonthLength, gregorianToJdn, jalaliToJdn, jdnToGregorian, jdnToJalali, type YMD } from './jalali';
 
@@ -357,4 +358,87 @@ export function equivalentText(kind: 'date' | 'datetime', value: string, calenda
 /** How a bound reads in a message ("Choose Oct 20, 2026 or later."): the site's calendar, a datetime in site time. */
 export function formatBound(kind: MomentKind, bound: string, locale: string): string {
   return formatValue(kind, bound, settings.calendar, locale) || bound;
+}
+
+// ── Ranges ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+/** What a range spans. `nextDay`: a time range whose end is earlier than its start (22:00 → 06:00). */
+export interface RangeDuration {
+  days: number;
+  hours: number;
+  minutes: number;
+  nextDay: boolean;
+}
+
+/**
+ * end − start of a range; null while an end is missing or invalid, or when the end does not come after the start. A date
+ * range counts both days (Oct 20 → Oct 26 = 7 days). A time range's earlier end is the next day. A datetime range counts the
+ * real time between the two UTC values, so a daylight-saving change in between is counted correctly.
+ */
+export function rangeDuration(kind: MomentKind, start: string, end: string): RangeDuration | null {
+  if (kind === 'date') {
+    const [from, to] = [parseDate(start), parseDate(end)];
+    const days = from && to ? gregorianToJdn(to) - gregorianToJdn(from) + 1 : 0;
+    return days >= 1 ? { days, hours: 0, minutes: 0, nextDay: false } : null;
+  }
+  let total: number;
+  let nextDay = false;
+  if (kind === 'time') {
+    const [from, to] = [parseTime(start), parseTime(end)];
+    if (!from || !to) return null;
+    const diff = to.hour * 60 + to.minute - (from.hour * 60 + from.minute);
+    nextDay = diff < 0;
+    total = (diff + 1440) % 1440;
+  } else {
+    const [from, to] = [parseDateTime(start), parseDateTime(end)];
+    if (!from || !to) return null;
+    total = Math.floor((msOf(to) - msOf(from)) / 60000);
+  }
+  return total > 0 ? { days: Math.floor(total / 1440), hours: Math.floor((total % 1440) / 60), minutes: total % 60, nextDay } : null;
+}
+
+/**
+ * Figma "Duration" under a range's inputs, once both ends are set: "Duration: 7 days", "Duration: 6 days, 9 hours and 30
+ * minutes", "Duration: 8 hours, ends the next day" (Persian "مدت: ۶ روز و ۹ ساعت و ۳۰ دقیقه"). Zero parts are left out.
+ * '' while there is nothing to count.
+ */
+export function durationText(kind: MomentKind, start: string, end: string, locale: string): string {
+  const span = rangeDuration(kind, start, end);
+  if (!span) return '';
+  const parts = [
+    span.days > 0 ? sprintf(_n('%d day', '%d days', span.days, 'fyldo'), span.days) : '',
+    span.hours > 0 ? sprintf(_n('%d hour', '%d hours', span.hours, 'fyldo'), span.hours) : '',
+    span.minutes > 0 ? sprintf(_n('%d minute', '%d minutes', span.minutes, 'fyldo'), span.minutes) : '',
+  ].filter((part) => part !== '');
+  const last = parts.pop() ?? '';
+  const head =
+    parts.length === 0
+      ? undefined
+      : parts.reduce((list, part) =>
+          /* translators: a list of duration parts ("6 days, 9 hours"). Persian joins them with "و": "%1$s و %2$s". */
+          sprintf(_x('%1$s, %2$s', 'duration parts', 'fyldo'), list, part),
+        );
+  const list =
+    head === undefined
+      ? last
+      : /* translators: the last two duration parts ("9 hours and 30 minutes"). Persian: "%1$s و %2$s". */
+        sprintf(_x('%1$s and %2$s', 'duration parts', 'fyldo'), head, last);
+  return numerals(
+    span.nextDay
+      ? /* translators: %s: how long an overnight time range lasts ("8 hours"); it ends the day after it starts. */
+        sprintf(__('Duration: %s, ends the next day', 'fyldo'), list)
+      : /* translators: %s: how long a range lasts ("7 days", "8 hours and 30 minutes"). */
+        sprintf(__('Duration: %s', 'fyldo'), list),
+    locale,
+  );
+}
+
+/**
+ * The end picker's `min` in a date or datetime range: the later of the field's own `min` (resolved) and the start, so the
+ * end's popup opens on the start's month with every day before it disabled. A time range's end is never limited.
+ */
+export function rangeEndMin(kind: 'date' | 'datetime', min: string | undefined, start: string): string | undefined {
+  const own = min === undefined ? undefined : resolveBound(kind, min);
+  if (!isValid(kind, start)) return own;
+  return own === undefined || start > own ? start : own;
 }
