@@ -1,13 +1,13 @@
 {
- "exportedAt": "2026-10-16",
+ "exportedAt": "2026-10-17",
  "source": {
   "fileName": "Fyldo",
   "fileKey": "Pg3Ni7eqTLQYIG6hfNVPt6",
   "page": "Components"
  },
  "variableCount": 166,
- "componentCount": 47,
- "variantCount": 947,
+ "componentCount": 48,
+ "variantCount": 989,
  "pngScale": {
   "variants": 2,
   "usage": 1
@@ -1382,6 +1382,57 @@
     "png/time-panel/locale-fa--type-embedded.png",
     "png/time-panel/locale-fa--type-popup.png"
    ]
+  },
+  {
+   "name": "Date Range Field",
+   "nodeId": "427:16298",
+   "variantCount": 42,
+   "json": "components/date-range-field.json",
+   "jsonVariantCount": 42,
+   "png": [
+    "png/date-range-field/locale-en--size-large--state-default.png",
+    "png/date-range-field/locale-en--size-large--state-disabled.png",
+    "png/date-range-field/locale-en--size-large--state-end-open.png",
+    "png/date-range-field/locale-en--size-large--state-error.png",
+    "png/date-range-field/locale-en--size-large--state-filled.png",
+    "png/date-range-field/locale-en--size-large--state-hover.png",
+    "png/date-range-field/locale-en--size-large--state-start-open.png",
+    "png/date-range-field/locale-en--size-medium--state-default.png",
+    "png/date-range-field/locale-en--size-medium--state-disabled.png",
+    "png/date-range-field/locale-en--size-medium--state-end-open.png",
+    "png/date-range-field/locale-en--size-medium--state-error.png",
+    "png/date-range-field/locale-en--size-medium--state-filled.png",
+    "png/date-range-field/locale-en--size-medium--state-hover.png",
+    "png/date-range-field/locale-en--size-medium--state-start-open.png",
+    "png/date-range-field/locale-en--size-small--state-default.png",
+    "png/date-range-field/locale-en--size-small--state-disabled.png",
+    "png/date-range-field/locale-en--size-small--state-end-open.png",
+    "png/date-range-field/locale-en--size-small--state-error.png",
+    "png/date-range-field/locale-en--size-small--state-filled.png",
+    "png/date-range-field/locale-en--size-small--state-hover.png",
+    "png/date-range-field/locale-en--size-small--state-start-open.png",
+    "png/date-range-field/locale-fa--size-large--state-default.png",
+    "png/date-range-field/locale-fa--size-large--state-disabled.png",
+    "png/date-range-field/locale-fa--size-large--state-end-open.png",
+    "png/date-range-field/locale-fa--size-large--state-error.png",
+    "png/date-range-field/locale-fa--size-large--state-filled.png",
+    "png/date-range-field/locale-fa--size-large--state-hover.png",
+    "png/date-range-field/locale-fa--size-large--state-start-open.png",
+    "png/date-range-field/locale-fa--size-medium--state-default.png",
+    "png/date-range-field/locale-fa--size-medium--state-disabled.png",
+    "png/date-range-field/locale-fa--size-medium--state-end-open.png",
+    "png/date-range-field/locale-fa--size-medium--state-error.png",
+    "png/date-range-field/locale-fa--size-medium--state-filled.png",
+    "png/date-range-field/locale-fa--size-medium--state-hover.png",
+    "png/date-range-field/locale-fa--size-medium--state-start-open.png",
+    "png/date-range-field/locale-fa--size-small--state-default.png",
+    "png/date-range-field/locale-fa--size-small--state-disabled.png",
+    "png/date-range-field/locale-fa--size-small--state-end-open.png",
+    "png/date-range-field/locale-fa--size-small--state-error.png",
+    "png/date-range-field/locale-fa--size-small--state-filled.png",
+    "png/date-range-field/locale-fa--size-small--state-hover.png",
+    "png/date-range-field/locale-fa--size-small--state-start-open.png"
+   ]
   }
  ],
  "usage": [
@@ -1591,6 +1642,14 @@
    "width": 960,
    "height": 5350,
    "png": "png/usage/date-and-time-picker-usage.png",
+   "scale": 1
+  },
+  {
+   "name": "Date Range Field · Usage",
+   "nodeId": "427:20278",
+   "width": 960,
+   "height": 4597,
+   "png": "png/usage/date-range-field-usage.png",
    "scale": 1
   }
  ]
