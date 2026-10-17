@@ -273,6 +273,7 @@ test.describe('wp-admin integration (sidebar layout)', () => {
     ]);
     await expect(nav(page).getByRole('list', { name: 'Tools' }).getByRole('link')).toHaveText([
       'Advanced',
+      'Notes', // a custom page (tests/fixtures/notes-page.php)
     ]);
     const docs = page
       .getByRole('navigation', { name: 'Resources' })
