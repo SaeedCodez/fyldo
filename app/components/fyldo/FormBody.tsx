@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactElement, t
 import { __ } from '../../i18n';
 import { ApiError } from '../../lib/api';
 import { cn } from '../../lib/cn';
-import { FormValuesContext } from '../../lib/form-values';
+import type { Visibility } from '../../lib/dependency';
+import { FormValuesContext, FormVisibilityContext } from '../../lib/form-values';
 import { firstErrorKey } from '../../lib/group';
 import { PAGE_SCOPE, scopeState, type FormController, type FormShape, type FormState } from '../../lib/page-form';
 import { RelationSearchContext, type RelationSearch } from '../../lib/relation';
@@ -38,6 +39,10 @@ export interface FormBodyProps {
 
 /** A section without a tab belongs to the whole page: it shows on every tab. */
 const onTab = (section: SectionDef, tab: string): boolean => section.tab === '' || tab === '' || section.tab === tab;
+
+/** A section shows while its dependency holds and, when it has fields, while one of them shows. */
+const sectionShows = (section: SectionDef, visibility: Visibility): boolean =>
+  visibility.section(section) && (section.fields.length === 0 || section.fields.some((f) => visibility.field(f.id)));
 
 /** Per-section saving: every card with fields that hold a value gets a footer with its own Save (never a Danger card). */
 const savesHere = (form: FormShape, section: SectionDef): boolean =>
@@ -108,7 +113,7 @@ export function ConflictNotice({ kind, reloading, onReload }: { kind: 'settings'
  * never both. Shared by the settings pages and the plugin's record forms (`<Form>`).
  */
 export function FormBody({ form, controller, container, search, tab = '', onTabChange, locale = 'en', kind = 'settings', endSpace = false, busy = false }: FormBodyProps): ReactElement {
-  const { state, dirty, scopes, setValue, setError, discard, save, validateField, reload, runAction } = controller;
+  const { state, dirty, scopes, visibility, setValue, setError, discard, save, validateField, reload, runAction } = controller;
   const toaster = useOptionalToaster();
   // The Danger card whose confirmation is open; kept after it closes so the dialog can fade out with its text.
   const [danger, setDanger] = useState<SectionDef | null>(null);
@@ -128,9 +133,9 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
   const bar = saveBarState(state, dirty);
 
   // After a failed submit, move focus to the first invalid field — switching to its tab first when it is on another one.
-  // A group's errors are its sub-fields' (`<group>.<index>.<sub-field>`): focus the first of those.
+  // A group's errors are its sub-fields' (`<group>.<index>.<sub-field>`): focus the first of those. A hidden field's are not shown.
   const firstInvalid = form.sections
-    .flatMap((s) => s.fields.map((f) => ({ field: f, section: s, key: firstErrorKey(state.errors, f.id) })))
+    .flatMap((s) => s.fields.filter((f) => visibility.field(f.id)).map((f) => ({ field: f, section: s, key: firstErrorKey(state.errors, f.id) })))
     .find(({ key }) => key !== undefined);
   useEffect(() => {
     if (!focusAfterErrors.current || !firstInvalid) return;
@@ -251,84 +256,99 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
       className={cn('fy:mt-6 fy:flex fy:flex-col fy:gap-6', tabSwitched.current && 'fy:fade-in', busy && 'fy:opacity-60')}
     >
       {form.sections
-        .filter((section) => onTab(section, current))
-        .map((section) => (
-          <SectionCard
-            key={section.id}
-            title={section.title}
-            description={section.description}
-            tone={section.tone}
-            {...(section.tone === 'danger' && section.action && runAction ? dangerFooter(section) : savesHere(form, section) ? footer(section) : {})}
-          >
-            {section.fields.map((field, index) => (
-              <FieldRenderer
-                key={field.id}
-                field={field}
-                value={field.type === 'notice' ? null : field.id in state.values ? (state.values[field.id] as FieldValue) : field.default}
-                error={state.errors[field.id]}
-                errors={state.errors}
-                reveal={state.reveal}
-                divider={index < section.fields.length - 1}
-                onChange={setValue}
-                onGroupChange={(id, next, clear) => setValue(id, next, undefined, clear)}
-                onBlur={validateField}
-                media={state.media[field.id] ?? null}
-                onError={setError}
-                revision={state.revision}
-                locale={locale}
-              />
-            ))}
-          </SectionCard>
-        ))}
+        .filter((section) => onTab(section, current) && sectionShows(section, visibility))
+        .map((section) => {
+          // A field its `dependency` hides is not drawn; it shows again (fading in) as soon as the condition holds.
+          const shown = section.fields.filter((field) => visibility.field(field.id));
+          return (
+            <SectionCard
+              key={section.id}
+              title={section.title}
+              description={section.description}
+              tone={section.tone}
+              {...(section.tone === 'danger' && section.action && runAction ? dangerFooter(section) : savesHere(form, section) ? footer(section) : {})}
+            >
+              {shown.map((field, index) => {
+                const row = (
+                  <FieldRenderer
+                    key={field.id}
+                    field={field}
+                    value={field.type === 'notice' ? null : field.id in state.values ? (state.values[field.id] as FieldValue) : field.default}
+                    error={state.errors[field.id]}
+                    errors={state.errors}
+                    reveal={state.reveal}
+                    divider={index < shown.length - 1}
+                    onChange={setValue}
+                    onGroupChange={(id, next, clear) => setValue(id, next, undefined, clear)}
+                    onBlur={validateField}
+                    media={state.media[field.id] ?? null}
+                    onError={setError}
+                    revision={state.revision}
+                    locale={locale}
+                  />
+                );
+                return field.dependency ? (
+                  <div key={field.id} className="fy:fade-in">
+                    {row}
+                  </div>
+                ) : (
+                  row
+                );
+              })}
+            </SectionCard>
+          );
+        })}
     </div>
   );
 
   return (
     <FormValuesContext.Provider value={current}>
-      <RelationSearchContext.Provider value={search}>
-        {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
+      <FormVisibilityContext.Provider value={visibility}>
+        <RelationSearchContext.Provider value={search}>
+          {state.conflict ? <ConflictNotice kind={kind} reloading={state.reloading} onReload={() => void reload()} /> : null}
 
-        {tabs.length > 0 ? (
-          <Tabs
-            className="fy:mt-6"
-            label={form.title ?? ''}
-            locale={locale}
-            value={tab || (tabs[0]?.id ?? '')}
-            onValueChange={(next) => onTabChange?.(next)}
-            tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
-          >
-            {cards}
-          </Tabs>
-        ) : (
-          cards('')
-        )}
+          {tabs.length > 0 ? (
+            <Tabs
+              className="fy:mt-6"
+              label={form.title ?? ''}
+              locale={locale}
+              value={tab || (tabs[0]?.id ?? '')}
+              onValueChange={(next) => onTabChange?.(next)}
+              tabs={tabs.map((t) => ({ id: t.id, label: t.label, icon: t.icon || undefined, badge: t.badge || undefined }))}
+            >
+              {cards}
+            </Tabs>
+          ) : (
+            cards('')
+          )}
 
-        {form.save === 'global' ? (
-          <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
-        ) : null}
-        {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
+          {form.save === 'global' ? (
+            <SaveBar state={bar} errorMessage={pageScope.message || undefined} onSave={() => submit(PAGE_SCOPE)} onDiscard={discard} />
+          ) : null}
+          {endSpace && (form.save !== 'global' || bar === null) ? <div className="fy:pb-10" /> : null}
 
-        {runAction ? (
-          <Modal
-            open={danger !== null}
-            onOpenChange={(open) => {
-              if (!open) setDanger(null);
-            }}
-            type="danger"
-            title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
-            description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
-            cancelLabel={__('Cancel', 'fyldo')}
-            confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
-            confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
-            onConfirm={async () => {
-              if (danger) await attempt(danger);
-              setDanger(null);
-            }}
-            // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
-            focusAfterConfirm={() => dangerTrigger.current}
-          />
-        ) : null}
-      </RelationSearchContext.Provider>
+          {runAction ? (
+            <Modal
+              open={danger !== null}
+              onOpenChange={(open) => {
+                if (!open) setDanger(null);
+              }}
+              type="danger"
+              title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
+              description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
+              cancelLabel={__('Cancel', 'fyldo')}
+              confirmLabel={lastDanger.current?.action?.confirm.label || lastDanger.current?.action?.label || __('Reset settings', 'fyldo')}
+              confirmKeyword={lastDanger.current?.action?.confirm.keyword || undefined}
+              onConfirm={async () => {
+                if (danger) await attempt(danger);
+                setDanger(null);
+              }}
+              // the button that opened it is still there after a reset: focus goes back to it, like after Cancel
+              focusAfterConfirm={() => dangerTrigger.current}
+            />
+          ) : null}
+        </RelationSearchContext.Provider>
+      </FormVisibilityContext.Provider>
     </FormValuesContext.Provider>
   );
 }

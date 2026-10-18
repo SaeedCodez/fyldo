@@ -27,7 +27,7 @@ final class NoticeField extends AbstractField {
 	}
 
 	protected function accepted_keys(): array {
-		return array( 'id', 'type', 'label', 'description', 'tone' );
+		return array( 'id', 'type', 'label', 'description', 'tone', 'dependency' );
 	}
 
 	protected function requires_label(): bool {
@@ -58,12 +58,14 @@ final class NoticeField extends AbstractField {
 	}
 
 	public function to_client(): array {
-		return array(
-			'id'          => $this->id(),
-			'type'        => $this->type(),
-			'label'       => $this->label(),
-			'description' => (string) $this->config['description'],
-			'tone'        => (string) $this->config['tone'],
+		return $this->with_dependency(
+			array(
+				'id'          => $this->id(),
+				'type'        => $this->type(),
+				'label'       => $this->label(),
+				'description' => (string) $this->config['description'],
+				'tone'        => (string) $this->config['tone'],
+			)
 		);
 	}
 }

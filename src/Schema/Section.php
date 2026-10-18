@@ -15,7 +15,7 @@ use Fyldo\V1\Fields\FieldFactory;
  */
 final class Section {
 
-	const KEYS = array( 'id', 'tab', 'title', 'description', 'tone', 'fields', 'action' );
+	const KEYS = array( 'id', 'tab', 'title', 'description', 'tone', 'fields', 'action', 'dependency' );
 
 	/** Built-in danger actions (`POST …/pages/{page}/actions/{id}`). */
 	const ACTIONS = array( 'reset' );
@@ -65,6 +65,7 @@ final class Section {
 			'description' => isset( $config['description'] ) ? (string) $config['description'] : '',
 			'tone'        => $tone,
 			'action'      => $action,
+			'dependency'  => isset( $config['dependency'] ) ? Dependency::normalize( $config['dependency'], $id ) : null,
 		);
 
 		foreach ( (array) ( $config['fields'] ?? array() ) as $field_config ) {
@@ -93,6 +94,15 @@ final class Section {
 		return $this->config['action'];
 	}
 
+	/**
+	 * When the section shows (Dependency), or null: always. A hidden section hides its fields.
+	 *
+	 * @return array{relation:string,conditions:array<int,array{field:string,operator:string,value:mixed}>}|null
+	 */
+	public function dependency(): ?array {
+		return $this->config['dependency'];
+	}
+
 	/** @return AbstractField[] */
 	public function fields(): array {
 		return $this->fields;
@@ -116,6 +126,9 @@ final class Section {
 
 		if ( null !== $this->config['action'] ) {
 			$out['action'] = $this->config['action'];
+		}
+		if ( null !== $this->config['dependency'] ) {
+			$out['dependency'] = $this->config['dependency'];
 		}
 
 		return $out;

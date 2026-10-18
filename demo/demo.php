@@ -288,6 +288,17 @@ final class Demo {
 							'description' => __( 'Show a coming-soon page to visitors. Administrators still see the site.', 'fyldo' ),
 							'default'     => false,
 						),
+						array(
+							'id'          => 'maintenance_message',
+							'type'        => 'textarea',
+							'label'       => __( 'Coming-soon message', 'fyldo' ),
+							'description' => __( 'What visitors read while the site is in maintenance mode.', 'fyldo' ),
+							'rows'        => 3,
+							'validate'    => array( 'required' => true ),
+							'default'     => __( 'We’ll be back soon.', 'fyldo' ),
+							// Shows only while maintenance mode is on (no reload); while it is hidden it is neither checked nor saved.
+							'dependency'  => array( 'maintenance', '==', true ),
+						),
 					),
 				),
 				array(

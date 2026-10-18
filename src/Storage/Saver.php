@@ -39,7 +39,7 @@ final class Saver {
 		}
 
 		$stored  = $store->raw( $page );
-		$checked = $this->check( $page, $incoming, $stored, 'sanitize/' . $page->id(), 'validate/' . $page->id() );
+		$checked = $this->check( $page, $incoming, $stored, $store->values( $page ), 'sanitize/' . $page->id(), 'validate/' . $page->id() );
 
 		if ( array() !== $checked['errors'] ) {
 			return $this->result( 'invalid', $checked['errors'], $page, $store );
@@ -86,7 +86,7 @@ final class Saver {
 		if ( $record->is_new() ) {
 			$incoming += $current;
 		}
-		$checked = $this->check( $page, $incoming, $stored, $hook . 'sanitize', $hook . 'validate' );
+		$checked = $this->check( $page, $incoming, $stored, $current, $hook . 'sanitize', $hook . 'validate' );
 
 		if ( array() !== $checked['errors'] ) {
 			return $this->record_result( 'invalid', $checked['errors'], $record );
@@ -160,17 +160,22 @@ final class Saver {
 	 * Sanitizes and validates the changed fields, then runs the two filters (`$sanitize_hook`, `$validate_hook`: a
 	 * page's `sanitize/{page}` / `validate/{page}`, a form's `form/{form}/sanitize` / `form/{form}/validate`).
 	 *
+	 * A field its `dependency` hides (for the values after this change) is not part of the form: it is not checked and
+	 * keeps what is stored.
+	 *
 	 * @param Page                $page          Schema being saved.
 	 * @param array<string,mixed> $incoming      Untrusted values keyed by field id (partial).
 	 * @param array<string,mixed> $stored        What is stored right now (raw).
+	 * @param array<string,mixed> $current       Every field's value right now (stored, or the default).
 	 * @param string              $sanitize_hook Event of the sanitize filter.
 	 * @param string              $validate_hook Event of the validate filter.
 	 * @return array{clean:array<string,mixed>,errors:array<string,string>}
 	 */
-	private function check( Page $page, array $incoming, array $stored, string $sanitize_hook, string $validate_hook ): array {
-		$slug   = $this->instance->slug();
-		$clean  = array();
-		$errors = array();
+	private function check( Page $page, array $incoming, array $stored, array $current, string $sanitize_hook, string $validate_hook ): array {
+		$slug    = $this->instance->slug();
+		$clean   = array();
+		$errors  = array();
+		$changed = array();
 
 		foreach ( $page->fields() as $id => $field ) {
 			// Unknown ids (and display-only fields, which are not in `fields()`) are ignored; disabled fields cannot be
@@ -179,8 +184,19 @@ final class Saver {
 				continue;
 			}
 
-			$value  = $field->sanitize( $incoming[ $id ] );
-			$failed = $field->errors( $value );
+			$changed[ $id ] = $field->sanitize( $incoming[ $id ] );
+		}
+
+		$visibility = $page->visibility( $changed + $current ); // Not array_merge: a numeric field id ("2024") would be renumbered.
+		$hidden     = $visibility->hidden();
+
+		foreach ( $changed as $id => $value ) {
+			if ( isset( $hidden[ $id ] ) ) {
+				continue;
+			}
+
+			$field  = $page->fields()[ $id ];
+			$failed = $field->page_errors( $value, array( $visibility, 'resolve' ) );
 
 			// A group reports each invalid sub-field under `<group>.<index>.<sub-field>`.
 			if ( array() !== $failed ) {

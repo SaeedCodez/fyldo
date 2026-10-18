@@ -91,7 +91,7 @@ $fyldo->add_page( 'general', [
 
 ### Fields
 
-Every field takes `id`, `type`, `label`, `description`, `default`, `default_before`, `disabled` (`true` or a reason string), `icon`, `layout`, `validate`, `sanitize_cb` and `validate_cb`.
+Every field takes `id`, `type`, `label`, `description`, `default`, `default_before`, `disabled` (`true` or a reason string), `icon`, `layout`, `dependency` ([conditional fields](#conditional-fields)), `validate`, `sanitize_cb` and `validate_cb`.
 
 `layout` sets where the control sits in its row: `inline` (at the end, for on/off controls), `stacked` (under the description) or `field` (an input at the end of the row, error under it; stacked on narrow screens). The default is `field` for every type except `choice` (`stacked`, its cards are too wide to sit beside the label) and `toggle`/`checkbox` (`inline`). Set it only to override.
 
@@ -119,6 +119,29 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `default_befo
 | `notice` | Display only, never stored: `description`, `tone` (`gray` `blue` `green` `amber` `red`). |
 
 `validate` keys: `required`, `min_length`, `max_length`, `pattern`, `min`, `max`, `step`, `schemes`, `allowed` (a date, time or range field's `min`, `max` and `step` are set on the field itself). They run in PHP **and** in the browser. `validate_cb( $value )` (return `true`, `false` or a message) and `sanitize_cb` are PHP-only; the server is authoritative.
+
+### Conditional fields
+
+`dependency` shows a field only while a condition on other fields of the page holds, as in Codestar Framework. It is live: the field appears (and disappears) as the values change, before anything is saved.
+
+```php
+[ 'id' => 'cache', 'type' => 'toggle', 'label' => 'Cache pages' ],
+[ 'id' => 'driver', 'type' => 'select', 'label' => 'Driver', 'options' => [ 'file' => 'Files', 'redis' => 'Redis', 'memcached' => 'Memcached' ],
+  'dependency' => [ 'cache', '==', true ] ],
+[ 'id' => 'host', 'type' => 'text', 'label' => 'Server', 'validate' => [ 'required' => true ],
+  'dependency' => [                                  // every condition must hold…
+	[ 'cache', '==', true ],
+	[ 'driver', 'any', [ 'redis', 'memcached' ] ],
+  ] ],
+[ 'id' => 'hint', 'type' => 'notice', 'description' => 'Add a logo or a tagline first.',
+  'dependency' => [ 'relation' => 'or', [ 'logo', 'empty' ], [ 'tagline', 'empty' ] ] ],  // …or, with `or`, one of them
+```
+
+- **Operators:** `==` `!=` `>` `>=` `<` `<=` `any` `not-any` (the value is a list) `contains` `not-contains` (text inside text, or a value in a list field) `empty` `not-empty` (no value: `[ 'logo', 'not-empty' ]`). A list field (`checkbox_group`, `multi_select`) `==` a value it holds; a toggle compares with `true`, `'true'` or `1`; numbers and numeric text compare as numbers, dates and times in their stored format compare in order. An image, file, post, term or user field with nothing chosen is `empty`.
+- **Where:** any field, a `notice`, a `group`'s sub-field (its conditions read the other sub-fields of the same item first, then the page) and a **section** (`'dependency'` on the section hides the whole card; a card whose fields are all hidden hides too). Conditions see every field of the page, in any section or tab.
+- **Hiding cascades:** a condition on a hidden field never holds, so in the example `host` hides when `cache` is switched off even though `driver` still says `redis`.
+- **A hidden field is not part of the form:** it is not checked (a hidden `required` field never blocks a save) and not saved; what is stored stays, and `get()` keeps returning it, so check the controlling value in your code too (`if ( $o['cache'] ) { … $o['host'] … }`). Edits made to a field before it was hidden wait in the page and are saved if it shows again. Inside a group item a hidden sub-field is only not checked.
+- PHP checks the conditions when the page is registered: unknown ids, password fields (their value never reaches the browser), notices, a field or section that depends on itself, and circles (`a` shows when `b` does and `b` when `a` does) are configuration errors. The demo's General page shows a coming-soon message only while maintenance mode is on.
 
 ### Changing a default
 
@@ -251,7 +274,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 ### مرجع پیکربندی (خلاصه)
 
-- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `icon` `date` `time` `datetime` (تاریخ با تقویم شمسی یا میلادی؛ آنچه ذخیره می‌شود همیشه میلادی است: `Y-m-d`، `H:i` و تاریخ‌وزمان به وقت UTC)، `date_range` `time_range` `datetime_range` (بازهٔ شروع ← پایان با دو ورودی؛ مقدار ذخیره‌شده `array( 'start' => …, 'end' => … )` است؛ بازهٔ ساعت می‌تواند از نیمه‌شب بگذرد؛ `Dates::range_to_site()` و `Dates::time_in_range()` برای خواندن آن) `image` `file` `select` `multi_select`، `post` `term` `user` (جستجو و انتخاب یک یا چند نوشته، واژه یا کاربر سایت؛ مقدار ذخیره‌شده شناسه است)، `group` (فهرستی از آیتم‌ها با زیرفیلدهای یکسان؛ با `sortable` قابل جابه‌جایی و با `addable` قابل افزودن و حذف) و `notice` (فقط نمایشی). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP. فیلد `custom` هم دارید: کنترل را خودتان با React یا جاوااسکریپت ساده می‌سازید (`module` نشانی یک ES module است که React و چند کامپوننت خود فیلدو را می‌گیرد)؛ راهنما در [docs/custom-fields.md](docs/custom-fields.md).
+- **فیلدها:** `text` `url` `email` `password` `number` `textarea` `toggle` `checkbox` `checkbox_group` `radio` `choice` `segmented` `slider` `color` `icon` `date` `time` `datetime` (تاریخ با تقویم شمسی یا میلادی؛ آنچه ذخیره می‌شود همیشه میلادی است: `Y-m-d`، `H:i` و تاریخ‌وزمان به وقت UTC)، `date_range` `time_range` `datetime_range` (بازهٔ شروع ← پایان با دو ورودی؛ مقدار ذخیره‌شده `array( 'start' => …, 'end' => … )` است؛ بازهٔ ساعت می‌تواند از نیمه‌شب بگذرد؛ `Dates::range_to_site()` و `Dates::time_in_range()` برای خواندن آن) `image` `file` `select` `multi_select`، `post` `term` `user` (جستجو و انتخاب یک یا چند نوشته، واژه یا کاربر سایت؛ مقدار ذخیره‌شده شناسه است)، `group` (فهرستی از آیتم‌ها با زیرفیلدهای یکسان؛ با `sortable` قابل جابه‌جایی و با `addable` قابل افزودن و حذف) و `notice` (فقط نمایشی). هر فیلد، notice، زیرفیلد group و هر بخش (section) می‌تواند `dependency` بگیرد، مثل Codestar: `'dependency' => [ 'cache', '==', true ]` یا فهرستی از شرط‌ها (همه باید برقرار باشند؛ با `'relation' => 'or'` یکی کافی است). نمایش و پنهان‌شدن زنده است و بدون ذخیره یا رفرش انجام می‌شود؛ فیلد پنهان نه اعتبارسنجی می‌شود و نه ذخیره، و مقدار ذخیره‌شده‌اش دست نمی‌خورد. عملگرها و جزئیات در بخش [Conditional fields](#conditional-fields). قواعد `validate` هم در PHP و هم در مرورگر اجرا می‌شوند؛ `validate_cb` و `sanitize_cb` فقط در PHP. فیلد `custom` هم دارید: کنترل را خودتان با React یا جاوااسکریپت ساده می‌سازید (`module` نشانی یک ES module است که React و چند کامپوننت خود فیلدو را می‌گیرد)؛ راهنما در [docs/custom-fields.md](docs/custom-fields.md).
 - **صفحه‌ها و ناوبری:** `navigation` برابر `sidebar` (پیش‌فرض) یا `top`؛ گروه‌ها با `add_group`؛ زبانه‌ها با `tabs`؛ نشان عددی با `badge`.
 - **تغییر مقدار پیش‌فرض:** فیلدی که کسی ذخیره‌اش نکرده، `default` را از کد می‌خواند؛ پس تغییر `default` در نسخهٔ جدید روی همهٔ این سایت‌ها اثر می‌گذارد. با `'default_before' => [ '2.0.0' => 10, '3.0.0' => 20 ]` (کلید: نسخه‌ای که پیش‌فرض جدید را آورد؛ مقدار: پیش‌فرض قبل از آن) Fyldo برای سایت‌های قدیمی همان مقدار قبلی را نگه می‌دارد. به `version` در نمونه نیاز دارد. جزئیات در [docs/default-history.md](docs/default-history.md).
 - **صفحه‌ی سفارشی و فرم:** صفحه‌ای که تنظیمات نیست (فهرست رکوردها، ویرایشگر یک رکورد، داشبورد) را افزونه‌ی شما خودش می‌کشد، داخل صفحه‌ی فیلدو و با کامپوننت‌های آن: `add_page( $id, [ 'type' => 'custom', 'module' => … ] )`. با `add_form()` فیلدها را مثل یک صفحه تعریف می‌کنید و فیلدو اعتبارسنجی و نوار ذخیره را انجام می‌دهد، ولی ذخیره و خواندن رکورد با `load` و `save` خود شماست (مثلاً در جدول خودتان). اگر فیلدها را خود صفحه می‌کشد (فیلدهای وابسته به هم، پیش‌نمایش زنده)، `useForm` بارگذاری، اعتبارسنجی و ذخیره‌ی فیلدو را نگه می‌دارد و کشیدن فیلدها را به شما می‌سپارد. نمونه‌ی کامل: صفحه‌ی «اطلاعیه‌ها» در دموی فیلدو؛ راهنما در [docs/custom-pages.md](docs/custom-pages.md).

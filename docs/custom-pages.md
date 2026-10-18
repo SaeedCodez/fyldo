@@ -270,6 +270,7 @@ function StoryEditor({ record, navigate }) {
 | `set(id, value, { clear })` | Set a value the page manages itself. `clear`: the message keys the edit makes stale (`['slides.2.link']`); default every message of the field. |
 | `error(path)`, `errorCount(path)`, `errors` | A message, and how many there are at or under a path (`slides.2` for a slide's Group Item). Messages come from the field's `validate` rules (on blur and on save) and from the server (422). |
 | `validate(id, path)` | Check a field now (on blur of a control the page draws itself); `path` checks one message key. |
+| `visible(path)` | Whether a field shows for the current values (its `dependency` and its section's, [conditional fields](../README.md#conditional-fields)): draw it only then. `slides.2.link` asks about a sub-field of one item. A hidden field is neither checked nor saved. |
 | `save()`, `discard()`, `dirty`, `saving` | What the Save Bar does, for a button of the page's own. |
 | `invalidSaves` | Grows with every save refused for invalid values: open the items that hold errors then. `Frame` focuses the first invalid control it can find. |
 | `Frame` | Draws around the page's content: the notices (loading, missing, failed, the 409 conflict), the content 24 below the header with 24 between its children, the Save Bar, Ctrl/⌘+S. |

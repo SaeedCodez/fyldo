@@ -484,6 +484,15 @@ msgstr "تنظیمات"
 msgid "Show a coming-soon page to visitors. Administrators still see the site."
 msgstr "یک صفحه‌ی «به‌زودی» به بازدیدکنندگان نشان داده می‌شود. مدیران همچنان سایت را می‌بینند."
 
+msgid "Coming-soon message"
+msgstr "پیام صفحه‌ی «به‌زودی»"
+
+msgid "What visitors read while the site is in maintenance mode."
+msgstr "متنی که بازدیدکنندگان در حالت تعمیر سایت می‌خوانند."
+
+msgid "We’ll be back soon."
+msgstr "به‌زودی برمی‌گردیم."
+
 msgid "Show on"
 msgstr "نمایش در"
 

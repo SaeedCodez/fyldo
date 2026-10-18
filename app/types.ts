@@ -56,6 +56,25 @@ export type JsonValue = string | number | boolean | null | JsonValue[] | { [key:
 
 export type FieldValue = string | boolean | string[] | number | null | GroupItemValue[] | JsonValue;
 
+/** A condition's operator (src/Schema/Dependency.php). `empty` and `not-empty` take no value. */
+export type DependencyOperator = '==' | '!=' | '>' | '>=' | '<' | '<=' | 'any' | 'not-any' | 'contains' | 'not-contains' | 'empty' | 'not-empty';
+
+export type DependencyScalar = string | number | boolean | null;
+
+/** One condition on a field of the page (for a group's sub-field: a sibling first, else a field of the page). */
+export interface DependencyCondition {
+  field: string;
+  operator: DependencyOperator;
+  /** A list for `any` / `not-any` (and possibly `==` / `!=`); null for `empty` / `not-empty`. */
+  value: DependencyScalar | DependencyScalar[];
+}
+
+/** When a field, a notice or a section shows: every condition holds (`and`), or one does (`or`). Mirror of src/Schema/Dependency.php. */
+export interface DependencyDef {
+  relation: 'and' | 'or';
+  conditions: DependencyCondition[];
+}
+
 /** Fields that own a value. A `notice` does not: it is display only. */
 interface FieldBase {
   id: string;
@@ -68,6 +87,8 @@ interface FieldBase {
   validate: RuleSet;
   icon?: string;
   badge?: string;
+  /** Shows only while it holds; absent = always. A hidden field is neither checked nor saved. */
+  dependency?: DependencyDef;
 }
 
 export interface TextFieldDef extends FieldBase {
@@ -96,6 +117,7 @@ export interface NoticeFieldDef {
   label: string;
   description: string;
   tone: NoticeTone;
+  dependency?: DependencyDef;
 }
 
 export interface ToggleFieldDef extends FieldBase {
@@ -384,6 +406,8 @@ export interface SectionDef {
   tone: 'default' | 'danger';
   fields: FieldDef[];
   action?: DangerActionDef;
+  /** Shows only while it holds (its fields too); absent = always. */
+  dependency?: DependencyDef;
 }
 
 /** A sub-page of a page, reached at `#/<page>/<tab>`. */

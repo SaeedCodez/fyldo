@@ -93,6 +93,8 @@ final class Page implements Guarded {
 		$section_ids = array();
 		$field_ids   = array();
 		$watching    = array(); // custom field id => the ids it watches
+		$depending   = array(); // `field:<id>` / `section:<id>` => the field ids its dependency reads
+		$graph       = array(); // the same nodes => the nodes their showing depends on
 		foreach ( (array) ( $config['sections'] ?? array() ) as $section_config ) {
 			$section = new Section( (array) $section_config );
 
@@ -100,6 +102,10 @@ final class Page implements Guarded {
 				throw new ConfigException( sprintf( '%1$s "%2$s": duplicate section id "%3$s".', $noun, $id, $section->id() ) );
 			}
 			$section_ids[ $section->id() ] = true;
+			$section_node                  = 'section:' . $section->id();
+			if ( null !== $section->dependency() ) {
+				$depending[ $section_node ] = Dependency::fields( $section->dependency() );
+			}
 
 			if ( '' !== $section->tab() && ! isset( $tabs[ $section->tab() ] ) ) {
 				throw new ConfigException( sprintf( 'Page "%1$s": section "%2$s" refers to unknown tab "%3$s".', $id, $section->id(), $section->tab() ) );
@@ -110,6 +116,22 @@ final class Page implements Guarded {
 					throw new ConfigException( sprintf( '%1$s "%2$s": duplicate field id "%3$s" (field ids are the storage keys and must be unique per %4$s).', $noun, $id, $field->id(), strtolower( $noun ) ) );
 				}
 				$field_ids[ $field->id() ] = true;
+
+				// A field shows when its section does and its own dependency holds.
+				$graph[ 'field:' . $field->id() ] = array( $section_node );
+				if ( null !== $field->dependency() ) {
+					$depending[ 'field:' . $field->id() ] = Dependency::fields( $field->dependency() );
+				}
+				if ( $field instanceof GroupField ) {
+					foreach ( $field->outside_references() as $ref ) {
+						if ( $ref === $field->id() ) {
+							throw new ConfigException( sprintf( 'Group field "%s": a sub-field cannot depend on its own group.', $ref ) );
+						}
+					}
+					if ( array() !== $field->outside_references() ) {
+						$depending[ 'group:' . $field->id() ] = $field->outside_references();
+					}
+				}
 
 				if ( $field->is_stored() ) {
 					$this->fields[ $field->id() ] = $field;
@@ -124,6 +146,13 @@ final class Page implements Guarded {
 					if ( $one instanceof CustomField ) {
 						$watching[ $one->id() ] = $one->watch();
 					}
+				}
+			}
+
+			if ( null !== $section->dependency() ) {
+				$own = array_intersect( Dependency::fields( $section->dependency() ), array_map( static fn( AbstractField $one ): string => $one->id(), $section->fields() ) );
+				if ( array() !== $own ) {
+					throw new ConfigException( sprintf( 'Section "%1$s" cannot depend on its own field "%2$s": hiding the section hides the field.', $section->id(), reset( $own ) ) );
 				}
 			}
 
@@ -150,7 +179,39 @@ final class Page implements Guarded {
 			}
 		}
 
+		// A condition reads a field of the same page that holds a value the browser has. (A group's sub-fields, whose
+		// siblings GroupField checked, may read the page's fields; a page field never reads a sub-field.)
+		foreach ( $depending as $node => $ids ) {
+			list( $kind, $owner ) = explode( ':', $node, 2 );
+			foreach ( $ids as $ref ) {
+				$target = $this->fields[ $ref ] ?? null;
+				if ( 'field' === $kind && $ref === $owner ) {
+					throw new ConfigException( sprintf( 'Field "%s" cannot depend on itself.', $owner ) );
+				}
+				if ( null === $target ) {
+					$who = 'group' === $kind ? sprintf( 'A sub-field of group "%s"', $owner ) : sprintf( '%1$s "%2$s"', 'section' === $kind ? 'Section' : 'Field', $owner );
+					throw new ConfigException( sprintf( '%1$s depends on "%2$s", which is not a field of %3$s "%4$s" that holds a value.', $who, $ref, strtolower( $noun ), $id ) );
+				}
+				if ( 'password' === $target->type() ) {
+					throw new ConfigException( sprintf( '"%1$s" cannot depend on password field "%2$s": its value never reaches the browser.', $owner, $ref ) );
+				}
+				if ( 'group' !== $kind ) {
+					$graph[ $node ][] = 'field:' . $ref;
+				}
+			}
+		}
+		Dependency::assert_acyclic( $graph, sprintf( '%1$s "%2$s"', $noun, $id ) );
+
 		$this->assert_danger_sections_last();
+	}
+
+	/**
+	 * Which fields and sections show for these values (their `dependency`).
+	 *
+	 * @param array<string,mixed> $values Values keyed by field id; a missing one reads as its default.
+	 */
+	public function visibility( array $values ): Visibility {
+		return new Visibility( $this, $values );
 	}
 
 	public function id(): string {
