@@ -28,7 +28,8 @@ export interface CustomFieldProps {
   locale: string;
   /**
    * The current values of the fields named in PHP's `watch`, keyed by id, with the person's edits as they happen (a live
-   * preview). Read-only: `{}` when the field watches nothing. The object is new only when one of them changes.
+   * preview). Inside a group they are the other sub-fields of the field's own item. Read-only: `{}` when the field
+   * watches nothing. The object is new only when one of them changes.
    */
   values: Readonly<Record<string, JsonValue>>;
 }

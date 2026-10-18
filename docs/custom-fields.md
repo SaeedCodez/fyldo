@@ -36,7 +36,7 @@ array(
 | `props` | An array keyed by name. It may hold only text, numbers, booleans, null and arrays, and it reaches the module unchanged. Put translated labels here, because the module has no text domain. |
 | `default` | Any JSON value. Without one the value is `null`. |
 | `media` | `true` when the module uses `ui.MediaPicker`: the screen then loads the WordPress media library. |
-| `watch` | Ids of other fields of the same page (or form) whose current values the module gets as `values`, as the person edits them: a live preview of the page's settings ([below](#a-live-preview-watch)). Not a password field, not a group's sub-field, not the field itself. |
+| `watch` | Ids of other fields of the same page (or form) whose current values the module gets as `values`, as the person edits them: a live preview of the page's settings ([below](#a-live-preview-watch)). Inside a `group`, ids of other sub-fields of the same item instead ([in a group](#in-a-group)). Not a password field, not the field itself. |
 
 Every common key works as usual: `layout` (default `field`), `disabled`, `validate`, `validate_cb`, `sanitize_cb`,
 `default_before`, `icon`, `badge`.
@@ -107,7 +107,7 @@ You can also export the definition object itself, without the function, if you d
 | `props` | The `props` from PHP. |
 | `field` | `{ id, label, description }`. |
 | `locale` | The page's locale, for example `fa_IR`. Format numbers with `Intl.NumberFormat(locale.replace('_', '-'))`. For the direction, read `element.closest('[dir]')`. |
-| `values` | The current values of the fields named in `watch`, keyed by id: the stored ones, with the person's unsaved edits, and a field's default when nothing is stored. Read-only, and `{}` without `watch`. It is a new object only when one of them changes. |
+| `values` | The current values of the fields named in `watch`, keyed by id: the stored ones, with the person's unsaved edits, and a field's default when nothing is stored. Inside a group, the values of the field's own item. Read-only, and `{}` without `watch`. It is a new object only when one of them changes. |
 
 ### A live preview: `watch`
 
@@ -133,6 +133,34 @@ export default ({ React }) => ({
 ```
 
 A field that only shows never calls `onChange`: its own value stays its default (`null`). The demo's "Opening hours" page has one (`demo/custom/hours-preview.js`).
+
+#### In a group
+
+A custom field that is a group's sub-field watches the **other sub-fields of its own item**, not the page's fields:
+each item draws a preview of itself. `values` then holds that item's values (a sub-field's default where the item holds
+none), with the person's edits as they type, and a `mount` module gets them through `update`. An id that is not a
+sub-field of the group is a config error, even when the page has a field of that name.
+
+```php
+array(
+	'id'      => 'sections',
+	'type'    => 'group',
+	'label'   => __( 'Sections', 'acme' ),
+	'addable' => true,
+	'fields'  => array(
+		array( 'id' => 'stories', 'type' => 'post', 'label' => __( 'Stories', 'acme' ), 'post_type' => 'acme_story', 'multiple' => true ),
+		array( 'id' => 'size', 'type' => 'segmented', 'label' => __( 'Size', 'acme' ), 'options' => array( 's' => 'S', 'm' => 'M', 'l' => 'L' ), 'default' => 'm' ),
+		array( 'id' => 'show_titles', 'type' => 'toggle', 'label' => __( 'Show titles', 'acme' ) ),
+		array(
+			'id'     => 'preview',
+			'type'   => 'custom',
+			'label'  => __( 'Desktop view', 'acme' ),
+			'module' => plugins_url( 'fields/bar-preview.js', __FILE__ ),
+			'watch'  => array( 'stories', 'size', 'show_titles' ),
+		),
+	),
+)
+```
 
 ### Writing JSX
 

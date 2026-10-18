@@ -2,7 +2,7 @@ import { type ReactElement, type ReactNode } from 'react';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { hiddenSubs } from '../../lib/dependency';
-import { useFormVisibility } from '../../lib/form-values';
+import { FormValuesContext, useFormVisibility } from '../../lib/form-values';
 import { blankItem, errorKey, itemsOf } from '../../lib/group';
 import { itemText, relationIds, useKnownItems, useRelationSearch } from '../../lib/relation';
 import type { FieldValue, GroupFieldDef, GroupItemValue, SubFieldDef } from '../../types';
@@ -56,7 +56,8 @@ function spans(fields: SubFieldDef[]): boolean[] {
  * Figma "Group" for the `group` field: GroupList (the list, its reordering, adding and removing) with the field's
  * schema: the titles from `item_title` (a post, term or user sub-field shows the chosen item's title), the summary from
  * the first text sub-field, the tile from `item_icon`, and each item's sub-fields two to a row (without those its
- * `dependency` hides: a sub-field's conditions read the item's other sub-fields, or the page's fields).
+ * `dependency` hides: a sub-field's conditions read the item's other sub-fields, or the page's fields). A custom
+ * sub-field's `watch` reads the other sub-fields of its own item: the item's values replace the page's for it.
  */
 export function FieldGroup({ field, value, errors, reveal, disabled, onChange, onBlur, renderField, locale }: FieldGroupProps): ReactElement {
   const items = itemsOf(value);
@@ -113,26 +114,30 @@ export function FieldGroup({ field, value, errors, reveal, disabled, onChange, o
       {(item, index) => {
         const shown = shownIn(item);
         const halves = spans(shown);
+        // What a custom sub-field's `watch` reads: this item's values, a sub-field's default where the item holds none.
+        const current = Object.fromEntries(field.fields.map((sub) => [sub.id, sub.id in item ? (item[sub.id] as FieldValue) : sub.default]));
         return (
-          <div className="fy:grid fy:grid-cols-2 fy:gap-4 fy:wp-mobile:grid-cols-1">
-            {shown.map((sub, i) => {
-              const fieldKey = errorKey(field.id, index, sub.id);
-              return (
-                <div key={sub.id} className={cn('fy:min-w-0', halves[i] && 'fy:col-span-2 fy:wp-mobile:col-span-1', sub.dependency && 'fy:fade-in')}>
-                  {renderField({
-                    field: sub,
-                    value: sub.id in item ? (item[sub.id] as FieldValue) : sub.default,
-                    fieldKey,
-                    error: errors[fieldKey],
-                    disabled: disabled || sub.disabled !== false,
-                    // A sub-field's edit makes only its own message stale.
-                    onChange: (next) => onChange(items.map((it, j) => (j === index ? { ...it, [sub.id]: next } : it)), [field.id, fieldKey]),
-                    onBlur: () => onBlur(fieldKey),
-                  })}
-                </div>
-              );
-            })}
-          </div>
+          <FormValuesContext.Provider value={current}>
+            <div className="fy:grid fy:grid-cols-2 fy:gap-4 fy:wp-mobile:grid-cols-1">
+              {shown.map((sub, i) => {
+                const fieldKey = errorKey(field.id, index, sub.id);
+                return (
+                  <div key={sub.id} className={cn('fy:min-w-0', halves[i] && 'fy:col-span-2 fy:wp-mobile:col-span-1', sub.dependency && 'fy:fade-in')}>
+                    {renderField({
+                      field: sub,
+                      value: sub.id in item ? (item[sub.id] as FieldValue) : sub.default,
+                      fieldKey,
+                      error: errors[fieldKey],
+                      disabled: disabled || sub.disabled !== false,
+                      // A sub-field's edit makes only its own message stale.
+                      onChange: (next) => onChange(items.map((it, j) => (j === index ? { ...it, [sub.id]: next } : it)), [field.id, fieldKey]),
+                      onBlur: () => onBlur(fieldKey),
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          </FormValuesContext.Provider>
         );
       }}
     </GroupList>

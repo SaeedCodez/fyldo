@@ -229,7 +229,10 @@ final class CustomFieldTest extends TestCase {
 					'type'    => 'group',
 					'label'   => 'Rows',
 					'addable' => true,
-					'fields'  => array( array( 'id' => 'sample', 'type' => 'custom', 'label' => 'Sample', 'module' => '/sample.js', 'watch' => array( 'theme' ) ) ),
+					'fields'  => array(
+						array( 'id' => 'size', 'type' => 'number', 'label' => 'Size' ),
+						array( 'id' => 'sample', 'type' => 'custom', 'label' => 'Sample', 'module' => '/sample.js', 'watch' => array( 'size' ) ),
+					),
 				),
 			)
 		);
@@ -239,6 +242,62 @@ final class CustomFieldTest extends TestCase {
 		$this->assertSame( array( 'brand', 'theme' ), $preview->watch(), 'each id once, in order' );
 		$this->assertSame( array( 'brand', 'theme' ), $preview->to_client()['watch'] );
 		$this->assertSame( array(), $this->custom()->to_client()['watch'], 'nothing watched: an empty list' );
+	}
+
+	public function test_a_group_sub_field_watches_the_other_sub_fields_of_its_item(): void {
+		$page = self::page(
+			array(
+				array(
+					'id'      => 'sections',
+					'type'    => 'group',
+					'label'   => 'Sections',
+					'addable' => true,
+					'fields'  => array(
+						array( 'id' => 'stories', 'type' => 'text', 'label' => 'Stories' ),
+						array( 'id' => 'size', 'type' => 'select', 'label' => 'Size', 'options' => array( 's' => 'S', 'l' => 'L' ) ),
+						array( 'id' => 'show_titles', 'type' => 'toggle', 'label' => 'Show titles' ),
+						array( 'id' => 'preview', 'type' => 'custom', 'label' => 'Preview', 'module' => '/preview.js', 'watch' => array( 'stories', 'size', 'show_titles' ) ),
+					),
+				),
+			)
+		);
+
+		$group = $page->field( 'sections' );
+		$this->assertInstanceOf( GroupField::class, $group );
+		$this->assertSame( array( 'stories', 'size', 'show_titles' ), $group->sub_fields()['preview']->watch() );
+		$client = $group->to_client()['fields'];
+		$this->assertSame( array( 'stories', 'size', 'show_titles' ), $client[3]['watch'], 'the browser gets the sibling ids' );
+	}
+
+	/**
+	 * @dataProvider invalid_group_watches
+	 *
+	 * @param array<int,array<string,mixed>> $fields  The page's fields.
+	 * @param string                         $message Expected part of the message.
+	 */
+	public function test_group_watch_errors( array $fields, string $message ): void {
+		$this->expectException( ConfigException::class );
+		$this->expectExceptionMessage( $message );
+		self::page( $fields );
+	}
+
+	public function invalid_group_watches(): array {
+		$group = static fn( $watch ): array => array(
+			'id'      => 'rows',
+			'type'    => 'group',
+			'label'   => 'Rows',
+			'addable' => true,
+			'fields'  => array(
+				array( 'id' => 'label', 'type' => 'text', 'label' => 'Label' ),
+				array( 'id' => 'sample', 'type' => 'custom', 'label' => 'Sample', 'module' => '/sample.js', 'watch' => $watch ),
+			),
+		);
+		$brand = array( 'id' => 'brand', 'type' => 'color', 'label' => 'Brand colour' );
+		return array(
+			'unknown sibling' => array( array( $group( array( 'logo' ) ) ), 'Custom field "sample" watches "logo", which is not a sub-field of group "rows"' ),
+			'a page field'    => array( array( $brand, $group( array( 'brand' ) ) ), 'Custom field "sample" watches "brand", which is not a sub-field of group "rows"' ),
+			'itself'          => array( array( $group( array( 'sample' ) ) ), 'Custom field "sample" cannot watch itself' ),
+		);
 	}
 
 	/**

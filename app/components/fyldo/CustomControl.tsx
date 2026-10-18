@@ -75,7 +75,10 @@ function Mounted({ mount, props }: { mount: NonNullable<CustomFieldDefinition['m
 
 const NOTHING: Readonly<Record<string, JsonValue>> = Object.freeze({});
 
-/** The watched fields' current values; the same object until one of them changes, so a module re-renders only then. */
+/**
+ * The watched fields' current values (in a group, FieldGroup gives the item's own); the same object until one of them
+ * changes, so a module re-renders only then.
+ */
 function useWatched(ids: readonly string[] | undefined): Readonly<Record<string, JsonValue>> {
   const all = useFormValues();
   const last = useRef<{ key: string; values: Readonly<Record<string, JsonValue>> }>({ key: '{}', values: NOTHING });

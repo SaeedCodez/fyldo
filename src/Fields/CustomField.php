@@ -21,7 +21,8 @@ use Fyldo\V1\Validation\Messages;
  * value (`array( '2.link' => '…' )`), shown under `<field>.<path>`.
  *
  * `watch` names other fields of the same page whose current values the module receives (`values`), as the person edits
- * them: a live preview of the page's settings. Page checks that they exist.
+ * them: a live preview of the page's settings. Page checks that they exist. Inside a group, `watch` names other sub-fields
+ * of the same item instead, and `values` holds that item's values (GroupField checks them).
  */
 final class CustomField extends AbstractField {
 
@@ -55,7 +56,8 @@ final class CustomField extends AbstractField {
 	}
 
 	/**
-	 * The ids of the fields of the same page whose values the module receives as they change.
+	 * The ids of the fields of the same page (inside a group: the sub-fields of the same item) whose values the module
+	 * receives as they change.
 	 *
 	 * @return array<int,string>
 	 */
@@ -97,7 +99,7 @@ final class CustomField extends AbstractField {
 
 		$watch = $config['watch'] ?? array();
 		if ( ! is_array( $watch ) || array_values( $watch ) !== $watch || array() !== array_filter( $watch, static fn( $one ) => ! is_string( $one ) || '' === $one ) ) {
-			throw new ConfigException( sprintf( 'Custom field "%s": `watch` must be a list of field ids of the same page.', $id ) );
+			throw new ConfigException( sprintf( 'Custom field "%s": `watch` must be a list of field ids of the same page (inside a group: of the same item).', $id ) );
 		}
 
 		$config['module'] = $module;

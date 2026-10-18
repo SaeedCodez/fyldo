@@ -324,7 +324,7 @@ export interface CustomFieldDef extends FieldBase {
   type: 'custom';
   /** '' (`'module' => false` in PHP): a form's field that the page draws itself (`useForm`); Fyldo draws nothing for it. */
   module: string;
-  /** Fields of the same page whose current values the module gets as `values` (a live preview); absent = none. */
+  /** Fields of the same page (in a group: sub-fields of the same item) whose current values the module gets as `values`; absent = none. */
   watch?: string[];
   /** Passed to the module as they are (translated labels, option lists…). */
   props: Record<string, JsonValue>;
