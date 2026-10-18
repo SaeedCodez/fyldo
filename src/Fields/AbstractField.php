@@ -39,6 +39,32 @@ abstract class AbstractField {
 	/** @var array<string,mixed> */
 	protected $config;
 
+	/** @var int Depth of trusted() calls: above 0, the checks that depend on the current user are off. */
+	private static $trusted = 0;
+
+	/**
+	 * Runs `$run` with the checks that depend on the current user off: a post, term or user item, or an attachment, then
+	 * only has to exist and fit the field, as when a stored value is read. For saves made by the plugin's own code
+	 * (Instance::update()), which may run with no user at all (cron, WP-CLI); a REST save never runs inside it.
+	 *
+	 * @internal
+	 * @param callable $run Called with no arguments.
+	 * @return mixed What `$run` returns.
+	 */
+	public static function trusted( callable $run ) {
+		++self::$trusted;
+		try {
+			return $run();
+		} finally {
+			--self::$trusted;
+		}
+	}
+
+	/** False inside trusted(): whether the current user may read an item does not matter there. */
+	protected static function checks_user(): bool {
+		return 0 === self::$trusted;
+	}
+
 	/**
 	 * @param array<string,mixed> $config Raw developer config for this field.
 	 * @throws ConfigException On invalid configuration.

@@ -23,9 +23,16 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 - **`useForm`, `field(id, kind)`**: the props of one kind of control, typed, so a TypeScript page spreads them as they are (`<ui.Input {...form.field('title', 'text')} />`): `text`, `number`, `list`, `range`, `toggle` and `media`, each value in its control's type (`''` for a text value that is not a string, `[]` for a list…). `field(id)` is unchanged. A kind that does not match the field's type is reported in the console. [docs/custom-pages.md](docs/custom-pages.md#typescript).
 - **Demo**: an "Announcements" custom page (Content group): stat cards, status tabs with counts, search, sort, cards, paging, duplicate, a delete dialog with an option, and an editor; the records live in the demo's own database table.
 
+- **SDK**: `ui.IconPicker`, the control the `icon` field draws (Figma Icon Picker and its modal), for an editor a custom page draws itself: the value is an Iconsax name in kebab case, `onValueChange`, `icons` to offer only some names, `size`, `placeholder`, `disabled`, `onBlur` and the aria props. It writes in the screen's language unless given `locale`, and binds as `form.field( id, 'text' )`. Typed in `assets/dist/fyldo-sdk.d.ts`. [docs/custom-pages.md](docs/custom-pages.md#field-controls).
+
 ### Changed
 
+- **`Instance::update()` no longer checks what the current user may read**: a `post`, `term`, `user`, `image` or `file` value (on its own or in a group's sub-field) only has to exist and fit the field, as when a value is read. The caller is the plugin's own code, and a save from cron or WP-CLI (no user) used to drop every item. Saves through the REST API still drop the items the user may not read. A plugin that passes values from a request to `update()` checks them itself (`current_user_can( 'read_post', $id )`).
 - **Design**: the info tone (Blue Badge and Notice, the Setting Row badge, anything on `status/info/*`) uses the blue scale again instead of the brand violet: bg `blue/100`, border `blue/400`, subtle `blue/300`, solid `blue/700`, text `blue/800`. Synced from Figma with the rest of the design pack.
+
+### Fixed
+
+- **Group**: a stored group read its sub-fields as if they were being saved, so a `post`, `term` or `user` sub-field checked whether the current user may read each item: a logged-out visitor (`Instance::all()` on the front end) lost every item of a post type that is not public. Each sub-field is now read through its own `stored_value()`, like a field on its own; saving still checks the user.
 
 ## [1.0.0-beta.5] - 2026-10-17
 

@@ -306,7 +306,7 @@ date" is chosen) go in the form's `fyldo/{slug}/form/{id}/validate` filter.
 
 ## Field controls
 
-The controls Fyldo's `color`, `date`, `time`, `datetime`, the range fields and `image` / `file` draw, and the Group Item
+The controls Fyldo's `color`, `icon`, `date`, `time`, `datetime`, the range fields and `image` / `file` draw, and the Group Item
 a `group` draws, for a page that keeps its record in its own state (an editor whose fields depend on each other, with a
 live preview). They are the same components, so they look and behave exactly like Fyldo's fields.
 
@@ -317,6 +317,7 @@ in the screen's language (Persian numerals and month names on a Persian screen) 
 | Component | Value | Props |
 |---|---|---|
 | `ColorPicker` | `#rrggbb` (lower case), `''` for none | `value`, `onValueChange`, `presets` (hex list, or `false`), `placeholder`, `size` (`sm`, `md`, `lg`; `md` in a Setting Row), `disabled`, `onBlur` |
+| `IconPicker` | An Iconsax name in kebab case (`setting-2`), `''` for none | `value`, `onValueChange`, `icons` (the names the modal offers; omitted: every Iconsax icon), `placeholder`, `size` (`sm`, `md`, `lg`; `md` in a Setting Row), `disabled`, `onBlur`, `aria-label` / `aria-labelledby` / `aria-describedby`. The value changes only when the person confirms with "Select icon"; `onBlur` follows when the modal closes. Draw the chosen icon with `ui.Icon` (`name`). |
 | `DatePicker` | `Y-m-d`; with `kind: 'datetime'`, `Y-m-d H:i:s` in UTC, shown in the site's time | `value`, `onValueChange`, `kind`, `calendar` (`auto`, `gregorian`, `jalali`), `min`, `max` (a value, or `today` / `now`), `step` (minutes), `placeholder`, `size`, `disabled`, `onBlur` |
 | `TimePicker` | `H:i` (24-hour) | `value`, `onValueChange`, `step`, `placeholder`, `size`, `disabled`, `onBlur` |
 | `DateRangePicker` | `{ start, end }`, each as above | `value`, `onValueChange`, `kind` (`date`, `time`, `datetime`), `calendar`, `min`, `max`, `step`, `placeholder`, `startPlaceholder`, `endPlaceholder`, `size`, `disabled`, `error` (shown under it), `invalid` (the end drawn red: `start` or `end`), `onBlur`. In a Setting Row, pass the row `group`, `ownError` and `range`. |

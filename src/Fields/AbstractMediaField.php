@@ -198,8 +198,8 @@ abstract class AbstractMediaField extends AbstractField {
 	}
 
 	/**
-	 * The attachment must exist, be readable by the current user (when saving; not when a stored value is read), be an image
-	 * (`image`), be one of `types`, and not exceed `max_size`.
+	 * The attachment must exist, be readable by the current user (when saving; not when a stored value is read, nor inside
+	 * AbstractField::trusted()), be an image (`image`), be one of `types`, and not exceed `max_size`.
 	 *
 	 * @param mixed $value Sanitized value.
 	 */
@@ -210,7 +210,7 @@ abstract class AbstractMediaField extends AbstractField {
 		}
 
 		$attachment = $this->attachment( $id );
-		if ( null === $attachment || ( ! $this->reading && ! $this->readable( $id ) ) ) {
+		if ( null === $attachment || ( ! $this->reading && self::checks_user() && ! $this->readable( $id ) ) ) {
 			return array(
 				'rule'   => 'attachment',
 				'params' => array(),

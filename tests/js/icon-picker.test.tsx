@@ -8,6 +8,7 @@ import { IconPickerField } from '../../app/components/ui/icon-picker-field';
 import { resetIconCache, setIconLoader } from '../../app/icons/registry';
 import { ICON_NAMES } from '../../app/icons/names.generated';
 import { setLocaleData } from '../../app/i18n';
+import { sdk } from '../../app/lib/sdk';
 import type { IconFieldDef } from '../../app/types';
 
 const NAMES = ['home-2', 'setting-2', 'star', 'user', 'arrow-down'];
@@ -338,4 +339,20 @@ describe('Icon field in a Setting Row', () => {
     expect(options()).toHaveLength(ICON_NAMES.length);
     expect(option('home-2')).toHaveAttribute('aria-selected', 'true');
   }, 20_000);
+});
+
+describe('ui.IconPicker on a custom page', () => {
+  it('is named by its aria-label, offers only `icons` and reports the chosen name, then blur', async () => {
+    const onValueChange = vi.fn();
+    const onBlur = vi.fn();
+    render(<sdk.ui.IconPicker value="" icons={['star', 'user']} onValueChange={onValueChange} onBlur={onBlur} aria-label="Story icon" />);
+    await userEvent.click(screen.getByRole('button', { name: 'Story icon' }));
+    await screen.findByRole('dialog', { name: 'Choose an icon' });
+    expect(options().map((tile) => tile.dataset.icon)).toEqual(['star', 'user']);
+
+    await userEvent.click(option('user'));
+    await userEvent.click(selectButton());
+    expect(onValueChange).toHaveBeenCalledWith('user');
+    expect(onBlur).toHaveBeenCalled();
+  });
 });

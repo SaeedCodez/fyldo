@@ -24,6 +24,14 @@ final class GroupField extends AbstractField {
 	/** @var array<string,AbstractField> Sub-fields keyed by id, in display order. */
 	private $subs = array();
 
+	/**
+	 * True while a stored value is read: each sub-field is then read through its own stored_value(), so the checks that
+	 * depend on who is reading (a post sub-field's `read_post`) stay out of it, as for a field on its own.
+	 *
+	 * @var bool
+	 */
+	private $reading = false;
+
 	public static function types(): array {
 		return array( 'group' );
 	}
@@ -218,7 +226,7 @@ final class GroupField extends AbstractField {
 	}
 
 	/**
-	 * An item with every sub-field: sanitized values, the sub-field default where a key is missing.
+	 * An item with every sub-field: sanitized values (read values while reading), the sub-field default where a key is missing.
 	 *
 	 * @param array<string,mixed> $raw Raw item.
 	 * @return array<string,mixed>
@@ -226,7 +234,11 @@ final class GroupField extends AbstractField {
 	private function clean_item( array $raw ): array {
 		$item = array();
 		foreach ( $this->subs as $sub_id => $sub ) {
-			$item[ $sub_id ] = array_key_exists( $sub_id, $raw ) ? $sub->sanitize( $raw[ $sub_id ] ) : $sub->default_value();
+			if ( ! array_key_exists( $sub_id, $raw ) ) {
+				$item[ $sub_id ] = $sub->default_value();
+				continue;
+			}
+			$item[ $sub_id ] = $this->reading ? $sub->stored_value( $raw[ $sub_id ] ) : $sub->sanitize( $raw[ $sub_id ] );
 		}
 
 		return $item;
@@ -346,15 +358,24 @@ final class GroupField extends AbstractField {
 	}
 
 	/**
-	 * A stored group is read item by item: a sub-field value that no longer validates (a removed select option) falls
-	 * back to that sub-field's default, instead of the whole group falling back to its default.
+	 * A stored group is read item by item, each sub-field through its own stored_value(): a sub-field value that no longer
+	 * validates (a removed select option) falls back to that sub-field's default, instead of the whole group falling back
+	 * to its default, and who is reading does not matter (a logged-out visitor keeps the posts of a non-public type).
 	 *
 	 * @param mixed $raw Stored value.
 	 * @return mixed
 	 */
 	public function stored_value( $raw ) {
+		$this->reading = true;
+		try {
+			$value = $this->sanitize( $raw );
+		} finally {
+			$this->reading = false;
+		}
+
+		// The sub-fields read their own values; this catches what the group's `sanitize_cb` changed afterwards.
 		$items = array();
-		foreach ( (array) $this->sanitize( $raw ) as $item ) {
+		foreach ( (array) $value as $item ) {
 			foreach ( $this->subs as $sub_id => $sub ) {
 				if ( null !== $sub->validate( $item[ $sub_id ] ) ) {
 					$item[ $sub_id ] = $sub->default_value();

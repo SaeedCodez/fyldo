@@ -19,6 +19,10 @@ final class GroupFieldTest extends TestCase {
 		$GLOBALS['__fyldo_test_options'] = array();
 	}
 
+	protected function tearDown(): void {
+		unset( $GLOBALS['__fyldo_test_caps'], $GLOBALS['__fyldo_test_posts'] );
+	}
+
 	/** Sub-fields of the header-buttons example: a required label, an icon, a link. */
 	private const SUBS = array(
 		array(
@@ -243,6 +247,87 @@ final class GroupFieldTest extends TestCase {
 		$ok = $instance->update( 'header', array( 'header_buttons' => array( array( 'label' => 'B', 'link' => 'https://example.com' ), array( 'label' => 'A' ) ) ) );
 		$this->assertSame( 'ok', $ok['status'] );
 		$this->assertSame( array( 'B', 'A' ), array_column( $instance->get( 'header', 'header_buttons' ), 'label' ), 'stored in the order sent' );
+	}
+
+	/** A page of story sections, each picking stories of a post type that is not public (Pelk's `pelk_story`). */
+	private function stories_instance(): Instance {
+		$GLOBALS['__fyldo_test_posts'] = array(
+			4 => new \WP_Post( array( 'ID' => 4, 'post_type' => 'story', 'post_title' => 'Launch' ) ),
+			8 => new \WP_Post( array( 'ID' => 8, 'post_type' => 'story', 'post_title' => 'Recap' ) ),
+		);
+
+		$instance = new Instance( 'acme-stories', array( 'title' => 'Acme' ) );
+		$instance->add_page(
+			'sections',
+			array(
+				'title'    => 'Sections',
+				'sections' => array(
+					array(
+						'id'     => 'main',
+						'title'  => 'Sections',
+						'fields' => array(
+							array(
+								'id'      => 'sections',
+								'type'    => 'group',
+								'label'   => 'Sections',
+								'addable' => true,
+								'fields'  => array(
+									array(
+										'id'    => 'title',
+										'type'  => 'text',
+										'label' => 'Title',
+									),
+									array(
+										'id'        => 'stories',
+										'type'      => 'post',
+										'label'     => 'Stories',
+										'post_type' => 'story',
+										'multiple'  => true,
+									),
+								),
+							),
+						),
+					),
+				),
+			)
+		);
+
+		return $instance;
+	}
+
+	public function test_a_relation_sub_field_reads_the_same_for_a_logged_out_visitor(): void {
+		$instance                     = $this->stories_instance();
+		$GLOBALS['__fyldo_test_caps'] = array( 'manage_options', 'read_post' );
+		$saved                        = array( array( 'title' => 'New', 'stories' => array( 8, 4 ) ) );
+
+		$this->assertSame( 'ok', $instance->update( 'sections', array( 'sections' => $saved ) )['status'] );
+		$this->assertSame( $saved, $instance->get( 'sections', 'sections' ), 'the admin reads what was saved' );
+
+		$GLOBALS['__fyldo_test_caps'] = array(); // User 0: may read no post of a non-public type.
+		$this->assertSame( $saved, $instance->all( 'sections' )['sections'], 'a visitor reads the same IDs' );
+
+		unset( $GLOBALS['__fyldo_test_posts'][4] );
+		$this->assertSame( array( array( 'title' => 'New', 'stories' => array( 8 ) ) ), $instance->get( 'sections', 'sections' ), 'a deleted story still drops out' );
+	}
+
+	public function test_a_save_still_drops_the_items_the_user_may_not_read(): void {
+		$group                        = $this->stories_instance()->page( 'sections' )->fields()['sections'];
+		$GLOBALS['__fyldo_test_caps'] = array( 'manage_options' );
+
+		$this->assertSame( array( array( 'title' => 'New', 'stories' => array() ) ), $group->sanitize( array( array( 'title' => 'New', 'stories' => array( 8, 4 ) ) ) ), 'the REST path checks read_post' );
+	}
+
+	public function test_a_programmatic_update_with_no_user_keeps_the_relation_items(): void {
+		$instance                     = $this->stories_instance();
+		$GLOBALS['__fyldo_test_caps'] = array(); // Cron or WP-CLI: no current user.
+
+		$result = $instance->update( 'sections', array( 'sections' => array( array( 'title' => 'Cron', 'stories' => array( 4, 99 ) ) ) ) );
+
+		$this->assertSame( 'ok', $result['status'] );
+		$this->assertSame( array( array( 'title' => 'Cron', 'stories' => array( 4 ) ) ), $instance->get( 'sections', 'sections' ), 'kept without a user; a post that does not exist still drops out' );
+
+		$group = $instance->page( 'sections' )->fields()['sections'];
+		$this->assertSame( array( array( 'title' => 'Cron', 'stories' => array() ) ), $group->sanitize( array( array( 'title' => 'Cron', 'stories' => array( 4 ) ) ) ), 'the user check is back after update()' );
 	}
 
 	/**

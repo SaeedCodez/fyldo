@@ -28,6 +28,7 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
         {/* `field(id, kind)`: the props of that kind of control, typed, so they spread as they are. */}
         <ui.Input size="md" {...form.field('title', 'text')} />
         <ui.Toggle {...form.field('pinned', 'toggle')} />
+        <ui.IconPicker size="md" icons={['star', 'heart', 'flash']} aria-label="Icon" {...form.field('icon', 'text')} />
         <ui.MultiSelect size="md" options={[]} {...form.field('tags', 'list')} />
         <ui.MediaPicker
           kind="image"
