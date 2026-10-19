@@ -35,6 +35,7 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ### Fixed
 
+- **A settings page shown again re-reads its values.** The app kept every page's values and revision for the whole visit, so an option changed outside the page's own save (a form record's `save` callback, another page's save hook) showed its old values, and the next save was refused with a 409 ("changed somewhere else"). Now a settings page with no unsaved edits re-reads what is stored (`GET …/pages/{page}`) each time it is shown, except the page the screen opened on; a field typed into while the read runs keeps its edit. A page with unsaved edits is left as it is, and its save still reports a conflict.
 - **Group**: a stored group read its sub-fields as if they were being saved, so a `post`, `term` or `user` sub-field checked whether the current user may read each item: a logged-out visitor (`Instance::all()` on the front end) lost every item of a post type that is not public. Each sub-field is now read through its own `stored_value()`, like a field on its own; saving still checks the user.
 
 ## [1.0.0-beta.5] - 2026-10-17

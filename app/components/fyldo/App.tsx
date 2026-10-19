@@ -65,6 +65,11 @@ export function App({ config, root }: AppProps): ReactElement {
 
   const { route, cause, navigate } = useRouter(config.pages, guard);
   const page = config.pages.find((p) => p.id === route.page);
+  // The page the screen opened on shows the values PHP rendered with it. Every later showing of a settings page re-reads
+  // them (when it has no unsaved edits): a record's save, another page's save or anything else on the server may have
+  // changed its option since, and the store's copy would show old values and save with an old revision (a 409).
+  const openedOn = useRef<string | null>(route.page);
+  if (openedOn.current !== route.page) openedOn.current = null;
   // The shown page's h1 (a custom page sets it through its `headingRef`).
   const heading = useRef<HTMLElement | null>(null);
   const setHeading = useCallback((element: HTMLHeadingElement | null) => {
@@ -167,6 +172,7 @@ export function App({ config, root }: AppProps): ReactElement {
                   page={page}
                   api={api}
                   store={store}
+                  refreshOnShow={openedOn.current === null}
                   tab={route.tab}
                   onTabChange={onTabChange}
                   headerLinks={config.navigation === 'top' ? [] : utilityLinks(config, 'header')}

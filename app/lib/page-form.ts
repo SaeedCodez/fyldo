@@ -63,6 +63,8 @@ export type Action =
   | { type: 'conflict'; scope: string; message: string }
   | { type: 'reloading' }
   | { type: 'reloaded'; values: Record<string, FieldValue>; revision: string; media?: MediaMap }
+  /** The stored values, re-read when a clean page is shown again: a field edited while the request ran keeps its edit. */
+  | { type: 'refreshed'; values: Record<string, FieldValue>; revision: string; media?: MediaMap }
   | { type: 'reload-failed'; message: string }
   | { type: 'settle'; scope: string };
 
@@ -112,6 +114,25 @@ export function saveFailedMessage(error: unknown): string {
   return __('Couldn’t save: the server ran into a problem. Try again in a moment.', 'fyldo');
 }
 
+/**
+ * `stored` (the server's values and media) merged with what the user typed since: a field edited while the request ran
+ * (it differs from what was `sent`), or dirty and not part of the request (nothing sent: every dirty field), stays.
+ */
+function mergeStored(state: FormState, stored: Record<string, FieldValue>, storedMedia: MediaMap | undefined, sent: Record<string, FieldValue>) {
+  const values: Record<string, FieldValue> = {};
+  const media: MediaMap = { ...state.media };
+  const kept: string[] = [];
+  for (const id of new Set([...Object.keys(stored), ...Object.keys(state.values)])) {
+    const local = state.values[id];
+    const keepLocal = id in sent ? !valuesEqual(local, sent[id]) : !valuesEqual(local, state.saved[id]);
+    if (keepLocal) kept.push(id);
+    values[id] = keepLocal ? (local as FieldValue) : (stored[id] as FieldValue);
+    // A media field's attachment follows its value: what was chosen since stays, otherwise the server's description.
+    if (id in state.media || (storedMedia !== undefined && id in storedMedia)) media[id] = keepLocal ? (state.media[id] ?? null) : (storedMedia?.[id] ?? null);
+  }
+  return { values, media, kept };
+}
+
 export function reducer(state: FormState, action: Action): FormState {
   switch (action.type) {
     case 'change': {
@@ -137,17 +158,14 @@ export function reducer(state: FormState, action: Action): FormState {
     case 'saving':
       return { ...state, errors: without(state.errors, action.ids), scopes: withScope(state, action.scope, { status: 'saving', message: '' }) };
     case 'saved': {
-      const values: Record<string, FieldValue> = {};
-      const media: MediaMap = { ...state.media };
-      for (const id of new Set([...Object.keys(action.values), ...Object.keys(state.values)])) {
-        const local = state.values[id];
-        // Keep what the user typed since: a field edited while the request ran, or dirty and not part of this save.
-        const keepLocal = id in action.sent ? !valuesEqual(local, action.sent[id]) : !valuesEqual(local, state.saved[id]);
-        values[id] = keepLocal ? (local as FieldValue) : (action.values[id] as FieldValue);
-        // A media field's attachment follows its value: what was chosen since stays, otherwise the server's description.
-        if (id in state.media || (action.media !== undefined && id in action.media)) media[id] = keepLocal ? (state.media[id] ?? null) : (action.media?.[id] ?? null);
-      }
+      const { values, media } = mergeStored(state, action.values, action.media, action.sent);
       return { ...state, values, media, saved: { ...action.values }, savedMedia: { ...action.media }, revision: action.revision, scopes: withScope(state, action.scope, { status: 'saved', message: '' }) };
+    }
+    case 'refreshed': {
+      // The values are the stored ones now: a refused save's conflict is over, and only a kept edit keeps its errors.
+      const { values, media, kept } = mergeStored(state, action.values, action.media, {});
+      const errors = Object.fromEntries(Object.entries(state.errors).filter(([key]) => kept.some((id) => belongsTo(key, id))));
+      return { ...state, values, media, errors, saved: { ...action.values }, savedMedia: { ...action.media }, revision: action.revision, conflict: false, reloading: false };
     }
     case 'failed':
       return { ...state, scopes: withScope(state, action.scope, { status: 'error', message: action.message }) };
@@ -422,6 +440,25 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
   );
 
   /**
+   * Re-read the stored values when the form has no unsaved edits (a settings page shown again: something else, such as
+   * a record's save, may have changed its option since). A dirty form is left as it is: its edits stay, and a save
+   * still reports a conflict. Silent: when it fails, the values shown stay and the next save checks the revision.
+   */
+  const refresh = useCallback(
+    (): Promise<void> =>
+      store.enqueue(form.id, async () => {
+        if (store.isDirty(form.id)) return;
+        try {
+          const stored = await source.read();
+          dispatch({ type: 'refreshed', values: stored.values, revision: stored.revision, media: stored.media });
+        } catch {
+          // Nothing to say: the page still shows what it read before.
+        }
+      }),
+    [source, store, form.id, dispatch],
+  );
+
+  /**
    * A Danger Section Card's action (reset to defaults): runs after any save already queued, then replaces every value
    * with what the server now holds (unsaved edits on the page are dropped: the confirmation says so). Rejects with the
    * ApiError when it fails, so the caller can say why. Undefined when the source has no actions.
@@ -439,5 +476,5 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
     [run, store, form.id, dispatch],
   );
 
-  return { state, dirty, scopes, visibility, setValue, setError, discard, save, validateField, reload, runAction };
+  return { state, dirty, scopes, visibility, setValue, setError, discard, save, validateField, reload, refresh, runAction };
 }

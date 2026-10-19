@@ -1,4 +1,4 @@
-import { useMemo, useRef, type ReactElement, type Ref } from 'react';
+import { useEffect, useMemo, useRef, type ReactElement, type Ref } from 'react';
 import type { Api } from '../../lib/api';
 import { usePageForm, type FormStore } from '../../lib/page-form';
 import type { RelationSearch } from '../../lib/relation';
@@ -13,6 +13,12 @@ export interface SettingsPageProps {
   api: Api;
   /** The app's forms (they outlive this component: page switches keep values, revision and status). */
   store?: FormStore;
+  /**
+   * Re-read the stored values when the page is shown, unless it has unsaved edits: the app's store may hold values read
+   * before something else (a record's save, another page's save) changed the page's option. Off for the page the screen
+   * opened on, whose values PHP has just rendered.
+   */
+  refreshOnShow?: boolean;
   /** The active tab ('' when the page has none). */
   tab?: string;
   onTabChange?: (tab: string) => void;
@@ -32,8 +38,16 @@ export const CONTENT_COLUMN = 'fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-
  * A settings page in the content column: Page Header → 24 → [notices] → the form (FormBody: conflict Notice, Tabs,
  * Section Cards, Save Bar or card footers). Values and edits belong to the page, so switching tabs keeps them.
  */
-export function SettingsPage({ page, api, store, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
+export function SettingsPage({ page, api, store, refreshOnShow = false, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
   const controller = usePageForm(page, api, store);
+  const { refresh } = controller;
+  // Once, when the page is shown (the app remounts it for each page): tab switches keep what was read.
+  const shownOnce = useRef(false);
+  useEffect(() => {
+    if (shownOnce.current || !refreshOnShow) return;
+    shownOnce.current = true;
+    void refresh();
+  }, [refreshOnShow, refresh]);
   // The post, term and user fields search through the page's REST route.
   const relationSearch = useMemo<RelationSearch | null>(() => {
     const searchItems = api.searchItems;

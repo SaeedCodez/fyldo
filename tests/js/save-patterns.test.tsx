@@ -13,8 +13,9 @@ import { SettingsPage } from '../../app/components/fyldo/SettingsPage';
 import { Modal } from '../../app/components/ui/modal';
 import { ApiError, type Api } from '../../app/lib/api';
 import { setLocaleData } from '../../app/i18n';
+import { createFormStore, PAGE_SCOPE } from '../../app/lib/page-form';
 import { PortalContainerContext } from '../../app/lib/portal';
-import type { FieldValue, FyldoConfig, PageDef } from '../../app/types';
+import { isSettingsPage, type FieldValue, type FyldoConfig, type PageDef } from '../../app/types';
 
 const fixture = (name: string) => JSON.parse(readFileSync(resolve(__dirname, `../fixtures/${name}.client.json`), 'utf8')) as PageDef;
 const general = fixture('slice-page'); // global save pattern
@@ -144,23 +145,39 @@ function config(overrides: Partial<FyldoConfig> = {}): FyldoConfig {
 }
 
 const requests: Array<{ url: string; method: string; body: Record<string, unknown> | null }> = [];
+/** The server's side: each page's stored option and revision (a number, sent as `rev-<n>`). */
+const stored = new Map<string, { values: Record<string, FieldValue>; revision: number }>();
 
+/** The settings pages' REST routes as PHP serves them: a read gives what is stored; a save with an old revision is refused (409). */
 function mountApp(overrides: Partial<FyldoConfig> = {}) {
   const root = within_root();
+  const settings = config(overrides);
   requests.length = 0;
-  let revision = 1;
+  stored.clear();
+  for (const p of settings.pages) if (isSettingsPage(p)) stored.set(p.id, { values: { ...p.values }, revision: Number(p.revision.replace('rev-', '')) });
   vi.stubGlobal(
     'fetch',
     vi.fn(async (url: string, init: RequestInit) => {
       const body = init.body ? (JSON.parse(String(init.body)) as Record<string, unknown>) : null;
-      requests.push({ url, method: init.method ?? 'GET', body });
-      revision += 1;
-      const values = { ...general.values, ...((body?.values as object) ?? {}) };
-      return new Response(JSON.stringify({ values, revision: `rev-${revision}` }), { status: 200 });
+      const method = init.method ?? 'GET';
+      requests.push({ url, method, body });
+      const option = stored.get(decodeURIComponent(/\/pages\/([^/?]+)$/.exec(url)?.[1] ?? ''));
+      if (!option) return new Response(JSON.stringify({ code: 'rest_no_route', message: 'No route.', data: { status: 404 } }), { status: 404 });
+      if (method === 'POST') {
+        if (body?.revision !== `rev-${option.revision}`) {
+          return new Response(JSON.stringify({ code: 'fyldo_conflict', message: 'Changed elsewhere.', data: { status: 409 } }), { status: 409 });
+        }
+        option.values = { ...option.values, ...(body.values as Record<string, FieldValue>) };
+        option.revision += 1;
+      }
+      return new Response(JSON.stringify({ values: option.values, revision: `rev-${option.revision}` }), { status: 200 });
     }),
   );
-  render(<App config={config(overrides)} root={root} />);
+  render(<App config={settings} root={root} />);
 }
+
+/** The saves sent, in order (reads left out). */
+const saves = () => requests.filter((r) => r.method === 'POST').map((r) => r.body);
 
 const nav = () => screen.getByRole('navigation', { name: 'Acme SEO' });
 const dialog = () => screen.queryByRole('dialog');
@@ -278,16 +295,77 @@ describe('unsaved-changes guard', () => {
     await userEvent.type(title, '!');
     await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
     await screen.findByText('All changes saved');
-    expect(requests[0]?.body).toEqual({ values: { site_title: 'Fyldo!' }, revision: 'rev-1' });
+    expect(saves()).toEqual([{ values: { site_title: 'Fyldo!' }, revision: 'rev-1' }]);
 
     await userEvent.click(within(nav()).getByRole('link', { name: 'Advanced' }));
     expect(dialog()).toBeNull(); // saved: nothing to lose
     await userEvent.click(within(nav()).getByRole('link', { name: 'General' }));
+    await waitFor(() => expect(requests.at(-1)).toMatchObject({ method: 'GET', url: '/rest/pages/general' })); // shown again: re-read
     expect(screen.getByRole('textbox', { name: 'Site title' })).toHaveValue('Fyldo!');
 
     await userEvent.type(screen.getByRole('textbox', { name: 'Site title' }), '?');
     await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
-    await waitFor(() => expect(requests[1]?.body).toEqual({ values: { site_title: 'Fyldo!?' }, revision: 'rev-2' }));
+    await waitFor(() => expect(saves()[1]).toEqual({ values: { site_title: 'Fyldo!?' }, revision: 'rev-2' }));
+  });
+});
+
+describe('a settings page shown again', () => {
+  it('re-reads its option when it has no unsaved edits: a change made elsewhere shows, and the next save is not refused', async () => {
+    mountApp();
+    expect(requests).toEqual([]); // the page the screen opened on uses the values PHP rendered
+    await userEvent.click(within(nav()).getByRole('link', { name: 'Advanced' }));
+    // Meanwhile PHP changed General's option outside its own save (a record's save callback, say).
+    const general = stored.get('general')!;
+    general.values = { ...general.values, tagline: 'Changed elsewhere' };
+    general.revision += 1;
+
+    await userEvent.click(within(nav()).getByRole('link', { name: 'General' }));
+    await waitFor(() => expect(screen.getByRole('textbox', { name: 'Tagline' })).toHaveValue('Changed elsewhere'));
+    expect(screen.queryByRole('region', { name: 'Unsaved changes' })).toBeNull(); // re-read, not edited
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Site title' }), '!');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(await screen.findByText('All changes saved')).toBeVisible();
+    expect(saves()).toEqual([{ values: { site_title: 'Fyldo!' }, revision: 'rev-2' }]);
+    expect(general.values).toMatchObject({ site_title: 'Fyldo!', tagline: 'Changed elsewhere' });
+  });
+
+  it('with unsaved edits it is not re-read: the edits stay, and a save still reports the conflict', async () => {
+    const store = createFormStore([general]);
+    store.dispatch('general', { type: 'change', id: 'site_title', value: 'Mine', scope: PAGE_SCOPE });
+    const readPage = vi.fn(async () => ({ values: { ...general.values, site_title: 'Theirs' }, revision: 'rev-5' }));
+    const savePage = vi.fn(async () => {
+      throw new ApiError('Changed elsewhere.', 409, 'fyldo_conflict');
+    });
+    render(
+      <PortalContainerContext.Provider value={within_root()}>
+        <SettingsPage page={general} api={{ savePage, readPage, runAction: vi.fn() }} store={store} refreshOnShow />
+      </PortalContainerContext.Provider>,
+    );
+    expect(screen.getByRole('textbox', { name: 'Site title' })).toHaveValue('Mine');
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(await screen.findByText('Couldn’t save: these settings were changed somewhere else.')).toBeVisible();
+    expect(readPage).not.toHaveBeenCalled();
+    expect(screen.getByRole('textbox', { name: 'Site title' })).toHaveValue('Mine');
+  });
+
+  it('a field typed into while it is re-read keeps the edit; the rest and the revision are the stored ones', async () => {
+    let answer: (result: { values: Record<string, FieldValue>; revision: string }) => void = () => undefined;
+    const readPage = vi.fn(() => new Promise<{ values: Record<string, FieldValue>; revision: string }>((r) => (answer = r)));
+    const savePage = vi.fn(async (_id: string, values: Record<string, FieldValue>) => ({ values: { ...general.values, ...values }, revision: 'rev-10' }));
+    render(
+      <PortalContainerContext.Provider value={within_root()}>
+        <SettingsPage page={general} api={{ savePage, readPage, runAction: vi.fn() }} store={createFormStore([general])} refreshOnShow />
+      </PortalContainerContext.Provider>,
+    );
+    await userEvent.type(screen.getByRole('textbox', { name: 'Site title' }), '!');
+    await act(async () => answer({ values: { ...general.values, site_title: 'Theirs', tagline: 'Theirs too' }, revision: 'rev-9' }));
+    expect(screen.getByRole('textbox', { name: 'Site title' })).toHaveValue('Fyldo!');
+    expect(screen.getByRole('textbox', { name: 'Tagline' })).toHaveValue('Theirs too');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(savePage).toHaveBeenCalledWith('general', { site_title: 'Fyldo!' }, 'rev-9'));
+    expect(readPage).toHaveBeenCalledTimes(1);
   });
 });
 

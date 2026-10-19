@@ -301,6 +301,62 @@ describe('the unsaved-changes guard on a custom page', () => {
   });
 });
 
+describe('a record save that changes a settings page’s option', () => {
+  it('the settings page shows the new value when opened, and saving it is not refused', async () => {
+    // The plugin's form save callback also writes the General page's option (as Pelk's story save rewrites its sections).
+    const option = { values: { ...general.values } as Record<string, FieldValue>, revision: 1 };
+    requests.length = 0;
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string, init: RequestInit) => {
+        const body = init.body ? (JSON.parse(String(init.body)) as { values: Record<string, FieldValue>; revision: string }) : null;
+        requests.push({ url, method: init.method ?? 'GET', body });
+        const json = (data: unknown, status = 200) => new Response(JSON.stringify(data), { status });
+        if (url.endsWith('/forms/announcement/records/new')) {
+          if (init.method !== 'POST') return json({ key: '', values: { ...general.values, site_title: '' }, revision: '' });
+          option.values = { ...option.values, tagline: `Latest: ${String(body?.values.site_title)}` };
+          option.revision += 1;
+          return json({ key: '43', values: body?.values, revision: 'r1' });
+        }
+        if (url.endsWith('/forms/announcement/records/43')) return json({ key: '43', values: { ...general.values, site_title: 'Hello' }, revision: 'r1' });
+        if (url.endsWith('/pages/general')) {
+          if (init.method === 'POST') {
+            if (body?.revision !== `rev-${option.revision}`) return json({ code: 'fyldo_conflict', message: 'Changed elsewhere.', data: { status: 409 } }, 409);
+            option.values = { ...option.values, ...body.values };
+            option.revision += 1;
+          }
+          return json({ values: option.values, revision: `rev-${option.revision}` });
+        }
+        return json({ code: 'rest_no_route', message: 'No route.', data: { status: 404 } }, 404);
+      }),
+    );
+    window.history.replaceState(null, '', '/wp-admin/admin.php?page=acme#/general');
+    const root = document.createElement('div');
+    document.body.append(root);
+    render(<App config={config()} root={root} />);
+    expect(screen.getByRole('textbox', { name: 'Tagline' })).toHaveValue(general.values.tagline as string);
+
+    await userEvent.click(within(nav()).getByRole('link', { name: 'Announcements' }));
+    await userEvent.click(screen.getByRole('button', { name: 'New announcement' }));
+    await userEvent.type(await screen.findByRole('textbox', { name: 'Site title' }), 'Hello');
+    await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
+    await waitFor(() => expect(window.location.hash).toBe('#/announcements/43'));
+
+    await userEvent.click(within(nav()).getByRole('link', { name: 'General' }));
+    await waitFor(() => expect(screen.getByRole('textbox', { name: 'Tagline' })).toHaveValue('Latest: Hello'));
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Site title' }), '!');
+    await userEvent.click(within(screen.getByRole('region', { name: 'Unsaved changes' })).getByRole('button', { name: 'Save changes' }));
+    expect(await screen.findByText('All changes saved')).toBeVisible();
+    expect(screen.queryByText('Couldn’t save: these settings were changed somewhere else.')).toBeNull();
+    expect(requests.filter((r) => r.url.endsWith('/pages/general')).map((r) => [r.method, r.body?.revision])).toEqual([
+      ['GET', undefined],
+      ['POST', 'rev-2'],
+    ]);
+    expect(option.values).toMatchObject({ site_title: 'Fyldo!', tagline: 'Latest: Hello' });
+  });
+});
+
 describe('a plain DOM page (mount)', () => {
   it('mounts once, updates on a new path, is destroyed when the page goes; focus falls back to the column', async () => {
     mount('#/general');
