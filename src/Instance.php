@@ -9,6 +9,7 @@
 namespace Fyldo\V1;
 
 use Fyldo\V1\Admin\Notice;
+use Fyldo\V1\Fields\AbstractField;
 use Fyldo\V1\Schema\ConfigException;
 use Fyldo\V1\Schema\CustomPage;
 use Fyldo\V1\Schema\Form;
@@ -377,7 +378,11 @@ final class Instance {
 	}
 
 	/**
-	 * Programmatic save through the same sanitize → validate → store path as the REST API.
+	 * Programmatic save through the same sanitize → validate → store path as the REST API, with one difference: the
+	 * caller is the plugin's own code, not a request, so the checks that depend on the current user are off. A `post`,
+	 * `term`, `user`, `image` or `file` value (on its own or in a group) only has to exist and fit the field, whoever
+	 * is logged in, so a save from cron or WP-CLI (no user) keeps it. Values that come from a request must be checked by
+	 * the plugin first (`current_user_can( 'read_post', $id )`), or saved through the REST route instead.
 	 *
 	 * @param array<string,mixed> $values Field values keyed by field id.
 	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
@@ -393,7 +398,7 @@ final class Instance {
 			);
 		}
 
-		return ( new Saver( $this ) )->save( $page, $values, null );
+		return AbstractField::trusted( fn() => ( new Saver( $this ) )->save( $page, $values, null ) );
 	}
 
 	/**

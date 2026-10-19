@@ -20,6 +20,7 @@ import { DatePicker, TimePicker, type DatePickerProps, type TimePickerProps } fr
 import { DateRangePicker } from '../components/ui/date-range-field';
 import { EmptyState } from '../components/ui/empty-state';
 import { IconButton } from '../components/ui/icon-button';
+import { IconPicker } from '../components/ui/icon-picker';
 import { GroupItem, type GroupItemProps } from '../components/ui/group-item';
 import { GroupList } from '../components/ui/group-list';
 import { Input } from '../components/ui/input';
@@ -68,6 +69,7 @@ export const sdk = {
     GroupList,
     Icon,
     IconButton,
+    IconPicker,
     Input,
     ItemCard,
     MediaPicker,

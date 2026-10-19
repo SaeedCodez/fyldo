@@ -201,7 +201,8 @@ abstract class AbstractRelationField extends AbstractField {
 	}
 
 	/**
-	 * Only IDs of items that exist and fit the field (and, when saving, that the current user may read).
+	 * Only IDs of items that exist and fit the field (and, when saving, that the current user may read; not inside
+	 * AbstractField::trusted()).
 	 *
 	 * @param mixed $raw Raw value.
 	 * @return int|array<int,int>
@@ -212,7 +213,7 @@ abstract class AbstractRelationField extends AbstractField {
 			$ids = array_slice( $ids, 0, 1 );
 		}
 
-		$found = array() === $ids ? array() : $this->lookup( $ids, ! $this->reading );
+		$found = array() === $ids ? array() : $this->lookup( $ids, ! $this->reading && self::checks_user() );
 		$kept  = array_values( array_filter( $ids, static fn( int $id ): bool => isset( $found[ $id ] ) ) );
 
 		return $this->is_multiple() ? $kept : (int) ( $kept[0] ?? 0 );

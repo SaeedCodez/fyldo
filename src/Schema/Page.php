@@ -143,7 +143,8 @@ final class Page implements Guarded {
 					if ( 'Form' !== $noun && $one instanceof CustomField && ! $one->has_module() ) {
 						throw new ConfigException( sprintf( 'Custom field "%s": `module` false is only for a form whose page draws its fields (useForm); a settings page needs the URL of its JavaScript module.', $one->id() ) );
 					}
-					if ( $one instanceof CustomField ) {
+					// A group's custom sub-field watches its item's sub-fields: GroupField checked those.
+					if ( $one === $field && $one instanceof CustomField ) {
 						$watching[ $one->id() ] = $one->watch();
 					}
 				}
@@ -163,7 +164,8 @@ final class Page implements Guarded {
 			throw new ConfigException( sprintf( '%1$s "%2$s" needs at least one section.', $noun, $id ) );
 		}
 
-		// A custom field watches fields of the same page (a group's custom field too): ones that hold a value the browser has.
+		// A custom field watches fields of the same page that hold a value the browser has (a group's custom sub-field
+		// watches its item's sub-fields instead: GroupField checks them).
 		foreach ( $watching as $watcher => $ids ) {
 			foreach ( $ids as $watched ) {
 				$target = $this->fields[ $watched ] ?? null;

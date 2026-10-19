@@ -343,6 +343,46 @@ if ( ! function_exists( 'current_user_can' ) ) {
 	}
 }
 
+// Posts for the relation fields (Support\Relations): `$GLOBALS['__fyldo_test_posts']`, ID => WP_Post. `read_post` is a
+// capability like the others: in `__fyldo_test_caps` or not.
+if ( ! class_exists( 'WP_Post' ) ) {
+	class WP_Post {
+		public $ID          = 0;
+		public $post_type   = 'post';
+		public $post_status = 'publish';
+		public $post_title  = '';
+
+		public function __construct( array $data ) {
+			foreach ( $data as $key => $value ) {
+				$this->$key = $value;
+			}
+		}
+	}
+}
+if ( ! function_exists( 'get_posts' ) ) {
+	function get_posts( $args = array() ) {
+		$posts = $GLOBALS['__fyldo_test_posts'] ?? array();
+		$found = array();
+		foreach ( (array) ( $args['post__in'] ?? array_keys( $posts ) ) as $id ) {
+			$post = $posts[ $id ] ?? null;
+			if ( null !== $post && in_array( $post->post_type, (array) ( $args['post_type'] ?? 'post' ), true ) && in_array( $post->post_status, (array) ( $args['post_status'] ?? 'publish' ), true ) ) {
+				$found[] = $post;
+			}
+		}
+		return $found;
+	}
+}
+if ( ! function_exists( 'get_the_title' ) ) {
+	function get_the_title( $post = 0 ) {
+		return $post instanceof WP_Post ? $post->post_title : '';
+	}
+}
+if ( ! function_exists( 'wp_strip_all_tags' ) ) {
+	function wp_strip_all_tags( $text ) {
+		return trim( strip_tags( (string) $text ) );
+	}
+}
+
 // The client config (Assets\ClientConfig::build): URLs, direction and locale of a plain English site.
 if ( ! function_exists( 'rest_url' ) ) {
 	function rest_url( $path = '' ) {

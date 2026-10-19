@@ -270,3 +270,93 @@ describe('Custom field, watch (a live preview)', () => {
     await waitFor(() => expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ values: { shop_name: 'Corner shop!', opening_hours: '09:00-17:00' } })));
   });
 });
+
+describe('Custom field in a group, watch (its item’s sub-fields)', () => {
+  const text = (id: string, label: string): FieldDef => ({ id, type: 'text', label, description: '', default: '', disabled: false, layout: 'field', validate: {}, placeholder: '' }) as FieldDef;
+
+  /** A page with a `size` field of its own and a group whose items hold a name, a size and a preview that watches both. */
+  function sectionsPage(module: string): PageDef {
+    const preview: CustomFieldDef = { ...hours, id: 'preview', label: 'Preview', description: '', module, props: {}, default: null, watch: ['name', 'size'] };
+    const group = {
+      ...text('sections', 'Sections'),
+      type: 'group',
+      default: [],
+      fields: [text('name', 'Name'), { ...text('size', 'Size'), default: 'medium' }, preview],
+      item_title: '',
+      item_icon: '',
+      sortable: true,
+      addable: true,
+      min: null,
+      max: null,
+      add_label: '',
+    } as unknown as GroupFieldDef;
+    return {
+      ...fixture,
+      sections: [{ id: 'main', tab: '', title: 'Sections', description: '', tone: 'default', fields: [text('size', 'Page size'), group] }],
+      values: { size: 'page', sections: [{ name: 'Home', size: 'large', preview: null }, { name: 'Shop', preview: null }] },
+    };
+  }
+
+  const open = async (title: string): Promise<HTMLElement> => {
+    const group = screen.getByRole('group', { name: 'Sections' });
+    await userEvent.click(within(group).getByRole('button', { name: new RegExp(`^${title}`) }));
+    return group;
+  };
+
+  it("each item's module gets its own item's values as they are edited (a default for one the item lacks), never the page's", async () => {
+    defineCustomField('/test/section-preview.js', () => ({
+      Component: ({ values }: CustomFieldProps) => <p data-testid="section-preview">{`${String(values.name)}: ${String(values.size)}`}</p>,
+    }));
+    const { savePage } = setup(sectionsPage('/test/section-preview.js'));
+    await open('Item 1');
+    await open('Item 2');
+    const previews = () => screen.getAllByTestId('section-preview').map((p) => p.textContent);
+    expect(previews()).toEqual(['Home: large', 'Shop: medium']);
+
+    await userEvent.type(screen.getAllByRole('textbox', { name: 'Name' })[1]!, '!');
+    expect(previews()).toEqual(['Home: large', 'Shop!: medium']);
+    await userEvent.type(screen.getByRole('textbox', { name: 'Page size' }), 'x'); // a page field of the same id: not the item's
+    expect(previews()).toEqual(['Home: large', 'Shop!: medium']);
+
+    await userEvent.click(saveChanges());
+    // The default shown to the module is not written into the item: the server fills it in, as for any sub-field.
+    expect(savePage.mock.calls.at(-1)?.[1].sections).toEqual([
+      { name: 'Home', size: 'large', preview: null },
+      { name: 'Shop!', preview: null },
+    ]);
+  });
+
+  it('keeps the same values object until a watched sibling changes', async () => {
+    const seen: Array<Readonly<Record<string, unknown>>> = [];
+    defineCustomField('/test/section-identity.js', () => ({
+      Component: ({ values }: CustomFieldProps) => {
+        seen.push(values);
+        return null;
+      },
+    }));
+    const page = sectionsPage('/test/section-identity.js');
+    const group = page.sections[0]!.fields[1] as GroupFieldDef;
+    const watchSize = { ...page, sections: [{ ...page.sections[0]!, fields: [page.sections[0]!.fields[0]!, { ...group, fields: group.fields.map((f) => (f.id === 'preview' ? { ...f, watch: ['size'] } : f)) }] }] } as PageDef;
+    setup(watchSize);
+    await open('Item 1');
+    const before = seen.length;
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Name' }), 'x'); // not watched: re-renders, same object
+    expect(seen.length).toBeGreaterThan(before);
+    expect(new Set(seen.slice(before - 1)).size).toBe(1);
+    expect(seen.at(-1)).toEqual({ size: 'large' });
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Size' }), '!');
+    expect(seen.at(-1)).toEqual({ size: 'large!' });
+  });
+
+  it('a plain-DOM module in a group gets its item’s new values through update()', async () => {
+    const update = vi.fn();
+    defineCustomField('/test/section-mount.js', () => ({ mount: () => ({ update }) }));
+    setup(sectionsPage('/test/section-mount.js'));
+    await open('Item 1');
+
+    await userEvent.type(screen.getByRole('textbox', { name: 'Size' }), '!');
+    await waitFor(() => expect(update).toHaveBeenLastCalledWith(expect.objectContaining({ values: { name: 'Home', size: 'large!' } })));
+  });
+});

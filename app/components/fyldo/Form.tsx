@@ -247,7 +247,7 @@ function RecordForm({ def, api, locale, record, onSaved }: RecordFormProps): Rea
  * control (`<ui.Input {...form.field('title', 'text')} />`) with no narrowing in TypeScript.
  */
 export interface FieldBindings {
-  /** `ui.Input`, `Textarea`, `Select`, `RadioGroup`, `SegmentedControl`, `ChoiceCards`, `ColorPicker`, `DatePicker`, `TimePicker`, `CodeEditor`: not a string = ''. */
+  /** `ui.Input`, `Textarea`, `Select`, `RadioGroup`, `SegmentedControl`, `ChoiceCards`, `ColorPicker`, `IconPicker`, `DatePicker`, `TimePicker`, `CodeEditor`: not a string = ''. */
   text: { value: string; onValueChange: (value: string) => void; onBlur: () => void; disabled: boolean };
   /** `ui.NumberInput` (a number, or the text being typed): neither = ''. */
   number: { value: number | string; onValueChange: (value: number | string) => void; onBlur: () => void; disabled: boolean };

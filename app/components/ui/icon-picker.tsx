@@ -3,6 +3,7 @@ import { lazy, Suspense, useRef, useState, type MouseEvent, type ReactElement } 
 import { Icon, type IconSize } from '../../icons/Icon';
 import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import { CONTROL_BASE, CONTROL_SIZE, type ControlSize } from './control';
 
 /** The modal (its grid, the icon names and Base UI's Dialog) is its own chunk, fetched the first time a picker opens. */
@@ -75,11 +76,13 @@ export interface IconPickerProps {
   disabled?: boolean;
   name?: string;
   id?: string;
-  /** The page's locale: the modal speaks its counts in its numerals. */
+  /** The page's locale (default: the screen's): the modal speaks its counts in its numerals. */
   locale?: string;
   /** The modal closed, or focus left the closed field (the caller validates). */
   onBlur?: () => void;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
   className?: string;
 }
 
@@ -88,7 +91,8 @@ export interface IconPickerProps {
  * name is always left to right, even in Persian. The value only changes when the person confirms with "Select icon". Use
  * inside a `Field.Root` (FieldShell / SettingRow).
  */
-export function IconPicker({ value, onValueChange, icons = null, size = 'sm', placeholder, disabled, name, id, locale = 'en', onBlur, className, ...aria }: IconPickerProps): ReactElement {
+export function IconPicker({ value, onValueChange, icons = null, size = 'sm', placeholder, disabled, name, id, locale: localeProp, onBlur, className, ...aria }: IconPickerProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useState(false);
   // Mounted on first open and kept: Base UI's Dialog then runs its own enter / exit and returns focus to the field.

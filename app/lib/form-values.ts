@@ -4,7 +4,8 @@ import { ALL_VISIBLE, type Visibility } from './dependency';
 
 /**
  * Every field's current value on the form being drawn (FormBody: a settings page, or a `<Form>`), with the person's edits
- * and the defaults of fields the stored values do not hold. A custom field's `watch` reads it.
+ * and the defaults of fields the stored values do not hold. A custom field's `watch` reads it; inside a group item it
+ * holds that item's sub-field values instead (FieldGroup).
  */
 export const FormValuesContext = createContext<Readonly<Record<string, FieldValue>>>({});
 

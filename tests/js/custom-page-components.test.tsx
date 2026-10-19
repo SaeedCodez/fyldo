@@ -269,6 +269,7 @@ describe('Field controls on a custom page', () => {
         <ui.TimePicker value="09:30" onValueChange={() => undefined} aria-label="At" />
         <ui.DateRangePicker value={{ start: '2026-10-01', end: '2026-10-05' }} calendar="gregorian" onValueChange={() => undefined} />
         <ui.MediaPicker kind="image" label="Cover" value={0} onValueChange={() => undefined} onError={() => undefined} />
+        <ui.IconPicker value="star" onValueChange={() => undefined} aria-label="Icon" />
         <ui.GroupItem title="Slide 1" open onOpenChange={() => undefined}>
           Body
         </ui.GroupItem>
@@ -279,6 +280,7 @@ describe('Field controls on a custom page', () => {
     const date = screen.getByRole('button', { name: 'From' });
     expect(date).toHaveAccessibleDescription(screen.getByText((_, node) => node?.getAttribute('data-slot') === 'fy-date-equivalent').textContent ?? '');
     expect(screen.getByRole('button', { name: 'Colour' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Icon' })).toHaveTextContent('star');
     expect(screen.getByRole('group', { name: 'Cover' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Slide 1' })).toHaveAttribute('aria-expanded', 'true');
   });
