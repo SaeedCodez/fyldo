@@ -100,6 +100,20 @@ describe('page form reducer', () => {
     expect(s).toMatchObject({ conflict: false, reloading: false, revision: 'r9', values: { title: 'theirs' }, saved: { title: 'theirs' }, scopes: {} });
     expect(dirtyIds(s)).toEqual([]);
   });
+
+  it('a refresh (a page shown again) adopts the stored values and revision; a field typed into while it ran keeps its edit', () => {
+    let s = initialState(page);
+    s = reducer(s, { type: 'conflict', scope: PAGE_SCOPE, message: 'changed elsewhere' });
+    s = reducer(s, { type: 'discard' }); // a conflict, then the edits dropped
+    s = reducer(s, { type: 'saved', scope: 'other', sent: {}, values: s.saved, revision: 'r1' }); // "All changes saved" in a card
+    s = change(s, 'title', 'typed');
+    s = reducer(s, { type: 'invalid', errors: { title: 'Too short.', flag: 'Old.' }, ids: ['title', 'flag'] });
+    s = reducer(s, { type: 'refreshed', values: { title: 'theirs', flag: true, tags: ['b'] }, revision: 'r7' });
+    expect(s).toMatchObject({ conflict: false, revision: 'r7', values: { title: 'typed', flag: true, tags: ['b'] }, saved: { title: 'theirs', flag: true, tags: ['b'] } });
+    expect(s.errors).toEqual({ title: 'Too short.' }); // only the kept edit's
+    expect(scopeState(s, 'other').status).toBe('saved'); // a save's status stays until it settles
+    expect(dirtyIds(s)).toEqual(['title']);
+  });
 });
 
 describe('form store', () => {
