@@ -12,6 +12,7 @@ use Fyldo\V1\Assets\Assets;
 use Fyldo\V1\I18n\Textdomain;
 use Fyldo\V1\Rest\Controller;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Icons;
 use Fyldo\V1\Support\Naming;
 
 /**
@@ -80,6 +81,23 @@ final class Fyldo {
 	/** @return array<string,Instance> */
 	public static function instances(): array {
 		return self::$instances;
+	}
+
+	/**
+	 * One Iconsax icon as `<svg>` markup, for pages Fyldo does not draw (a site's front end, an email): only that icon is
+	 * read, never the whole set. 24×24 viewBox, drawn in `currentColor`, decorative unless `label` is given; no script, no
+	 * event handlers. '' when `$name` is not an icon (see is_icon()). Read once per request.
+	 *
+	 * @param string              $name Iconsax name in kebab case, as the `icon` field stores it (`setting-2`).
+	 * @param array<string,mixed> $args `size` (px: width and height; none by default, so CSS sizes it), `class`, `label`.
+	 */
+	public static function icon( string $name, array $args = array() ): string {
+		return Icons::svg( $name, $args );
+	}
+
+	/** Whether `$name` is an Iconsax name Fyldo has (kebab case, `setting-2`): to check a stored or submitted icon. */
+	public static function is_icon( string $name ): bool {
+		return Icons::exists( $name );
 	}
 
 	public static function register_screens(): void {

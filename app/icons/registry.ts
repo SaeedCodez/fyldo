@@ -12,6 +12,8 @@ const warned = new Set<string>();
 const listeners = new Set<() => void>();
 
 const defaultLoader: Loader = async (key) => {
+  // A key is letters and digits only, so a name can never reach a file outside assets/dist/icons.
+  if (!/^[a-z0-9]+$/.test(key)) throw new Error(`Not an icon key: ${key}`);
   // Icons live next to app.js (assets/dist/icons/<key>.js). The relative path is built in a variable on purpose: Vite treats
   // `new URL(`./icons/${key}.js`, import.meta.url)` as an asset glob and rewrites it to `undefined` in the production bundle.
   // The bundler may hoist this module into a shared chunk (`chunks/<name>-<hash>.js`, one level below app.js): the icons stay next to app.js.

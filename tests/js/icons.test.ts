@@ -7,6 +7,7 @@ import { Icon } from '../../app/icons/Icon';
 import { normalizeIconName } from '../../app/icons/normalize';
 import { collectIconNames, loadIcon, peekIcon, preloadIcons, resetIconCache, setIconLoader } from '../../app/icons/registry';
 import { RTL_FLIP } from '../../app/icons/rtl-flip';
+import { iconSvg } from '../../app/icons/svg';
 
 const ALL_KEYS: string[] = JSON.parse(readFileSync(resolve(__dirname, '../../tools/icons/all-keys.generated.json'), 'utf8'));
 
@@ -110,5 +111,40 @@ describe('<Icon>', () => {
     const down = render(createElement(Icon, { name: 'arrow-down-2' })).container.querySelector('svg') as SVGElement;
     expect(left.getAttribute('class')).toContain('fy:rtl:-scale-x-100');
     expect(down.getAttribute('class') ?? '').not.toContain('scale-x');
+  });
+});
+
+describe('iconSvg', () => {
+  it('gives the same markup as PHP Fyldo::icon(): kebab attributes, currentColor, decorative', async () => {
+    setIconLoader(async () => [['g', {}, [['path', { d: 'M0 0', stroke: 'currentColor', strokeWidth: '1.5', strokeLinecap: 'round' }]]]]);
+    expect(await iconSvg('pen-close')).toBe(
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><g><path d="M0 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></g></svg>',
+    );
+    expect(await iconSvg('pen-close', { size: 20, className: 'a "b"', label: 'Edit' })).toMatch(
+      /^<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http:\/\/www.w3.org\/2000\/svg" class="a &quot;b&quot;" role="img" aria-label="Edit" focusable="false">/,
+    );
+  });
+
+  it('drops unknown elements and attributes and escapes values', async () => {
+    setIconLoader(async () => [['script', { src: 'x' }], ['path', { d: 'M1 1" onload="x', onLoad: 'x', style: 'x' }, [['image', { href: 'x' }]]]]);
+    expect(await iconSvg('heart')).toBe(
+      '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M1 1&quot; onload=&quot;x"/></svg>',
+    );
+  });
+
+  it('loads only that icon, once, and gives "" for names that are not icons', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const loaded: string[] = [];
+    setIconLoader(async (key) => {
+      loaded.push(key);
+      if (key !== 'heart') throw new Error('404');
+      return [['path', { d: 'M0 0' }]];
+    });
+    await iconSvg('heart');
+    await iconSvg('heart');
+    expect(await iconSvg('no-such-icon')).toBe('');
+    expect(await iconSvg('../chunks/app')).toBe('');
+    expect(await iconSvg('Heart')).toBe('');
+    expect(loaded).toEqual(['heart', 'nosuchicon']);
   });
 });

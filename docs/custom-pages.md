@@ -84,9 +84,10 @@ breaking the screen.
 |---|---|
 | `version` | `1`. Within v1 members are only added, never removed or changed. |
 | `React` | Fyldo's React 19. |
-| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `CodeEditor`, `ChoiceCards`, `GroupItem` and `GroupList` ([below](#field-controls)). |
+| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `IconPicker`, `CodeEditor`, `ChoiceCards`, `GroupItem` and `GroupList` ([below](#field-controls)). |
 | `Form` | A Fyldo form for one record (below). |
 | `useForm` | The same form for a page that draws the fields itself ([below](#drawing-the-fields-yourself-useform)). |
+| `iconSvg` | `iconSvg( name, { size?, className?, label? } )`: a promise of one Iconsax icon's `<svg>` markup, the same as PHP's `Fyldo::icon()` (24×24 viewBox, `currentColor`, no script), `''` for a name that is not an icon. Loads only that icon's module, once. For drawing outside React: a shadow root, an iframe, a preview of your site. Inside React, use `ui.Icon`. |
 
 Custom fields get the same object.
 

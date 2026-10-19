@@ -40,6 +40,7 @@ import { Textarea } from '../components/ui/textarea';
 import { Toggle } from '../components/ui/toggle';
 import { Tooltip } from '../components/ui/tooltip';
 import { Icon } from '../icons/Icon';
+import { iconSvg } from '../icons/svg';
 
 /*
  * Props Fyldo uses inside and does not promise: a range's own ends (`bare`, `openOn`), and the dragging a Group owns
@@ -97,6 +98,11 @@ export const sdk = {
   Form,
   /** The same form, drawn by the page: `const form = useForm({ form, record, onSaved })`, then `h(form.Frame, null, …)`. */
   useForm: useRecordForm,
+  /**
+   * One Iconsax icon as `<svg>` markup, for drawing outside React (a shadow root, an iframe, a site preview): resolves to
+   * the same markup as PHP's `Fyldo::icon()`, or '' for a name that is not an icon. Loads only that icon, once.
+   */
+  iconSvg,
 } as const;
 
 export type FyldoSdk = typeof sdk;
