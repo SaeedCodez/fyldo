@@ -14,7 +14,8 @@ use Fyldo\V1\Schema\Dependency;
  * The value is a list of items; each item is an array keyed by the sub-field ids. A fixed group (`addable` off) keeps
  * exactly the items of its `default`; `sortable` lets people reorder them, `addable` lets them add, duplicate and remove.
  * Sub-fields are ordinary fields, validated on their own; their errors are keyed `<group>.<index>.<sub-field>`.
- * A sub-field's `dependency` reads the other sub-fields of its item, or the fields of the page.
+ * A sub-field's `dependency` reads the other sub-fields of its item, or the fields of the page. A custom sub-field's
+ * `watch` names other sub-fields of its item only.
  */
 final class GroupField extends AbstractField {
 
@@ -156,6 +157,21 @@ final class GroupField extends AbstractField {
 			}
 		}
 		Dependency::assert_acyclic( $graph, sprintf( 'Group field "%s"', $id ) );
+
+		// A custom sub-field watches the other sub-fields of its own item, never the page's fields.
+		foreach ( $this->subs as $sub_id => $sub ) {
+			foreach ( $sub instanceof CustomField ? $sub->watch() : array() as $watched ) {
+				if ( $watched === $sub_id ) {
+					throw new ConfigException( sprintf( 'Custom field "%s" cannot watch itself: its own value is `value`.', $sub_id ) );
+				}
+				if ( ! isset( $this->subs[ $watched ] ) ) {
+					throw new ConfigException( sprintf( 'Custom field "%1$s" watches "%2$s", which is not a sub-field of group "%3$s" (inside a group, `watch` names the other sub-fields of the same item).', $sub_id, $watched, $id ) );
+				}
+				if ( 'password' === $this->subs[ $watched ]->type() ) {
+					throw new ConfigException( sprintf( 'Custom field "%1$s" cannot watch password field "%2$s": its value never reaches the browser.', $sub_id, $watched ) );
+				}
+			}
+		}
 
 		foreach ( array( 'sortable', 'addable' ) as $key ) {
 			$config[ $key ] = $config[ $key ] ?? false;
