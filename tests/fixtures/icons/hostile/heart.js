@@ -1,0 +1,1 @@
+export default [["script",{"src":"https://evil.test/x.js"}],["path",{"d":"M1 1\" onload=\"alert(1)","onLoad":"alert(1)","style":"x","strokeWidth":"1.5"},[["foreignObject",{}],["path",{"d":"M2 2"}]]],["image",{"href":"x"}]];

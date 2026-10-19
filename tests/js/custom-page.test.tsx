@@ -356,6 +356,7 @@ describe('the SDK', () => {
     // The field controls a record editor needs, the same components Fyldo's own fields draw.
     expect(Object.keys(sdk.ui)).toEqual(expect.arrayContaining(['ColorPicker', 'DatePicker', 'TimePicker', 'DateRangePicker', 'MediaPicker', 'GroupItem', 'GroupList', 'ChoiceCards', 'CodeEditor']));
     expect(typeof sdk.Form).toBe('function');
+    expect(typeof sdk.iconSvg).toBe('function');
   });
 
   it('collects page modules, and the custom fields of forms', () => {

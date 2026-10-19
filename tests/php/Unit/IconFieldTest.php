@@ -25,7 +25,7 @@ final class IconFieldTest extends TestCase {
 		$this->assertSame( array( 'icon' ), $field::types() );
 		$this->assertSame( '', $field->default_value() );
 		$this->assertSame( 'field', $client['layout'] );
-		$this->assertNull( $client['icons'], 'null = every Iconsax icon; the names are not known to PHP' );
+		$this->assertNull( $client['icons'], 'null = every Iconsax icon' );
 		$this->assertEquals( (object) array( 'pattern' => IconField::PATTERN ), $client['validate'] );
 	}
 
@@ -41,11 +41,14 @@ final class IconFieldTest extends TestCase {
 		$this->assertSame( 'Choose one of the available options.', $field->validate( $field->sanitize( 'user' ) ) );
 	}
 
-	public function test_without_icons_any_well_formed_name_is_accepted_and_malformed_ones_are_not(): void {
+	public function test_without_icons_any_iconsax_name_is_accepted_and_others_are_not(): void {
 		$field = $this->icon();
 
 		$this->assertNull( $field->validate( $field->sanitize( ' setting-2 ' ) ), 'trimmed' );
-		$this->assertNull( $field->validate( $field->sanitize( 'not-an-icon-the-browser-knows' ) ) );
+		$this->assertNull( $field->validate( $field->sanitize( 'ticket-discount' ) ) );
+		$this->assertSame( 'Choose one of the available options.', $field->validate( $field->sanitize( 'not-an-icon-fyldo-has' ) ), 'well formed, but not an icon' );
+		$this->assertSame( 'Choose one of the available options.', $field->validate( $field->sanitize( 'setting2' ) ), 'the module key is not the name' );
+		$this->assertSame( '', $field->stored_value( 'not-an-icon-fyldo-has' ), 'a stored unknown name reads as the default' );
 		$this->assertSame( 'This value is not in the expected format.', $field->validate( $field->sanitize( 'Setting-2' ) ) );
 		$this->assertSame( 'This value is not in the expected format.', $field->validate( $field->sanitize( 'a--b' ) ) );
 		$this->assertSame( 'This value is not in the expected format.', $field->validate( $field->sanitize( '<svg onload=x>' ) ) );

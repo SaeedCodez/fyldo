@@ -6,7 +6,7 @@ interface Story {
   title: string;
 }
 
-const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
+const stories: CustomPageExport = ({ React, ui, Form, useForm, iconSvg }: FyldoSdk) => {
   function Editor({
     record,
     headingRef,
@@ -18,6 +18,10 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
       record,
       onSaved: (key) => navigate([key], { replace: true }),
     });
+    const [svg, setSvg] = React.useState('');
+    React.useEffect(() => {
+      void iconSvg('heart', { size: 20, label: 'Heart' }).then((markup: string) => setSvg(markup));
+    }, []);
     return (
       <form.Frame>
         <ui.PageHeader
@@ -29,6 +33,8 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm }: FyldoSdk) => {
         <ui.Input size="md" {...form.field('title', 'text')} />
         <ui.Toggle {...form.field('pinned', 'toggle')} />
         <ui.IconPicker size="md" icons={['star', 'heart', 'flash']} aria-label="Icon" {...form.field('icon', 'text')} />
+        {/* `iconSvg`: one icon's markup, for drawing outside React (here only to use the value). */}
+        <span dangerouslySetInnerHTML={{ __html: svg }} />
         <ui.MultiSelect size="md" options={[]} {...form.field('tags', 'list')} />
         <ui.MediaPicker
           kind="image"

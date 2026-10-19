@@ -8,14 +8,15 @@
 namespace Fyldo\V1\Fields;
 
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Icons;
 
 /**
  * Renders an Icon Picker (a preview tile and the icon name that open a modal with a searchable icon grid). The value is the
  * icon's name, such as `setting-2`: the same convention as the `icon` option of a field or a page.
  *
- * The icon names live in the browser (the picker's modal chunk), not here: the server checks the shape of the name
- * (`^[a-z0-9]+(-[a-z0-9]+)*$`) and, when `icons` is given, that the name is one of them. A well-formed name the browser does
- * not know is accepted and simply draws nothing (the same as an unknown `icon` anywhere else).
+ * The browser checks the shape of the name (`^[a-z0-9]+(-[a-z0-9]+)*$`) and, when `icons` is given, that the name is one
+ * of them. The server checks the same, and without `icons` that the name is an Iconsax icon (Support\IconNames), so an
+ * unknown name is refused on save and a stored one reads as the default.
  *
  * Config: `default` (an icon name, optional) and `icons` (a list of icon names the picker offers and the server accepts).
  */
@@ -78,6 +79,22 @@ final class IconField extends AbstractField {
 		}
 
 		return $config;
+	}
+
+	/**
+	 * Without `icons`, the name must be an icon Fyldo has (server only: the browser holds the names in the modal chunk).
+	 *
+	 * @param mixed $value Sanitized value.
+	 */
+	protected function implicit_check( $value ): ?array {
+		if ( null !== $this->config['icons'] || Icons::exists( (string) $value ) ) {
+			return null;
+		}
+
+		return array(
+			'rule'   => 'allowed',
+			'params' => array(),
+		);
 	}
 
 	protected function sanitize_value( $raw ) {
