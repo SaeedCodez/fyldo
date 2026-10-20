@@ -1,0 +1,1 @@
+export default [["path",{"d":"M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z","stroke":"currentColor","strokeWidth":"1.5","strokeMiterlimit":"10"}],["path",{"d":"m9 11 2.5-5h1l2.5 5M8 13l-1 2 5 3 5-3-1-2","stroke":"currentColor","strokeWidth":"1.5","strokeMiterlimit":"10","strokeLinecap":"round","strokeLinejoin":"round"}]];
