@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.6] - 2026-10-20
+
 ### Added
 
 - **Conditional fields** (`dependency`, Codestar style): a field, a notice, a group's sub-field or a whole section shows only while conditions on other fields of the page hold, live as the values change: `'dependency' => [ 'cache', '==', true ]`, or a list of conditions (all must hold; `'relation' => 'or'`: one). Operators `==` `!=` `>` `>=` `<` `<=` `any` `not-any` `contains` `not-contains` `empty` `not-empty`. Hiding cascades (a condition on a hidden field never holds). A hidden field is neither checked nor saved, in the browser and on the server, so what is stored stays. PHP refuses unknown ids, password fields, self-references and circles. `useForm` gains `visible(path)`. Shared cases in `tests/fixtures/dependency-cases.json` (PHPUnit + Vitest). The demo's General page shows a coming-soon message only in maintenance mode. Decision O22.
@@ -117,6 +119,8 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.6]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.6
+[1.0.0-beta.5]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.2
