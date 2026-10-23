@@ -76,9 +76,9 @@ final class ClientContractTest extends TestCase {
 
 		$client = json_decode( (string) wp_json_encode( ClientConfig::build( $instance ) ), true );
 
-		$this->assertSame( array( 'type', 'id', 'title', 'description', 'icon', 'group', 'badge', 'save', 'tabs', 'sections', 'values', 'revision' ), array_keys( $client['pages'][0] ) );
+		$this->assertSame( array( 'type', 'id', 'title', 'description', 'icon', 'group', 'badge', 'links', 'save', 'tabs', 'sections', 'values', 'revision' ), array_keys( $client['pages'][0] ) );
 		$this->assertSame(
-			array( 'type' => 'custom', 'id' => 'books', 'title' => 'Books', 'description' => '', 'icon' => '', 'group' => '', 'badge' => '', 'module' => '/wp-content/plugins/acme/books.js', 'props' => array() ),
+			array( 'type' => 'custom', 'id' => 'books', 'title' => 'Books', 'description' => '', 'icon' => '', 'group' => '', 'badge' => '', 'links' => array(), 'module' => '/wp-content/plugins/acme/books.js', 'props' => array() ),
 			$client['pages'][1]
 		);
 		$this->assertSame( '{}', wp_json_encode( ClientConfig::build( $instance )['pages'][1]['props'] ) );

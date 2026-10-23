@@ -17,7 +17,7 @@ use Fyldo\V1\Support\Naming;
  */
 final class Page implements Guarded {
 
-	const KEYS = array( 'title', 'description', 'icon', 'group', 'badge', 'save', 'tabs', 'sections', 'capability', 'option_name' );
+	const KEYS = array( 'title', 'description', 'icon', 'group', 'badge', 'links', 'save', 'tabs', 'sections', 'capability', 'option_name' );
 
 	/** @var string */
 	private $id;
@@ -85,6 +85,7 @@ final class Page implements Guarded {
 			'icon'        => isset( $config['icon'] ) ? (string) $config['icon'] : '',
 			'group'       => isset( $config['group'] ) ? (string) $config['group'] : '',
 			'badge'       => (string) $badge,
+			'links'       => Links::parse( $config['links'] ?? array(), sprintf( '%1$s "%2$s"', $noun, $id ), false ),
 			'save'        => $save,
 			'tabs'        => $tabs,
 			'capability'  => isset( $config['capability'] ) ? (string) $config['capability'] : '',
@@ -282,6 +283,7 @@ final class Page implements Guarded {
 			'icon'        => (string) $this->config['icon'],
 			'group'       => (string) $this->config['group'],
 			'badge'       => (string) $this->config['badge'],
+			'links'       => $this->config['links'],
 			'save'        => (string) $this->config['save'],
 			'tabs'        => $tabs,
 			'sections'    => array_map(

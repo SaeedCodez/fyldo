@@ -430,6 +430,8 @@ export interface PageDef {
   group: string;
   /** Nav Item badge ("needs attention"), or '' for none. */
   badge: string;
+  /** The page's own links, drawn in its Page Header before the instance's `header` links. */
+  links?: PageLinkDef[];
   save: 'global' | 'section';
   tabs: TabDef[];
   sections: SectionDef[];
@@ -452,6 +454,8 @@ export interface CustomPageDef {
   group: string;
   /** Nav Item badge, or '' for none. */
   badge: string;
+  /** The page's own links: the module draws them (`page.links` → `ui.PageHeader`). */
+  links?: PageLinkDef[];
   module: string;
   /** Passed to the module as they are (translated labels, URLs…). */
   props: Record<string, JsonValue>;
@@ -480,6 +484,9 @@ export interface LinkDef {
   /** `footer`: sidebar footer / top navigation utilities. `header`: Page Header actions. */
   placement: 'footer' | 'header';
 }
+
+/** A page's own link (`links` in `add_page()`): always in that page's Page Header. */
+export type PageLinkDef = Omit<LinkDef, 'placement'>;
 
 /** A notice PHP queued with `Instance::admin_notice()`, drawn under the Page Header in Fyldo's own slot. */
 export interface NoticeDef {

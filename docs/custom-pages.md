@@ -49,6 +49,7 @@ $acme->add_page( 'stories', array(
 | `props` | Plain data (text, numbers, booleans, null, arrays). Put translated strings here: the module has no text domain. |
 | `media` | `true` when the module uses `ui.MediaPicker`: the screen then loads the WordPress media library (`wp.media`). Without it, the library loads only when a settings page or form has an `image` or `file` field. |
 | `title`, `description`, `icon`, `group`, `badge`, `capability` | As for a settings page. The page shows in the navigation like any other. |
+| `links` | As for a settings page: the page's own buttons (its help page…). The module draws its Page Header, so it passes them on: `<ui.PageHeader … links={page.links} />`. |
 
 A custom page has no sections, tabs, option or values. `sections`, `tabs`, `save` and `option_name` are errors.
 
@@ -95,7 +96,7 @@ Custom fields get the same object.
 
 | | |
 |---|---|
-| `page` | `{ id, title, description, icon }`. |
+| `page` | `{ id, title, description, icon, links }`. `links` are the page's own links, ready for `ui.PageHeader`'s `links`. |
 | `path` | The route below the page: `#/stories/42/slides` gives `['42', 'slides']`, `#/stories` gives `[]`. |
 | `navigate(path, { replace })` | Go to another path of this page (`'new'`, `['42']`, `[]`). It goes through the unsaved-changes guard and pushes a history entry, so Back works. A string is split on `/` (empty parts dropped); pass an array for a segment that contains `/`. |
 | `request(path, options)` | Calls a REST route of the site, relative to the REST root: `request('acme/v1/stories', { query: { paged: 2 } })`. Options: `method` (default `GET`), `data` (sent as JSON), `query`, `signal`. It sends the WordPress REST nonce `X-WP-Nonce` (refreshed once when it has expired; not Fyldo's own instance nonce), sends PUT, PATCH and DELETE as POST with `X-HTTP-Method-Override` (some hosts block them), resolves with the parsed JSON (`null` when there is no body, e.g. a 204) and rejects with an error that has `status`, `code`, `message` and `errors`. An aborted request rejects with the browser's `AbortError`. |
@@ -130,7 +131,7 @@ const stories: CustomPageExport = ({ React, ui, Form }) => {
     }, [request, toast]);
 
     if (path[0] !== undefined) return <Form form="story" record={path[0]} onSaved={(key) => navigate(key, { replace: true })} />;
-    return <ui.PageHeader title={page.title} description={page.description} headingRef={headingRef} />;
+    return <ui.PageHeader title={page.title} description={page.description} links={page.links} headingRef={headingRef} />;
   }
   return { Component: Stories };
 };

@@ -71,6 +71,7 @@ $fyldo->add_page( 'general', [
 	'group'       => 'settings',
 	'save'        => 'global',                        // 'global' (Save Bar) | 'section' (a Save button in each card)
 	'badge'       => 3,                               // optional count on the nav item
+	'links'       => [ [ 'label' => 'Guide', 'url' => 'https://acme.test/docs/general', 'external' => true ] ], // this page's Page Header buttons
 	'tabs'        => [ 'identity' => 'Identity', 'reading' => [ 'label' => 'Reading', 'icon' => 'book-1' ] ],
 	'sections'    => [
 		[

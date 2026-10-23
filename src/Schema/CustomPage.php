@@ -17,12 +17,12 @@ use Fyldo\V1\Support\Naming;
  */
 final class CustomPage implements Guarded {
 
-	const KEYS = array( 'type', 'title', 'description', 'icon', 'group', 'badge', 'capability', 'module', 'style', 'props', 'media' );
+	const KEYS = array( 'type', 'title', 'description', 'icon', 'group', 'badge', 'links', 'capability', 'module', 'style', 'props', 'media' );
 
 	/** @var string */
 	private $id;
 
-	/** @var array{title:string,description:string,icon:string,group:string,badge:string,capability:string,module:string,style:string,props:array<string,mixed>,media:bool} */
+	/** @var array{title:string,description:string,icon:string,group:string,badge:string,links:array<int,array<string,mixed>>,capability:string,module:string,style:string,props:array<string,mixed>,media:bool} */
 	private $config;
 
 	/**
@@ -85,6 +85,7 @@ final class CustomPage implements Guarded {
 			'icon'        => isset( $config['icon'] ) ? (string) $config['icon'] : '',
 			'group'       => isset( $config['group'] ) ? (string) $config['group'] : '',
 			'badge'       => (string) $badge,
+			'links'       => Links::parse( $config['links'] ?? array(), sprintf( 'Custom page "%s"', $id ), false ),
 			'capability'  => isset( $config['capability'] ) ? (string) $config['capability'] : '',
 			'module'      => $module,
 			'style'       => $style,
@@ -130,6 +131,7 @@ final class CustomPage implements Guarded {
 			'icon'        => $this->config['icon'],
 			'group'       => $this->config['group'],
 			'badge'       => $this->config['badge'],
+			'links'       => $this->config['links'],
 			'module'      => $this->config['module'],
 			// An object even when empty, so the browser always gets `{}`, never `[]`.
 			'props'       => (object) $this->config['props'],

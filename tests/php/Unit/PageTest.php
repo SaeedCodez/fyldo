@@ -184,4 +184,38 @@ final class PageTest extends TestCase {
 		$client = ( new Page( 'acme-seo', 'general', $this->config() ) )->to_client( array(), '' );
 		$this->assertSame( '', $client['badge'], 'No badge by default.' );
 	}
+
+	public function test_a_page_has_links_of_its_own_for_its_page_header(): void {
+		$links  = array(
+			array( 'label' => 'Guide', 'url' => 'https://acme.test/docs/general', 'external' => true ),
+			array( 'label' => 'Video', 'url' => 'https://acme.test/video', 'icon' => 'video-play' ),
+		);
+		$client = ( new Page( 'acme-seo', 'general', $this->config( array( 'links' => $links ) ) ) )->to_client( array(), '' );
+		$this->assertSame(
+			array(
+				array( 'label' => 'Guide', 'url' => 'https://acme.test/docs/general', 'icon' => '', 'external' => true ),
+				array( 'label' => 'Video', 'url' => 'https://acme.test/video', 'icon' => 'video-play', 'external' => false ),
+			),
+			$client['links']
+		);
+
+		$client = ( new Page( 'acme-seo', 'general', $this->config() ) )->to_client( array(), '' );
+		$this->assertSame( array(), $client['links'], 'No links by default.' );
+	}
+
+	public function test_a_page_link_needs_a_label_and_url_and_has_no_placement_or_other_keys(): void {
+		$cases = array(
+			'every link needs `label` and `url`'                => array( array( 'label' => 'Guide' ) ),
+			'always in its Page Header; remove `placement`'     => array( array( 'label' => 'Guide', 'url' => '/x', 'placement' => 'header' ) ),
+			'Page "general": a link has unknown key(s): target' => array( array( 'label' => 'Guide', 'url' => '/x', 'target' => '_blank' ) ),
+		);
+		foreach ( $cases as $needle => $links ) {
+			try {
+				new Page( 'acme-seo', 'general', $this->config( array( 'links' => $links ) ) );
+				$this->fail( 'No error for: ' . $needle );
+			} catch ( ConfigException $e ) {
+				$this->assertStringContainsString( $needle, $e->getMessage() );
+			}
+		}
+	}
 }

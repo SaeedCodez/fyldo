@@ -7,6 +7,7 @@ import { FormBody } from './FormBody';
 import { Notices } from './Notices';
 import type { UtilityLink } from './nav-model';
 import { PageHeader } from './PageHeader';
+import { toUtilityLinks } from './nav-model';
 
 export interface SettingsPageProps {
   page: PageDef;
@@ -22,7 +23,7 @@ export interface SettingsPageProps {
   /** The active tab ('' when the page has none). */
   tab?: string;
   onTabChange?: (tab: string) => void;
-  /** Page Header actions (links placed in the header; none in the Top Navigation layout). */
+  /** The instance's Page Header actions (links placed in the header; none in the Top Navigation layout). The page's own `links` come first. */
   headerLinks?: UtilityLink[];
   headingRef?: Ref<HTMLHeadingElement>;
   locale?: string;
@@ -38,7 +39,7 @@ export const CONTENT_COLUMN = 'fy:fade-in fy:mx-auto fy:flex fy:w-full fy:max-w-
  * A settings page in the content column: Page Header → 24 → [notices] → the form (FormBody: conflict Notice, Tabs,
  * Section Cards, Save Bar or card footers). Values and edits belong to the page, so switching tabs keeps them.
  */
-export function SettingsPage({ page, api, store, refreshOnShow = false, tab = '', onTabChange, headerLinks, headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
+export function SettingsPage({ page, api, store, refreshOnShow = false, tab = '', onTabChange, headerLinks = [], headingRef, locale = 'en', notices = [], onDismissNotice }: SettingsPageProps): ReactElement {
   const controller = usePageForm(page, api, store);
   const { refresh } = controller;
   // Once, when the page is shown (the app remounts it for each page): tab switches keep what was read.
@@ -62,7 +63,7 @@ export function SettingsPage({ page, api, store, refreshOnShow = false, tab = ''
       data-save={page.save}
       className={CONTENT_COLUMN}
     >
-      <PageHeader title={page.title} description={page.description} links={headerLinks} headingRef={headingRef} />
+      <PageHeader title={page.title} description={page.description} links={[...toUtilityLinks(page.links), ...headerLinks]} headingRef={headingRef} />
 
       <Notices notices={notices} onDismiss={(id) => onDismissNotice?.(id)} />
 

@@ -29,7 +29,10 @@ const custom = (id: string, title: string, module: string): CustomPageDef => ({
   module,
   props: { add: 'New announcement' },
 });
-const announcements = custom('announcements', 'Announcements', '/test/announcements.js');
+const announcements: CustomPageDef = {
+  ...custom('announcements', 'Announcements', '/test/announcements.js'),
+  links: [{ label: 'Guide', url: 'https://acme.test/docs/announcements', icon: '', external: true }],
+};
 const stats = custom('stats', 'Statistics', '/test/stats.js');
 const broken = custom('broken', 'Broken', '/test/never-loaded.js');
 const crashing = custom('crashing', 'Crashing', '/test/crashing.js');
@@ -53,7 +56,7 @@ defineCustomPage('/test/announcements.js', ({ ui, Form }: FyldoSdk) => ({
     }
     return (
       <>
-        <ui.PageHeader title={page.title} description={page.description} headingRef={headingRef} />
+        <ui.PageHeader title={page.title} description={page.description} links={page.links} headingRef={headingRef} />
         <ui.Button onClick={() => navigate('new')}>{String(props.props.add)}</ui.Button>
         <ui.Button onClick={() => navigate('42/edit')}>Edit 42</ui.Button>
         <ui.Button onClick={() => setDirty(true)}>Start a draft</ui.Button>
@@ -182,7 +185,14 @@ describe('a custom page', () => {
     expect(within(nav()).getByRole('link', { name: 'Announcements' })).toHaveAttribute('aria-current', 'page');
 
     const props = seen.at(-1)!;
-    expect(props.page).toEqual({ id: 'announcements', title: 'Announcements', description: 'Announcements of the site.', icon: 'notification' });
+    expect(props.page).toEqual({
+      id: 'announcements',
+      title: 'Announcements',
+      description: 'Announcements of the site.',
+      icon: 'notification',
+      links: [{ label: 'Guide', href: 'https://acme.test/docs/announcements', icon: undefined, external: true }],
+    });
+    expect(screen.getByRole('link', { name: 'Guide (opens in a new tab)' })).toHaveAttribute('href', 'https://acme.test/docs/announcements');
     expect(props).toMatchObject({ path: [], props: { add: 'New announcement' }, locale: 'en', dir: 'ltr' });
     expect(screen.getByRole('button', { name: 'New announcement' })).toBeVisible();
   });
