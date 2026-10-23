@@ -5,7 +5,7 @@ import { routeHref, type Route } from '../../lib/router';
 import type { FyldoConfig } from '../../types';
 import { Button } from '../ui/button';
 import { BrandMark } from './BrandMark';
-import type { Brand, NavGroup, UtilityLink } from './nav-model';
+import { toUtilityLinks, type Brand, type NavGroup, type UtilityLink } from './nav-model';
 import { Sidebar } from './Sidebar';
 import { TopNavigation } from './TopNavigation';
 
@@ -30,9 +30,7 @@ export function navGroups(config: FyldoConfig, route: Route): NavGroup[] {
 }
 
 export const utilityLinks = (config: FyldoConfig, placement: 'footer' | 'header'): UtilityLink[] =>
-  config.links
-    .filter((l) => l.placement === placement)
-    .map((l) => ({ label: l.label, href: l.url, icon: l.icon || undefined, external: l.external }));
+  toUtilityLinks(config.links.filter((l) => l.placement === placement));
 
 /**
  * The first stop of the Tab order: skips the brand and the navigation and lands on the page's heading (WCAG 2.4.1).

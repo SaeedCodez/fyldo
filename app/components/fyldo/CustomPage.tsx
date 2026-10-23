@@ -7,6 +7,7 @@ import type { Toaster } from '../../lib/toast';
 import type { CustomPageDef } from '../../types';
 import { Notice } from '../ui/notice';
 import { PageHeader } from './PageHeader';
+import { toUtilityLinks } from './nav-model';
 import { CONTENT_COLUMN } from './SettingsPage';
 
 export interface CustomPageHostProps {
@@ -34,7 +35,7 @@ const FLAGGED = { isDirty: () => true };
 function Unavailable({ page, headingRef }: { page: CustomPageDef; headingRef: (element: HTMLElement | null) => void }): ReactElement {
   return (
     <>
-      <PageHeader title={page.title} description={page.description} headingRef={headingRef} />
+      <PageHeader title={page.title} description={page.description} links={toUtilityLinks(page.links)} headingRef={headingRef} />
       <Notice className="fy:mt-6" tone="red">
         {__('This page couldn’t be loaded.', 'fyldo')}
       </Notice>
@@ -129,7 +130,10 @@ export function CustomPage({ page, path, locale, dir, navigate, request, toaster
     }),
     [toaster],
   );
-  const info = useMemo(() => ({ id: page.id, title: page.title, description: page.description, icon: page.icon }), [page]);
+  const info = useMemo(
+    () => ({ id: page.id, title: page.title, description: page.description, icon: page.icon, links: toUtilityLinks(page.links) }),
+    [page],
+  );
 
   const props: CustomPageProps = { page: info, path, props: page.props, locale, dir, navigate: pageNavigate, request, toast, setDirty, headingRef };
   const fallback = <Unavailable page={page} headingRef={headingRef} />;

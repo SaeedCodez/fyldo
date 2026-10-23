@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Added
+
+- **Page links**: `add_page( $id, [ 'links' => [ [ 'label', 'url', 'icon', 'external' ] ] ] )` gives a page buttons of its own in its Page Header (Figma's Page Header actions), such as the page's own help page. They come before the instance's `header` links and show in both layouts, since they belong to the page. A custom page gets them as `page.links`, ready for `ui.PageHeader`'s `links`. A link without `label` or `url`, a `placement` or an unknown key is a config error. The client config's pages gain `links`.
+
 ## [1.0.0-beta.6] - 2026-10-20
 
 ### Added

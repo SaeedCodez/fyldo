@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-20T18:47:22+00:00\n"
+"POT-Creation-Date: 2026-10-23T11:25:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -45,7 +45,7 @@ msgstr ""
 msgid "This field could not be loaded."
 msgstr ""
 
-#: app/components/fyldo/CustomPage.tsx:39
+#: app/components/fyldo/CustomPage.tsx:40
 msgid "This page couldn’t be loaded."
 msgstr ""
 
@@ -180,11 +180,11 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: app/components/fyldo/Shell.tsx:176
+#: app/components/fyldo/Shell.tsx:174
 msgid "Menu"
 msgstr ""
 
-#: app/components/fyldo/Shell.tsx:53
+#: app/components/fyldo/Shell.tsx:51
 msgid "Skip to page content"
 msgstr ""
 
@@ -2692,7 +2692,7 @@ msgstr ""
 
 #: fyldo.php
 #: build/fyldo/src/Instance.php:149
-#: src/Instance.php:149
+#: src/Instance.php:132
 #. Plugin Name of the plugin
 #. Author of the plugin
 msgid "Fyldo"

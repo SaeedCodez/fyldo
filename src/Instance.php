@@ -14,6 +14,7 @@ use Fyldo\V1\Schema\ConfigException;
 use Fyldo\V1\Schema\CustomPage;
 use Fyldo\V1\Schema\Form;
 use Fyldo\V1\Schema\Guarded;
+use Fyldo\V1\Schema\Links;
 use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Storage\DefaultHistory;
 use Fyldo\V1\Storage\OptionStore;
@@ -97,25 +98,7 @@ final class Instance {
 			throw new ConfigException( sprintf( 'Fyldo "%s": menu.type must be "submenu" or "top".', $slug ) );
 		}
 
-		$links = array();
-		foreach ( (array) ( $config['links'] ?? array() ) as $link ) {
-			$link = (array) $link;
-			if ( ! isset( $link['label'], $link['url'] ) ) {
-				throw new ConfigException( sprintf( 'Fyldo "%s": every link needs `label` and `url`.', $slug ) );
-			}
-			// `footer`: the sidebar footer (top navigation: its utility buttons). `header`: the Page Header actions.
-			$placement = isset( $link['placement'] ) ? (string) $link['placement'] : 'footer';
-			if ( ! in_array( $placement, array( 'footer', 'header' ), true ) ) {
-				throw new ConfigException( sprintf( 'Fyldo "%s": link placement must be "footer" or "header".', $slug ) );
-			}
-			$links[] = array(
-				'label'     => (string) $link['label'],
-				'url'       => (string) $link['url'],
-				'icon'      => isset( $link['icon'] ) ? (string) $link['icon'] : '',
-				'external'  => ! empty( $link['external'] ),
-				'placement' => $placement,
-			);
-		}
+		$links = Links::parse( $config['links'] ?? array(), sprintf( 'Fyldo "%s"', $slug ), true );
 
 		$this->slug   = $slug;
 		$this->logo   = $logo;

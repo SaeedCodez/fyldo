@@ -55,6 +55,7 @@ final class CustomPageTest extends TestCase {
 					'icon'        => 'book',
 					'group'       => 'shop',
 					'badge'       => 12,
+					'links'       => array( array( 'label' => 'Guide', 'url' => 'https://acme.test/docs/books', 'external' => true ) ),
 					'capability'  => 'edit_posts',
 					'style'       => '/wp-content/plugins/acme/books.css',
 					'props'       => array( 'perPage' => 20, 'columns' => array( 'title', 'author' ) ),
@@ -63,7 +64,7 @@ final class CustomPageTest extends TestCase {
 		);
 
 		$this->assertSame(
-			'{"type":"custom","id":"books","title":"Books","description":"Every book in the shop.","icon":"book","group":"shop","badge":"12","module":"https://example.com/wp-content/plugins/acme/books.js","props":{"perPage":20,"columns":["title","author"]}}',
+			'{"type":"custom","id":"books","title":"Books","description":"Every book in the shop.","icon":"book","group":"shop","badge":"12","links":[{"label":"Guide","url":"https://acme.test/docs/books","icon":"","external":true}],"module":"https://example.com/wp-content/plugins/acme/books.js","props":{"perPage":20,"columns":["title","author"]}}',
 			wp_json_encode( $page->to_client(), JSON_UNESCAPED_SLASHES )
 		);
 		$this->assertSame( '/wp-content/plugins/acme/books.css', $page->style(), 'the stylesheet is enqueued by PHP, not sent' );
@@ -98,6 +99,8 @@ final class CustomPageTest extends TestCase {
 			'several page keys'    => array( array( 'tabs' => array(), 'save' => 'global', 'option_name' => 'x' ), 'remove `tabs`, `save`, `option_name`' ),
 			'unknown key'          => array( array( 'colour' => 'red' ), 'unknown key(s): colour' ),
 			'no title'             => array( array( 'title' => ' ' ), 'needs a title' ),
+			'link without url'     => array( array( 'links' => array( array( 'label' => 'Guide' ) ) ), 'Custom page "books": every link needs `label` and `url`' ),
+			'link placement'       => array( array( 'links' => array( array( 'label' => 'Guide', 'url' => '/x', 'placement' => 'footer' ) ) ), 'always in its Page Header; remove `placement`' ),
 			'no module'            => array( array( 'module' => '' ), '`module` must be the URL' ),
 			'module not a URL'     => array( array( 'module' => 'books.js' ), '`module` must be the URL' ),
 			'protocol-relative'    => array( array( 'module' => '//cdn.example.com/books.js' ), '`module` must be the URL' ),

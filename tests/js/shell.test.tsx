@@ -226,6 +226,24 @@ describe('sidebar layout', () => {
     expect(changelog).not.toHaveAttribute('role'); // a link, not a button
     expect(changelog.querySelector('svg')).toHaveAttribute('data-fyldo-icon', 'exportsquare');
   });
+
+  it("a page's own links come first in its Page Header, in both layouts, and only on that page", async () => {
+    const guide = { label: 'Guide', url: 'https://acme.test/docs/general', icon: '', external: true };
+    const withGuide = { pages: [{ ...general, links: [guide] }, fields, advanced] };
+    const actions = () =>
+      [...document.querySelectorAll('[data-slot=fy-page-header-actions] a')].map((a) => a.textContent);
+
+    const { unmount } = mount(withGuide);
+    expect(actions()).toEqual(['Guide (opens in a new tab)', 'Changelog (opens in a new tab)']);
+    expect(screen.getByRole('link', { name: 'Guide (opens in a new tab)' })).toHaveAttribute('href', 'https://acme.test/docs/general');
+    await userEvent.click(screen.getByRole('link', { name: 'Advanced' }));
+    expect(actions()).toEqual(['Changelog (opens in a new tab)']);
+    unmount();
+
+    window.history.replaceState(null, '', '/wp-admin/options-general.php?page=acme-seo#/general');
+    mount({ ...withGuide, navigation: 'top' });
+    expect(actions()).toEqual(['Guide (opens in a new tab)']);
+  });
 });
 
 describe('tabs (sub-pages)', () => {

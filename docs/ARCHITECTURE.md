@@ -132,6 +132,9 @@ add_action( 'init', static function () {
 		'group'       => 'settings',
 		'save'        => 'global',                          // 'global' (Save Bar) | 'section' (card footers) — one per page
 		'badge'       => 3,                                 // optional Nav Item badge (a count that needs attention)
+		'links'       => [                                  // optional: this page's own Page Header actions (its help page…)
+			[ 'label' => __( 'Guide', 'acme-seo' ), 'url' => 'https://acme.test/docs/general', 'external' => true ],
+		],
 		'tabs'        => [                                  // optional sub-pages at #/general/<tab>; never nested
 			'identity' => __( 'Site identity', 'acme-seo' ),
 			'reading'  => [ 'label' => __( 'Reading', 'acme-seo' ), 'icon' => 'book-1', 'badge' => 2 ],  // icon / count optional
@@ -250,7 +253,7 @@ $all   = Fyldo::instance( 'acme-seo' )->all( 'general' );
 | Escape hatches | `sanitize_cb` (runs after the type's own sanitizer, before the rules), `validate_cb` (after the declarative rules pass; returns `true`, `false` or a message), both **PHP only** — a callable cannot run in the browser, so the server is where they are authoritative and their message arrives as the field's 422 error; `options` may be a callable, `disabled` may be `true` or a string reason (rendered in the description and part of the control's accessible description), `layout` override (`inline\|stacked\|field`). |
 | Registration-time `_doing_it_wrong` | one Primary button per card is a UI concern; the API enforces: one `save` mode per page, no nested tabs, Danger section last. |
 | Brand (M3 part 2) | `title` (default "Fyldo", translated when shown; also the default admin-menu label) and `logo`: an Iconsax icon name (drawn with `<Icon>` at 24px) or an image URL (anything with `/` or `:`, passed through `esc_url_raw()`; drawn as a 24×24 `<img alt="">`, since the name beside it names the brand). Without a logo the Fyldo mark is drawn (design/figma/brand, inline SVG, `currentColor` = `text/primary`, `aria-hidden`). Brand row: logo · name · version Badge, gap 10. |
-| Navigation (M3) | `navigation` `sidebar` (default) \| `top` per instance. Groups (`add_group`) label the Sidebar and become dividers in the Top Navigation; pages outside a group come first. `links[].placement`: `footer` (default: Sidebar footer / Top Navigation utilities) or `header` (Page Header actions; in the top layout they join the utilities). Page `badge` (string\|int). Tabs: `'id' => 'Label'` or `'id' => [ label, icon?, badge? ]`; tab ids are URL-safe like page ids. Each is validated at registration. |
+| Navigation (M3) | `navigation` `sidebar` (default) \| `top` per instance. Groups (`add_group`) label the Sidebar and become dividers in the Top Navigation; pages outside a group come first. `links[].placement`: `footer` (default: Sidebar footer / Top Navigation utilities) or `header` (Page Header actions; in the top layout they join the utilities). Page `badge` (string\|int). Page `links` (`label`, `url`, `icon`, `external`; no `placement`): that page's own Page Header actions, before the instance's `header` links and shown in both layouts (they belong to the page, not the plugin). Tabs: `'id' => 'Label'` or `'id' => [ label, icon?, badge? ]`; tab ids are URL-safe like page ids. Each is validated at registration. |
 
 ### 3.3 Storage & naming defaults (part of the public contract)
 
