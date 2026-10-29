@@ -251,11 +251,11 @@ export interface FieldBindings {
   text: { value: string; onValueChange: (value: string) => void; onBlur: () => void; disabled: boolean };
   /** `ui.NumberInput` (a number, or the text being typed): neither = ''. */
   number: { value: number | string; onValueChange: (value: number | string) => void; onBlur: () => void; disabled: boolean };
-  /** `ui.MultiSelect`, `CheckboxGroup`: the strings of the list; not a list = []. */
+  /** `ui.MultiSelect`: the strings of the list; not a list = []. */
   list: { value: string[]; onValueChange: (value: string[]) => void; onBlur: () => void; disabled: boolean };
   /** `ui.DateRangePicker`: each end a string; a missing end = ''. */
   range: { value: DateRangeValue; onValueChange: (value: DateRangeValue) => void; onBlur: () => void; disabled: boolean };
-  /** `ui.Toggle`, `Checkbox`: Base UI's checked state; anything but `true` = off. */
+  /** `ui.Toggle`, `Checkbox`: on or off; anything but `true` = off. */
   toggle: { checked: boolean; onCheckedChange: (checked: boolean) => void; disabled: boolean };
   /** `ui.MediaPicker`: the attachment ID (not a number = 0), the attachment it draws, and its change. */
   media: { value: number; media: MediaItem | null; onValueChange: (value: number, item: MediaItem | null) => void; onBlur: () => void; disabled: boolean };
@@ -266,7 +266,7 @@ export type FieldKind = keyof FieldBindings;
 
 /** What a control needs from the form, spread onto it (`h(ui.Input, form.field('title'))`): depends on the field's type. */
 export type FieldBinding =
-  /** `toggle`, `checkbox`: Base UI's checked state. */
+  /** `toggle`, `checkbox`: on or off. */
   | FieldBindings['toggle']
   /** `image`, `file`: `ui.MediaPicker`'s value, the attachment it draws, and its change. */
   | FieldBindings['media']
@@ -292,7 +292,7 @@ function asRange(value: FieldValue): DateRangeValue {
 }
 
 /** A record form whose page draws the fields itself (the SDK's `useForm`); Fyldo keeps loading, checking and saving. */
-export interface RecordFormApi {
+export interface FormApi {
   /** `loading` (the defaults are in `values`), `ready`, `missing` (no such record) or `failed` (`Frame` says why). */
   status: Load['status'];
   /** Every field's current value: the record's, with this session's edits, and the defaults while it loads. */
@@ -323,8 +323,11 @@ export interface RecordFormApi {
     (id: string): FieldBinding;
     <K extends FieldKind>(id: string, kind: K): FieldBindings[K];
   };
-  /** Check a field now (on blur); `path` checks one message key of it. Returns whether it is valid. */
-  validate: (id: string, path?: string) => boolean;
+  /**
+   * Check now, as on blur, and return whether it is valid: a field (`title`), the part of a field at a path
+   * (`slides.2`, `slides.2.link`: the messages at or under it), or, without a path, every field that is enabled and shown.
+   */
+  validate: (path?: string) => boolean;
   /** Check every field, then save the record; false when it was refused or failed (the Save Bar says why). */
   save: () => Promise<boolean>;
   discard: () => void;
@@ -377,7 +380,7 @@ function RecordFrame({ engine, formId, children }: { engine: RecordEngine; formI
  *
  * A function declaration on purpose: the SDK object takes it while an import cycle is evaluated (app/lib/sdk.ts).
  */
-export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormApi {
+export function useRecordForm({ form, record, onSaved }: FormProps): FormApi {
   const host = useFormHost();
   const def = host?.forms.find((f) => f.id === form) ?? null;
   useMissingFormReport(host !== null, def !== null, form, 'useForm');
@@ -441,7 +444,7 @@ export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormA
     }
     return { value, onValueChange: set, onBlur, disabled };
   };
-  const field = bind as RecordFormApi['field'];
+  const field = bind as FormApi['field'];
 
   return {
     status: load.status,
@@ -462,7 +465,14 @@ export function useRecordForm({ form, record, onSaved }: FormProps): RecordFormA
     invalidSaves: state.reveal,
     set: (id, value, options) => controller.setValue(id, value, undefined, options?.clear),
     field,
-    validate: (id, path) => controller.validateField(id, path),
+    validate: (path) => {
+      if (path !== undefined) {
+        const [id = ''] = path.split('.');
+        return controller.validateField(id, path === id ? undefined : path);
+      }
+      const ids = [...fields.values()].filter((f) => !f.disabled && controller.visibility.field(f.id)).map((f) => f.id);
+      return ids.map((id) => controller.validateField(id)).every(Boolean);
+    },
     save: () => controller.save(),
     discard: controller.discard,
     Frame,

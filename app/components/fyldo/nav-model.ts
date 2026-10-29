@@ -19,8 +19,11 @@ export interface NavGroup {
   items: NavEntry[];
 }
 
-/** Utility link (Documentation, Help & support): sidebar footer, or top-right of the Top Navigation. */
-export interface UtilityLink {
+/**
+ * A link drawn as a button: a utility link (Documentation, Help & support) in the sidebar footer or the Top Navigation,
+ * and a page's own links in its Page Header (`page.links` of a custom page).
+ */
+export interface PageLink {
   label: string;
   href: string;
   icon?: string;
@@ -28,7 +31,7 @@ export interface UtilityLink {
 }
 
 /** PHP's links (`url`) as the buttons draw them (`href`). */
-export const toUtilityLinks = (links: PageLinkDef[] = []): UtilityLink[] =>
+export const toUtilityLinks = (links: PageLinkDef[] = []): PageLink[] =>
   links.map((l) => ({ label: l.label, href: l.url, icon: l.icon || undefined, external: l.external }));
 
 /** The instance `logo`: an Iconsax icon (24px) or an image URL (24×24). None: the Fyldo mark. */

@@ -2,14 +2,14 @@ import { useId, type MouseEvent, type ReactElement } from 'react';
 import { __, _x, localizeDigits, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { BrandMark } from './BrandMark';
-import type { Brand, NavGroup, UtilityLink } from './nav-model';
+import type { Brand, NavGroup, PageLink } from './nav-model';
 import { NavItem } from './NavItem';
 
 export interface SidebarProps {
   brand: Brand;
   groups: NavGroup[];
   /** Utility links at the bottom (Documentation, Help & support). */
-  links?: UtilityLink[];
+  links?: PageLink[];
   locale?: string;
   /** Client-side navigation to a page (plain left click on a nav item). */
   onNavigate?: (pageId: string, event: MouseEvent<HTMLAnchorElement>) => void;

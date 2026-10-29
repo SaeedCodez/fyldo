@@ -111,7 +111,7 @@ describe('Setting Row + Input', () => {
   it('layout="field" uses the wide control column when `wide`, and works the same in RTL', () => {
     render(
       <div dir="rtl">
-        <SettingRow title="عنوان سایت" layout="field" wide>
+        <SettingRow title="عنوان سایت" layout="field" width="wide">
           <Input defaultValue="" />
         </SettingRow>
       </div>,
@@ -224,6 +224,44 @@ describe('Select', () => {
 
     await userEvent.click(screen.getByRole('option', { name: 'فارسی' }));
     await waitFor(() => expect(onValueChange).toHaveBeenCalledWith('fa'));
+    root.remove();
+  });
+  it('onBlur: not when the popup opens; after the pick is committed; when focus leaves the closed control', async () => {
+    const calls: string[] = [];
+    const root = document.createElement('div');
+    document.body.append(root);
+    function Harness() {
+      const [value, setValue] = useState('');
+      return (
+        <PortalContainerContext.Provider value={root}>
+          <Select
+            aria-label="Language"
+            options={options}
+            value={value}
+            onValueChange={(next) => {
+              calls.push(`change:${next}`);
+              setValue(next);
+            }}
+            onBlur={() => calls.push('blur')}
+          />
+          <button type="button">After</button>
+        </PortalContainerContext.Provider>
+      );
+    }
+    render(<Harness />);
+
+    const trigger = screen.getByRole('combobox', { name: 'Language' });
+    await userEvent.click(trigger);
+    await screen.findByRole('listbox');
+    expect(calls).toEqual([]);
+
+    await userEvent.click(screen.getByRole('option', { name: 'English' }));
+    await waitFor(() => expect(calls).toEqual(['change:en', 'blur']));
+
+    trigger.focus();
+    await userEvent.tab();
+    expect(screen.getByRole('button', { name: 'After' })).toHaveFocus();
+    expect(calls).toEqual(['change:en', 'blur', 'blur']);
     root.remove();
   });
 });

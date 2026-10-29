@@ -1,16 +1,37 @@
 import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox';
 import { CheckboxGroup as BaseCheckboxGroup } from '@base-ui/react/checkbox-group';
 import { Field } from '@base-ui/react/field';
-import type { ComponentPropsWithoutRef, FocusEvent, ReactElement } from 'react';
+import type { FocusEvent, ReactElement } from 'react';
 import { cn } from '../../lib/cn';
 import { useGroupLabels } from './group-field';
+import type { NativeAttributes } from './native';
 import { OPTION_LIST, OptionItem, type OptionDef } from './option-item';
 
-export interface CheckboxProps extends Omit<ComponentPropsWithoutRef<typeof BaseCheckbox.Root>, 'children' | 'className'> {
+/** What Checkbox and Toggle share: the on/off state, one argument for its change, and the form attributes. */
+export interface CheckedAttributes extends NativeAttributes<HTMLElement> {
+  checked?: boolean;
+  defaultChecked?: boolean;
+  /** The new state; one argument. */
+  onCheckedChange?: (checked: boolean) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  /** The name of the hidden input, for a native form. */
+  name?: string;
+}
+
+export interface CheckboxProps extends CheckedAttributes {
   /** Names the option. Omit inside a Setting Row (its title is the name) or a group (each option has one). */
   label?: string;
   description?: string;
-  className?: string;
+  /** A display state: a parent whose children are partly checked. */
+  indeterminate?: boolean;
+}
+
+/** Inside a Checkbox Group: an option's value, or the "all" checkbox (`parent`). Fyldo's own; not in the SDK. */
+interface CheckboxBoxProps extends Omit<CheckboxProps, 'label' | 'description'> {
+  value?: string;
+  parent?: boolean;
 }
 
 /*
@@ -40,9 +61,14 @@ const GLYPH = (
 );
 
 /** The bare 20px box. Inside a Setting Row / group the surrounding Field names it. */
-function CheckboxBox({ className, ...props }: Omit<CheckboxProps, 'label' | 'description'>): ReactElement {
+function CheckboxBox({ className, onCheckedChange, ...props }: CheckboxBoxProps): ReactElement {
   return (
-    <BaseCheckbox.Root {...props} data-slot="fy-checkbox" className={cn(BOX, className)}>
+    <BaseCheckbox.Root
+      {...props}
+      onCheckedChange={onCheckedChange && ((checked) => onCheckedChange(checked))}
+      data-slot="fy-checkbox"
+      className={cn(BOX, className)}
+    >
       <BaseCheckbox.Indicator className="fy:absolute fy:inset-0" data-slot="fy-checkbox-indicator">
         {GLYPH}
       </BaseCheckbox.Indicator>

@@ -5,7 +5,7 @@ import type { RelationSearch } from '../../lib/relation';
 import type { NoticeDef, PageDef } from '../../types';
 import { FormBody } from './FormBody';
 import { Notices } from './Notices';
-import type { UtilityLink } from './nav-model';
+import type { PageLink } from './nav-model';
 import { PageHeader } from './PageHeader';
 import { toUtilityLinks } from './nav-model';
 
@@ -24,7 +24,7 @@ export interface SettingsPageProps {
   tab?: string;
   onTabChange?: (tab: string) => void;
   /** The instance's Page Header actions (links placed in the header; none in the Top Navigation layout). The page's own `links` come first. */
-  headerLinks?: UtilityLink[];
+  headerLinks?: PageLink[];
   headingRef?: Ref<HTMLHeadingElement>;
   locale?: string;
   /** PHP notices for this page (`Instance::admin_notice()`), most severe first, dismissed ones already left out. */

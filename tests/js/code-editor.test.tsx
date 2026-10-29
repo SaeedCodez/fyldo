@@ -73,7 +73,7 @@ function Editor(props: Partial<CodeEditorProps> & { initial?: string; onValue?: 
   const { initial = '', onValue, ...rest } = props;
   const [value, setValue] = useState(initial);
   return (
-    <SettingRow title="Custom CSS" description="Loaded after your theme styles." layout="stacked" full>
+    <SettingRow title="Custom CSS" description="Loaded after your theme styles." layout="stacked" width="full">
       <CodeEditor
         language="css"
         {...rest}

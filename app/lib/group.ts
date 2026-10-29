@@ -55,7 +55,7 @@ export function groupErrors(
       if (hidden?.has(sub.id)) continue;
       const value = sub.id in item ? item[sub.id] : sub.default;
       const failure = check(sub.validate, value);
-      const message = failure ? messageFor(failure) : sub.type === 'custom' ? customError(sub, value) : null;
+      const message = failure ? messageFor(failure) : sub.type === 'custom' ? customError(sub, value, (id) => (id in item ? item[id] : field.fields.find((f) => f.id === id)?.default)) : null;
       if (message) errors[errorKey(field.id, index, sub.id)] = message;
     }
   });

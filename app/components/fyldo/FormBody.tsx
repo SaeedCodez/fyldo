@@ -310,7 +310,7 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
           {tabs.length > 0 ? (
             <Tabs
               className="fy:mt-6"
-              label={form.title ?? ''}
+              aria-label={form.title ?? ''}
               locale={locale}
               value={tab || (tabs[0]?.id ?? '')}
               onValueChange={(next) => onTabChange?.(next)}
@@ -333,7 +333,7 @@ export function FormBody({ form, controller, container, search, tab = '', onTabC
               onOpenChange={(open) => {
                 if (!open) setDanger(null);
               }}
-              type="danger"
+              tone="danger"
               title={lastDanger.current?.action?.confirm.title || __('Reset all settings?', 'fyldo')}
               description={lastDanger.current?.action?.confirm.description || __('Every option on this page will return to its default value. This can’t be undone.', 'fyldo')}
               cancelLabel={__('Cancel', 'fyldo')}

@@ -264,7 +264,7 @@ describe('Modal: Danger type', () => {
         <Modal
           open={open}
           onOpenChange={setOpen}
-          type={type}
+          tone={type}
           title="Reset all settings?"
           description="Every option will return to its default value. This can’t be undone."
           cancelLabel="Cancel"

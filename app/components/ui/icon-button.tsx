@@ -1,12 +1,12 @@
 import { Button as BaseButton } from '@base-ui/react/button';
-import type { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { Icon } from '../../icons/Icon';
 import { Spinner } from '../../icons/Spinner';
 import { cn } from '../../lib/cn';
-import { BUTTON_BASE, BUTTON_DISABLED, BUTTON_VARIANT, type ButtonSize, type ButtonVariant } from './button';
+import { BUTTON_BASE, BUTTON_DISABLED, BUTTON_VARIANT, type ButtonAttributes, type ButtonSize, type ButtonVariant } from './button';
 import { Tooltip, type TooltipSide } from './tooltip';
 
-export interface IconButtonProps extends Omit<ComponentPropsWithoutRef<typeof BaseButton>, 'children' | 'aria-label'> {
+export interface IconButtonProps extends Omit<ButtonAttributes, 'aria-label'> {
   /** Iconsax name. */
   icon: string;
   /**
@@ -63,7 +63,7 @@ export function IconButton({
         data-variant={variant}
         data-size={size}
         data-loading={loading ? '' : undefined}
-        className={cn(BUTTON_BASE, SIZE[size], BUTTON_VARIANT[variant], BUTTON_DISABLED[variant], className as string | undefined)}
+        className={cn(BUTTON_BASE, SIZE[size], BUTTON_VARIANT[variant], BUTTON_DISABLED[variant], className)}
       >
         {loading ? <Spinner size={ICON_BUTTON_ICON[size]} /> : <Icon name={icon} size={ICON_BUTTON_ICON[size]} />}
       </BaseButton>

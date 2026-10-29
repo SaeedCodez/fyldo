@@ -14,7 +14,7 @@ export interface PaginationProps {
   /** At the start: what is shown ("Showing 1–8 of 24 items"), in the page's numerals. */
   summary?: ReactNode;
   /** The `<nav>`'s accessible name. Default "Pagination"; name it when a page has more than one ("Stories pages"). */
-  label?: string;
+  'aria-label'?: string;
   className?: string;
 }
 
@@ -24,7 +24,7 @@ export interface PaginationProps {
  * the page's numerals), Next. The arrows mirror in RTL (Previous points right). At either end its button is disabled,
  * never hidden, and stays focusable so focus is not lost on the last click; the page text is announced when it changes.
  */
-export function Pagination({ page, pageCount, onPageChange, summary, label, className }: PaginationProps): ReactElement | null {
+export function Pagination({ page, pageCount, onPageChange, summary, 'aria-label': label, className }: PaginationProps): ReactElement | null {
   const locale = usePortalContainer()?.lang || undefined;
   if (pageCount <= 1) return null;
 

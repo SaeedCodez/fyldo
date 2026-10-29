@@ -5,7 +5,7 @@ import { routeHref, type Route } from '../../lib/router';
 import type { FyldoConfig } from '../../types';
 import { Button } from '../ui/button';
 import { BrandMark } from './BrandMark';
-import { toUtilityLinks, type Brand, type NavGroup, type UtilityLink } from './nav-model';
+import { toUtilityLinks, type Brand, type NavGroup, type PageLink } from './nav-model';
 import { Sidebar } from './Sidebar';
 import { TopNavigation } from './TopNavigation';
 
@@ -29,7 +29,7 @@ export function navGroups(config: FyldoConfig, route: Route): NavGroup[] {
   return groups;
 }
 
-export const utilityLinks = (config: FyldoConfig, placement: 'footer' | 'header'): UtilityLink[] =>
+export const utilityLinks = (config: FyldoConfig, placement: 'footer' | 'header'): PageLink[] =>
   toUtilityLinks(config.links.filter((l) => l.placement === placement));
 
 /**
@@ -138,7 +138,7 @@ export function Shell({ config, route, onNavigate, children }: ShellProps): Reac
 interface MenuDisclosureProps {
   brand: Brand;
   groups: NavGroup[];
-  links: UtilityLink[];
+  links: PageLink[];
   locale: string;
   route: Route;
   onNavigate: (page: string, event: MouseEvent<HTMLAnchorElement>) => void;

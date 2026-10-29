@@ -13,8 +13,11 @@ export interface ModalProps {
   open: boolean;
   /** Called with `false` when the modal asks to close: Esc, the close button, a click on the backdrop (Default only), or Cancel. Esc is Cancel: it never confirms. */
   onOpenChange: (open: boolean) => void;
-  /** Figma `Type`. Default: a confirmation that discards work. Danger: an irreversible action, with an Error button. */
-  type?: 'default' | 'danger';
+  /**
+   * Figma `Type`, named `tone` as on Section Card. Default: a confirmation that discards work. Danger: an irreversible
+   * action, with an Error button.
+   */
+  tone?: 'default' | 'danger';
   /** A question that names the action ("Discard unsaved changes?", "Reset all settings?"). */
   title: string;
   description?: string;
@@ -60,14 +63,14 @@ export interface ModalProps {
  * and focus returns to the trigger on close, except after Confirm, whose action decides where focus goes next (e.g.
  * the next page's heading). Portals into the Fyldo root.
  */
-export function Modal({ open, onOpenChange, type = 'default', title, description, cancelLabel, confirmLabel, onConfirm, confirmKeyword, focusAfterConfirm, children }: ModalProps): ReactElement {
+export function Modal({ open, onOpenChange, tone = 'default', title, description, cancelLabel, confirmLabel, onConfirm, confirmKeyword, focusAfterConfirm, children }: ModalProps): ReactElement {
   const container = usePortalContainer();
   const popup = useRef<HTMLDivElement>(null);
   const confirmed = useRef(false);
   const mounted = useRef(true);
   const [typed, setTyped] = useState('');
   const [busy, setBusy] = useState(false);
-  const danger = type === 'danger';
+  const danger = tone === 'danger';
   const keyword = danger ? (confirmKeyword ?? '').trim() : '';
   const matches = keyword === '' || typed.trim() === keyword;
   const D = (danger ? AlertDialog : Dialog) as typeof Dialog;
@@ -123,7 +126,7 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
         <D.Viewport className="fy:fixed fy:inset-0 fy:z-50 fy:flex fy:items-center fy:justify-center fy:p-4">
           <D.Popup
             data-slot="fy-modal"
-            data-type={type}
+            data-type={tone}
             ref={popup}
             initialFocus={() =>
               popup.current?.querySelector<HTMLElement>(keyword ? '[data-modal-keyword]' : '[data-modal-cancel]') ?? true
@@ -153,7 +156,7 @@ export function Modal({ open, onOpenChange, type = 'default', title, description
                     placeholder={keyword}
                     size="md"
                     value={typed}
-                    onChange={(event) => setTyped(event.target.value)}
+                    onValueChange={setTyped}
                     disabled={busy}
                     autoComplete="off"
                     autoCapitalize="off"

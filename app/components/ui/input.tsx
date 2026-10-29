@@ -1,12 +1,19 @@
 import { Field } from '@base-ui/react/field';
-import { useLayoutEffect, useRef, type ComponentPropsWithoutRef, type ReactElement, type ReactNode } from 'react';
+import { useCallback, useLayoutEffect, useRef, type HTMLInputTypeAttribute, type ReactElement, type ReactNode, type Ref } from 'react';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 import { toAsciiDigits } from '../../lib/digits';
 import { CONTROL_BASE, CONTROL_SIZE, type ControlSize } from './control';
+import type { TextAttributes } from './native';
 
-export interface InputProps extends Omit<ComponentPropsWithoutRef<typeof Field.Control>, 'size' | 'prefix' | 'children'> {
+export interface InputProps extends TextAttributes<HTMLInputElement> {
   size?: ControlSize;
+  /** `text` (default), `email`, `url`, `password`, `search`, `tel`… */
+  type?: HTMLInputTypeAttribute;
+  inputMode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
+  maxLength?: number;
+  minLength?: number;
+  pattern?: string;
   /** Iconsax name shown before the value (hints the content: search, URL). */
   prefixIcon?: string;
   /** Trailing content, usually an icon-only action (clear). */
@@ -20,13 +27,26 @@ export interface InputProps extends Omit<ComponentPropsWithoutRef<typeof Field.C
   digits?: boolean;
 }
 
+/** Points the caller's `ref` (a callback or an object) at the input as well. */
+function assignRef<T>(ref: Ref<T> | undefined, element: T | null): void {
+  if (typeof ref === 'function') ref(element);
+  else if (ref) ref.current = element;
+}
+
 /**
  * The bordered text control. Must be rendered inside a Base UI `Field.Root` (see FieldShell / SettingRow), which
  * supplies the id, label association, description and error wiring.
  */
-export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = false, className, onValueChange, ...props }: InputProps): ReactElement {
+export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = false, className, onValueChange, ref, ...props }: InputProps): ReactElement {
   const control = useRef<HTMLInputElement>(null);
   const caret = useRef<number | null>(null);
+  const setControl = useCallback(
+    (element: HTMLInputElement | null) => {
+      control.current = element;
+      assignRef(ref, element);
+    },
+    [ref],
+  );
 
   // Replacing the text moves the caret to the end; put it back after what was before it (a dropped ٬ shortens that).
   const restoreCaret = (): void => {
@@ -38,11 +58,11 @@ export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = f
   });
 
   return (
-    <div data-slot="fy-input" className={cn(CONTROL_BASE, CONTROL_SIZE[size], className as string | undefined)}>
+    <div data-slot="fy-input" className={cn(CONTROL_BASE, CONTROL_SIZE[size], className)}>
       {prefixIcon ? <Icon name={prefixIcon} size={16} className="fy:text-icon-tertiary" /> : null}
       <Field.Control
         {...props}
-        ref={control}
+        ref={setControl}
         onValueChange={(next, details) => {
           const fixed = digits ? toAsciiDigits(next) : next;
           if (fixed !== next) {
@@ -56,7 +76,7 @@ export function Input({ size = 'sm', prefixIcon, suffix, ltr = false, digits = f
               control.current.setSelectionRange(pending, pending);
             });
           }
-          onValueChange?.(fixed, details);
+          onValueChange?.(fixed);
         }}
         dir={ltr ? 'ltr' : props.dir}
         className={cn(

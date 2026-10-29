@@ -63,11 +63,6 @@ interface PickerBase {
   locale?: string;
   /** The popup closed, or focus left the closed field (the caller validates). */
   onBlur?: () => void;
-  /**
-   * One end of a Date Range Field: no chevron and no Equivalent line (Figma draws the icon and the value only). A time's
-   * clock icon then opens its panel.
-   */
-  bare?: boolean;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   className?: string;
@@ -82,6 +77,18 @@ export interface DatePickerProps extends PickerBase {
   /** The earliest / latest value: stored format, or `today` (date) / `now` (datetime). */
   min?: string;
   max?: string;
+}
+
+/** A range's own ends (Date Range Picker); not in the SDK. */
+interface RangeEndProps {
+  /**
+   * One end of a Date Range Field: no chevron and no Equivalent line (Figma draws the icon and the value only). A time's
+   * clock icon then opens its panel.
+   */
+  bare?: boolean;
+}
+
+export interface DatePickerInternalProps extends DatePickerProps, RangeEndProps {
   /** A stored value whose month the panel shows while the field is empty (a range's end opens on its start's month). */
   openOn?: string;
 }
@@ -110,7 +117,7 @@ export function DatePicker({
   bare = false,
   className,
   ...aria
-}: DatePickerProps): ReactElement {
+}: DatePickerInternalProps): ReactElement {
   const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLDivElement | null>(null);
   const control = useRef<HTMLElement | null>(null);
@@ -239,7 +246,7 @@ export function TimePicker({
   bare = false,
   className,
   ...aria
-}: TimePickerProps): ReactElement {
+}: TimePickerProps & RangeEndProps): ReactElement {
   const locale = useScreenLocale(localeProp);
   const anchor = useRef<HTMLDivElement | null>(null);
   const input = useRef<HTMLElement | null>(null);

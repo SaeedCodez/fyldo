@@ -165,7 +165,7 @@ export function FieldRenderer({
 
     case 'choice':
       return (
-        <SettingRow {...common} group cards>
+        <SettingRow {...common} group width="cards">
           <ChoiceCards
             options={field.options}
             content={field.content}
@@ -276,7 +276,7 @@ export function FieldRenderer({
       // The end at fault is drawn in red: the one the failure names (the server's message has the same cause).
       const fault = error && check(field.validate, range)?.params.end === 'start' ? 'start' : 'end';
       return (
-        <SettingRow {...common} group ownError range>
+        <SettingRow {...common} group ownError width="range">
           <DateRangePicker
             size="md"
             kind={kind}
@@ -318,7 +318,7 @@ export function FieldRenderer({
     case 'file':
       // A group: the title names it, the buttons inside name themselves (the field label is part of each name).
       return (
-        <SettingRow {...common} group wide>
+        <SettingRow {...common} group width="wide">
           <MediaPicker
             kind={field.type}
             label={field.label}
@@ -345,7 +345,7 @@ export function FieldRenderer({
       const first = atLines[0];
       const message = error ?? (first ? sprintf(__('Line %1$s: %2$s', 'fyldo'), formatNumber(first.line, locale), first.message) : undefined);
       return (
-        <SettingRow {...common} error={message} full>
+        <SettingRow {...common} error={message} width="full">
           <CodeEditor
             value={typeof value === 'string' ? value : ''}
             language={field.language}
@@ -364,7 +364,7 @@ export function FieldRenderer({
     case 'textarea': {
       const text = typeof value === 'string' ? value : '';
       return (
-        <SettingRow {...common} wide errorInControl>
+        <SettingRow {...common} width="wide" errorInControl>
           <Textarea
             value={text}
             placeholder={field.placeholder}
@@ -473,7 +473,7 @@ export function FieldRenderer({
     case 'group':
       // A list of items: the title names the group, each sub-field is a field of its own (FieldRenderer, `item` variant).
       return (
-        <SettingRow {...common} layout="stacked" group full>
+        <SettingRow {...common} layout="stacked" group width="full">
           <FieldGroup
             field={field}
             value={value}

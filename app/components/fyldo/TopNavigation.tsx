@@ -3,7 +3,7 @@ import { __ } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { ButtonLink } from '../ui/button';
 import { BrandMark } from './BrandMark';
-import type { Brand, NavGroup, UtilityLink } from './nav-model';
+import type { Brand, NavGroup, PageLink } from './nav-model';
 import { isPlainClick } from './NavItem';
 import { TAB_OUTER, TabLook } from './Tab';
 
@@ -11,7 +11,7 @@ export interface TopNavigationProps {
   brand: Brand;
   groups: NavGroup[];
   /** Utility links top-right (Tertiary Small buttons with a leading icon). */
-  links?: UtilityLink[];
+  links?: PageLink[];
   locale?: string;
   onNavigate?: (pageId: string, event: MouseEvent<HTMLAnchorElement>) => void;
 }

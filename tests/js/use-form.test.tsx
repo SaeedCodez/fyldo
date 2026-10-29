@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { Form, useRecordForm, type FormProps, type RecordFormApi } from '../../app/components/fyldo/Form';
+import { Form, useRecordForm, type FormProps, type FormApi } from '../../app/components/fyldo/Form';
 import { SectionCard } from '../../app/components/fyldo/SectionCard';
 import { SettingRow } from '../../app/components/fyldo/SettingRow';
 import { Input } from '../../app/components/ui/input';
@@ -201,14 +201,14 @@ describe('useForm', () => {
 describe('useForm field(id, kind)', () => {
   /** Hands the form's API to the test, as a page's own component would use it. */
   function probe(stored: Record<string, FieldValue>) {
-    const form: { current?: RecordFormApi } = {};
+    const form: { current?: FormApi } = {};
     function Probe() {
       form.current = useRecordForm({ form: 'kinds', record: '7' });
       return <form.current.Frame />;
     }
     const cover: MediaItem = { id: 12, filename: 'cover.jpg', filesize: 0, mime: 'image/jpeg', extension: 'jpg', width: 800, height: 600, thumbnail: null };
     setup({ readRecord: async () => ({ key: '7', values: stored, revision: 'r1', media: { cover } }) }, <Probe />);
-    return form as { current: RecordFormApi };
+    return form as { current: FormApi };
   }
 
   it('gives each kind its control’s value type, whatever the record stores', async () => {
@@ -271,5 +271,52 @@ describe('Form with a value only a page draws', () => {
     await userEvent.click(within(bar()).getByRole('button', { name: 'Save changes' }));
     await screen.findByText('All changes saved');
     expect(api.saveRecord).toHaveBeenCalledWith('story', '42', { ...values, title: 'Breakfast!' }, 'r1');
+  });
+});
+
+describe('useForm validate(path?)', () => {
+  /** The story form's API, with Editor's controls drawn. */
+  function probe(api: Partial<RecordsApi> = {}) {
+    const form: { current?: FormApi } = {};
+    function Probe() {
+      form.current = useRecordForm({ form: 'story', record: '42' });
+      return <form.current.Frame />;
+    }
+    setup(api, <Probe />);
+    return form as { current: FormApi };
+  }
+
+  it('checks one field by its id, or every field without a path', async () => {
+    const form = probe();
+    await waitFor(() => expect(form.current.status).toBe('ready'));
+
+    act(() => form.current.set('title', ''));
+    expect(form.current.error('title')).toBeUndefined();
+    let valid = true;
+    act(() => void (valid = form.current.validate()));
+    expect(valid).toBe(false);
+    expect(form.current.error('title')).toBe('This field is required.');
+
+    act(() => form.current.set('title', 'Lunch', { clear: [] }));
+    act(() => void (valid = form.current.validate('title')));
+    expect(valid).toBe(true);
+    expect(form.current.error('title')).toBeUndefined();
+  });
+
+  it('a path inside a value checks only the messages at or under it', async () => {
+    const form = probe({
+      saveRecord: async () =>
+        Promise.reject(new ApiError('Some values are not valid.', 422, 'fyldo_invalid', { 'slides.0.link': 'Enter a full URL.', 'slides.1.link': 'Enter a full URL.' })),
+    });
+    await waitFor(() => expect(form.current.status).toBe('ready'));
+    act(() => form.current.set('title', 'Lunch'));
+    await act(() => form.current.save());
+    expect(form.current.errorCount('slides')).toBe(2);
+
+    let valid = false;
+    act(() => void (valid = form.current.validate('slides.1')));
+    expect(valid).toBe(true);
+    expect(form.current.error('slides.1.link')).toBeUndefined();
+    expect(form.current.error('slides.0.link')).toBe('Enter a full URL.');
   });
 });

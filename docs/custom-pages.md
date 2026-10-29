@@ -84,13 +84,26 @@ breaking the screen.
 | | |
 |---|---|
 | `version` | `1`. Within v1 members are only added, never removed or changed. |
+| `fyldoVersion` | The version of the Fyldo that serves the screen (`'1.2.0'`), from its client config. For a message or a log; to use a member added in a later 1.x, test for it instead (below). |
 | `React` | Fyldo's React 19. |
-| `ui` | Fyldo's components, with the same props as in `app/components/ui/*` and `app/components/fyldo/*`: `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `IconPicker`, `CodeEditor`, `ChoiceCards`, `GroupItem` and `GroupList` ([below](#field-controls)). |
+| `ui` | Fyldo's components. Their props are Fyldo's own, each one typed as `<Name>Props` in `fyldo-sdk.d.ts` (`ButtonProps`, `SelectProps`…): `Button`, `ButtonLink`, `IconButton`, `Icon`, `Input`, `NumberInput`, `Textarea`, `Select`, `MultiSelect`, `Checkbox`, `RadioGroup`, `Toggle`, `SegmentedControl`, `Badge`, `Tag`, `Notice`, `EmptyState`, `Modal`, `Tooltip`, `Tabs`, `PageHeader`, `SectionCard`, `SettingRow`, for list and dashboard screens `ItemCard`, `AddItemCard`, `Pagination`, `StatCard`, and the controls of Fyldo's own fields for a record editor of your own: `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `IconPicker`, `CodeEditor`, `ChoiceCards`, `GroupItem` and `GroupList` ([below](#field-controls)). |
 | `Form` | A Fyldo form for one record (below). |
 | `useForm` | The same form for a page that draws the fields itself ([below](#drawing-the-fields-yourself-useform)). |
 | `iconSvg` | `iconSvg( name, { size?, className?, label? } )`: a promise of one Iconsax icon's `<svg>` markup, the same as PHP's `Fyldo::icon()` (24×24 viewBox, `currentColor`, no script), `''` for a name that is not an icon. Loads only that icon's module, once. For drawing outside React: a shadow root, an iframe, a preview of your site. Inside React, use `ui.Icon`. |
 
 Custom fields get the same object.
+
+Within 1.x the SDK only grows. To use something a later 1.x added, feature-detect it, `'name' in sdk` (or
+`'Name' in sdk.ui` for a component), rather than comparing `fyldoVersion`; in the types, every addition after 1.0
+carries `@since` in its doc comment.
+
+```js
+export default function stories(sdk) {
+  const { React, ui } = sdk;
+  const Picker = 'NewPicker' in ui ? ui.NewPicker : ui.Select; // a component a later 1.x added, with a fallback
+  // …
+}
+```
 
 #### Props of the page
 
@@ -268,10 +281,10 @@ function StoryEditor({ record, navigate }) {
 | `status` | `loading` (the defaults are in `values`, `Frame` makes the fields inert), `ready`, `missing` or `failed` (`Frame` says why, with Retry). |
 | `values` | Every field's current value: the record's, with the edits, and the defaults while it loads. |
 | `field(id)` | Props for the control of a field, by its type: `{ value, onValueChange, onBlur, disabled }`, `{ checked, onCheckedChange, disabled }` for `toggle` and `checkbox`, and `ui.MediaPicker`'s `{ value, media, onValueChange, onBlur, disabled }` for `image` and `file`. `onBlur` checks the field, as Fyldo's fields do. |
-| `field(id, kind)` | The props of one kind of control, the value in that control's type (`text`: `''` for a value that is not a string, and so on), so TypeScript needs no narrowing: `text` (`{ value: string, … }`: Input, Textarea, Select, RadioGroup, SegmentedControl, ChoiceCards, ColorPicker, DatePicker, TimePicker, CodeEditor), `number` (`number \| string`: NumberInput), `list` (`string[]`: MultiSelect, CheckboxGroup), `range` (`{ start, end }`: DateRangePicker), `toggle` (as `field(id)` for a toggle: Toggle, Checkbox) and `media` (as for an image: MediaPicker). A kind that does not match the field's type is reported in the console; a `custom` value binds as any kind. |
+| `field(id, kind)` | The props of one kind of control, the value in that control's type (`text`: `''` for a value that is not a string, and so on), so TypeScript needs no narrowing: `text` (`{ value: string, … }`: Input, Textarea, Select, RadioGroup, SegmentedControl, ChoiceCards, ColorPicker, DatePicker, TimePicker, CodeEditor), `number` (`number \| string`: NumberInput), `list` (`string[]`: MultiSelect), `range` (`{ start, end }`: DateRangePicker), `toggle` (as `field(id)` for a toggle: Toggle, Checkbox) and `media` (as for an image: MediaPicker). A kind that does not match the field's type is reported in the console; a `custom` value binds as any kind. |
 | `set(id, value, { clear })` | Set a value the page manages itself. `clear`: the message keys the edit makes stale (`['slides.2.link']`); default every message of the field. |
 | `error(path)`, `errorCount(path)`, `errors` | A message, and how many there are at or under a path (`slides.2` for a slide's Group Item). Messages come from the field's `validate` rules (on blur and on save) and from the server (422). |
-| `validate(id, path)` | Check a field now (on blur of a control the page draws itself); `path` checks one message key. |
+| `validate(path?)` | Check now (on blur of a control the page draws itself) and return whether it is valid. The path is the one `error`, `errorCount` and `visible` take: a field (`title`), or a part of a value (`slides.2`, `slides.2.link`: the messages at or under it). Without a path, every field that is enabled and shown. |
 | `visible(path)` | Whether a field shows for the current values (its `dependency` and its section's, [conditional fields](../README.md#conditional-fields)): draw it only then. `slides.2.link` asks about a sub-field of one item. A hidden field is neither checked nor saved. |
 | `save()`, `discard()`, `dirty`, `saving` | What the Save Bar does, for a button of the page's own. |
 | `invalidSaves` | Grows with every save refused for invalid values: open the items that hold errors then. `Frame` focuses the first invalid control it can find. |
@@ -322,16 +335,19 @@ in the screen's language (Persian numerals and month names on a Persian screen) 
 | `IconPicker` | An Iconsax name in kebab case (`setting-2`), `''` for none | `value`, `onValueChange`, `icons` (the names the modal offers; omitted: every Iconsax icon), `placeholder`, `size` (`sm`, `md`, `lg`; `md` in a Setting Row), `disabled`, `onBlur`, `aria-label` / `aria-labelledby` / `aria-describedby`. The value changes only when the person confirms with "Select icon"; `onBlur` follows when the modal closes. Draw the chosen icon with `ui.Icon` (`name`). |
 | `DatePicker` | `Y-m-d`; with `kind: 'datetime'`, `Y-m-d H:i:s` in UTC, shown in the site's time | `value`, `onValueChange`, `kind`, `calendar` (`auto`, `gregorian`, `jalali`), `min`, `max` (a value, or `today` / `now`), `step` (minutes), `placeholder`, `size`, `disabled`, `onBlur` |
 | `TimePicker` | `H:i` (24-hour) | `value`, `onValueChange`, `step`, `placeholder`, `size`, `disabled`, `onBlur` |
-| `DateRangePicker` | `{ start, end }`, each as above | `value`, `onValueChange`, `kind` (`date`, `time`, `datetime`), `calendar`, `min`, `max`, `step`, `placeholder`, `startPlaceholder`, `endPlaceholder`, `size`, `disabled`, `error` (shown under it), `invalid` (the end drawn red: `start` or `end`), `onBlur`. In a Setting Row, pass the row `group`, `ownError` and `range`. |
-| `MediaPicker` | The attachment ID, `0` for none | `kind` (`image` or `file`), `label` (the media library's title), `value`, `onValueChange(id, item)` (`item` describes the attachment; `0` and `null` on Remove), `onError(message)` (the chosen file is the wrong type or too large: show it as the row's `error`; `item.duration` is a video's or an audio file's length in seconds, `null` when unknown), `mimes` (e.g. `['video/mp4', 'video/webm']`), `maxSize` (bytes), `disabled`, `onBlur`. It looks the attachment up by its ID, so keeping the ID is enough. Set `'media' => true` on the page (or the custom field) so the media library is loaded. In a Setting Row, pass the row `group` and `wide`. |
-| `CodeEditor` | The code, `''` for none | `value`, `onValueChange`, `language` (`css`, `html`, `json`, `text`), `rows` (lines shown, default 7), `toolbar`, `lineNumbers`, `invalidLines` (lines whose number and values turn red, from 1), `disabled`, `onBlur`. Tab indents; Escape, then Tab, leaves it. In a Setting Row, pass the row `full`. |
+| `DateRangePicker` | `{ start, end }`, each as above | `value`, `onValueChange`, `kind` (`date`, `time`, `datetime`), `calendar`, `min`, `max`, `step`, `placeholder`, `startPlaceholder`, `endPlaceholder`, `size`, `disabled`, `error` (shown under it), `invalid` (the end drawn red: `start` or `end`), `onBlur`, `aria-label` / `aria-labelledby` / `aria-describedby` (on its own, or to name it otherwise than its row). In a Setting Row, pass the row `group` and `width: 'range'`, and give the error to the picker, not to the row: the picker draws it and turns only the end at fault red. |
+| `MediaPicker` | The attachment ID, `0` for none | `kind` (`image` or `file`), `label` (the media library's title), `value`, `onValueChange(id, item)` (`item` describes the attachment; `0` and `null` on Remove), `onError(message)` (the chosen file is the wrong type or too large: show it as the row's `error`; `item.duration` is a video's or an audio file's length in seconds, `null` when unknown), `mimes` (e.g. `['video/mp4', 'video/webm']`), `maxSize` (bytes), `disabled`, `onBlur`. It looks the attachment up by its ID, so keeping the ID is enough. Set `'media' => true` on the page (or the custom field) so the media library is loaded. In a Setting Row, pass the row `group` and `width: 'wide'`. |
+| `CodeEditor` | The code, `''` for none | `value`, `onValueChange`, `language` (`css`, `html`, `json`, `text`), `rows` (lines shown, default 7), `toolbar`, `lineNumbers`, `invalidLines` (lines whose number and values turn red, from 1), `disabled`, `onBlur`. Tab indents; Escape, then Tab, leaves it. In a Setting Row, pass the row `width: 'full'`. |
 | `GroupItem` | | `title`, `summary` (a line under it), `preview` (an Iconsax name for the tile, `''` for an empty one), `open`, `onOpenChange`, `status` (labels after the title that say what holds for the item without opening it: `[{ label: 'Scheduled', tone: 'blue', icon: 'clock' }]`, tones as for `Badge`; usually one), `inactive` (the item is kept but not in effect: its preview, title and summary fade; it stays editable; add an "Inactive" `status` too, since fading says nothing to a screen reader), `errorCount` (a red border and "2 errors" while it is invalid), `actions` (your `ui.IconButton`s), `children` (the item's fields, drawn while open). For a list of them use `GroupList`, which draws Group Items for you. Figma: Group Item's `Status` badge and `State=Inactive`. |
-| `GroupList` | Your items, in order (any values) | Figma "Group" without a schema: the list the `group` field draws, for items the page keeps itself (slides, sections). `items`, `onChange(items)` (after a move, an add, a duplicate, a removal or its Undo, or an item's edit), `title(item, index)` (empty: "Item 2"), `summary`, `preview`, `status`, `inactive`, `errorCount` (each `(item, index) => …`, as on Group Item), `children(item, index, update)` (the open item's fields; `update(next)` replaces it), `sortable` (a drag handle: pointer, or Space, the arrows, Space, Escape; every step announced), `addable` with `create()` (Add at the end, Duplicate below, Remove with Undo), `copy`, `min`, `max` (with a count next to Add), `addLabel`, `disabled`, `reveal` (grows on a refused save: the first item with errors opens, e.g. `form.invalidSaves`), `locale`. In a Setting Row pass the row `group` and `full`; on its own give it an `aria-label`. |
-| `ChoiceCards` | The chosen option's `value` | `options` (`{ value, label, description?, image?, disabled? }`), `content` (`image_text`, `image`, `text`), `columns` (2, 3, 4), `value`, `onValueChange`, `disabled`, `onBlur`. A radio group: the arrow keys move the choice. In a Setting Row pass the row `group` and `cards`. |
+| `GroupList` | Your items, in order (any values) | Figma "Group" without a schema: the list the `group` field draws, for items the page keeps itself (slides, sections). `items`, `onChange(items)` (after a move, an add, a duplicate, a removal or its Undo, or an item's edit), `title(item, index)` (empty: "Item 2"), `summary`, `preview`, `status`, `inactive`, `errorCount` (each `(item, index) => …`, as on Group Item), `children(item, index, update)` (the open item's fields; `update(next)` replaces it), `sortable` (a drag handle: pointer, or Space, the arrows, Space, Escape; every step announced), `addable` with `create()` (Add at the end, Duplicate below, Remove with Undo), `copy`, `min`, `max` (with a count next to Add), `addLabel`, `disabled`, `reveal` (grows on a refused save: the first item with errors opens, e.g. `form.invalidSaves`), `locale` (default: the screen's). In a Setting Row pass the row `group` and `width: 'full'`; on its own give it an `aria-label`. |
+| `ChoiceCards` | The chosen option's `value` | `options` (`{ value, label, description?, image?, disabled? }`), `content` (`image_text`, `image`, `text`), `columns` (2, 3, 4), `value`, `onValueChange`, `disabled`, `onBlur`. A radio group: the arrow keys move the choice. In a Setting Row pass the row `group` and `width: 'cards'`. |
 
 `onValueChange` gives the new value, `onBlur` says the person has left the control (the moment Fyldo's fields validate).
 The values are the formats Fyldo's own fields store, so PHP reads them the same way (`Support\Dates::to_site()` for a
 datetime).
+
+A Setting Row's `width` is the control's width as Figma draws it: `default` (400), `wide` (448: Textarea, Media
+Picker), `cards` (576: Choice Cards), `range` (480: Date Range Picker) or `full` (the whole row: Group List, Code Editor).
 
 ## Components for list and dashboard pages
 
@@ -341,11 +357,14 @@ Designed in Figma (sets **Item Card**, **Pagination**, **Stat Card**; Modal's **
   own content: a cover, an avatar), `status` and `flag` (Badges at the top), `tags`, `details` (up to two
   `{ icon, label }` in the footer), `actions` (Tertiary `IconButton`s), `onOpen` / `href` (the whole card opens the
   record; the action buttons stay separate). `AddItemCard` (`title`, `description`, `onClick` / `href`) closes the grid.
-- `Pagination`: `page` (from 1), `pageCount`, `onPageChange`, `summary` ("Showing 1–8 of 24"). Nothing is drawn for a
-  single page; the arrows mirror in RTL.
+- `Pagination`: `page` (from 1), `pageCount`, `onPageChange`, `summary` ("Showing 1–8 of 24"), `aria-label` (the
+  `<nav>`'s name; default "Pagination"). Nothing is drawn for a single page; the arrows mirror in RTL.
 - `StatCard`: `label`, `value`, `icon`, `delta` (`{ value, trend: 'up' | 'down' | 'neutral', tone }`; the colour follows
   `tone`, which defaults to green for up and red for down) and `comparison` ("vs previous 30 days").
-- `Modal` takes `children`: a few controls between the text and the buttons, such as "Also delete its image".
+- `Modal` takes `children`: a few controls between the text and the buttons, such as "Also delete its image". Its
+  `tone` (`default`, `danger`) is Figma's Type, named as on Section Card.
+- `Tabs`: `tabs` (`{ id, label, icon?, badge?, disabled? }`), `value`, `onValueChange`, `aria-label` (names the tab
+  list), `locale` (the badges' numerals; default the screen's), `children(id)` (the active tab's panel).
 
 The usage frames in `design/figma/png/usage/` (`item-card-usage.png`, `pagination-usage.png`, `stat-card-usage.png`,
 `modal-usage.png`) show them in context.

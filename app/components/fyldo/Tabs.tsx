@@ -1,6 +1,7 @@
 import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import type { ReactElement, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import { useScreenLocale } from '../../lib/portal';
 import { TAB_OUTER, TabLook } from './Tab';
 
 export interface TabsItem {
@@ -16,7 +17,8 @@ export interface TabsProps {
   value: string;
   onValueChange: (id: string) => void;
   /** Names the tab list for screen readers (the page title). */
-  label: string;
+  'aria-label': string;
+  /** The badges' numerals; default the screen's locale. */
   locale?: string;
   /** Renders the panel of the active tab. */
   children: (id: string) => ReactNode;
@@ -33,11 +35,12 @@ export function Tabs({
   tabs,
   value,
   onValueChange,
-  label,
-  locale,
+  'aria-label': label,
+  locale: localeProp,
   children,
   className,
 }: TabsProps): ReactElement {
+  const locale = useScreenLocale(localeProp);
   return (
     <BaseTabs.Root
       value={value}

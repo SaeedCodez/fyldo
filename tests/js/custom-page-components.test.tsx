@@ -64,7 +64,7 @@ describe('Pagination', () => {
   });
 
   it('takes its accessible name from `label`', () => {
-    mount(<Pagination page={1} pageCount={2} onPageChange={() => undefined} label="Stories pages" />);
+    mount(<Pagination page={1} pageCount={2} onPageChange={() => undefined} aria-label="Stories pages" />);
     expect(screen.getByRole('navigation', { name: 'Stories pages' })).toBeInTheDocument();
   });
 

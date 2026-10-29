@@ -1,5 +1,22 @@
 /** A custom page in TSX, as docs/custom-pages.md#typescript shows it: checked against the bundled declarations. */
-import type { CustomPageExport, CustomPageProps, FyldoSdk } from 'fyldo';
+import type {
+  ButtonProps,
+  CustomPageExport,
+  CustomPageProps,
+  DateRangeValue,
+  FieldBindings,
+  FieldKind,
+  FieldValue,
+  FormApi,
+  FormProps,
+  FyldoSdk,
+  GroupItemStatus,
+  MediaItem,
+  PageLink,
+  RequestOptions,
+  SelectProps,
+  SettingRowProps,
+} from 'fyldo';
 
 interface Story {
   id: number;
@@ -74,3 +91,53 @@ const stories: CustomPageExport = ({ React, ui, Form, useForm, iconSvg }: FyldoS
 };
 
 export default stories;
+
+/** The 1.x contract: the names the d.ts exports, Fyldo's own props, one-argument callbacks. */
+export function contract(sdk: FyldoSdk, form: FormApi, links: PageLink[], options: RequestOptions): React.ReactElement {
+  const { React, ui } = sdk;
+  const version: string = sdk.fyldoVersion;
+  const hasGroupList = 'GroupList' in ui;
+  const value: FieldValue = form.values.title ?? null;
+  const media: MediaItem | null = form.field('cover', 'media').media;
+  const range: DateRangeValue = form.field('when', 'range').value;
+  const kind: FieldKind = 'list';
+  const list: FieldBindings['list'] = form.field('tags', kind);
+  const status: GroupItemStatus[] = [{ label: 'Scheduled', tone: 'blue', icon: 'clock' }];
+  const props: FormProps = { form: 'story', record: 'new' };
+  const button: ButtonProps = { variant: 'secondary', className: 'acme', onClick: () => undefined };
+  const select: SelectProps = { options: [], value: '', onValueChange: (next: string) => void next, onBlur: () => undefined };
+  const row: SettingRowProps = { title: 'Body', width: 'wide', children: null };
+  const valid: boolean = form.validate() && form.validate('slides.2.link');
+  void [version, hasGroupList, value, media, range, list, status, props, links, options, valid];
+
+  return (
+    <>
+      <ui.Button {...button} />
+      <ui.Select {...select} />
+      <ui.SettingRow {...row} />
+      <ui.Input value="" onValueChange={(next) => void next.toUpperCase()} />
+      <ui.Toggle onCheckedChange={(on) => void (on === true)} />
+      <ui.Tabs tabs={[]} value="" onValueChange={() => undefined} aria-label="Status">
+        {() => null}
+      </ui.Tabs>
+      <ui.Pagination page={1} pageCount={2} onPageChange={() => undefined} aria-label="Stories pages" />
+      <ui.Modal open={false} onOpenChange={() => undefined} tone="danger" title="Delete?" cancelLabel="Cancel" confirmLabel="Delete" onConfirm={() => undefined} />
+      <ui.DateRangePicker value={range} onValueChange={() => undefined} aria-label="Period" />
+      <ui.GroupItem title="One" open={false} onOpenChange={() => undefined} status={status}>
+        {null}
+      </ui.GroupItem>
+      {/* @ts-expect-error Base UI's `render` is not part of Fyldo's props. */}
+      <ui.Button render={<a />} />
+      {/* @ts-expect-error A Setting Row's width is `width`, not a boolean. */}
+      <ui.SettingRow title="Body" wide>
+        {null}
+      </ui.SettingRow>
+      {/* @ts-expect-error `variant` is Fyldo's own (a group's sub-field), not public. */}
+      <ui.SettingRow title="Body" variant="item">
+        {null}
+      </ui.SettingRow>
+      {/* @ts-expect-error `className` is a string, not a function of Base UI's state. */}
+      <ui.Checkbox className={() => 'x'} />
+    </>
+  );
+}

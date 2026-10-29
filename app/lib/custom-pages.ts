@@ -4,7 +4,7 @@
  * module gets the same SDK (app/lib/sdk.ts).
  */
 import type { ComponentType } from 'react';
-import type { UtilityLink } from '../components/fyldo/nav-model';
+import type { PageLink } from '../components/fyldo/nav-model';
 import { isCustomPage, type FyldoConfig, type JsonValue } from '../types';
 import type { RequestFn } from './api';
 import { createModuleRegistry } from './modules';
@@ -13,7 +13,7 @@ import type { FyldoSdk } from './sdk';
 /** What the page gets, in React (`Component` props) and in plain DOM (`mount` / `update`). */
 export interface CustomPageProps {
   /** `links`: the page's own links, ready for `ui.PageHeader`'s `links`. */
-  page: { id: string; title: string; description: string; icon: string; links: UtilityLink[] };
+  page: { id: string; title: string; description: string; icon: string; links: PageLink[] };
   /** The URL segments after the page's id, decoded: `#/announcements/42/edit` → ['42', 'edit']; [] at the page itself. */
   path: string[];
   /** The page's `props` from PHP. */

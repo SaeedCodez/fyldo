@@ -1,11 +1,12 @@
 import { Field } from '@base-ui/react/field';
-import { useEffect, useRef, useState, type ComponentPropsWithoutRef, type ReactElement } from 'react';
+import { useEffect, useRef, useState, type ComponentProps, type ReactElement } from 'react';
 import { _n, formatNumber, sprintf } from '../../i18n';
 import { cn } from '../../lib/cn';
 import { usePortalContainer } from '../../lib/portal';
 import { length } from '../../lib/validation';
 import { CONTROL_BASE } from './control';
 import { FieldError, FieldShell, type FieldShellProps } from './field-shell';
+import type { TextAttributes } from './native';
 
 /** Figma's default Textarea control is 120px tall (≈ 4 rows); each further row adds one 20px line. */
 export const TEXTAREA_DEFAULT_ROWS = 4;
@@ -14,7 +15,7 @@ const LINE = 20;
 const BORDER = 2; // 1px stroke ×2 (Figma counts it inside the 120)
 const PADDING = 16; // 8px ×2
 
-export interface TextareaProps extends Omit<ComponentPropsWithoutRef<typeof Field.Control>, 'size' | 'children' | 'render' | 'rows' | 'maxLength'> {
+export interface TextareaProps extends TextAttributes<HTMLTextAreaElement> {
   /** Rows the default height is authored for (Figma: 4 → 120px). The user can still resize. */
   rows?: number;
   /** Figma "Resize handle": vertical only, or none. */
@@ -32,9 +33,10 @@ export function Textarea({ rows = TEXTAREA_DEFAULT_ROWS, resize = 'vertical', cl
   const minHeight = 2 * LINE + PADDING;
 
   return (
-    <div data-slot="fy-textarea" className={cn(CONTROL_BASE, 'fy:block fy:overflow-hidden fy:rounded-sm', className as string | undefined)}>
+    <div data-slot="fy-textarea" className={cn(CONTROL_BASE, 'fy:block fy:overflow-hidden fy:rounded-sm', className)}>
       <Field.Control
-        {...props}
+        // Base UI types the control's events for an <input>; it renders the <textarea> below.
+        {...(props as ComponentProps<typeof Field.Control>)}
         render={<textarea />}
         style={{ height, minHeight, ...style }}
         data-slot="fy-textarea-control"
@@ -153,9 +155,9 @@ export function TextareaField({ label, hideLabel, description, error, disabled, 
         {...textarea}
         value={text}
         disabled={disabled}
-        onValueChange={(next, details) => {
+        onValueChange={(next) => {
           setInner(next);
-          onValueChange?.(next, details);
+          onValueChange?.(next);
         }}
       />
     </FieldShell>
