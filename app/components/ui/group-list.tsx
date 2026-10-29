@@ -4,6 +4,7 @@ import { DragHandle } from '../../icons/DragHandle';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 import { move } from '../../lib/group';
+import { useScreenLocale } from '../../lib/portal';
 import { Button } from './button';
 import { useGroupLabels } from './group-field';
 import { GroupItem, type GroupItemStatus } from './group-item';
@@ -45,7 +46,7 @@ export interface GroupListProps<T> {
   disabled?: boolean;
   /** Grows when a save is refused: the first item with errors opens. */
   reveal?: number;
-  /** The page's locale for the count (default `en`). */
+  /** The locale of the count's numerals; default the screen's. */
   locale?: string;
   /** On its own (not in a Setting Row), name the list. */
   'aria-label'?: string;
@@ -95,9 +96,10 @@ export function GroupList<T>({
   addLabel,
   disabled = false,
   reveal = 0,
-  locale = 'en',
+  locale: localeProp,
   'aria-label': ariaLabel,
 }: GroupListProps<T>): ReactElement {
+  const locale = useScreenLocale(localeProp);
   const labels = useGroupLabels();
   const toaster = useOptionalToaster();
 

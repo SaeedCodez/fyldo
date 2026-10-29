@@ -78,19 +78,29 @@ export default function workingHours({ React, ui }) {
 
 ### The API (first argument)
 
+The SDK, the same object a [custom page](custom-pages.md#the-sdk-first-argument) gets.
+
 | | |
 |---|---|
-| `version` | `1`. Within v1, members are only ever added, never removed. Custom pages get the same object, with `Form` too. |
+| `version` | `1`. Within v1, members are only ever added, never removed. |
+| `fyldoVersion` | The version of the Fyldo that serves the screen (`'1.2.0'`), from its client config. For a message or a log; to use a member added in a later 1.x, test for it instead (below). |
 | `React` | Fyldo's own React 19. Use it for hooks and `createElement`. **Do not bundle React yourself**: a second copy breaks hooks. |
-| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`, and since custom pages every other public one (`Badge`, `MultiSelect`, `RadioGroup`, `SegmentedControl`, `Tag`, `Tooltip`, and the field controls `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `GroupItem`… — the full list and the controls' props are in [custom-pages.md](custom-pages.md#field-controls)). Their props are the same as in `app/components/ui/*` and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
+| `ui` | Fyldo's components, so your field matches the others: `Button`, `Checkbox`, `Icon`, `Input`, `NumberInput`, `Select`, `Textarea`, `Toggle`, and since custom pages every other public one (`Badge`, `MultiSelect`, `RadioGroup`, `SegmentedControl`, `Tag`, `Tooltip`, and the field controls `ColorPicker`, `DatePicker`, `TimePicker`, `DateRangePicker`, `MediaPicker`, `GroupItem`… — the full list and the controls' props are in [custom-pages.md](custom-pages.md#field-controls)). Their props are Fyldo's own, each one typed as `<Name>Props` in [`fyldo-sdk.d.ts`](#typescript), and stay stable within v1. Pass `size: 'md'` to match the controls of a Setting Row. |
+| `Form` | A Fyldo form for one record, drawn by Fyldo ([custom-pages.md](custom-pages.md#forms)). A React component. |
+| `useForm` | The same form for a component that draws the fields itself ([custom-pages.md](custom-pages.md#drawing-the-fields-yourself-useform)). A React hook. |
+| `iconSvg` | `iconSvg( name, { size?, className?, label? } )`: a promise of one Iconsax icon's `<svg>` markup, for drawing outside React (a `mount` field, a shadow root). Inside React, use `ui.Icon`. |
+
+Within 1.x the SDK only grows. To use something a later 1.x added, feature-detect it, `'name' in sdk` (or
+`'Name' in sdk.ui` for a component), rather than comparing `fyldoVersion`; in the types, every addition after 1.0
+carries `@since` in its doc comment.
 
 ### The definition (return value)
 
 | | |
 |---|---|
 | `Component` | A React component, rendered with Fyldo's React. |
-| `mount(element, props)` | Plain DOM, or any framework that brings its own runtime (Vue, Svelte, …). Fyldo calls it once with an empty `<div>`. Return `{ update(props), destroy() }`: `update` runs after every change of value, disabled, invalid or a watched value, and `destroy` runs when the field leaves the screen (another page or tab). Used when there is no `Component`. |
-| `validate(value, props)` | Optional. It runs on blur and on save, after the `validate` rules. Return a message, or `null` when the value is valid. This is instant feedback only; the server still decides. |
+| `mount(element, props)` | Plain DOM, or any framework that brings its own runtime (Vue, Svelte, …). Fyldo calls it once with an empty `<div>`. Return `{ update(props), destroy() }`: `update` runs on every render of the row, not only after a change (of value, disabled, invalid or a watched value), so compare before you redraw; `destroy` runs when the field leaves the screen (another page or tab). Used when there is no `Component`. |
+| `validate(value, ctx)` | Optional. It runs on blur and on save, after the `validate` rules. `ctx` is `{ props, values, field, locale }`, as the control gets them (below): the `props` from PHP, the watched `values`, `{ id, label, description }` and the locale. Return a message, or `null` when the value is valid. This is instant feedback only; the server still decides. |
 
 You can also export the definition object itself, without the function, if you don't need the API (a `mount`-only field).
 
@@ -100,13 +110,13 @@ You can also export the definition object itself, without the function, if you d
 |---|---|
 | `value` | The current value. |
 | `onChange(value)` | Set a new value (any JSON value). The Save Bar appears. |
-| `onBlur()` | Call it when focus leaves your control; the field is validated then. If your control opens a popup that takes focus (as `ui.Select` does), call it right after a pick instead. |
+| `onBlur()` | Call it when focus leaves your control; the field is validated then. The `ui` controls with a popup (`ui.Select`, `ui.MultiSelect`, the pickers) call their own `onBlur` after a pick and when focus leaves them, not when the popup opens, so pass yours on. A popup of your own that takes focus: call it right after a pick. |
 | `disabled` | The field is disabled (or its group is). |
 | `invalid` | The field is showing an error. Fyldo's `ui` components turn red on their own. |
 | `labelledBy`, `describedBy` | Ids of the row's title and of its description (plus the disabled reason). The row names your control as a group, so put `aria-labelledby={labelledBy}` and `aria-describedby={describedBy}` on your control, or on a `role="group"` element around several controls (then give each control its own `aria-label`). |
 | `props` | The `props` from PHP. |
 | `field` | `{ id, label, description }`. |
-| `locale` | The page's locale, for example `fa_IR`. Format numbers with `Intl.NumberFormat(locale.replace('_', '-'))`. For the direction, read `element.closest('[dir]')`. |
+| `locale` | The page's locale, BCP-47, for example `fa-IR`. Format numbers with `Intl.NumberFormat(locale)`. For the direction, read `element.closest('[dir]')`. |
 | `values` | The current values of the fields named in `watch`, keyed by id: the stored ones, with the person's unsaved edits, and a field's default when nothing is stored. Inside a group, the values of the field's own item. Read-only, and `{}` without `watch`. It is a new object only when one of them changes. |
 
 ### A live preview: `watch`
@@ -178,9 +188,12 @@ export default ({ React, ui }) => ({
 
 Fyldo ships the SDK's types in one file, `assets/dist/fyldo-sdk.d.ts` (Composer: `vendor/fyldo/fyldo/assets/dist/…`,
 the plugin ZIP or drop-in folder: `fyldo/assets/dist/…`). It is built from the source with every release, so it
-matches the Fyldo next to it: the API object (`FyldoSdk`: `React`, every `ui` component with its props, `Form`,
-`useForm`), `CustomFieldExport`, `CustomFieldDefinition`, `CustomFieldProps`, `JsonValue`, and the custom page types
-(`CustomPageExport`, `CustomPageProps`…). It needs `@types/react` 19 and nothing else: the only import in it is
+matches the Fyldo next to it: the API object (`FyldoSdk`: `React`, every `ui` component, `Form`, `useForm`,
+`iconSvg`, `fyldoVersion`), the props of every `ui` component (`ButtonProps`, `SelectProps`, `SettingRowProps`…),
+`CustomFieldExport`, `CustomFieldDefinition`, `CustomFieldProps`, `CustomFieldValidateContext`, the values
+(`JsonValue`, `FieldValue`, `MediaItem`, `DateRangeValue`), the custom page types (`CustomPageExport`,
+`CustomPageProps`, `PageLink`, `RequestOptions`…) and `useForm`'s (`FormApi`, `FormProps`, `FieldKind`,
+`FieldBindings`). These names are the 1.x contract. It needs `@types/react` 19 and nothing else: the only import in it is
 `react`, and only for types.
 
 The file is a module, not a global declaration, so `types` / `typeRoots` do not apply: point `paths` at it and import
@@ -236,7 +249,9 @@ esbuild fields/working-hours.tsx --bundle --format=esm --jsx=transform --externa
 - `jsx: "react"` (TypeScript) and `--jsx=transform` (esbuild, the default) compile JSX to `React.createElement`, so
   the `React` you destructure from the API must be in scope wherever you write JSX: define your components inside the
   default export, as above. Do not use the automatic runtime (`react-jsx`): it imports `react/jsx-runtime`.
-- A component's props: `React.ComponentProps<FyldoSdk['ui']['Select']>`.
+- A component's props: `SelectProps` (the same as `React.ComponentProps<FyldoSdk['ui']['Select']>`). They are
+  Fyldo's own: no Base UI type is part of them, and a callback gets one argument (`onValueChange(value)`,
+  `onCheckedChange(checked)`).
 - The file has the version it came from in its first comment. Inside v1 the SDK only grows, so a module typed against
   an older Fyldo keeps compiling against a newer one.
 

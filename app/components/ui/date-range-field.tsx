@@ -39,6 +39,12 @@ export interface DateRangePickerProps {
   locale?: string;
   /** Focus left the range (both inputs and their popups): the caller validates. */
   onBlur?: () => void;
+  /** Names the range on its own (a filter in a toolbar); in a Setting Row with `group` the row's title names it. */
+  'aria-label'?: string;
+  /** Ids that name the range, instead of the Setting Row's title. */
+  'aria-labelledby'?: string;
+  /** Ids that describe the range, instead of the Setting Row's description (the Duration and the error are added). */
+  'aria-describedby'?: string;
   className?: string;
 }
 
@@ -71,6 +77,9 @@ export function DateRangePicker({
   invalid = 'end',
   locale: localeProp,
   onBlur,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
+  'aria-describedby': ariaDescribedBy,
   className,
 }: DateRangePickerProps): ReactElement {
   const locale = useScreenLocale(localeProp);
@@ -79,7 +88,7 @@ export function DateRangePicker({
   const ids = { start: useId(), end: useId(), startName: useId(), endName: useId(), duration: useId(), error: useId() };
   const [startName, endName] = endNames(kind);
   const duration = durationText(kind, value.start, value.end, locale);
-  const describedBy = [labels['aria-describedby'], duration ? ids.duration : '', error ? ids.error : ''].filter(Boolean).join(' ');
+  const describedBy = [ariaDescribedBy ?? labels['aria-describedby'], duration ? ids.duration : '', error ? ids.error : ''].filter(Boolean).join(' ');
 
   // A popup closing returns focus to its input: only focus that ends up outside both inputs (and their popups) is leaving.
   const report = (): void => {
@@ -141,7 +150,8 @@ export function DateRangePicker({
     <div
       ref={root}
       role="group"
-      aria-labelledby={labels['aria-labelledby']}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledBy ?? (ariaLabel === undefined ? labels['aria-labelledby'] : undefined)}
       aria-describedby={describedBy || undefined}
       data-slot="fy-date-range"
       className={cn('fy:flex fy:w-full fy:flex-col fy:gap-2', className)}

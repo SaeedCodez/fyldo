@@ -6,6 +6,7 @@ import { collectIconNames, preloadIcons } from './icons/registry';
 import { collectCustomModules, loadCustomFields } from './lib/custom-fields';
 import { collectPageModules, loadCustomPages } from './lib/custom-pages';
 import { setDateSettings } from './lib/datetime';
+import { setFyldoVersion } from './lib/sdk';
 import type { FyldoConfig } from './types';
 import './styles/app.css';
 
@@ -31,6 +32,7 @@ async function mount(root: HTMLElement): Promise<void> {
 
   setLocaleData(config.i18n);
   setDateSettings({ ...config.dates, locale: config.locale });
+  setFyldoVersion(config.fyldoVersion);
   // Import every icon, custom field module and custom page module named anywhere in the config in parallel BEFORE the
   // first render: no pop-in.
   await Promise.all([preloadIcons(collectIconNames(config)), loadCustomFields(collectCustomModules(config)), loadCustomPages(collectPageModules(config))]);

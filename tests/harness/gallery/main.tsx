@@ -912,7 +912,7 @@ function Variant() {
       return (
         <div style={{ width: 960 }}>
           <Tabs
-            label="Tabs"
+            aria-label="Tabs"
             value="t0"
             onValueChange={() => undefined}
             tabs={labels.map((label, i) => ({ id: `t${i}`, label }))}
@@ -972,7 +972,7 @@ function Variant() {
             cancelLabel={param('cancel')}
             confirmLabel={param('confirm')}
             onConfirm={() => undefined}
-            type={param('type', 'default') as 'default' | 'danger'}
+            tone={param('type', 'default') as 'default' | 'danger'}
             confirmKeyword={param('keyword') || undefined}
           >
             {param('content') ? <Checkbox label={param('content')} description={param('content_description') || undefined} /> : undefined}

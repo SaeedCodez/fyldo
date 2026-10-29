@@ -1,17 +1,17 @@
 import { Field } from '@base-ui/react/field';
 import { Switch } from '@base-ui/react/switch';
-import type { ComponentPropsWithoutRef, ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { cn } from '../../lib/cn';
+import type { CheckedAttributes } from './checkbox';
 
 export type ToggleSize = 'sm' | 'md';
 
-export interface ToggleProps extends Omit<ComponentPropsWithoutRef<typeof Switch.Root>, 'children' | 'className'> {
+export interface ToggleProps extends CheckedAttributes {
   /** Figma `Size`: Small 28×16 (dense lists), Medium 36×20 (standalone). */
   size?: ToggleSize;
   /** Label the FEATURE, not the state ("Enable caching"). Omit when a Setting Row supplies the name. */
   label?: string;
   description?: string;
-  className?: string;
 }
 
 const TRACK: Record<ToggleSize, string> = {
@@ -29,10 +29,11 @@ const THUMB: Record<ToggleSize, string> = {
  * On/off switch. Bare (inside a Setting Row, which names it) or with its own label/description.
  * In RTL the whole control mirrors: "on" puts the thumb on the left.
  */
-export function Toggle({ size = 'sm', label, description, className, ...props }: ToggleProps): ReactElement {
+export function Toggle({ size = 'sm', label, description, className, onCheckedChange, ...props }: ToggleProps): ReactElement {
   const control = (
     <Switch.Root
       {...props}
+      onCheckedChange={onCheckedChange && ((checked) => onCheckedChange(checked))}
       data-slot="fy-toggle"
       data-size={size}
       className={cn(

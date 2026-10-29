@@ -20,6 +20,40 @@ Before 1.0, so that nothing is frozen by accident. After 1.0 the public API only
 - **Registration checks**: `add_group()` needs an id that is URL-safe like a page id, not yet used, and a label; a page whose `group` is not registered when the screens are registered (`admin_menu`) is reported with `_doing_it_wrong` and shows ungrouped; an unknown key in an instance's `links` or `menu` is a `ConfigException`; link URLs go through `esc_url_raw()` (one it rejects is a `ConfigException`); a field's `badge` must be a string or an int.
 - **Docs**: the empty value of every field type, the reserved form record key `new`, the methods of the record routes, that the client config and the `fyldo/{slug}/config` filter are internal, that `Fyldo::create()` throws while other registration errors are `_doing_it_wrong`, that a page `capability` only narrows the instance's, that `upgraded` fires inside `add_page()`; complete hook lists; `multiselect` is `multi_select`; the `reset` hook gets `$page_id, $stored_before`; default layouts; the `code` rule; the 512 KB body cap is fixed; no more `show_if`.
 
+### Changed (API freeze: SDK)
+
+The SDK a custom field or a custom page receives, and its types in `assets/dist/fyldo-sdk.d.ts`, are now the 1.x
+contract. Breaking for modules written against the betas:
+
+- **No Base UI in the public types.** `Button`, `IconButton`, `Checkbox`, `Toggle`, `Input`, `NumberInput` and
+  `Textarea` have props of Fyldo's own: their props plus the native attributes they pass on (`id`, `name`,
+  `className` as a string, `style`, `placeholder`, `autoComplete`, `onBlur`, `onFocus`, `aria-*`, `ref`…). Base UI's
+  `render`, `nativeButton` and `className` / `style` functions of the state are gone, and the callbacks take one
+  argument: `onValueChange(value)`, `onCheckedChange(checked)` (no `details`). The d.ts no longer contains a Base UI
+  type, and `npm run types` fails if one comes back.
+- **Custom fields: `validate(value, ctx)`**, with `ctx = { props, values, field, locale }` (`values`: the watched
+  values). It was `validate(value, props)`: read `ctx.props` instead (`validate(value, { props })`).
+- **`useForm`'s `validate(path?)`** takes a path, as `error`, `errorCount` and `visible` do: a field (`title`), the part
+  of a value at a path (`slides.2`, `slides.2.link`: the messages at or under it), or nothing for every enabled, shown
+  field. It was `validate(id, path)`.
+- **`SettingRow`**: `width: 'default' | 'wide' | 'cards' | 'range' | 'full'` replaces the booleans `wide`, `cards`,
+  `range` and `full`. `variant`, `fieldId`, `name`, `srNote`, `errorInControl` and `ownError` are no longer public
+  (with a `DateRangePicker`, give the error to the picker, not to the row).
+- **Renames**: `Tabs`' and `Pagination`'s `label` is `aria-label`; `Modal`'s `type` is `tone`, as on `SectionCard`.
+  In the types, `UtilityLink` is `PageLink` and `RecordFormApi` is `FormApi`; the duplicate `CustomFieldApi` is gone
+  (use `FyldoSdk`).
+- **Defaults**: `GroupList` and `Tabs` write their numerals in the screen's locale when no `locale` is given (it was
+  English).
+- **Types exported under the names they keep**: `FieldValue`, `MediaItem`, `DateRangeValue`, `PageLink`, `FormApi`,
+  `FormProps`, `FieldKind`, `FieldBindings`, `RequestOptions`, `GroupItemStatus`, `CustomFieldValidateContext`, and
+  `<Component>Props` for every `ui` component.
+- **Added**: `sdk.fyldoVersion`, the version of the Fyldo that serves the screen. Within 1.x, feature-detect a later
+  addition with `'name' in sdk`; additions carry `@since` in the types. `ui.Select` gets a real `onBlur` (after a pick
+  and when focus leaves the closed control, never when the popup opens), and `DateRangePicker` accepts `aria-label`,
+  `aria-labelledby` and `aria-describedby`.
+- **Docs**: the locale a module gets is BCP-47 (`fa-IR`); a `mount` field's `update()` runs on every render of the row,
+  not only after a change.
+
 ## [1.0.0-beta.6] - 2026-10-20
 
 ### Added

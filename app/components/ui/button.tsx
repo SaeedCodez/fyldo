@@ -1,13 +1,23 @@
 import { Button as BaseButton } from '@base-ui/react/button';
-import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react';
 import { Icon } from '../../icons/Icon';
 import { Spinner } from '../../icons/Spinner';
 import { cn } from '../../lib/cn';
+import type { NativeAttributes } from './native';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'error';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
-export interface ButtonProps extends Omit<ComponentPropsWithoutRef<typeof BaseButton>, 'children'> {
+/** What a button passes on to its `<button>` (Button and Icon Button). */
+export interface ButtonAttributes
+  extends NativeAttributes<HTMLButtonElement>,
+    Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'type' | 'name' | 'value' | 'form' | 'onClick' | 'onMouseDown' | 'onPointerDown'> {
+  disabled?: boolean;
+  /** A disabled button that keeps its place in the Tab order (announced as dimmed), e.g. Pagination's arrows. */
+  focusableWhenDisabled?: boolean;
+}
+
+export interface ButtonProps extends ButtonAttributes {
   /** Figma `Type`. */
   variant?: ButtonVariant;
   /** Figma `Size`: 36 / 44 / 52. */
@@ -105,7 +115,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       data-loading={loading ? '' : undefined}
-      className={cn(look(variant, size), BUTTON_DISABLED[variant], className as string | undefined)}
+      className={cn(look(variant, size), BUTTON_DISABLED[variant], className)}
     >
       {loading ? <Spinner /> : leadingIcon ? <Icon name={leadingIcon} size={ICON[size]} /> : null}
       {children !== undefined && children !== null ? <span>{children}</span> : null}

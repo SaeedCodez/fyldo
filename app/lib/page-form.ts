@@ -300,7 +300,8 @@ const valueFields = (form: Pick<FormShape, 'sections'>): ValueFieldDef[] => form
  * Every message of a field's value, keyed like the server's (a group: per sub-field, without those its items hide;
  * `outside` resolves the page's fields). A stored password the user has not touched is `null` ("keep"): nothing to validate.
  */
-function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined, outside: Resolve): Record<string, string> {
+function fieldErrors(field: ValueFieldDef, values: Record<string, FieldValue>, outside: Resolve): Record<string, string> {
+  const value = values[field.id];
   if (field.type === 'group') return groupErrors(field, value, outside);
   // A code field's CSS message is at its line, keyed `<field>.<line>` as the server keys it.
   if (field.type === 'code') {
@@ -311,7 +312,7 @@ function fieldErrors(field: ValueFieldDef, value: FieldValue | undefined, outsid
   const error =
     field.type === 'password' && value === null
       ? null
-      : (validateValue(field.validate, value) ?? (field.type === 'custom' ? customError(field, value) : null));
+      : (validateValue(field.validate, value) ?? (field.type === 'custom' ? customError(field, value, (id) => values[id]) : null));
   return error ? { [field.id]: error } : {};
 }
 
@@ -360,16 +361,17 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
   const discard = useCallback(() => dispatch({ type: 'discard' }), [dispatch]);
 
   /**
-   * Validate one field now (used on blur); returns whether it is valid. `only`: one error key of the field (a group's
-   * sub-field, `<group>.<index>.<sub-field>`): the other items are left alone until they are touched or saved.
+   * Validate one field now (used on blur); returns whether it is valid. `only`: the error keys of the field at or under a
+   * path (a group's item or sub-field, `<group>.<index>.<sub-field>`): the other items are left alone until they are
+   * touched or saved.
    */
   const validateField = useCallback(
     (id: string, only?: string): boolean => {
       const field = fields.get(id);
       if (!field) return true;
       const values = store.get(form.id).values;
-      const all = fieldErrors(field, values[id], visibilityOf(form.sections, values).resolve);
-      const errors = only === undefined ? all : only in all ? { [only]: all[only] as string } : {};
+      const all = fieldErrors(field, values, visibilityOf(form.sections, values).resolve);
+      const errors = only === undefined ? all : Object.fromEntries(Object.entries(all).filter(([key]) => belongsTo(key, only)));
       dispatch({ type: 'invalid', errors, ids: [only ?? id] });
       return Object.keys(errors).length === 0;
     },
@@ -394,7 +396,7 @@ export function useForm(form: FormShape, source: FormSource, store: FormStore, o
         const errors: Record<string, string> = {};
         for (const id of ids) {
           const field = fields.get(id);
-          if (field) Object.assign(errors, fieldErrors(field, current.values[id], shown.resolve));
+          if (field) Object.assign(errors, fieldErrors(field, current.values, shown.resolve));
         }
         if (Object.keys(errors).length > 0) {
           dispatch({ type: 'invalid', errors, ids, scope });

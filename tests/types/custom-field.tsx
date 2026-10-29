@@ -1,5 +1,5 @@
 /** A custom field in TSX, as docs/custom-fields.md#typescript shows it: checked against the bundled declarations. */
-import type { CustomFieldExport, CustomFieldProps, JsonValue } from 'fyldo';
+import type { CustomFieldDefinition, CustomFieldExport, CustomFieldProps, CustomFieldValidateContext, JsonValue } from 'fyldo';
 
 const workingHours: CustomFieldExport = ({ React, ui }) => {
   function WorkingHours({
@@ -67,3 +67,13 @@ export const plain: CustomFieldExport = {
 
 // @ts-expect-error A definition needs a Component or a mount of the right shape.
 export const wrong: CustomFieldExport = { Component: 42 };
+
+/** `validate(value, ctx)`: the props, the watched values, the field and the BCP-47 locale. */
+export const checked: CustomFieldDefinition = {
+  mount: () => undefined,
+  validate: (value, { props, values, field, locale }: CustomFieldValidateContext) =>
+    value === values.other ? `${field.label} (${locale}) must differ: ${String(props.hint)}` : null,
+};
+
+// @ts-expect-error The second argument is the context, not the props.
+export const oldValidate: CustomFieldDefinition = { mount: () => undefined, validate: (_value, props: Record<string, number>) => String(props.max) };

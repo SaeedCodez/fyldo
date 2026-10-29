@@ -1,5 +1,5 @@
 import { Select as BaseSelect } from '@base-ui/react/select';
-import type { ReactElement } from 'react';
+import { useRef, type FocusEvent, type ReactElement } from 'react';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
 import { usePortalContainer } from '../../lib/portal';
@@ -23,7 +23,14 @@ export interface SelectProps {
   disabled?: boolean;
   name?: string;
   id?: string;
+  /**
+   * The person has left the control: on a pick or another close of the popup (after `onValueChange`), and when focus
+   * leaves the closed control. Not when the popup opens, though it takes the focus.
+   */
+  onBlur?: () => void;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
   className?: string;
 }
 
@@ -35,20 +42,30 @@ export const POPUP_MAX_HEIGHT = 310;
  * the menu is exactly as wide as the field, 4px below it (never overlaying it), with the selected option's check
  * at the END of the row. Use inside a `Field.Root` (FieldShell / SettingRow).
  */
-export function Select({ options, value, onValueChange, placeholder, size = 'sm', prefixIcon, disabled, name, id, className, ...aria }: SelectProps): ReactElement {
+export function Select({ options, value, onValueChange, placeholder, size = 'sm', prefixIcon, disabled, name, id, onBlur, className, ...aria }: SelectProps): ReactElement {
   const container = usePortalContainer();
+  // A ref, not state: the trigger's blur when the popup opens comes before a re-render.
+  const open = useRef(false);
+  const onTriggerBlur = (event: FocusEvent<HTMLElement>): void => {
+    if (!open.current && !event.currentTarget.contains(event.relatedTarget as Node | null)) onBlur?.();
+  };
 
   return (
     <BaseSelect.Root
       items={options.map(({ value: v, label }) => ({ value: v, label }))}
       value={value === '' ? null : value}
       onValueChange={(next) => onValueChange(next === null ? '' : String(next))}
+      onOpenChange={(next) => {
+        open.current = next;
+        if (!next) onBlur?.();
+      }}
       disabled={disabled}
       name={name}
       id={id}
     >
       <BaseSelect.Trigger
         {...aria}
+        onBlur={onTriggerBlur}
         data-slot="fy-select"
         className={cn(
           'fy:group/select fy:text-start fy:focus-visible:border-focus-border fy:focus-visible:shadow-focus-input fy:focus-none',

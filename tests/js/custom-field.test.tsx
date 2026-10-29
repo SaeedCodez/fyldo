@@ -11,7 +11,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import workingHours from '../../demo/custom/working-hours.js';
 import { SettingsPage } from '../../app/components/fyldo/SettingsPage';
 import { ApiError } from '../../app/lib/api';
-import { collectCustomModules, customError, customFieldApi, defineCustomField, type CustomFieldProps } from '../../app/lib/custom-fields';
+import { collectCustomModules, customError, customFieldApi, defineCustomField, type CustomFieldDefinition, type CustomFieldProps } from '../../app/lib/custom-fields';
+import { dateSettings, setDateSettings } from '../../app/lib/datetime';
 import { groupErrors } from '../../app/lib/group';
 import { PortalContainerContext } from '../../app/lib/portal';
 import type { CustomFieldDef, FieldDef, FieldValue, GroupFieldDef, PageDef } from '../../app/types';
@@ -206,6 +207,39 @@ describe('Custom field helpers', () => {
     });
     expect(customError({ ...hours, module: '/throws.js' }, 'v')).toBeNull();
     error.mockRestore();
+  });
+
+  it('validate(value, ctx) gets the props, the watched values, the field and the locale', () => {
+    const validate = vi.fn(() => null);
+    defineCustomField('/ctx.js', { Component: () => null, validate });
+    const before = dateSettings();
+    setDateSettings({ ...before, locale: 'fa-IR' });
+    const field = { ...hours, module: '/ctx.js', watch: ['shop_name', 'missing'], props: { max: 3 } };
+    customError(field, 'v', (id) => (id === 'shop_name' ? 'Corner shop' : undefined));
+    setDateSettings(before);
+    expect(validate).toHaveBeenCalledWith('v', {
+      props: { max: 3 },
+      values: { shop_name: 'Corner shop', missing: null },
+      field: { id: hours.id, label: hours.label, description: hours.description },
+      locale: 'fa-IR',
+    });
+  });
+
+  it("in a group, ctx.values are the item's own sub-fields (a sub-field's default where the item holds none)", () => {
+    const seen: unknown[] = [];
+    const definition: CustomFieldDefinition = {
+      Component: () => null,
+      validate: (_value, { values }) => {
+        seen.push(values);
+        return values.title === '' ? 'Name the item first.' : null;
+      },
+    };
+    defineCustomField('/item.js', definition);
+    const title = { id: 'title', type: 'text', label: 'Title', description: '', default: '', disabled: false, layout: 'field', validate: {}, placeholder: '' } as FieldDef;
+    const custom = { ...hours, id: 'preview', module: '/item.js', watch: ['title'], validate: {} };
+    const group = { id: 'items', type: 'group', validate: {}, min: null, max: null, fields: [title, custom] } as unknown as GroupFieldDef;
+    expect(groupErrors(group, [{ title: 'A', preview: null }, { preview: null }])).toEqual({ 'items.1.preview': 'Name the item first.' });
+    expect(seen).toEqual([{ title: 'A' }, { title: '' }]);
   });
 });
 

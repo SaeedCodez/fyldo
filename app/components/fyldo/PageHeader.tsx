@@ -1,13 +1,13 @@
 import type { ReactElement, ReactNode, Ref } from 'react';
 import { __ } from '../../i18n';
 import { ButtonLink } from '../ui/button';
-import type { UtilityLink } from './nav-model';
+import type { PageLink } from './nav-model';
 
 export interface PageHeaderProps {
   title: string;
   description?: string;
   /** Links drawn as the Figma "Actions": Secondary Small buttons, a trailing `export-square` icon on links that open a new tab. */
-  links?: UtilityLink[];
+  links?: PageLink[];
   actions?: ReactNode;
   /** The h1 receives focus after a page change, so screen readers hear where they are. */
   headingRef?: Ref<HTMLHeadingElement>;

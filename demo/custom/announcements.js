@@ -232,7 +232,7 @@ export default function announcements({ React, ui, Form }) {
         tabs: STATUSES.map((id) => ({ id, label: t[id], badge: counts ? number.format(counts[id]) : undefined })),
         value: status,
         onValueChange: setStatus,
-        label: t.tabsLabel,
+        'aria-label': t.tabsLabel,
         locale,
         children: body,
       }),
@@ -243,7 +243,7 @@ export default function announcements({ React, ui, Form }) {
           onOpenChange: (open) => {
             if (!open) setDoomed(null);
           },
-          type: 'danger',
+          tone: 'danger',
           title: format(t.deleteTitle, lastDoomed.current ? lastDoomed.current.title : ''),
           description: t.deleteDescription,
           cancelLabel: t.cancel,

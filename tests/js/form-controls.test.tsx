@@ -101,7 +101,7 @@ describe('Textarea', () => {
 
   it('bare Textarea works inside a Setting Row: the row title names it', () => {
     render(
-      <SettingRow title="Meta description" description="Shown in results." wide>
+      <SettingRow title="Meta description" description="Shown in results." width="wide">
         <Textarea defaultValue="x" />
       </SettingRow>,
     );

@@ -43,7 +43,7 @@ export default function workingHours({ React, ui }) {
   return {
     Component: WorkingHours,
     // Instant feedback only: the same check runs on the server (validate_cb in demo/demo.php), which decides.
-    validate(value, props) {
+    validate(value, { props }) {
       const [opens, closes] = split(value);
       if (opens === '' && closes === '') return null;
       if (opens === '' || closes === '') return props.incomplete;

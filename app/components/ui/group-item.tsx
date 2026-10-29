@@ -33,15 +33,19 @@ export interface GroupItemProps {
   inactive?: boolean;
   /** Invalid sub-fields inside: red border and a count in the header (shown while collapsed too). */
   errorCount?: number;
-  /** Figma `State=Dragging`: lifted while it is being moved. */
-  dragging?: boolean;
-  /** The drag handle, at the start of the header (Group owns the dragging). */
-  handle?: ReactNode;
   /** Duplicate / Remove Icon Buttons, before the chevron. */
   actions?: ReactNode;
   /** The sub-fields. Rendered only while open. */
   children: ReactNode;
   className?: string;
+}
+
+/** The dragging a Group List owns; not in the SDK. */
+export interface GroupItemInternalProps extends GroupItemProps {
+  /** Figma `State=Dragging`: lifted while it is being moved. */
+  dragging?: boolean;
+  /** The drag handle, at the start of the header (Group owns the dragging). */
+  handle?: ReactNode;
   style?: CSSProperties;
 }
 
@@ -50,7 +54,7 @@ export interface GroupItemProps {
  * summary; the handle and the actions sit above it so they stay their own buttons, and a click anywhere else in the
  * header (the chevron too) opens or closes the item. The body holds the sub-fields, 20 padding, 16 apart.
  */
-export const GroupItem = forwardRef<HTMLDivElement, GroupItemProps>(function GroupItem(
+export const GroupItem = forwardRef<HTMLDivElement, GroupItemInternalProps>(function GroupItem(
   {
     title,
     summary,

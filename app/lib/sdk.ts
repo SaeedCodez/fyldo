@@ -1,14 +1,15 @@
 /**
  * What a developer's module (a custom field or a custom page) gets as the argument of its default export
- * (docs/custom-fields.md, docs/custom-pages.md). Version 1 never loses a member: they are only added. The components'
- * props are the ones in app/components, so they are public API too, except the internal ones the types below leave out.
+ * (docs/custom-fields.md, docs/custom-pages.md). Version 1 never loses a member: they are only added (`@since` in their
+ * doc comment), so a module feature-detects with `'name' in sdk`. The components' props are public API too: each one's
+ * props interface is Fyldo's own (app/sdk-types.ts), and Fyldo's internal props stay out of it.
  */
 import * as React from 'react';
 import type { ComponentType } from 'react';
 import { Form, useRecordForm } from '../components/fyldo/Form';
 import { PageHeader } from '../components/fyldo/PageHeader';
 import { SectionCard } from '../components/fyldo/SectionCard';
-import { SettingRow } from '../components/fyldo/SettingRow';
+import { SettingRow, type SettingRowProps } from '../components/fyldo/SettingRow';
 import { Tabs } from '../components/fyldo/Tabs';
 import { Badge } from '../components/ui/badge';
 import { Button, ButtonLink } from '../components/ui/button';
@@ -43,15 +44,28 @@ import { Icon } from '../icons/Icon';
 import { iconSvg } from '../icons/svg';
 
 /*
- * Props Fyldo uses inside and does not promise: a range's own ends (`bare`, `openOn`), and the dragging a Group owns
- * (`dragging`, `handle`, `style`). The components are the same; only their public types are narrower.
+ * Props Fyldo uses inside and does not promise: a range's own ends (`bare`, `openOn`), the dragging a Group owns
+ * (`dragging`, `handle`, `style`), and what Fyldo's fields tell their Setting Row (`variant`, `ownError`…). The
+ * components are the same; only their public types are narrower.
  */
-const PublicDatePicker = DatePicker as ComponentType<Omit<DatePickerProps, 'bare' | 'openOn'>>;
-const PublicTimePicker = TimePicker as ComponentType<Omit<TimePickerProps, 'bare'>>;
-const PublicGroupItem = GroupItem as ComponentType<Omit<GroupItemProps, 'dragging' | 'handle' | 'style'>>;
+const PublicDatePicker = DatePicker as ComponentType<DatePickerProps>;
+const PublicTimePicker = TimePicker as ComponentType<TimePickerProps>;
+const PublicGroupItem = GroupItem as ComponentType<GroupItemProps>;
+const PublicSettingRow = SettingRow as ComponentType<SettingRowProps>;
+
+let fyldoVersion = '';
+
+/** The version of the Fyldo that serves the screen, from the client config (app/main.tsx, before any module loads). */
+export const setFyldoVersion = (version: string): void => {
+  fyldoVersion = version;
+};
 
 export const sdk = {
   version: 1,
+  /** The version of the Fyldo that serves the screen (`1.2.0`). Within 1.x, feature-detect a member with `'name' in sdk`. */
+  get fyldoVersion(): string {
+    return fyldoVersion;
+  },
   /** Fyldo's own React 19: never bundle a second one (hooks break). */
   React,
   ui: {
@@ -84,7 +98,7 @@ export const sdk = {
     SectionCard,
     SegmentedControl,
     Select,
-    SettingRow,
+    SettingRow: PublicSettingRow,
     StatCard,
     Tabs,
     Tag,

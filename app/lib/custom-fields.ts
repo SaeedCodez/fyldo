@@ -4,6 +4,7 @@
  */
 import type { ComponentType } from 'react';
 import { isSettingsPage, type CustomFieldDef, type FieldDef, type FyldoConfig, type JsonValue } from '../types';
+import { dateSettings } from './datetime';
 import { createModuleRegistry } from './modules';
 import type { FyldoSdk } from './sdk';
 
@@ -24,7 +25,7 @@ export interface CustomFieldProps {
   /** The field's `props` from PHP. */
   props: Record<string, JsonValue>;
   field: { id: string; label: string; description: string };
-  /** The page's locale (`fa_IR`…). The direction is the one of the page: `element.closest('[dir]')`. */
+  /** The page's locale, BCP-47 (`fa-IR`…). The direction is the one of the page: `element.closest('[dir]')`. */
   locale: string;
   /**
    * The current values of the fields named in PHP's `watch`, keyed by id, with the person's edits as they happen (a live
@@ -41,22 +42,31 @@ export interface CustomFieldMountHandle {
   destroy?: () => void;
 }
 
+/** The second argument of a definition's `validate`: what the check may depend on besides the value. */
+export interface CustomFieldValidateContext {
+  /** The field's `props` from PHP. */
+  props: Record<string, JsonValue>;
+  /** The current values of the fields named in `watch` (in a group: the other sub-fields of the item), as `values` of the control. */
+  values: Readonly<Record<string, JsonValue>>;
+  field: { id: string; label: string; description: string };
+  /** The page's locale, BCP-47 (`fa-IR`…). */
+  locale: string;
+}
+
 export interface CustomFieldDefinition {
   /** A React component, rendered with Fyldo's own React (hooks work; never bundle a second React). */
   Component?: ComponentType<CustomFieldProps>;
   /** Plain DOM, or any framework: draw into `element`. Used when there is no `Component`. */
   mount?: (element: HTMLElement, props: CustomFieldProps) => CustomFieldMountHandle | void;
   /** Instant feedback on blur and save; the server (`validate_cb`) still decides. A message, or null when valid. */
-  validate?: (value: JsonValue, props: Record<string, JsonValue>) => string | null | undefined;
+  validate?: (value: JsonValue, context: CustomFieldValidateContext) => string | null | undefined;
 }
 
 /** What a module's default export receives when it is a function: the SDK (fields and pages share it). */
 export { sdk as customFieldApi } from './sdk';
 
-export type CustomFieldApi = FyldoSdk;
-
-/** A module's default export: the definition, or a function of the API that returns it. */
-export type CustomFieldExport = CustomFieldDefinition | ((api: CustomFieldApi) => CustomFieldDefinition);
+/** A module's default export: the definition, or a function of the SDK that returns it. */
+export type CustomFieldExport = CustomFieldDefinition | ((sdk: FyldoSdk) => CustomFieldDefinition);
 
 const registry = createModuleRegistry<CustomFieldDefinition>('custom field');
 
@@ -81,12 +91,21 @@ export function collectCustomModules(config: Pick<FyldoConfig, 'pages' | 'forms'
 /** Import every module in parallel. Never rejects: a module that fails is reported and its fields say so. */
 export const loadCustomFields = (urls: string[]): Promise<void> => registry.load(urls);
 
-/** The module's own check of a value (after the declarative rules); null when it has none or the value passes. */
-export function customError(field: CustomFieldDef, value: unknown): string | null {
+/**
+ * The module's own check of a value (after the declarative rules); null when it has none or the value passes. `read`
+ * gives the current value of a watched id: a field of the page, or in a group a sub-field of the same item.
+ */
+export function customError(field: CustomFieldDef, value: unknown, read: (id: string) => unknown = () => null): string | null {
   const validate = customDefinition(field.module)?.validate;
   if (!validate) return null;
   try {
-    const message = validate(value as JsonValue, field.props);
+    const values = Object.freeze(Object.fromEntries((field.watch ?? []).map((id) => [id, (read(id) ?? null) as JsonValue])));
+    const message = validate(value as JsonValue, {
+      props: field.props,
+      values,
+      field: { id: field.id, label: field.label, description: field.description },
+      locale: dateSettings().locale,
+    });
     return typeof message === 'string' && message !== '' ? message : null;
   } catch (e) {
     console.error(`Fyldo: the validate() of custom field "${field.id}" threw.`, e);

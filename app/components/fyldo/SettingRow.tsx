@@ -4,13 +4,14 @@ import { cn } from '../../lib/cn';
 import { FieldError, InFieldRoot } from '../ui/field-shell';
 import { GroupLabelProvider } from '../ui/group-field';
 
+/** The control's width in a stacked or `field` row. */
+export type SettingRowWidth = 'default' | 'wide' | 'cards' | 'range' | 'full';
+
 export interface SettingRowProps {
   title: string;
   description?: string;
   /** Why the control is disabled: shown under the description and part of the control's accessible description. */
   disabledReason?: string;
-  /** Extra state for screen readers only (a password that is already set), described like the description. */
-  srNote?: string;
   /** Short status label next to the title ("Pro", "Beta"). */
   badge?: ReactNode;
   /**
@@ -21,31 +22,43 @@ export interface SettingRowProps {
   /** Bottom divider; off on the last row of a card. */
   divider?: boolean;
   error?: string;
+  /** The control is a group (checkbox group, radio group): the title names the group instead of labelling one control. */
+  group?: boolean;
+  /**
+   * The control's width, as Figma draws it: `default` 400, `wide` 448 (Textarea, Media Picker), `cards` 576 (Choice
+   * Cards), `range` 480 (Date Range Picker), `full` the whole row (Group List, Code Editor). Like every stacked control
+   * it shrinks (`max-w-full`) on narrow containers.
+   */
+  width?: SettingRowWidth;
+  disabled?: boolean;
+  children: ReactNode;
+}
+
+/** What Fyldo's own fields pass as well (FieldRenderer); not in the SDK. */
+export interface SettingRowInternalProps extends SettingRowProps {
+  /** Extra state for screen readers only (a password that is already set), described like the description. */
+  srNote?: string;
   /** The control renders its own error row (Textarea: the counter shares it). */
   errorInControl?: boolean;
   /** The control renders its own error row and marks only the part at fault invalid (Date Range Field: the end in red). */
   ownError?: boolean;
-  /** The control is a group (checkbox group, radio group): the title names the group instead of labelling one control. */
-  group?: boolean;
-  /** The Textarea control is 448 wide in a Setting Row; every other control 400. */
-  wide?: boolean;
-  /** Figma Choice Card Group is 576 wide. Like every stacked control it shrinks (`max-w-full`) on narrow containers. */
-  cards?: boolean;
-  /** Figma Date Range Field is 480 wide. */
-  range?: boolean;
-  /** The control takes the whole width of the row (a Group field's list of items). */
-  full?: boolean;
   /**
    * `row`: a Setting Row of a Section Card. `item`: a sub-field inside a Group Item (Figma "Input" anatomy: label →
    * control → helper, no padding or divider; `field` reads as `stacked`, the control fills the column).
    */
   variant?: 'row' | 'item';
-  disabled?: boolean;
   name?: string;
   /** Field id, exposed for focusing the first invalid field. */
   fieldId?: string;
-  children: ReactNode;
 }
+
+const WIDTH: Record<SettingRowWidth, string> = {
+  default: 'fy:w-100',
+  wide: 'fy:w-112',
+  cards: 'fy:w-144',
+  range: 'fy:w-120',
+  full: 'fy:w-full',
+};
 
 /**
  * Figma "Setting Row": title + description on the start side, control on the end (inline) or below (stacked).
@@ -63,16 +76,14 @@ export function SettingRow({
   errorInControl = false,
   ownError = false,
   group = false,
-  wide = false,
-  cards = false,
-  range = false,
-  full = false,
+  width = 'default',
   variant = 'row',
   disabled,
   name,
   fieldId,
   children,
-}: SettingRowProps): ReactElement {
+}: SettingRowInternalProps): ReactElement {
+  const full = width === 'full';
   const item = variant === 'item';
   const layout = item && requested === 'field' ? 'stacked' : requested;
   const inline = layout === 'inline';
@@ -141,7 +152,7 @@ export function SettingRow({
       <div
         className={cn(
           'fy:flex fy:flex-col fy:gap-2',
-          inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item || full ? 'fy:w-full' : wide ? 'fy:w-112' : cards ? 'fy:w-144' : range ? 'fy:w-120' : 'fy:w-100', 'fy:max-w-full'),
+          inline ? 'fy:shrink-0' : cn(layout === 'field' && 'fy:shrink-0', item ? 'fy:w-full' : WIDTH[width], 'fy:max-w-full'),
         )}
       >
         <InFieldRoot.Provider value>

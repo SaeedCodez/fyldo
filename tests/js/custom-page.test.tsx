@@ -12,7 +12,7 @@ import { App } from '../../app/components/fyldo/App';
 import { defineCustomPage, collectPageModules, type CustomPageProps } from '../../app/lib/custom-pages';
 import { collectCustomModules, customFieldApi } from '../../app/lib/custom-fields';
 import { parseHash, resolveRoute, routeHash } from '../../app/lib/router';
-import { sdk, type FyldoSdk } from '../../app/lib/sdk';
+import { sdk, setFyldoVersion, type FyldoSdk } from '../../app/lib/sdk';
 import type { CustomFieldDef, CustomPageDef, FieldValue, FyldoConfig, PageDef } from '../../app/types';
 
 const fixture = (name: string) => JSON.parse(readFileSync(resolve(__dirname, `../fixtures/${name}.client.json`), 'utf8')) as PageDef;
@@ -416,6 +416,8 @@ describe('the SDK', () => {
   it('one object for fields and pages: v1 keeps the field API and adds the page building blocks', () => {
     expect(customFieldApi).toBe(sdk);
     expect(sdk.version).toBe(1);
+    setFyldoVersion('1.2.3');
+    expect('fyldoVersion' in sdk && sdk.fyldoVersion).toBe('1.2.3');
     expect(Object.keys(sdk.ui)).toEqual(
       expect.arrayContaining(['Button', 'Checkbox', 'Icon', 'Input', 'NumberInput', 'Select', 'Textarea', 'Toggle', 'ButtonLink', 'IconButton', 'RadioGroup', 'MultiSelect', 'SegmentedControl', 'Badge', 'Tag', 'Notice', 'EmptyState', 'Modal', 'Tooltip', 'Tabs', 'PageHeader', 'SectionCard', 'SettingRow']),
     );
