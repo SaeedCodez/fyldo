@@ -23,6 +23,8 @@ use Fyldo\V1\Validation\Messages;
  * `watch` names other fields of the same page whose current values the module receives (`values`), as the person edits
  * them: a live preview of the page's settings. Page checks that they exist. Inside a group, `watch` names other sub-fields
  * of the same item instead, and `values` holds that item's values (GroupField checks them).
+ *
+ * @internal
  */
 final class CustomField extends AbstractField {
 

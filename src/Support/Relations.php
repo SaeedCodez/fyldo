@@ -8,17 +8,43 @@
 namespace Fyldo\V1\Support;
 
 /**
- * The one place that queries WordPress for the relation fields (`post`, `term`, `user`). The fields call it through
- * protected methods, so the unit tests replace it.
+ * The one place that queries WordPress for the relation fields (`post`, `term`, `user`). The unit tests replace the
+ * post lookups with pin().
  *
  * Every method returns items as `array( 'value' => ID, 'label' => title, 'hint' => '' or a short note )`. The hint tells
  * equal titles apart: the post type or taxonomy when the field allows several, a user's login when it differs from the
  * display name.
+ *
+ * @internal
  */
 final class Relations {
 
 	/** Results per page of a search. */
 	const PER_PAGE = 20;
+
+	/**
+	 * Pinned post lookups, for tests.
+	 *
+	 * @var array{search:?callable,find:?callable}
+	 */
+	private static $pinned = array(
+		'search' => null,
+		'find'   => null,
+	);
+
+	/**
+	 * Replaces the post lookups (tests only); no arguments restore WordPress.
+	 *
+	 * @internal
+	 * @param callable|null $search `( array $source, string $search, int $page ): array`, as search_posts().
+	 * @param callable|null $find   `( array $source, array $ids, bool $check ): array`, as find_posts().
+	 */
+	public static function pin( ?callable $search = null, ?callable $find = null ): void {
+		self::$pinned = array(
+			'search' => $search,
+			'find'   => $find,
+		);
+	}
 
 	/**
 	 * One page of posts: the most recent first, or the best matches of `$search`.
@@ -29,6 +55,10 @@ final class Relations {
 	 * @return array{items:array<int,array{value:int,label:string,hint:string}>,more:bool}
 	 */
 	public static function search_posts( array $source, string $search, int $page ): array {
+		if ( null !== self::$pinned['search'] ) {
+			return ( self::$pinned['search'] )( $source, $search, $page );
+		}
+
 		$query = new \WP_Query(
 			array_merge(
 				array(
@@ -69,6 +99,10 @@ final class Relations {
 	 * @return array<int,array{value:int,label:string,hint:string}>
 	 */
 	public static function find_posts( array $source, array $ids, bool $check ): array {
+		if ( null !== self::$pinned['find'] ) {
+			return ( self::$pinned['find'] )( $source, $ids, $check );
+		}
+
 		if ( array() === $ids ) {
 			return array();
 		}

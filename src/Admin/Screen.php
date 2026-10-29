@@ -13,6 +13,8 @@ use Fyldo\V1\Support\Theme;
 
 /**
  * One admin screen per instance (pages and tabs are client-side routes).
+ *
+ * @internal
  */
 final class Screen {
 

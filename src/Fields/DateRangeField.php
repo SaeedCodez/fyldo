@@ -9,6 +9,8 @@ namespace Fyldo\V1\Fields;
 
 /**
  * See AbstractDateRangeField for the config and what is stored. The end may be the start's day (both days count).
+ *
+ * @internal
  */
 final class DateRangeField extends AbstractDateRangeField {
 

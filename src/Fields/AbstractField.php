@@ -15,6 +15,8 @@ use Fyldo\V1\Validation\Rules;
 
 /**
  * One field of one section: definition + server-side sanitize/validate + client export.
+ *
+ * @internal
  */
 abstract class AbstractField {
 
@@ -209,7 +211,7 @@ abstract class AbstractField {
 	}
 
 	/**
-	 * Sanitize an untrusted value (developer callback first, then the type's own sanitizer).
+	 * Sanitize an untrusted value: the type's own sanitizer first, then the developer's `sanitize_cb` on its result.
 	 *
 	 * @param mixed $raw Raw value.
 	 * @return mixed
@@ -405,6 +407,35 @@ abstract class AbstractField {
 		return $out;
 	}
 
+	/**
+	 * Bounds and counts (`min`, `max`, `step`) are keys of the field; `validate` accepts them too for the types that have
+	 * them (number and the lists). Either way they become the declarative rules, which the server checks and the browser
+	 * gets. Both places at once is a mistake: which one wins?
+	 *
+	 * @param array<string,mixed> $config Config after common normalisation.
+	 * @param string[]            $keys   The bounds this type has.
+	 * @return array<string,mixed> The config with the field's own bounds moved into `validate`.
+	 * @throws ConfigException When a bound is given on the field and in `validate`.
+	 */
+	protected function bounds_into_rules( array $config, array $keys ): array {
+		$rules = (array) $config['validate'];
+		foreach ( $keys as $key ) {
+			if ( ! array_key_exists( $key, $config ) ) {
+				continue;
+			}
+			if ( isset( $rules[ $key ] ) && null !== $config[ $key ] ) {
+				throw new ConfigException( sprintf( 'Field "%1$s": `%2$s` is set on the field and in `validate`; use one (the field).', $config['id'], $key ) );
+			}
+			if ( null !== $config[ $key ] ) {
+				$rules[ $key ] = $config[ $key ];
+			}
+			unset( $config[ $key ] );
+		}
+		$config['validate'] = $rules;
+
+		return $config;
+	}
+
 	/** Type-specific keys for the browser. */
 	protected function client_extra(): array {
 		return array();
@@ -433,6 +464,11 @@ abstract class AbstractField {
 		$layout = isset( $config['layout'] ) ? (string) $config['layout'] : $this->default_layout();
 		if ( ! in_array( $layout, array( 'inline', 'stacked', 'field' ), true ) ) {
 			throw new ConfigException( sprintf( 'Field "%s": layout must be "inline", "stacked" or "field".', $id ) );
+		}
+
+		$badge = $config['badge'] ?? '';
+		if ( ! is_string( $badge ) && ! is_int( $badge ) ) {
+			throw new ConfigException( sprintf( 'Field "%s": badge must be a short string or a number.', $id ) );
 		}
 
 		$rules = isset( $config['validate'] ) ? (array) $config['validate'] : array();
@@ -474,6 +510,7 @@ abstract class AbstractField {
 		$normalized['label']          = isset( $config['label'] ) ? (string) $config['label'] : '';
 		$normalized['description']    = isset( $config['description'] ) ? (string) $config['description'] : '';
 		$normalized['layout']         = $layout;
+		$normalized['badge']          = (string) $badge;
 		$normalized['validate']       = $rules;
 		$normalized['disabled']       = $disabled;
 		$normalized['dependency']     = isset( $config['dependency'] ) ? Dependency::normalize( $config['dependency'], $id ) : null;

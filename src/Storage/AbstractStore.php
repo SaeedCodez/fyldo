@@ -14,6 +14,8 @@ use Fyldo\V1\Schema\Page;
 /**
  * A store says where the raw array lives (an option, a plugin's record); the rest is the same for every store. Writing
  * is each store's own: an option is written in place, a record goes through the plugin's callback, which may refuse.
+ *
+ * @internal
  */
 abstract class AbstractStore {
 

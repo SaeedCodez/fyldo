@@ -10,6 +10,8 @@ namespace Fyldo\V1\Fields;
 /**
  * See AbstractDateRangeField for the config and what is stored. The end comes strictly after the start;
  * `Dates::range_to_site()` reads both ends in the site's time zone.
+ *
+ * @internal
  */
 final class DateTimeRangeField extends AbstractDateRangeField {
 

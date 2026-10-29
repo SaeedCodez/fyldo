@@ -12,10 +12,11 @@ use Fyldo\V1\Support\Relations;
 /**
  * Config: `role` (a role name or a list; none = every user), plus the keys of every relation field (see
  * AbstractRelationField). Only someone who may list users (`list_users`) can search or save; results show the display
- * name, and the login when it differs. Email addresses are never searched or sent. Not final: the unit tests stub the
- * WordPress queries.
+ * name, and the login when it differs. Email addresses are never searched or sent.
+ *
+ * @internal
  */
-class UserField extends AbstractRelationField {
+final class UserField extends AbstractRelationField {
 
 	public static function types(): array {
 		return array( 'user' );

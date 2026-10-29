@@ -25,6 +25,8 @@ use Fyldo\V1\Support\Naming;
  * `/pages/{page}/fields/{field}/items` (search results of a post, term or user field; `{field}` is `<group>.<sub-field>`
  * for one inside a group). A form's: GET/PATCH `/forms/{form}/records/{key}` (`new` = a record not stored yet) and GET
  * `/forms/{form}/fields/{field}/items`.
+ *
+ * @internal
  */
 final class Controller {
 

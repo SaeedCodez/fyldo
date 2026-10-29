@@ -14,6 +14,8 @@ use Fyldo\V1\Support\Naming;
 
 /**
  * Normalised page. A form's fields (Schema\Form) are a Page too: the stores and the Saver read the same schema.
+ *
+ * @internal
  */
 final class Page implements Guarded {
 
@@ -228,6 +230,11 @@ final class Page implements Guarded {
 	/** Capability override, or '' to use the instance default. */
 	public function capability(): string {
 		return (string) $this->config['capability'];
+	}
+
+	/** The navigation group's id, or '' for none. */
+	public function group(): string {
+		return (string) $this->config['group'];
 	}
 
 	public function save_mode(): string {

@@ -12,9 +12,10 @@ use Fyldo\V1\Support\Relations;
 /**
  * Config: `post_type` (a name or a list, default `post`) and `post_status` (a name or a list, default `publish`), plus the
  * keys of every relation field (see AbstractRelationField). When several post types are allowed, each result names its type.
- * Not final: the unit tests stub the WordPress queries by overriding `query()` and `lookup()`.
+ *
+ * @internal
  */
-class PostField extends AbstractRelationField {
+final class PostField extends AbstractRelationField {
 
 	public static function types(): array {
 		return array( 'post' );

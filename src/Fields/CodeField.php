@@ -18,6 +18,8 @@ use Fyldo\V1\Validation\Rules;
  *
  * The implied `code` rule checks JSON (it must parse) and CSS (no markup, as WordPress checks its Additional CSS); a CSS
  * message names its line. `validate_cb` may answer with messages by line (`array( 3 => '…' )` → `<field>.3`).
+ *
+ * @internal
  */
 final class CodeField extends AbstractField {
 

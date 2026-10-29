@@ -13,6 +13,8 @@ use Fyldo\V1\Schema\ConfigException;
  * Renders an Input (`type="password"`). The stored value never goes to the browser: the browser learns only whether
  * one is set (value `null`) or not (`''`). On save `null` keeps what is stored, `''` clears it, anything else replaces
  * it. The value is stored and returned by `Instance::get()` exactly as typed (never trimmed or altered).
+ *
+ * @internal
  */
 final class PasswordField extends AbstractField {
 

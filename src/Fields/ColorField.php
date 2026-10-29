@@ -16,6 +16,8 @@ use Fyldo\V1\Schema\ConfigException;
  * being silently replaced. An empty value is allowed unless `required`.
  *
  * Config: `default` (a hex colour, optional) and `presets` (a list of hex colours; `false` hides the section).
+ *
+ * @internal
  */
 final class ColorField extends AbstractField {
 

@@ -387,13 +387,13 @@ final class Demo {
 					'description' => __( 'Each card saves on its own.', 'fyldo' ),
 					'fields'      => array(
 						array(
-							'id'       => 'post_types',
-							'type'     => 'checkbox_group',
-							'label'    => __( 'Show on', 'fyldo' ),
-							'parent'   => __( 'All post types', 'fyldo' ),
-							'default'  => array( 'post', 'page' ),
-							'validate' => array( 'min' => 1 ),
-							'options'  => array(
+							'id'      => 'post_types',
+							'type'    => 'checkbox_group',
+							'label'   => __( 'Show on', 'fyldo' ),
+							'parent'  => __( 'All post types', 'fyldo' ),
+							'default' => array( 'post', 'page' ),
+							'min'     => 1,
+							'options' => array(
 								array(
 									'value' => 'post',
 									'label' => __( 'Posts', 'fyldo' ),
@@ -417,7 +417,7 @@ final class Demo {
 							'placeholder' => __( 'Select content types…', 'fyldo' ),
 							'clearable'   => true,
 							'default'     => array( 'post', 'page' ),
-							'validate'    => array( 'max' => 4 ),
+							'max'         => 4,
 							'options'     => array(
 								array(
 									'value' => 'post',
@@ -1098,7 +1098,7 @@ final class Demo {
 							'placeholder' => __( 'Select posts or pages…', 'fyldo' ),
 							'post_type'   => array( 'post', 'page' ),
 							'multiple'    => true,
-							'validate'    => array( 'max' => 4 ),
+							'max'         => 4,
 						),
 					),
 				),

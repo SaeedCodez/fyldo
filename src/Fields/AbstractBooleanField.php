@@ -11,6 +11,8 @@ use Fyldo\V1\Validation\Rules;
 
 /**
  * A boolean value. "Required" means "must be on" (e.g. accepting a statement).
+ *
+ * @internal
  */
 abstract class AbstractBooleanField extends AbstractField {
 

@@ -9,6 +9,8 @@ namespace Fyldo\V1\Support;
 
 /**
  * Every Iconsax name Fyldo has a module for (assets/dist/icons/<name without hyphens>.js). Read it through Icons.
+ *
+ * @internal
  */
 final class IconNames {
 

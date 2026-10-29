@@ -19,6 +19,8 @@ use Fyldo\V1\Validation\Rules;
  *
  * A hidden field is not part of the form: the browser neither checks nor sends it, and the server neither checks nor
  * saves it (what is stored stays). Inside a group item, a hidden sub-field is not checked; its value is saved as it is.
+ *
+ * @internal
  */
 final class Dependency {
 

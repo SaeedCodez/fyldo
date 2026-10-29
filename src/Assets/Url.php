@@ -10,6 +10,8 @@ namespace Fyldo\V1\Assets;
 
 /**
  * Path→URL resolver.
+ *
+ * @internal
  */
 final class Url {
 

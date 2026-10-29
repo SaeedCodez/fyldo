@@ -11,6 +11,8 @@ use Fyldo\V1\Validation\Digits;
 
 /**
  * Renders an Input. `url` and `email` values are read with ASCII digits (a Persian keyboard types ۰-۹).
+ *
+ * @internal
  */
 final class TextField extends AbstractField {
 

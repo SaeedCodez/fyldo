@@ -9,6 +9,8 @@ namespace Fyldo\V1\Fields;
 
 /**
  * Renders a Select (or a searchable combobox for long lists).
+ *
+ * @internal
  */
 final class SelectField extends AbstractOptionsField {
 

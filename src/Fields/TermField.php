@@ -12,9 +12,11 @@ use Fyldo\V1\Support\Relations;
 /**
  * Config: `taxonomy` (a name or a list, default `category`), plus the keys of every relation field (see
  * AbstractRelationField). Only taxonomies whose terms the current user may assign are searched. When several taxonomies
- * are allowed, each result names its taxonomy. Not final: the unit tests stub the WordPress queries.
+ * are allowed, each result names its taxonomy.
+ *
+ * @internal
  */
-class TermField extends AbstractRelationField {
+final class TermField extends AbstractRelationField {
 
 	public static function types(): array {
 		return array( 'term' );
