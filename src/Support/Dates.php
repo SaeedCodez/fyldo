@@ -21,9 +21,9 @@ use Fyldo\V1\Validation\Digits;
 final class Dates {
 
 	/** @internal */
-	const DATE     = '/^(\d{4})-(\d{2})-(\d{2})$/D';
+	const DATE = '/^(\d{4})-(\d{2})-(\d{2})$/D';
 	/** @internal */
-	const TIME     = '/^([01]\d|2[0-3]):([0-5]\d)$/D';
+	const TIME = '/^([01]\d|2[0-3]):([0-5]\d)$/D';
 	/** @internal */
 	const DATETIME = '/^(\d{4})-(\d{2})-(\d{2}) ([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/D';
 
