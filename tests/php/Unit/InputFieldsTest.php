@@ -132,8 +132,10 @@ final class InputFieldsTest extends TestCase {
 		$json = (string) wp_json_encode( $page->to_client( $instance->store()->client_values( $page ), 'rev' ) );
 		$this->assertStringNotContainsString( 'top-secret-value', $json );
 
+		// update() answers PHP code with what all() returns, a password as stored; REST (Saver) answers the browser.
 		$result = $instance->update( 'general', array( 'api_key' => 'another-secret' ) );
-		$this->assertStringNotContainsString( 'another-secret', (string) wp_json_encode( $result ) );
+		$this->assertSame( $instance->all( 'general' ), $result['values'] );
+		$this->assertSame( 'another-secret', $result['values']['api_key'] );
 	}
 
 	public function test_password_rules_apply_to_a_new_value_only(): void {

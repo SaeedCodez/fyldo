@@ -11,6 +11,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Builds field objects from developer config.
+ *
+ * @internal
  */
 final class FieldFactory {
 

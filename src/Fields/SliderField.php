@@ -15,6 +15,8 @@ use Fyldo\V1\Validation\Rules;
  * declarative `min` / `max` / `step` rules, so the server rejects (and the browser prevents) values outside the range or
  * off the step grid. A slider always has a value: `default` is `min` unless given, and `required` is implied. Stored as
  * int|float; text that is not a number is kept as text so the implied `number` rule reports it.
+ *
+ * @internal
  */
 final class SliderField extends AbstractField {
 

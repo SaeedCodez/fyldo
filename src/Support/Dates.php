@@ -20,8 +20,11 @@ use Fyldo\V1\Validation\Digits;
  */
 final class Dates {
 
-	const DATE     = '/^(\d{4})-(\d{2})-(\d{2})$/D';
-	const TIME     = '/^([01]\d|2[0-3]):([0-5]\d)$/D';
+	/** @internal */
+	const DATE = '/^(\d{4})-(\d{2})-(\d{2})$/D';
+	/** @internal */
+	const TIME = '/^([01]\d|2[0-3]):([0-5]\d)$/D';
+	/** @internal */
 	const DATETIME = '/^(\d{4})-(\d{2})-(\d{2}) ([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/D';
 
 	/**
@@ -97,7 +100,11 @@ final class Dates {
 		return $start < $end ? $at >= $start && $at < $end : $at >= $start || $at < $end;
 	}
 
-	/** The site's time zone: `wp_timezone()` (the "Timezone" setting), UTC without WordPress. */
+	/**
+	 * The site's time zone: `wp_timezone()` (the "Timezone" setting), UTC without WordPress.
+	 *
+	 * @internal
+	 */
 	public static function timezone(): \DateTimeZone {
 		if ( null !== self::$zone ) {
 			return self::$zone;
@@ -106,7 +113,11 @@ final class Dates {
 		return function_exists( 'wp_timezone' ) ? wp_timezone() : new \DateTimeZone( 'UTC' );
 	}
 
-	/** The zone as the browser gets it: an IANA name (`Asia/Tehran`) or a fixed offset (`+03:30`), like `wp_timezone_string()`. */
+	/**
+	 * The zone as the browser gets it: an IANA name (`Asia/Tehran`) or a fixed offset (`+03:30`), like `wp_timezone_string()`.
+	 *
+	 * @internal
+	 */
 	public static function timezone_name(): string {
 		if ( null === self::$zone && function_exists( 'wp_timezone_string' ) ) {
 			return wp_timezone_string();
@@ -128,7 +139,7 @@ final class Dates {
 	}
 
 	/** The current instant, in UTC. */
-	public static function now(): \DateTimeImmutable {
+	private static function now(): \DateTimeImmutable {
 		return self::$now ?? new \DateTimeImmutable( 'now', new \DateTimeZone( 'UTC' ) );
 	}
 
@@ -137,6 +148,7 @@ final class Dates {
 	 *
 	 * @param string $kind  `date`, `time` or `datetime`.
 	 * @param mixed  $value Value.
+	 * @internal
 	 */
 	public static function is_valid( string $kind, $value ): bool {
 		if ( ! is_string( $value ) ) {
@@ -157,6 +169,7 @@ final class Dates {
 	 *
 	 * @param string $kind  `date`, `time` or `datetime`.
 	 * @param string $bound A stored-format value or a keyword.
+	 * @internal
 	 */
 	public static function resolve( string $kind, string $bound ): string {
 		if ( 'date' === $kind && 'today' === $bound ) {
@@ -175,6 +188,7 @@ final class Dates {
 	 *
 	 * @param string $kind  `time` or `datetime`.
 	 * @param string $value A stored value.
+	 * @internal
 	 */
 	public static function minute_of_day( string $kind, string $value ): int {
 		if ( 'time' === $kind ) {
@@ -193,6 +207,7 @@ final class Dates {
 	 *
 	 * @param string $kind  `date`, `time` or `datetime`.
 	 * @param string $value A stored value.
+	 * @internal
 	 */
 	public static function display( string $kind, string $value ): string {
 		if ( 'time' === $kind || ! function_exists( 'wp_date' ) ) {
@@ -213,6 +228,7 @@ final class Dates {
 	 * is not text is nothing. The format is not fixed up: the field's rule reports a wrong one.
 	 *
 	 * @param mixed $raw Raw value.
+	 * @internal
 	 */
 	public static function read( $raw ): string {
 		return is_string( $raw ) ? trim( Digits::to_ascii( $raw ) ) : '';

@@ -11,8 +11,10 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Renders a Multi Select: tags in the field, a popup with a search row, checkbox options and a footer with Clear.
- * The value is the list of selected option values, in option order. `validate` accepts `min` / `max` (the number of
- * selected options) besides `required`.
+ * The value is the list of selected option values, in option order. `min` / `max` (the number of selected options) are keys of
+ * the field; `validate` accepts them too, besides `required`.
+ *
+ * @internal
  */
 final class MultiSelectField extends AbstractListField {
 
@@ -33,7 +35,7 @@ final class MultiSelectField extends AbstractListField {
 	}
 
 	protected function extra_keys(): array {
-		return array( 'placeholder', 'options', 'searchable', 'clearable' );
+		return array( 'placeholder', 'options', 'searchable', 'clearable', 'min', 'max' );
 	}
 
 	protected function normalize_type( array $config ): array {

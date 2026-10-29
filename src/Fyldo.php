@@ -28,6 +28,8 @@ final class Fyldo {
 
 	/**
 	 * Registers the shared hooks. Idempotent; called by every bundled copy through Loader::on_ready().
+	 *
+	 * @internal
 	 */
 	public static function init(): void {
 		if ( self::$initialized ) {
@@ -100,12 +102,15 @@ final class Fyldo {
 		return Icons::exists( $name );
 	}
 
+	/** @internal */
 	public static function register_screens(): void {
 		foreach ( self::$instances as $instance ) {
+			$instance->check_groups();
 			Screen::register( $instance );
 		}
 	}
 
+	/** @internal */
 	public static function register_rest_routes(): void {
 		foreach ( self::$instances as $instance ) {
 			( new Controller( $instance ) )->register_routes();
@@ -114,6 +119,8 @@ final class Fyldo {
 
 	/**
 	 * The nonce refresh of every instance (admin-ajax runs `admin_init` before `wp_ajax_{action}`). Logged-in users only.
+	 *
+	 * @internal
 	 */
 	public static function register_ajax(): void {
 		foreach ( self::$instances as $instance ) {
@@ -122,7 +129,10 @@ final class Fyldo {
 		}
 	}
 
-	/** @param string $hook Current admin page hook suffix. */
+	/**
+	 * @param string $hook Current admin page hook suffix.
+	 * @internal
+	 */
 	public static function enqueue( $hook ): void {
 		foreach ( self::$instances as $instance ) {
 			Assets::enqueue( $instance, (string) $hook );
@@ -131,6 +141,7 @@ final class Fyldo {
 
 	/**
 	 * @param string $classes Body classes.
+	 * @internal
 	 */
 	public static function body_class( $classes ): string {
 		return Screen::body_class( (string) $classes, array_values( self::$instances ) );
@@ -138,6 +149,8 @@ final class Fyldo {
 
 	/**
 	 * No WordPress admin notice on a Fyldo screen.
+	 *
+	 * @internal
 	 */
 	public static function clear_admin_notices(): void {
 		Screen::clear_admin_notices( array_values( self::$instances ) );

@@ -12,6 +12,8 @@ use Fyldo\V1\Schema\ConfigException;
 /**
  * Display only: renders the Notice component. It has no value: it is not in the option, not in the REST payload,
  * and cannot be disabled or validated. `label` is the (optional) title, `description` the message.
+ *
+ * @internal
  */
 final class NoticeField extends AbstractField {
 

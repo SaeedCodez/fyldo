@@ -11,7 +11,9 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Option list + list value: only known values, in option order, de-duplicated; unknown values are kept last so the
- * `allowed` rule reports them instead of silently dropping them. `min` / `max` count the selected items.
+ * `allowed` rule reports them instead of silently dropping them. `min` / `max` (keys of the field; `validate` takes them too) count the selected items.
+ *
+ * @internal
  */
 abstract class AbstractListField extends AbstractOptionsField {
 
@@ -30,7 +32,7 @@ abstract class AbstractListField extends AbstractOptionsField {
 	 * @throws ConfigException When options are missing or the default is not a list of enabled options.
 	 */
 	protected function normalize_list( array $config ): array {
-		$config = $this->normalize_options( $config );
+		$config = $this->bounds_into_rules( $this->normalize_options( $config ), array( 'min', 'max' ) );
 
 		$default = $config['default'] ?? array();
 		if ( ! is_array( $default ) ) {

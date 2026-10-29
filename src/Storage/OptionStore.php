@@ -11,6 +11,8 @@ use Fyldo\V1\Schema\Page;
 
 /**
  * Flat associative array keyed by field id; autoload disabled. The read side (values, revision…) is AbstractStore's.
+ *
+ * @internal
  */
 final class OptionStore extends AbstractStore {
 

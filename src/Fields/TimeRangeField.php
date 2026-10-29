@@ -10,6 +10,8 @@ namespace Fyldo\V1\Fields;
 /**
  * See AbstractDateRangeField for the config and what is stored. A range may cross midnight (22:00 → 06:00); the end
  * cannot equal the start. `Dates::time_in_range()` tells whether a time is inside one.
+ *
+ * @internal
  */
 final class TimeRangeField extends AbstractDateRangeField {
 

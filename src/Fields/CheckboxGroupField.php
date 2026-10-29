@@ -10,6 +10,8 @@ namespace Fyldo\V1\Fields;
 /**
  * Renders a Checkbox group; the optional `parent` label adds the "all" checkbox that shows Indeterminate.
  * The value is the list of selected option values, in option order.
+ *
+ * @internal
  */
 final class CheckboxGroupField extends AbstractListField {
 
@@ -30,7 +32,7 @@ final class CheckboxGroupField extends AbstractListField {
 	}
 
 	protected function extra_keys(): array {
-		return array( 'options', 'parent' );
+		return array( 'options', 'parent', 'min', 'max' );
 	}
 
 	protected function normalize_type( array $config ): array {

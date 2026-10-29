@@ -17,6 +17,8 @@ use Fyldo\V1\Support\Version;
  * option `{slug}__fyldo`. When a page is registered with a later version, every field of that page with nothing
  * stored gets the default it had in the version the site came from, so updating the plugin does not change what an
  * untouched setting does. A first run (a new site, a new page) only records the version. See docs/default-history.md.
+ *
+ * @internal
  */
 final class DefaultHistory {
 

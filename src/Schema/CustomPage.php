@@ -14,6 +14,8 @@ use Fyldo\V1\Support\Naming;
  * Registered with `add_page( $id, array( 'type' => 'custom', … ) )`. Fyldo draws the navigation and the Page Header
  * and loads `module`, an ES module whose default export draws the content. It has no option, no values and no REST
  * routes of its own: the module reads and writes through the plugin's routes (and Fyldo's forms).
+ *
+ * @internal
  */
 final class CustomPage implements Guarded {
 
@@ -100,6 +102,11 @@ final class CustomPage implements Guarded {
 
 	public function capability(): string {
 		return $this->config['capability'];
+	}
+
+	/** The navigation group's id, or '' for none. */
+	public function group(): string {
+		return $this->config['group'];
 	}
 
 	/** URL of the ES module that draws the page. */

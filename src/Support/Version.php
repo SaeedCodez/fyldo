@@ -9,6 +9,8 @@ namespace Fyldo\V1\Support;
 
 /**
  * The one place that says what a version number is.
+ *
+ * @internal
  */
 final class Version {
 

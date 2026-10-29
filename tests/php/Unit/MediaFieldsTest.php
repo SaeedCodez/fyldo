@@ -12,62 +12,48 @@ use Fyldo\V1\Fields\FileField;
 use Fyldo\V1\Fields\ImageField;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Attachments;
 use PHPUnit\Framework\TestCase;
 
-/** An image field whose attachments come from a table instead of WordPress. */
-final class StubbedImageField extends ImageField {
+/** Attachments that come from a table instead of WordPress. */
+final class AttachmentsDouble {
 	/** @var array<int,array<string,mixed>> */
 	public static $attachments = array();
 
 	/** @var int[] Attachments the current user may not read. */
 	public static $unreadable = array();
 
-	protected function attachment( int $id ): ?array {
-		return self::$attachments[ $id ] ?? null;
-	}
-
-	protected function readable( int $id ): bool {
-		return ! in_array( $id, self::$unreadable, true );
-	}
-}
-
-/** A file field whose attachments come from a table instead of WordPress. */
-final class StubbedFileField extends FileField {
-	/** @var array<int,array<string,mixed>> */
-	public static $attachments = array();
-
-	/** @var int[] Attachments the current user may not read. */
-	public static $unreadable = array();
-
-	protected function attachment( int $id ): ?array {
-		return self::$attachments[ $id ] ?? null;
-	}
-
-	protected function readable( int $id ): bool {
-		return ! in_array( $id, self::$unreadable, true );
+	public static function pin(): void {
+		Attachments::pin(
+			static fn( int $id ): ?array => self::$attachments[ $id ] ?? null,
+			static fn( int $id ): bool => ! in_array( $id, self::$unreadable, true )
+		);
 	}
 }
 
 final class MediaFieldsTest extends TestCase {
 
 	protected function setUp(): void {
-		StubbedImageField::$attachments = array(
+		AttachmentsDouble::$attachments = array(
 			7  => array( 'id' => 7, 'filename' => 'logo-mark.png', 'filesize' => 38912, 'mime' => 'image/png', 'extension' => 'png', 'width' => 512, 'height' => 512, 'thumbnail' => 'https://example.com/logo-150x150.png', 'image' => true ),
 			8  => array( 'id' => 8, 'filename' => 'photo.jpg', 'filesize' => 3145728, 'mime' => 'image/jpeg', 'extension' => 'jpg', 'width' => 4000, 'height' => 3000, 'thumbnail' => null, 'image' => true ),
 			9  => array( 'id' => 9, 'filename' => 'guide.pdf', 'filesize' => 1258291, 'mime' => 'application/pdf', 'extension' => 'pdf', 'width' => null, 'height' => null, 'thumbnail' => null, 'image' => false ),
 			10 => array( 'id' => 10, 'filename' => 'stretch.mp4', 'filesize' => 4194304, 'mime' => 'video/mp4', 'extension' => 'mp4', 'width' => null, 'height' => null, 'thumbnail' => null, 'image' => false, 'duration' => 72 ),
 		);
-		StubbedFileField::$attachments = StubbedImageField::$attachments;
-		StubbedImageField::$unreadable = array();
-		StubbedFileField::$unreadable  = array();
+		AttachmentsDouble::$unreadable = array();
+		AttachmentsDouble::pin();
+	}
+
+	protected function tearDown(): void {
+		Attachments::pin();
 	}
 
 	private function image( array $extra = array() ): ImageField {
-		return new StubbedImageField( array_merge( array( 'id' => 'site_logo', 'type' => 'image', 'label' => 'Site logo' ), $extra ) );
+		return new ImageField( array_merge( array( 'id' => 'site_logo', 'type' => 'image', 'label' => 'Site logo' ), $extra ) );
 	}
 
 	private function file( array $extra = array() ): FileField {
-		return new StubbedFileField( array_merge( array( 'id' => 'guide', 'type' => 'file', 'label' => 'Brand guidelines' ), $extra ) );
+		return new FileField( array_merge( array( 'id' => 'guide', 'type' => 'file', 'label' => 'Brand guidelines' ), $extra ) );
 	}
 
 	public function test_the_factory_builds_both_types_with_the_field_layout_and_no_value(): void {
@@ -169,7 +155,7 @@ final class MediaFieldsTest extends TestCase {
 	public function test_bad_config_throws( string $type, array $extra, string $message ): void {
 		$this->expectException( ConfigException::class );
 		$this->expectExceptionMessage( $message );
-		new StubbedFileField( array_merge( array( 'id' => 'x', 'type' => $type, 'label' => 'X' ), $extra ) );
+		new FileField( array_merge( array( 'id' => 'x', 'type' => $type, 'label' => 'X' ), $extra ) );
 	}
 
 	public function bad_config(): array {
@@ -232,15 +218,14 @@ final class MediaFieldsTest extends TestCase {
 	}
 
 	public function test_an_attachment_the_user_may_not_read_is_refused_when_saving(): void {
-		StubbedImageField::$unreadable = array( 7 );
+		AttachmentsDouble::$unreadable = array( 7 );
 		$this->assertSame( 'This file is no longer available. Choose another one.', $this->image()->validate( 7 ) );
 		$this->assertNull( $this->image()->media( 7 ), 'nor described to that user in the browser' );
 	}
 
 	public function test_a_stored_value_does_not_depend_on_who_reads_it(): void {
 		// A logged-out visitor has no `read` capability, so `read_post` fails for every attachment on the front end.
-		StubbedImageField::$unreadable = array( 7 );
-		StubbedFileField::$unreadable  = array( 9 );
+		AttachmentsDouble::$unreadable = array( 7, 9 );
 		$this->assertSame( 7, $this->image()->stored_value( 7 ), 'the saved logo, not the default' );
 		$this->assertSame( 9, $this->file()->stored_value( '9' ) );
 
@@ -286,7 +271,7 @@ final class MediaFieldsTest extends TestCase {
 		$exact = $this->file( array( 'max_size' => 1258291 ) );
 		$this->assertNull( $exact->validate( 9 ), 'the limit itself is allowed' );
 
-		StubbedFileField::$attachments[9]['filesize'] = 0;
+		AttachmentsDouble::$attachments[9]['filesize'] = 0;
 		$this->assertNull( $this->file( array( 'max_size' => 10 ) )->validate( 9 ), 'a size WordPress does not know cannot be held against the limit' );
 	}
 

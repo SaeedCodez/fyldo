@@ -15,6 +15,8 @@ use Fyldo\V1\Support\Naming;
  * Registered with `$instance->add_form( $id, array( 'sections' => …, 'load' => …, 'save' => … ) )`. Fyldo sanitizes,
  * validates, reports errors and checks the revision exactly like on a settings page; the plugin's callbacks read and
  * write the record. A custom page opens it over REST (`…/forms/{form}/records/{key}`).
+ *
+ * @internal
  */
 final class Form implements Guarded {
 

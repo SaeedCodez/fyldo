@@ -14,6 +14,8 @@ use Fyldo\V1\Schema\Page;
  * Bound to a form and a key ('' = a new record, not stored yet). `load` runs at most once per store (a request reads
  * the record several times: values, revision, media); after a successful write the store is the saved record, under
  * the key `save` returned, read again so the revision is what the next request will see.
+ *
+ * @internal
  */
 final class RecordStore extends AbstractStore {
 

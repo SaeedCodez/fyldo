@@ -11,6 +11,8 @@ namespace Fyldo\V1\Validation;
 
 /**
  * Digit normalisation.
+ *
+ * @internal
  */
 final class Digits {
 

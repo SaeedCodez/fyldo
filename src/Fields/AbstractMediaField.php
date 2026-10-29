@@ -18,6 +18,8 @@ use Fyldo\V1\Support\Attachments;
  * `wp_get_ext_types()` such as `array( 'document', 'image' )`, which expand to their extensions; mapped to MIME types with
  * `wp_get_mime_types()`; a name that is neither is a ConfigException) and `max_size` (bytes, or text like `2MB`). The browser asks the
  * media library for those types only and checks the choice again; the server checks the stored attachment.
+ *
+ * @internal
  */
 abstract class AbstractMediaField extends AbstractField {
 
@@ -45,7 +47,7 @@ abstract class AbstractMediaField extends AbstractField {
 	}
 
 	/**
-	 * The attachment behind an id, or null when it does not exist. A seam to WordPress: unit tests override it.
+	 * The attachment behind an id, or null when it does not exist. A seam to WordPress (the unit tests pin the lookups in Attachments or Relations).
 	 *
 	 * @param int $id Attachment id.
 	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool,duration?:?int}|null
@@ -55,7 +57,7 @@ abstract class AbstractMediaField extends AbstractField {
 	}
 
 	/**
-	 * Whether the current user may read the attachment. A seam to WordPress: unit tests override it.
+	 * Whether the current user may read the attachment. A seam to WordPress (the unit tests pin the lookups in Attachments or Relations).
 	 *
 	 * @param int $id Attachment id.
 	 */

@@ -14,6 +14,8 @@ use Fyldo\V1\Support\Dates;
 
 /**
  * Rule engine.
+ *
+ * @internal
  */
 final class Rules {
 

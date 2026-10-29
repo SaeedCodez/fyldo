@@ -11,6 +11,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Renders a Textarea. With a `max_length` rule it shows the live counter; over the limit is an error, never a truncation.
+ *
+ * @internal
  */
 final class TextareaField extends AbstractField {
 

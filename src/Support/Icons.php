@@ -14,13 +14,23 @@ namespace Fyldo\V1\Support;
  *
  * Only names from IconNames are read, so a name can never point at another file. The markup keeps a fixed set of
  * elements and attributes (no script, no event handlers), with attributes in kebab case and strokes in `currentColor`.
+ *
+ * @internal
  */
 final class Icons {
 
-	/** Elements an icon may use; anything else is dropped. */
+	/**
+	 * Elements an icon may use; anything else is dropped.
+	 *
+	 * @internal
+	 */
 	const ELEMENTS = array( 'path', 'g', 'circle', 'ellipse', 'line', 'polygon', 'polyline', 'rect' );
 
-	/** Attributes an icon element may carry (kebab case); anything else is dropped. */
+	/**
+	 * Attributes an icon element may carry (kebab case); anything else is dropped.
+	 *
+	 * @internal
+	 */
 	const ATTRIBUTES = array( 'd', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'points', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-dasharray', 'opacity', 'fill-rule', 'clip-rule', 'transform' );
 
 	/** @var array<string,true>|null Name → true, built once from IconNames. */
@@ -32,7 +42,11 @@ final class Icons {
 	/** @var string|null Where the modules are read from; null = this copy's assets/dist/icons. */
 	private static $dir = null;
 
-	/** Whether `$name` is an Iconsax name Fyldo has (kebab case, e.g. `setting-2`). */
+	/**
+	 * Whether `$name` is an Iconsax name Fyldo has (kebab case, e.g. `setting-2`).
+	 *
+	 * @internal
+	 */
 	public static function exists( string $name ): bool {
 		if ( null === self::$names ) {
 			self::$names = array_fill_keys( IconNames::ALL, true );
@@ -48,6 +62,7 @@ final class Icons {
 	 * @param string              $name Iconsax name in kebab case (`setting-2`).
 	 * @param array<string,mixed> $args `size` (px, sets width and height; none by default so CSS sizes it), `class`,
 	 *                                  `label` (an accessible name: `role="img"` and `aria-label` instead of `aria-hidden`).
+	 * @internal
 	 */
 	public static function svg( string $name, array $args = array() ): string {
 		$body = self::body( $name );

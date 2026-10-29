@@ -11,6 +11,8 @@ use Fyldo\V1\Support\Dates;
 
 /**
  * Rule id → message. Literal strings so `wp i18n make-pot` can extract them.
+ *
+ * @internal
  */
 final class Messages {
 

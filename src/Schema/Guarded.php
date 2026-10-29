@@ -9,6 +9,8 @@ namespace Fyldo\V1\Schema;
 
 /**
  * Instance::capability_for() reads the override; '' falls back to the instance's `capability`.
+ *
+ * @internal
  */
 interface Guarded {
 

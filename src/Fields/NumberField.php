@@ -11,9 +11,11 @@ use Fyldo\V1\Schema\ConfigException;
 use Fyldo\V1\Validation\Digits;
 
 /**
- * Renders an Input (`inputmode="decimal"`, LTR). Persian / Arabic-Indic digits are read as ASCII, in the browser as
- * the user types and again here. Stored as int|float; nothing typed is `''`; text that is not a number is kept as
- * text so the implied `number` rule reports it.
+ * Renders an Input (`inputmode="decimal"`, LTR). `min`, `max` and `step` are keys of the field (`validate` takes them
+ * too). Persian / Arabic-Indic digits are read as ASCII, in the browser as the user types and again here. Stored as
+ * int|float; nothing typed is `''`; text that is not a number is kept as text so the implied `number` rule reports it.
+ *
+ * @internal
  */
 final class NumberField extends AbstractField {
 
@@ -29,10 +31,11 @@ final class NumberField extends AbstractField {
 	}
 
 	protected function extra_keys(): array {
-		return array( 'placeholder' );
+		return array( 'placeholder', 'min', 'max', 'step' );
 	}
 
 	protected function normalize_type( array $config ): array {
+		$config          = $this->bounds_into_rules( $config, array( 'min', 'max', 'step' ) );
 		$rules           = $config['validate'];
 		$rules['number'] = true;
 

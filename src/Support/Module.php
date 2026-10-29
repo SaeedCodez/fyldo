@@ -9,6 +9,8 @@ namespace Fyldo\V1\Support;
 
 /**
  * The one place that says what a module URL and module props may be (CustomField and CustomPage share the rules).
+ *
+ * @internal
  */
 final class Module {
 

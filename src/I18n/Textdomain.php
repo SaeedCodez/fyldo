@@ -12,6 +12,8 @@ use Fyldo\V1\Bootstrap\Loader;
 
 /**
  * PHP `.mo` loading and UI (JED) data for the browser.
+ *
+ * @internal
  */
 final class Textdomain {
 

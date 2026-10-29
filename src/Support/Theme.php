@@ -14,6 +14,8 @@ use Fyldo\V1\Schema\ConfigException;
  * Every semantic colour of Fyldo (buttons, borders, text, focus, toggles, …) points at one of these steps, so changing a
  * step recolours everything that uses it; the status colours (info, success, warning, error) are not themeable.
  * The colours are set as custom properties on the instance's root element, so they reach no other instance.
+ *
+ * @internal
  */
 final class Theme {
 

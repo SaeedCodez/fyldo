@@ -12,6 +12,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Renders a Radio group. A radio group always has a selection, so `default` is required.
+ *
+ * @internal
  */
 final class RadioField extends AbstractOptionsField {
 

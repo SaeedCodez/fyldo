@@ -13,6 +13,8 @@ use Fyldo\V1\Support\Naming;
 
 /**
  * One save operation: of a settings page (its option) or of a form's record (the plugin's `save`).
+ *
+ * @internal
  */
 final class Saver {
 
@@ -39,7 +41,7 @@ final class Saver {
 		}
 
 		$stored  = $store->raw( $page );
-		$checked = $this->check( $page, $incoming, $stored, $store->values( $page ), 'sanitize/' . $page->id(), 'validate/' . $page->id() );
+		$checked = $this->check( $page, $incoming, $stored, $store->values( $page ), 'page/' . $page->id() . '/sanitize', 'page/' . $page->id() . '/validate' );
 
 		if ( array() !== $checked['errors'] ) {
 			return $this->result( 'invalid', $checked['errors'], $page, $store );
@@ -158,7 +160,7 @@ final class Saver {
 
 	/**
 	 * Sanitizes and validates the changed fields, then runs the two filters (`$sanitize_hook`, `$validate_hook`: a
-	 * page's `sanitize/{page}` / `validate/{page}`, a form's `form/{form}/sanitize` / `form/{form}/validate`).
+	 * page's `page/{page}/sanitize` / `page/{page}/validate`, a form's `form/{form}/sanitize` / `form/{form}/validate`).
 	 *
 	 * A field its `dependency` hides (for the values after this change) is not part of the form: it is not checked and
 	 * keeps what is stored.
@@ -208,7 +210,8 @@ final class Saver {
 		}
 
 		/**
-		 * Filters the sanitized values of a page (or a form's record) before validation results are decided.
+		 * Filters the sanitized values of a page (`fyldo/{slug}/page/{page}/sanitize`) or a form's record
+		 * (`fyldo/{slug}/form/{form}/sanitize`) before validation results are decided.
 		 *
 		 * @param array<string,mixed> $clean  Sanitized values (changed fields only).
 		 * @param array<string,mixed> $stored Values currently stored.
@@ -216,7 +219,8 @@ final class Saver {
 		$clean = (array) apply_filters( Naming::hook( $slug, $sanitize_hook ), $clean, $stored );
 
 		/**
-		 * Filters validation errors (field id => message). Return a non-empty array to block the save.
+		 * Filters validation errors (field id => message) of a page (`fyldo/{slug}/page/{page}/validate`) or a form's
+		 * record (`fyldo/{slug}/form/{form}/validate`). Return a non-empty array to block the save.
 		 *
 		 * @param array<string,string> $errors Errors found so far.
 		 * @param array<string,mixed>  $clean  Sanitized values.

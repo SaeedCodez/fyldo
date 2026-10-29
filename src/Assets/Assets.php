@@ -17,6 +17,8 @@ use Fyldo\V1\Support\Naming;
 
 /**
  * Handles, URLs and the inline config for an instance.
+ *
+ * @internal
  */
 final class Assets {
 
