@@ -12,6 +12,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Renders a Segmented Control. Like a radio group it always has a selection, so `default` is required.
+ *
+ * @internal
  */
 final class SegmentedField extends AbstractOptionsField {
 

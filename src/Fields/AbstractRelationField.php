@@ -16,10 +16,13 @@ use Fyldo\V1\Schema\ConfigException;
  * The value is the item's ID (an int, 0 = nothing chosen), or with `multiple` a list of IDs in the order they were picked.
  * IDs that no longer exist or no longer fit the field (a deleted post, a term moved to another taxonomy, a user who lost
  * the role) drop out when the value is read, so a page never shows a bare ID. When a value is saved, only items the current
- * user may read count. `validate` takes `required`, and with `multiple` also `min` / `max` (the number of items).
+ * user may read count. `validate` takes `required`; with `multiple`, `min` / `max` (the number of items) are keys
+ * of the field, and `validate` takes them too.
  *
- * Config: `multiple`, `placeholder`, `query_args` (extra arguments for the search query, e.g. `array( 'author' => 3 )`;
+ * Config: `multiple`, `min`, `max`, `placeholder`, `query_args` (extra arguments for the search query, e.g. `array( 'author' => 3 )`;
  * the search, paging and the field's own source cannot be overridden) and the source keys of the concrete type.
+ *
+ * @internal
  */
 abstract class AbstractRelationField extends AbstractField {
 
@@ -47,7 +50,7 @@ abstract class AbstractRelationField extends AbstractField {
 	abstract protected function normalize_source( array $config ): array;
 
 	/**
-	 * One page of search results. A seam to WordPress: unit tests override it.
+	 * One page of search results. A seam to WordPress (the unit tests pin the lookups in Attachments or Relations).
 	 *
 	 * @param string $search Words to look for ('' = the first items).
 	 * @param int    $page   Page, from 1.
@@ -56,7 +59,7 @@ abstract class AbstractRelationField extends AbstractField {
 	abstract protected function query( string $search, int $page ): array;
 
 	/**
-	 * The items behind IDs that fit the field, keyed by ID. A seam to WordPress: unit tests override it.
+	 * The items behind IDs that fit the field, keyed by ID. A seam to WordPress (the unit tests pin the lookups in Attachments or Relations).
 	 *
 	 * @param int[] $ids   IDs.
 	 * @param bool  $check Leave out the items the current user may not read.
@@ -76,7 +79,7 @@ abstract class AbstractRelationField extends AbstractField {
 	}
 
 	protected function extra_keys(): array {
-		return array_merge( array( 'multiple', 'placeholder', 'query_args' ), $this->source_keys() );
+		return array_merge( array( 'multiple', 'placeholder', 'query_args', 'min', 'max' ), $this->source_keys() );
 	}
 
 	public function is_multiple(): bool {
@@ -113,7 +116,8 @@ abstract class AbstractRelationField extends AbstractField {
 	}
 
 	protected function normalize_type( array $config ): array {
-		$id = (string) $config['id'];
+		$config = $this->bounds_into_rules( $config, array( 'min', 'max' ) );
+		$id     = (string) $config['id'];
 
 		if ( array_key_exists( 'multiple', $config ) && ! is_bool( $config['multiple'] ) ) {
 			throw new ConfigException( sprintf( '%1$s "%2$s": `multiple` must be true or false.', $this->noun(), $id ) );

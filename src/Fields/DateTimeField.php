@@ -9,6 +9,8 @@ namespace Fyldo\V1\Fields;
 
 /**
  * See AbstractDateTimeField for the config (`calendar`, `min`, `max`, `step`) and what is stored.
+ *
+ * @internal
  */
 final class DateTimeField extends AbstractDateTimeField {
 

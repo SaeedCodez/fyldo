@@ -18,6 +18,8 @@ use Fyldo\V1\Support\Dates;
  * `start_placeholder` / `end_placeholder`. The implied rule is the single type's with `range` on: each end passes it, both
  * ends are set or both empty, and the end comes after the start (`date_range`: on or after; `datetime_range`: strictly
  * after; `time_range`: different, an earlier end being the next day).
+ *
+ * @internal
  */
 abstract class AbstractDateRangeField extends AbstractDateTimeField {
 

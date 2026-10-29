@@ -19,6 +19,8 @@ use Fyldo\V1\Support\Icons;
  * unknown name is refused on save and a stored one reads as the default.
  *
  * Config: `default` (an icon name, optional) and `icons` (a list of icon names the picker offers and the server accepts).
+ *
+ * @internal
  */
 final class IconField extends AbstractField {
 

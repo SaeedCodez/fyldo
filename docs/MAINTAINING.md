@@ -107,6 +107,7 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
 
 Versioning (O8): semver. Before `1.0.0` the API may still change. From `1.0.0` on, breaking changes (renamed options, a
 higher minimum PHP/WordPress) are only allowed in a new major, `Fyldo\V2`.
+The public API is only the list in `docs/ARCHITECTURE.md` §3.2: mark every new class `@internal`, and a new public method of a listed class too, unless it is meant to be frozen.
 
 ### D. Fix a bug or make a small change
 

@@ -9,6 +9,8 @@ namespace Fyldo\V1\Fields;
 
 /**
  * Renders a Checkbox (inline row). For an instant on/off setting use `toggle`; for several options use `checkbox_group`.
+ *
+ * @internal
  */
 final class CheckboxField extends AbstractBooleanField {
 

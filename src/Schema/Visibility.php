@@ -12,6 +12,8 @@ use Fyldo\V1\Fields\AbstractField;
 /**
  * A field shows when its section shows and its dependency holds; a section shows when its dependency holds. A condition
  * on a hidden field never holds. Page config rules out cycles. Mirror of `visibilityOf()` in app/lib/dependency.ts.
+ *
+ * @internal
  */
 final class Visibility {
 

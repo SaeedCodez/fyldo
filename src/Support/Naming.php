@@ -10,6 +10,8 @@ namespace Fyldo\V1\Support;
 
 /**
  * Slug/namespace → identifier derivations (docs/ARCHITECTURE.md §6.5).
+ *
+ * @internal
  */
 final class Naming {
 

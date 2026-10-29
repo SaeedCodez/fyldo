@@ -16,6 +16,8 @@ use Fyldo\V1\Support\Naming;
 
 /**
  * Builds the inline config for one instance.
+ *
+ * @internal
  */
 final class ClientConfig {
 
@@ -28,14 +30,20 @@ final class ClientConfig {
 		$store  = $instance->store();
 
 		// Both kinds of page, in registration order (the navigation's). Only pages the current user may open are sent.
-		$pages = array();
+		$pages  = array();
+		$groups = array_column( $instance->groups(), 'id' );
 		foreach ( $instance->all_pages() as $page ) {
 			if ( ! current_user_can( $instance->capability_for( $page ) ) ) {
 				continue;
 			}
-			$pages[] = $page instanceof Page
+			$entry = $page instanceof Page
 				? $page->to_client( $store->client_values( $page ), $store->revision( $page ), $store->client_media( $page ) )
 				: $page->to_client();
+			// A group nobody registered (Instance::check_groups() reported it): the page shows ungrouped.
+			if ( ! in_array( $entry['group'], $groups, true ) ) {
+				$entry['group'] = '';
+			}
+			$pages[] = $entry;
 		}
 
 		// A form's schema only: a custom page reads a record over REST when it opens one.
@@ -82,6 +90,7 @@ final class ClientConfig {
 		/**
 		 * Filters the final client config (schema, values, links…) for this instance.
 		 *
+		 * @internal The shape of the client config is not part of the public API; it may change in any release.
 		 * @param array<string,mixed> $client Client config.
 		 */
 		return (array) apply_filters( Naming::hook( $slug, 'config' ), $client );

@@ -28,6 +28,7 @@ use Fyldo\V1\Support\Version;
  */
 final class Instance {
 
+	/** @internal */
 	const KEYS = array( 'title', 'logo', 'theme', 'version', 'capability', 'navigation', 'menu', 'links' );
 
 	/** @var string */
@@ -64,6 +65,7 @@ final class Instance {
 	 * @param string              $slug   Validated slug.
 	 * @param array<string,mixed> $config Raw config.
 	 * @throws ConfigException On invalid configuration.
+	 * @internal
 	 */
 	public function __construct( string $slug, array $config ) {
 		$unknown = array_diff( array_keys( $config ), self::KEYS );
@@ -84,16 +86,20 @@ final class Instance {
 			throw new ConfigException( sprintf( 'Fyldo "%s": navigation must be "sidebar" or "top".', $slug ) );
 		}
 
-		$menu = array_merge(
-			array(
-				'type'     => 'submenu',
-				'parent'   => 'options-general.php',
-				'title'    => '', // '' = the instance title.
-				'icon'     => 'dashicons-admin-generic', // WordPress menu icon (top-level only), not an Iconsax name.
-				'position' => null,
-			),
-			(array) ( $config['menu'] ?? array() )
+		$menu_defaults = array(
+			'type'     => 'submenu',
+			'parent'   => 'options-general.php',
+			'title'    => '', // '' = the instance title.
+			'icon'     => 'dashicons-admin-generic', // WordPress menu icon (top-level only), not an Iconsax name.
+			'position' => null,
 		);
+
+		$menu_config  = (array) ( $config['menu'] ?? array() );
+		$unknown_menu = array_diff( array_keys( $menu_config ), array_keys( $menu_defaults ) );
+		if ( array() !== $unknown_menu ) {
+			throw new ConfigException( sprintf( 'Fyldo "%1$s": unknown menu key(s): %2$s. Use %3$s.', $slug, implode( ', ', $unknown_menu ), implode( ', ', array_keys( $menu_defaults ) ) ) );
+		}
+		$menu = array_merge( $menu_defaults, $menu_config );
 		if ( ! in_array( $menu['type'], array( 'submenu', 'top' ), true ) ) {
 			throw new ConfigException( sprintf( 'Fyldo "%s": menu.type must be "submenu" or "top".', $slug ) );
 		}
@@ -122,12 +128,17 @@ final class Instance {
 	 * The plugin's colours as custom properties for the root element (empty = Fyldo's own).
 	 *
 	 * @return array<string,string>
+	 * @internal
 	 */
 	public function theme(): array {
 		return $this->theme;
 	}
 
-	/** The brand name: the configured title, or "Fyldo" (translated, so it is read when shown, not at `init`). */
+	/**
+	 * The brand name: the configured title, or "Fyldo" (translated, so it is read when shown, not at `init`).
+	 *
+	 * @internal
+	 */
 	public function title(): string {
 		return '' !== $this->config['title'] ? (string) $this->config['title'] : __( 'Fyldo', 'fyldo' );
 	}
@@ -136,12 +147,17 @@ final class Instance {
 	 * The brand logo as the browser draws it: an Iconsax icon, an image URL, or null for the Fyldo mark.
 	 *
 	 * @return array{icon:string}|array{url:string}|null
+	 * @internal
 	 */
 	public function logo(): ?array {
 		return $this->logo;
 	}
 
-	/** The admin menu label: `menu.title`, else the brand name. */
+	/**
+	 * The admin menu label: `menu.title`, else the brand name.
+	 *
+	 * @internal
+	 */
 	public function menu_title(): string {
 		$title = (string) $this->config['menu']['title'];
 
@@ -150,18 +166,60 @@ final class Instance {
 
 	/**
 	 * @return array<string,mixed>
+	 * @internal
 	 */
 	public function config(): array {
 		return $this->config;
 	}
 
+	/**
+	 * Registers a navigation group: pages name it with their `group`. Configuration mistakes are reported with
+	 * _doing_it_wrong() and the group is skipped.
+	 *
+	 * @param string $id    Group id (the rules of a page id).
+	 * @param string $label Heading shown in the navigation.
+	 */
 	public function add_group( string $id, string $label ): self {
+		try {
+			if ( ! Naming::is_valid_page_id( $id ) ) {
+				throw new ConfigException( sprintf( 'Group id "%s" is invalid: use lower-case letters, digits, "_" or "-" (max 40 characters).', $id ) );
+			}
+			foreach ( $this->groups as $group ) {
+				if ( $group['id'] === $id ) {
+					throw new ConfigException( sprintf( 'Group "%s" is already registered.', $id ) );
+				}
+			}
+			if ( '' === trim( $label ) ) {
+				throw new ConfigException( sprintf( 'Group "%s" needs a label.', $id ) );
+			}
+		} catch ( ConfigException $e ) {
+			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
+
+			return $this;
+		}
+
 		$this->groups[] = array(
 			'id'    => $id,
-			'label' => $label,
+			'label' => trim( $label ),
 		);
 
 		return $this;
+	}
+
+	/**
+	 * Reports each page whose `group` was never registered with add_group(). Called when the screens are registered
+	 * (`admin_menu`), after every plugin has had its `init`; the navigation shows such a page ungrouped.
+	 *
+	 * @internal
+	 */
+	public function check_groups(): void {
+		$known = array_column( $this->groups, 'id' );
+		foreach ( $this->pages as $id => $page ) {
+			$group = $page->group();
+			if ( '' !== $group && ! in_array( $group, $known, true ) ) {
+				self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": page "%2$s" is in group "%3$s", which is not registered with add_group(); it is shown ungrouped.', $this->slug, $id, $group ) );
+			}
+		}
 	}
 
 	/**
@@ -177,6 +235,9 @@ final class Instance {
 			}
 
 			$page = $this->make_page( $id, $config );
+			if ( $page instanceof Page ) {
+				$this->assert_option_free( $page );
+			}
 		} catch ( ConfigException $e ) {
 			self::doing_it_wrong( __METHOD__, sprintf( 'Fyldo "%1$s": %2$s', $this->slug, $e->getMessage() ) );
 
@@ -243,6 +304,28 @@ final class Instance {
 	}
 
 	/**
+	 * Two pages on one option overwrite each other's data, and Fyldo's own `{slug}__fyldo` holds the default history.
+	 * An option name may belong to one page of one instance (any instance on the site) and is never a state option.
+	 *
+	 * @throws ConfigException On an option name that is taken.
+	 */
+	private function assert_option_free( Page $page ): void {
+		$name      = $page->option_name();
+		$instances = array_merge( Fyldo::instances(), array( $this->slug => $this ) ); // This slug is this instance, wherever else it is held.
+
+		foreach ( $instances as $slug => $instance ) {
+			if ( Naming::state_option( (string) $slug ) === $name ) {
+				throw new ConfigException( sprintf( 'Page "%1$s": the option "%2$s" is Fyldo\'s own bookkeeping of "%3$s"; choose another `option_name`.', $page->id(), $name, $slug ) );
+			}
+			foreach ( $instance->pages() as $other ) {
+				if ( $other->option_name() === $name ) {
+					throw new ConfigException( sprintf( 'Page "%1$s": the option "%2$s" is already used by page "%3$s" of "%4$s"; two pages cannot share an option.', $page->id(), $name, $other->id(), $slug ) );
+				}
+			}
+		}
+	}
+
+	/**
 	 * `default_before` needs the instance `version` (to know which version a site came from), and lists only versions up
 	 * to it.
 	 *
@@ -267,6 +350,7 @@ final class Instance {
 	 * The settings pages (the ones with values). Custom pages: custom_pages(); both, in order: all_pages().
 	 *
 	 * @return array<string,Page>
+	 * @internal
 	 */
 	public function pages(): array {
 		$pages = array();
@@ -279,13 +363,17 @@ final class Instance {
 		return $pages;
 	}
 
+	/** @internal */
 	public function page( string $id ): ?Page {
 		$page = $this->pages[ $id ] ?? null;
 
 		return $page instanceof Page ? $page : null;
 	}
 
-	/** @return array<string,CustomPage> */
+	/**
+	 * @return array<string,CustomPage>
+	 * @internal
+	 */
 	public function custom_pages(): array {
 		$pages = array();
 		foreach ( $this->pages as $id => $page ) {
@@ -297,6 +385,7 @@ final class Instance {
 		return $pages;
 	}
 
+	/** @internal */
 	public function custom_page( string $id ): ?CustomPage {
 		$page = $this->pages[ $id ] ?? null;
 
@@ -307,30 +396,43 @@ final class Instance {
 	 * Every page, settings and custom, in registration order: the navigation.
 	 *
 	 * @return array<string,Page|CustomPage>
+	 * @internal
 	 */
 	public function all_pages(): array {
 		return $this->pages;
 	}
 
-	/** @return array<string,Form> */
+	/**
+	 * @return array<string,Form>
+	 * @internal
+	 */
 	public function forms(): array {
 		return $this->forms;
 	}
 
+	/** @internal */
 	public function form( string $id ): ?Form {
 		return $this->forms[ $id ] ?? null;
 	}
 
-	/** @return array<int,array{id:string,label:string}> */
+	/**
+	 * @return array<int,array{id:string,label:string}>
+	 * @internal
+	 */
 	public function groups(): array {
 		return $this->groups;
 	}
 
+	/** @internal */
 	public function store(): OptionStore {
 		return $this->store;
 	}
 
-	/** Capability required for a page of either kind or a form (its override, else the instance default). */
+	/**
+	 * Capability required for a page of either kind or a form (its override, else the instance default).
+	 *
+	 * @internal
+	 */
 	public function capability_for( Guarded $target ): string {
 		return '' !== $target->capability() ? $target->capability() : (string) $this->config['capability'];
 	}
@@ -367,40 +469,64 @@ final class Instance {
 	 * is logged in, so a save from cron or WP-CLI (no user) keeps it. Values that come from a request must be checked by
 	 * the plugin first (`current_user_can( 'read_post', $id )`), or saved through the REST route instead.
 	 *
-	 * @param array<string,mixed> $values Field values keyed by field id.
+	 * `values` is what all() returns for the page after the save (a password as stored, and no `media` key: that is for the browser).
+	 *
+	 * @param string              $page_id Page id.
+	 * @param array<string,mixed> $values  Field values keyed by field id.
 	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 *         status: `ok` | `invalid` (also an unknown page: `errors['_page']`, `values` empty).
 	 */
 	public function update( string $page_id, array $values ): array {
 		$page = $this->page( $page_id );
 		if ( null === $page ) {
-			return array(
-				'status'   => 'invalid',
-				'errors'   => array( '_page' => 'Unknown page.' ),
-				'values'   => array(),
-				'revision' => '',
-			);
+			return self::unknown_page();
 		}
 
-		return AbstractField::trusted( fn() => ( new Saver( $this ) )->save( $page, $values, null ) );
+		return $this->outcome( $page, AbstractField::trusted( fn() => ( new Saver( $this ) )->save( $page, $values, null ) ) );
 	}
 
 	/**
 	 * Restores the defaults of a page (what the Danger Section Card's `reset` action does), through the same path as REST.
+	 * Same result as update(): `values` is what all() returns for the page afterwards.
 	 *
+	 * @param string $page_id Page id.
 	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
 	 */
 	public function reset( string $page_id ): array {
 		$page = $this->page( $page_id );
 		if ( null === $page ) {
-			return array(
-				'status'   => 'invalid',
-				'errors'   => array( '_page' => 'Unknown page.' ),
-				'values'   => array(),
-				'revision' => '',
-			);
+			return self::unknown_page();
 		}
 
-		return ( new Saver( $this ) )->reset( $page );
+		return $this->outcome( $page, ( new Saver( $this ) )->reset( $page ) );
+	}
+
+	/**
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 */
+	private static function unknown_page(): array {
+		return array(
+			'status'   => 'invalid',
+			'errors'   => array( '_page' => 'Unknown page.' ),
+			'values'   => array(),
+			'revision' => '',
+		);
+	}
+
+	/**
+	 * What update() and reset() return: the Saver's status, errors and revision, and the values as all() reads them.
+	 *
+	 * @param Page                $page   The page that was saved.
+	 * @param array<string,mixed> $result The Saver's result.
+	 * @return array{status:string,errors:array<string,string>,values:array<string,mixed>,revision:string}
+	 */
+	private function outcome( Page $page, array $result ): array {
+		return array(
+			'status'   => $result['status'],
+			'errors'   => $result['errors'],
+			'values'   => $this->store->values( $page ),
+			'revision' => $result['revision'],
+		);
 	}
 
 	/**
@@ -446,15 +572,18 @@ final class Instance {
 	 * The notices for the screen, most severe first.
 	 *
 	 * @return array<int,array<string,mixed>>
+	 * @internal
 	 */
 	public function notices(): array {
 		return Notice::sort( array_values( $this->notices ) );
 	}
 
+	/** @internal */
 	public function hook_suffix(): string {
 		return $this->hook_suffix;
 	}
 
+	/** @internal */
 	public function set_hook_suffix( string $hook_suffix ): void {
 		$this->hook_suffix = $hook_suffix;
 	}
@@ -492,6 +621,8 @@ final class Instance {
 
 	/**
 	 * Reports a developer mistake without taking the site down.
+	 *
+	 * @internal
 	 */
 	public static function doing_it_wrong( string $function_name, string $message ): void {
 		if ( function_exists( '_doing_it_wrong' ) ) {

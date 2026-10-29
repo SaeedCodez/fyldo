@@ -21,6 +21,8 @@ use Fyldo\V1\Support\Dates;
  * datetime; it divides an hour; default 1) and `placeholder`. They become the field's implied `date` / `time` / `datetime`
  * rule, which the server checks again on every save: the strict format (no 30 February, 00:00–23:59), `min`, `max` and the
  * step. The site's time zone comes from WordPress, never from the request.
+ *
+ * @internal
  */
 abstract class AbstractDateTimeField extends AbstractField {
 

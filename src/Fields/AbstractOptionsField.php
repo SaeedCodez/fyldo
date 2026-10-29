@@ -11,6 +11,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Option list handling shared by the option-based types.
+ *
+ * @internal
  */
 abstract class AbstractOptionsField extends AbstractField {
 

@@ -15,6 +15,8 @@ use Fyldo\V1\Schema\ConfigException;
 
 /**
  * Normalised notice.
+ *
+ * @internal
  */
 final class Notice {
 

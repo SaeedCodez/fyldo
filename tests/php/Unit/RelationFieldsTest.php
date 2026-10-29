@@ -12,10 +12,11 @@ use Fyldo\V1\Fields\PostField;
 use Fyldo\V1\Fields\TermField;
 use Fyldo\V1\Fields\UserField;
 use Fyldo\V1\Schema\ConfigException;
+use Fyldo\V1\Support\Relations;
 use PHPUnit\Framework\TestCase;
 
-/** A post field whose posts come from a table instead of WordPress. */
-final class StubbedPostField extends PostField {
+/** Posts that come from a table instead of WordPress. */
+final class PostsDouble {
 	/** @var array<int,array{value:int,label:string,hint:string}> */
 	public static $items = array();
 
@@ -25,46 +26,54 @@ final class StubbedPostField extends PostField {
 	/** @var array<int,array{0:string,1:int}> The searches asked for. */
 	public static $searches = array();
 
-	protected function query( string $search, int $page ): array {
-		self::$searches[] = array( $search, $page );
-		$hits             = array_values( array_filter( self::$items, static fn( array $item ): bool => '' === $search || false !== stripos( $item['label'], $search ) ) );
+	public static function pin(): void {
+		Relations::pin(
+			static function ( array $source, string $search, int $page ): array {
+				self::$searches[] = array( $search, $page );
+				$hits             = array_values( array_filter( self::$items, static fn( array $item ): bool => '' === $search || false !== stripos( $item['label'], $search ) ) );
 
-		return array(
-			'items' => array_slice( $hits, ( $page - 1 ) * 2, 2 ),
-			'more'  => count( $hits ) > $page * 2,
-		);
-	}
+				return array(
+					'items' => array_slice( $hits, ( $page - 1 ) * 2, 2 ),
+					'more'  => count( $hits ) > $page * 2,
+				);
+			},
+			static function ( array $source, array $ids, bool $check ): array {
+				$found = array();
+				foreach ( $ids as $id ) {
+					if ( isset( self::$items[ $id ] ) && ( ! $check || ! in_array( $id, self::$unreadable, true ) ) ) {
+						$found[ $id ] = self::$items[ $id ];
+					}
+				}
 
-	protected function lookup( array $ids, bool $check ): array {
-		$found = array();
-		foreach ( $ids as $id ) {
-			if ( isset( self::$items[ $id ] ) && ( ! $check || ! in_array( $id, self::$unreadable, true ) ) ) {
-				$found[ $id ] = self::$items[ $id ];
+				return $found;
 			}
-		}
-
-		return $found;
+		);
 	}
 }
 
 final class RelationFieldsTest extends TestCase {
 
 	protected function setUp(): void {
-		StubbedPostField::$items      = array(
+		PostsDouble::$items      = array(
 			3  => array( 'value' => 3, 'label' => 'Home', 'hint' => '' ),
 			7  => array( 'value' => 7, 'label' => 'About us', 'hint' => '' ),
 			9  => array( 'value' => 9, 'label' => 'Contact', 'hint' => '' ),
 			12 => array( 'value' => 12, 'label' => 'Shop', 'hint' => '' ),
 		);
-		StubbedPostField::$unreadable = array();
-		StubbedPostField::$searches   = array();
+		PostsDouble::$unreadable = array();
+		PostsDouble::$searches   = array();
+		PostsDouble::pin();
+	}
+
+	protected function tearDown(): void {
+		Relations::pin();
 	}
 
 	/**
 	 * @param array<string,mixed> $extra Config.
 	 */
-	private function post( array $extra = array() ): StubbedPostField {
-		return new StubbedPostField(
+	private function post( array $extra = array() ): PostField {
+		return new PostField(
 			array_merge(
 				array(
 					'id'    => 'homepage',
@@ -134,7 +143,7 @@ final class RelationFieldsTest extends TestCase {
 	}
 
 	public function test_saving_drops_what_the_user_may_not_read_but_reading_keeps_it(): void {
-		StubbedPostField::$unreadable = array( 9 );
+		PostsDouble::$unreadable = array( 9 );
 		$field                        = $this->post( array( 'multiple' => true ) );
 
 		$this->assertSame( array( 3 ), $field->sanitize( array( 3, 9 ) ), 'a save only keeps readable items' );
@@ -144,7 +153,7 @@ final class RelationFieldsTest extends TestCase {
 
 	public function test_deleted_items_drop_out_of_a_stored_value(): void {
 		$field = $this->post( array( 'multiple' => true ) );
-		unset( StubbedPostField::$items[7] );
+		unset( PostsDouble::$items[7] );
 
 		$this->assertSame( array( 3, 12 ), $field->stored_value( array( 3, 7, 12 ) ) );
 		$this->assertSame( 0, $this->post()->stored_value( 7 ) );
@@ -180,7 +189,7 @@ final class RelationFieldsTest extends TestCase {
 		$first = $field->search( '  ', 1 );
 		$this->assertSame( array( 3, 7 ), array_column( $first['items'], 'value' ) );
 		$this->assertTrue( $first['more'] );
-		$this->assertSame( array( '', 1 ), StubbedPostField::$searches[0], 'the words are trimmed' );
+		$this->assertSame( array( '', 1 ), PostsDouble::$searches[0], 'the words are trimmed' );
 
 		$last = $field->search( '', 2 );
 		$this->assertSame( array( 9, 12 ), array_column( $last['items'], 'value' ) );

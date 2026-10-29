@@ -8,6 +8,18 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 - **Page links**: `add_page( $id, [ 'links' => [ [ 'label', 'url', 'icon', 'external' ] ] ] )` gives a page buttons of its own in its Page Header (Figma's Page Header actions), such as the page's own help page. They come before the instance's `header` links and show in both layouts, since they belong to the page. A custom page gets them as `page.links`, ready for `ui.PageHeader`'s `links`. A link without `label` or `url`, a `placement` or an unknown key is a config error. The client config's pages gain `links`.
 
+### Changed (API freeze: PHP)
+
+Before 1.0, so that nothing is frozen by accident. After 1.0 the public API only grows inside 1.x.
+
+- **Public API**: only `Fyldo::create`, `instance`, `instances`, `icon`, `is_icon`; `Instance::add_group`, `add_page`, `add_form`, `get`, `all`, `update`, `reset`, `delete_data`, `admin_notice`, `slug`; `Support\Dates::to_site`, `range_to_site`, `time_in_range`; `Schema\ConfigException` and `Bootstrap\Loader` are the 1.x contract (list in [docs/ARCHITECTURE.md §3.2](docs/ARCHITECTURE.md)). Every other class and every other public method is now marked `@internal` and may change in any release. `FileField`, `ImageField`, `PostField`, `TermField` and `UserField` are `final`; `Dates::now()` is private.
+- **Page filters renamed** (breaking, no alias): `fyldo/{slug}/sanitize/{page}` is now `fyldo/{slug}/page/{page}/sanitize` and `fyldo/{slug}/validate/{page}` is `fyldo/{slug}/page/{page}/validate`, like the form filters (`…/form/{form}/sanitize|validate|saved`). Same arguments.
+- **Option names are unique**: `add_page()` rejects (`_doing_it_wrong`, page skipped) an `option_name` that another registered page of any instance already uses, or that is an instance's `{slug}__fyldo`. Two pages on one option used to overwrite each other's data.
+- **`min` / `max` / `step` are field keys**: `number` takes `min`, `max`, `step`; `multi_select`, `checkbox_group` and `post` / `term` / `user` with `multiple` take `min`, `max` (counts), as `slider`, the dates and `group` already do. `validate.min|max|step` is still accepted for `number` and the lists. The same key in both places is a `ConfigException`.
+- **`Instance::update()` and `reset()` return what `all()` returns**: `values` is the page's values as `all()` reads them (a password as stored, not hidden for the browser), the result has no `media` key, and the unknown-page result has the same shape.
+- **Registration checks**: `add_group()` needs an id that is URL-safe like a page id, not yet used, and a label; a page whose `group` is not registered when the screens are registered (`admin_menu`) is reported with `_doing_it_wrong` and shows ungrouped; an unknown key in an instance's `links` or `menu` is a `ConfigException`; link URLs go through `esc_url_raw()` (one it rejects is a `ConfigException`); a field's `badge` must be a string or an int.
+- **Docs**: the empty value of every field type, the reserved form record key `new`, the methods of the record routes, that the client config and the `fyldo/{slug}/config` filter are internal, that `Fyldo::create()` throws while other registration errors are `_doing_it_wrong`, that a page `capability` only narrows the instance's, that `upgraded` fires inside `add_page()`; complete hook lists; `multiselect` is `multi_select`; the `reset` hook gets `$page_id, $stored_before`; default layouts; the `code` rule; the 512 KB body cap is fixed; no more `show_if`.
+
 ### Changed (API freeze: SDK)
 
 The SDK a custom field or a custom page receives, and its types in `assets/dist/fyldo-sdk.d.ts`, are now the 1.x

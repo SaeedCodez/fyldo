@@ -16,6 +16,8 @@ use Fyldo\V1\Schema\Dependency;
  * Sub-fields are ordinary fields, validated on their own; their errors are keyed `<group>.<index>.<sub-field>`.
  * A sub-field's `dependency` reads the other sub-fields of its item, or the fields of the page. A custom sub-field's
  * `watch` names other sub-fields of its item only.
+ *
+ * @internal
  */
 final class GroupField extends AbstractField {
 

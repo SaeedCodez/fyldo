@@ -12,6 +12,8 @@ use Fyldo\V1\Fields\FieldFactory;
 
 /**
  * Normalised section.
+ *
+ * @internal
  */
 final class Section {
 

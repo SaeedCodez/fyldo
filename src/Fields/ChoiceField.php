@@ -13,6 +13,8 @@ use Fyldo\V1\Schema\ConfigException;
  * Renders a Choice Card Group: single choice, like a radio group, but with room for a preview image per option.
  *
  * Option keys besides `value`, `label` and `disabled`: `description` and `image` (an http(s) URL or a `/relative` path).
+ *
+ * @internal
  */
 final class ChoiceField extends AbstractOptionsField {
 

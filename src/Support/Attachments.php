@@ -8,10 +8,35 @@
 namespace Fyldo\V1\Support;
 
 /**
- * The one place that talks to WordPress about attachments (the `image` and `file` fields call it through a protected method,
- * so the unit tests replace it).
+ * The one place that talks to WordPress about attachments (the unit tests replace it with pin()).
+ *
+ * @internal
  */
 final class Attachments {
+
+	/**
+	 * Pinned lookups, for tests.
+	 *
+	 * @var array{find:?callable,readable:?callable}
+	 */
+	private static $pinned = array(
+		'find'     => null,
+		'readable' => null,
+	);
+
+	/**
+	 * Replaces the lookups (tests only); no arguments restore WordPress.
+	 *
+	 * @internal
+	 * @param callable|null $find     `( int $id ): ?array`, as find().
+	 * @param callable|null $readable `( int $id ): bool`, as readable().
+	 */
+	public static function pin( ?callable $find = null, ?callable $readable = null ): void {
+		self::$pinned = array(
+			'find'     => $find,
+			'readable' => $readable,
+		);
+	}
 
 	/**
 	 * The attachment as the media fields use it, or null when there is no such attachment. Who may read it is a separate
@@ -22,6 +47,10 @@ final class Attachments {
 	 * @return array{id:int,filename:string,filesize:int,mime:string,extension:string,width:?int,height:?int,thumbnail:?string,image:bool,duration:?int}|null
 	 */
 	public static function find( int $id ): ?array {
+		if ( null !== self::$pinned['find'] ) {
+			return ( self::$pinned['find'] )( $id );
+		}
+
 		$post = get_post( $id );
 		if ( ! $post instanceof \WP_Post || 'attachment' !== $post->post_type ) {
 			return null;
@@ -65,6 +94,10 @@ final class Attachments {
 	 * @param int $id Attachment id.
 	 */
 	public static function readable( int $id ): bool {
+		if ( null !== self::$pinned['readable'] ) {
+			return (bool) ( self::$pinned['readable'] )( $id );
+		}
+
 		return current_user_can( 'read_post', $id );
 	}
 }

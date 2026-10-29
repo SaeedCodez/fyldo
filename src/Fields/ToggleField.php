@@ -9,6 +9,8 @@ namespace Fyldo\V1\Fields;
 
 /**
  * Renders a Toggle (inline row).
+ *
+ * @internal
  */
 final class ToggleField extends AbstractBooleanField {
 
