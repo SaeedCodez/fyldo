@@ -34,6 +34,18 @@ jobs:
           composer lint
           composer analyse
 
+  # The frozen Loader (docs/ARCHITECTURE.md §6.2) of every released v1.* tag negotiates with this tree, both orders, plus a
+  # tie. PHP 7.4 only: the syntax floor. A new tag is picked up automatically; the job fails when no tag was tested.
+  contract:
+    name: Loader contract (old tags)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # the tags
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '7.4', coverage: none }
+      - run: php tests/contract/run.php
+
   js:
     name: Tokens · types · lint · unit
     runs-on: ubuntu-latest
@@ -86,6 +98,7 @@ jobs:
     needs: [php, js]
     steps:
       - uses: actions/checkout@v4
+        with: { fetch-depth: 0 } # the upgrade fixture bundles the newest v1.* tag below fyldo.php (N-1)
       - uses: actions/setup-node@v4
         with: { node-version: 24, cache: npm }
       - uses: shivammathur/setup-php@v2
@@ -94,10 +107,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Build the release tree
         run: npm run build && npm run build:gallery
-      - name: Generate coexistence fixtures (1.0.0, 1.1.0 ×2, synthetic 2.0.0, Strauss-prefixed)
+      - name: Generate coexistence fixtures (1.0.0, 1.1.0 ×2, synthetic 2.0.0, Strauss-prefixed) and the upgrade fixture (N-1 + current)
         run: npx tsx tools/fixtures/make-demos.ts
       - run: npx wp-env start
-      - name: Figma parity, visual and isolation suites
+      - name: Figma parity, visual, isolation and upgrade suites
         run: npx playwright test
       - name: Bundle size budgets
         run: npm run size

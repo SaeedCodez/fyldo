@@ -96,6 +96,8 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
 
 1. On a branch: set the version in `fyldo.php` (`Version:` header) and `package.json`, and move the `[Unreleased]` notes
    in `CHANGELOG.md` under `## [x.y.z] - YYYY-MM-DD`. Run `npm run i18n` if strings changed. Open a PR, wait for green CI, merge.
+   The **Loader contract (old tags)** job and the upgrade spec (`e2e/wp/upgrade.spec.ts`, in the Playwright on wp-env job)
+   must be green; both pick up a new tag by themselves (nothing to list or update).
 2. Tag the merged main:
    ```bash
    git checkout main && git pull && git tag vX.Y.Z && git push origin vX.Y.Z
@@ -108,6 +110,22 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
 Versioning (O8): semver. Before `1.0.0` the API may still change. From `1.0.0` on, breaking changes (renamed options, a
 higher minimum PHP/WordPress) are only allowed in a new major, `Fyldo\V2`.
 The public API is only the list in `docs/ARCHITECTURE.md` §3.2: mark every new class `@internal`, and a new public method of a listed class too, unless it is meant to be frozen.
+
+Deprecation policy (1.x):
+
+- **Inside 1.x nothing public is removed or renamed.** Removal happens only in 2.0.
+- **What "public" means:** the PHP API listed in `docs/ARCHITECTURE.md` §3.2 (the frozen `Bootstrap\Loader` included), the
+  hooks (`fyldo/{slug}/…`), the REST routes (`fyldo-{slug}/v1/…`) with their request and response shapes, the storage
+  shapes of §3.3 (option names, `{slug}__fyldo`, the stored value of every field type, pinned by
+  `tests/fixtures/stored-values-v1.json`), and the module SDK as typed in `assets/dist/fyldo-sdk.d.ts`. Anything marked
+  `@internal` is not public.
+- **A public PHP name that must go is kept** and marked with `_deprecated_function()` (a method),
+  `_deprecated_argument()` (an argument or a config key) or `_deprecated_hook()` (a hook, through
+  `apply_filters_deprecated()` / `do_action_deprecated()`), naming the version and the replacement. It keeps working.
+- **A JS SDK member or prop is kept**, marked `@deprecated` in the d.ts, and warns once in the console, naming the replacement.
+- **The CHANGELOG lists it under "Deprecated"** in the release that deprecates it.
+- CI holds the line: the Loader contract job (every released 1.x Loader negotiates with the tree), the upgrade spec
+  (N-1 → N on WordPress) and the stored-values golden file (`docs/ARCHITECTURE.md` §12).
 
 ### D. Fix a bug or make a small change
 
