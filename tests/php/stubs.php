@@ -409,3 +409,50 @@ if ( ! function_exists( 'get_locale' ) ) {
 		return 'en_US';
 	}
 }
+
+// Terms and users from tables: $GLOBALS['__fyldo_test_terms'] (id => [ taxonomy, name ]) and
+// $GLOBALS['__fyldo_test_users'] (id => [ login, display name ]). Relations reads them only through these.
+if ( ! class_exists( 'WP_Term' ) ) {
+	class WP_Term {
+		public $term_id  = 0;
+		public $name     = '';
+		public $taxonomy = '';
+	}
+}
+if ( ! class_exists( 'WP_User' ) ) {
+	class WP_User {
+		public $ID           = 0;
+		public $user_login   = '';
+		public $display_name = '';
+	}
+}
+if ( ! function_exists( 'get_terms' ) ) {
+	function get_terms( $args = array() ) {
+		$terms = array();
+		foreach ( $GLOBALS['__fyldo_test_terms'] ?? array() as $id => $row ) {
+			if ( in_array( $id, (array) ( $args['include'] ?? array() ), true ) && in_array( $row[0], (array) ( $args['taxonomy'] ?? array() ), true ) ) {
+				$term           = new WP_Term();
+				$term->term_id  = $id;
+				$term->taxonomy = $row[0];
+				$term->name     = $row[1];
+				$terms[]        = $term;
+			}
+		}
+		return $terms;
+	}
+}
+if ( ! function_exists( 'get_users' ) ) {
+	function get_users( $args = array() ) {
+		$users = array();
+		foreach ( $GLOBALS['__fyldo_test_users'] ?? array() as $id => $row ) {
+			if ( in_array( $id, (array) ( $args['include'] ?? array() ), true ) ) {
+				$user               = new WP_User();
+				$user->ID           = $id;
+				$user->user_login   = $row[0];
+				$user->display_name = $row[1];
+				$users[]            = $user;
+			}
+		}
+		return $users;
+	}
+}

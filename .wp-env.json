@@ -11,7 +11,8 @@
     "./e2e/.generated/plugins/acme-omega"
   ],
   "mappings": {
-    "wp-content/mu-plugins": "./e2e/mu-plugins"
+    "wp-content/mu-plugins": "./e2e/mu-plugins",
+    "wp-content/plugins/acme-upgrade": "./e2e/.generated/plugins/acme-upgrade"
   },
   "config": {
     "WP_DEBUG": true,

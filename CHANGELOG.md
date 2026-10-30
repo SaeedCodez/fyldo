@@ -54,6 +54,12 @@ contract. Breaking for modules written against the betas:
 - **Docs**: the locale a module gets is BCP-47 (`fa-IR`); a `mount` field's `update()` runs on every render of the row,
   not only after a change.
 
+### Tests
+
+- **Loader contract against every released 1.x tag** (`tests/contract/run.php`, CI job "Loader contract (old tags)", PHP 7.4): each tag's Loader negotiates with the current tree in both orders and in a tie.
+- **Upgrade N-1 → N on WordPress** (`e2e/wp/upgrade.spec.ts`): values saved on the newest released tag survive the update, `default_before` keeps the old default and `upgraded` fires once.
+- **Stored-values golden file** (`tests/fixtures/stored-values-v1.json`): a stored value for every field type must read back unchanged inside 1.x. Deprecation policy in `docs/MAINTAINING.md`.
+
 ## [1.0.0-beta.6] - 2026-10-20
 
 ### Added

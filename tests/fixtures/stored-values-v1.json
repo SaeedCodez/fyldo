@@ -1,0 +1,47 @@
+{
+  "_readme": [
+    "Stored-values golden file for Fyldo 1.x (docs/ARCHITECTURE.md §3.3 and §12): one page's option value, exactly as Fyldo stores it, with a realistic value for every field type.",
+    "tests/php/Unit/StoredValuesTest.php declares the matching schema and asserts that Instance::all() returns every value unchanged.",
+    "NEVER edit or remove an entry inside 1.x: only add one (a new field type, a new shape). A change that makes this file fail is a breaking change and belongs in 2.0."
+  ],
+  "option": "golden_settings",
+  "stored": {
+    "site_title": "Acme Blog",
+    "home_url": "https://example.com/blog",
+    "contact_email": "hello@example.com",
+    "api_key": "s3cret Key 2026 ",
+    "per_page": 24,
+    "ratio": 1.5,
+    "intro": "Fresh news from Acme.\nتازه‌های اکمه، هر هفته.",
+    "custom_css": ".site-header {\n\tcolor: #1d4ed8;\n}",
+    "maintenance": true,
+    "agree": false,
+    "post_types": ["post", "product"],
+    "layout": "boxed",
+    "language": "fa_IR",
+    "sitemap_types": ["page", "tag"],
+    "density": "compact",
+    "sort_by": "simple",
+    "image_quality": 80,
+    "accent_color": "#1d4ed8",
+    "menu_icon": "star",
+    "start_date": "2026-11-05",
+    "report_at": "09:30",
+    "publish_at": "2026-11-05 06:30:00",
+    "offer_period": { "start": "2026-12-01", "end": "2026-12-31" },
+    "support_hours": { "start": "22:00", "end": "06:00" },
+    "campaign_window": { "start": "2026-12-24 18:00:00", "end": "2026-12-26 08:00:00" },
+    "site_logo": 7,
+    "brand_guidelines": 9,
+    "og_image": 0,
+    "homepage": 12,
+    "related_pages": [7, 3],
+    "topics": [5, 2],
+    "author": 1,
+    "header_buttons": [
+      { "label": "Docs", "link": "https://example.com/docs" },
+      { "label": "Shop", "link": "https://example.com/shop" }
+    ],
+    "opening_hours": { "days": [1, 2, 3, 4, 5], "opens": "09:00", "closes": "17:30", "note": "Closed on public holidays", "by_appointment": false, "rating": 4.5 }
+  }
+}
