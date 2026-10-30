@@ -77,19 +77,19 @@ final class CodeField extends AbstractField {
 		$config['rows']         = $rows;
 		$config['toolbar']      = $config['toolbar'] ?? true;
 		$config['line_numbers'] = $config['line_numbers'] ?? true;
-		$config['default']      = isset( $config['default'] ) ? self::normalize( $config['default'] ) : '';
+		$config['default']      = isset( $config['default'] ) ? self::as_code( $config['default'] ) : '';
 
 		return $config;
 	}
 
 	/**
-	 * The code as typed (normalize()). On save, filtered for someone without `unfiltered_html` (see the class).
+	 * The code as typed (as_code()). On save, filtered for someone without `unfiltered_html` (see the class).
 	 *
 	 * @param mixed $raw Raw value.
 	 * @return string
 	 */
 	protected function sanitize_value( $raw ) {
-		$code = self::normalize( $raw );
+		$code = self::as_code( $raw );
 		if ( $this->reading || ! function_exists( 'current_user_can' ) || current_user_can( 'unfiltered_html' ) ) {
 			return $code;
 		}
@@ -110,7 +110,7 @@ final class CodeField extends AbstractField {
 	 *
 	 * @param mixed $raw Raw value.
 	 */
-	private static function normalize( $raw ): string {
+	private static function as_code( $raw ): string {
 		if ( ! is_scalar( $raw ) ) {
 			return '';
 		}

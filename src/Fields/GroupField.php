@@ -163,7 +163,10 @@ final class GroupField extends AbstractField {
 	 * @return array<string,mixed>
 	 */
 	private function restore( array $item, int $index, array $locked, array $current ): array {
-		foreach ( array_keys( $locked ) as $sub_id ) {
+		foreach ( $this->subs as $sub_id => $sub ) {
+			if ( ! isset( $locked[ $sub_id ] ) ) {
+				continue;
+			}
 			$incoming = array_key_exists( $sub_id, $item ) ? $item[ $sub_id ] : null;
 			foreach ( $current as $now ) {
 				if ( is_array( $now ) && array_key_exists( $sub_id, $now ) && $now[ $sub_id ] === $incoming ) {
@@ -172,7 +175,7 @@ final class GroupField extends AbstractField {
 			}
 
 			$at              = $current[ $index ] ?? null;
-			$item[ $sub_id ] = is_array( $at ) && array_key_exists( $sub_id, $at ) ? $at[ $sub_id ] : $this->subs[ $sub_id ]->default_value();
+			$item[ $sub_id ] = is_array( $at ) && array_key_exists( $sub_id, $at ) ? $at[ $sub_id ] : $sub->default_value();
 		}
 
 		return $item;
