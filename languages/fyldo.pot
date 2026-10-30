@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Fyldo 1.0.0-beta.7\n"
+"Project-Id-Version: Fyldo 1.0.0-beta.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/fyldo\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-30T12:43:44+00:00\n"
+"POT-Creation-Date: 2026-10-30T14:43:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: fyldo\n"
@@ -312,7 +312,7 @@ msgstr ""
 msgid "Start time"
 msgstr ""
 
-#: app/components/ui/group-item.tsx:161
+#: app/components/ui/group-item.tsx:164
 msgid "%d error"
 msgid_plural "%d errors"
 msgstr[0] ""
