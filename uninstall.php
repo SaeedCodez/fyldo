@@ -27,7 +27,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	};
 
 	if ( is_multisite() ) {
-		foreach ( get_sites( array( 'fields' => 'ids' ) ) as $site ) {
+		$sites = get_sites(
+			array(
+				'fields' => 'ids',
+				'number' => 0,
+			)
+		);
+		foreach ( $sites as $site ) {
 			switch_to_blog( (int) $site );
 			$clean();
 			restore_current_blog();

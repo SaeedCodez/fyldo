@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.7] - 2026-10-30
+
 ### Added
 
 - **Page links**: `add_page( $id, [ 'links' => [ [ 'label', 'url', 'icon', 'external' ] ] ] )` gives a page buttons of its own in its Page Header (Figma's Page Header actions), such as the page's own help page. They come before the instance's `header` links and show in both layouts, since they belong to the page. A custom page gets them as `page.links`, ready for `ui.PageHeader`'s `links`. A link without `label` or `url`, a `placement` or an unknown key is a config error. The client config's pages gain `links`.
@@ -195,6 +197,7 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.7]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.7
 [1.0.0-beta.6]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.4
