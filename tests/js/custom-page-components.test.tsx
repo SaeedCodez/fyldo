@@ -261,6 +261,30 @@ describe('Modal: Content slot', () => {
 describe('Field controls on a custom page', () => {
   const { ui } = sdk;
 
+  it('draws a Setting Row inside a Group Item as a sub-field, and only there', () => {
+    render(
+      <>
+        <ui.SettingRow title="Outside" description="Outside help">
+          <ui.Input aria-label="Outside" />
+        </ui.SettingRow>
+        <ui.GroupItem title="Slide 1" open onOpenChange={() => undefined}>
+          <ui.SettingRow title="Inside" description="Inside help" layout="field">
+            <ui.Input aria-label="Inside" />
+          </ui.SettingRow>
+        </ui.GroupItem>
+      </>,
+    );
+
+    const row = (name: string): HTMLElement => screen.getByText(name).closest<HTMLElement>('[data-slot="fy-setting-row"]') as HTMLElement;
+    expect(row('Outside')).toHaveClass('fy:py-6', 'fy:border-b');
+    expect(row('Inside')).not.toHaveClass('fy:py-6');
+    expect(row('Inside')).not.toHaveClass('fy:border-b');
+    // Label, control, then the helper; `field` reads as stacked.
+    expect(row('Inside')).toHaveClass('fy:flex-col');
+    const control = screen.getByRole('textbox', { name: 'Inside' });
+    expect(control.compareDocumentPosition(screen.getByText('Inside help')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it('work outside a Setting Row (a toolbar, a card of the page’s own)', () => {
     mount(
       <>

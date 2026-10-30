@@ -1,8 +1,9 @@
 import { Field } from '@base-ui/react/field';
-import { useId, type ReactElement, type ReactNode } from 'react';
+import { useContext, useId, type ReactElement, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { FieldError, InFieldRoot } from '../ui/field-shell';
 import { GroupLabelProvider } from '../ui/group-field';
+import { InGroupItem } from '../ui/group-item';
 
 /** The control's width in a stacked or `field` row. */
 export type SettingRowWidth = 'default' | 'wide' | 'cards' | 'range' | 'full';
@@ -44,7 +45,8 @@ export interface SettingRowInternalProps extends SettingRowProps {
   ownError?: boolean;
   /**
    * `row`: a Setting Row of a Section Card. `item`: a sub-field inside a Group Item (Figma "Input" anatomy: label →
-   * control → helper, no padding or divider; `field` reads as `stacked`, the control fills the column).
+   * control → helper, no padding or divider; `field` reads as `stacked`, the control fills the column). Default: `item`
+   * inside a Group Item's body, else `row`.
    */
   variant?: 'row' | 'item';
   name?: string;
@@ -77,14 +79,15 @@ export function SettingRow({
   ownError = false,
   group = false,
   width = 'default',
-  variant = 'row',
+  variant,
   disabled,
   name,
   fieldId,
   children,
 }: SettingRowInternalProps): ReactElement {
   const full = width === 'full';
-  const item = variant === 'item';
+  const inGroupItem = useContext(InGroupItem);
+  const item = (variant ?? (inGroupItem ? 'item' : 'row')) === 'item';
   const layout = item && requested === 'field' ? 'stacked' : requested;
   const inline = layout === 'inline';
   const beside = inline || layout === 'field';

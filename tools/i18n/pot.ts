@@ -65,7 +65,8 @@ function main(): void {
   const phpPot = resolve(root, 'build/php.pot');
   execFileSync(
     'wp',
-    ['i18n', 'make-pot', root, phpPot, `--domain=${DOMAIN}`, '--slug=fyldo', '--include=src,demo,fyldo.php', '--skip-js', '--skip-audit'],
+    // `--include` matches at any depth: build/fyldo/demo and worktrees would count without the excludes.
+    ['i18n', 'make-pot', root, phpPot, `--domain=${DOMAIN}`, '--slug=fyldo', '--include=src,demo,fyldo.php', '--exclude=build,e2e,.claude', '--skip-js', '--skip-audit'],
     { stdio: 'inherit' },
   );
 
