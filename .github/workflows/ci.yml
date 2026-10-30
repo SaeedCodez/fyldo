@@ -86,6 +86,9 @@ jobs:
       - run: npm ci
       - name: Build build/fyldo.zip (the same command as a release)
         run: npm run release
+      # The build regenerates src/Support/IconNames.php: a hand edit there fails the tag's tree check at release time.
+      - name: Generated PHP matches what is committed
+        run: git diff --exit-code -- src
       - uses: actions/upload-artifact@v4
         with:
           name: fyldo-plugin-zip
