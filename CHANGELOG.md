@@ -4,6 +4,8 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0-beta.8] - 2026-10-30
+
 ### Fixed
 
 - **`ui.SettingRow` inside a `ui.GroupItem`** (or a `ui.GroupList` item) draws as a sub-field again: no padding or divider, the description under the control, `field` as `stacked`. The API freeze took `variant="item"` out of the SDK with no replacement; it now follows from where the row is. Found by trying beta.7 on Pelk.
@@ -202,6 +204,7 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0-beta.8]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.8
 [1.0.0-beta.7]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.7
 [1.0.0-beta.6]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.5
