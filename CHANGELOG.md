@@ -54,6 +54,26 @@ contract. Breaking for modules written against the betas:
 - **Docs**: the locale a module gets is BCP-47 (`fa-IR`); a `mount` field's `update()` runs on every render of the row,
   not only after a change.
 
+### Changed
+
+- **The demo dashboard is off by default.** A site that used it must add `add_filter( 'fyldo/fyldo-demo/enabled', '__return_true' );` (for example in a mu-plugin). Without the filter nothing of the demo runs: no pages, no REST routes, no table or sample rows, no "Open demo" link. Deleting the Fyldo plugin now runs its `uninstall.php`, which drops the demo's table and deletes its options.
+
+### Security
+
+- **Form record key from the path only**: a query or body `key` no longer overrides the `{key}` of `…/records/{key}` (it skipped the key pattern, and `?key=new` turned an update into a create).
+- **Disabled and hidden sub-fields of a `group` are not saved**: a sub-field that is disabled, or hidden by its `dependency` in its item, keeps what a stored item of the group holds (the stored item at the same position, else the sub-field's default), on settings pages and forms. Before, the incoming value was stored, unvalidated for a hidden one.
+- **`code` field without `unfiltered_html`**: `json` is saved with `<` and `>` as `\u003C` and `\u003E` (the same JSON), `text` goes through `wp_kses_post` like `html`; `css` is unchanged (markup refused; `@import` and `url()` pass, now documented). Inside a group too. A stored CSS value with markup reads as the default.
+- **Revision**: an HMAC-SHA256 of the stored values keyed with `wp_salt( 'nonce' )` instead of their MD5, so it no longer lets someone test password guesses offline. Still an opaque string to the browser.
+- **Body size**: the 512 KB cap also measures the JSON-encoded `values` param, so a multipart or form-encoded request no longer passes it with an empty raw body.
+- **`custom` field values**: the keys `__proto__`, `constructor` and `prototype` are dropped at every depth.
+- **Demo off by default** (see Changed), with an `uninstall.php` that removes its table and options.
+- **Docs**: a form authorizes each record in its callbacks (`load` → `null` is a 404, `save` → `WP_Error`, `$key === ''` means create), with an `edit_post` example; values are sanitized, not escaped (escape where you print; `textContent` in a `mount` module; `wp_add_inline_style` and `wp_json_encode` for `code`); `query_args` only narrows the search (enforce it in `validate_cb`); `Instance::update()` and `custom` values hold IDs with no user check.
+
+### Fixed
+
+- **`code` field read for the current user**: `wp_kses_post` ran on read too, so `get()` on the front end or in cron stripped HTML an admin with `unfiltered_html` had saved. Filtering now runs on save only; reading never depends on who reads.
+- **Numeric field ids**: a field id like `2024` was renumbered when a page was saved, so its value was lost on the next save.
+
 ### Tests
 
 - **Loader contract against every released 1.x tag** (`tests/contract/run.php`, CI job "Loader contract (old tags)", PHP 7.4): each tag's Loader negotiates with the current tree in both orders and in a tie.

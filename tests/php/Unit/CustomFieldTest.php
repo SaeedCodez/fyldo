@@ -96,6 +96,25 @@ final class CustomFieldTest extends TestCase {
 		$this->assertNull( $clean );
 	}
 
+	public function test_prototype_keys_are_dropped_at_every_depth(): void {
+		$value = array(
+			'__proto__'   => array( 'admin' => true ),
+			'constructor' => array( 'prototype' => array( 'admin' => true ) ),
+			'days'        => array(
+				array(
+					'open'      => '09:00',
+					'__proto__' => 'x',
+					'nested'    => array( 'prototype' => 1, ' constructor ' => 2, 'ok' => 3 ),
+				),
+			),
+		);
+
+		$this->assertSame(
+			array( 'days' => array( array( 'open' => '09:00', 'nested' => array( 'ok' => 3 ) ) ) ),
+			$this->custom()->sanitize( $value )
+		);
+	}
+
 	public function test_the_default_is_cleaned_like_a_value(): void {
 		$this->assertSame( array( 'from' => '09:00' ), $this->custom( array( 'default' => array( 'from' => '<b>09:00</b>' ) ) )->default_value() );
 	}

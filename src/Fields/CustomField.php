@@ -31,6 +31,9 @@ final class CustomField extends AbstractField {
 	/** Arrays deeper than this are cut: a value is settings, not a document. */
 	const MAX_DEPTH = 8;
 
+	/** Keys dropped from a value at every depth: they reach an object's prototype in JavaScript. */
+	const UNSAFE_KEYS = array( '__proto__', 'constructor', 'prototype' );
+
 	public static function types(): array {
 		return array( 'custom' );
 	}
@@ -161,7 +164,8 @@ final class CustomField extends AbstractField {
 	}
 
 	/**
-	 * Any JSON value, with every string (and key) cleaned like a textarea's text. Anything else becomes null.
+	 * Any JSON value, with every string (and key) cleaned like a textarea's text. Anything else becomes null. The keys
+	 * of UNSAFE_KEYS are dropped at every depth: a module that merges the value into an object must not reach its prototype.
 	 *
 	 * @param mixed $value Raw value.
 	 * @param int   $depth How deep `$value` sits.
@@ -183,7 +187,11 @@ final class CustomField extends AbstractField {
 
 		$out = array();
 		foreach ( $value as $key => $item ) {
-			$out[ is_int( $key ) ? $key : sanitize_text_field( (string) $key ) ] = self::clean( $item, $depth + 1 );
+			$key = is_int( $key ) ? $key : sanitize_text_field( (string) $key );
+			if ( in_array( $key, self::UNSAFE_KEYS, true ) ) {
+				continue;
+			}
+			$out[ $key ] = self::clean( $item, $depth + 1 );
 		}
 
 		return $out;

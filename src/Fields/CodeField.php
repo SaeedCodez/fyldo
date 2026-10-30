@@ -13,8 +13,10 @@ use Fyldo\V1\Validation\Rules;
 
 /**
  * Renders a Code Editor (Figma "Code Editor"): a language label and a copy button, line numbers, the code in Geist Mono,
- * left to right in every language. The value is the code as typed: Fyldo never strips tags from it, so escape it where
- * you print it. HTML from someone who may not post unfiltered HTML is passed through `wp_kses_post`.
+ * left to right in every language. The value is the code as typed, so escape it where you print it. Saved by someone who
+ * may not post unfiltered HTML: HTML and text go through `wp_kses_post`, JSON has `<` and `>` written as `\u003C` and
+ * `\u003E` (the same JSON: they can only stand inside its strings), CSS is kept (markup is refused by the `code` rule;
+ * `@import` and `url()` pass). This runs on save only: reading never depends on who reads.
  *
  * The implied `code` rule checks JSON (it must parse) and CSS (no markup, as WordPress checks its Additional CSS); a CSS
  * message names its line. `validate_cb` may answer with messages by line (`array( 3 => '…' )` → `<field>.3`).
@@ -28,6 +30,13 @@ final class CodeField extends AbstractField {
 
 	/** Lines the editor shows before it scrolls: Figma's control. */
 	const DEFAULT_ROWS = 7;
+
+	/**
+	 * True while a stored value is read: the filter for who is saving stays out of it.
+	 *
+	 * @var bool
+	 */
+	private $reading = false;
 
 	public static function types(): array {
 		return array( 'code' );
@@ -68,27 +77,45 @@ final class CodeField extends AbstractField {
 		$config['rows']         = $rows;
 		$config['toolbar']      = $config['toolbar'] ?? true;
 		$config['line_numbers'] = $config['line_numbers'] ?? true;
-		$config['default']      = isset( $config['default'] ) ? $this->sanitize_value( $config['default'] ) : '';
+		$config['default']      = isset( $config['default'] ) ? self::as_code( $config['default'] ) : '';
 
 		return $config;
 	}
 
 	/**
-	 * The code as typed: valid UTF-8, `\n` line ends, no NUL bytes. HTML is filtered for someone without `unfiltered_html`.
+	 * The code as typed (as_code()). On save, filtered for someone without `unfiltered_html` (see the class).
 	 *
 	 * @param mixed $raw Raw value.
 	 * @return string
 	 */
 	protected function sanitize_value( $raw ) {
+		$code = self::as_code( $raw );
+		if ( $this->reading || ! function_exists( 'current_user_can' ) || current_user_can( 'unfiltered_html' ) ) {
+			return $code;
+		}
+
+		switch ( $this->config['language'] ?? '' ) {
+			case 'html':
+			case 'text':
+				return wp_kses_post( $code );
+			case 'json':
+				return str_replace( array( '<', '>' ), array( '\u003C', '\u003E' ), $code );
+			default:
+				return $code;
+		}
+	}
+
+	/**
+	 * Valid UTF-8, `\n` line ends, no NUL bytes; '' for anything but a scalar.
+	 *
+	 * @param mixed $raw Raw value.
+	 */
+	private static function as_code( $raw ): string {
 		if ( ! is_scalar( $raw ) ) {
 			return '';
 		}
-		$code = str_replace( array( "\r\n", "\r", "\0" ), array( "\n", "\n", '' ), wp_check_invalid_utf8( (string) $raw ) );
-		if ( 'html' === ( $this->config['language'] ?? '' ) && function_exists( 'current_user_can' ) && ! current_user_can( 'unfiltered_html' ) ) {
-			$code = wp_kses_post( $code );
-		}
 
-		return $code;
+		return str_replace( array( "\r\n", "\r", "\0" ), array( "\n", "\n", '' ), wp_check_invalid_utf8( (string) $raw ) );
 	}
 
 	/**
@@ -112,13 +139,22 @@ final class CodeField extends AbstractField {
 	}
 
 	/**
-	 * A stored value keeps a message at a line (it shows when the person saves); a message about the whole value resets it.
+	 * A stored value keeps a `validate_cb` message at a line (it shows when the person saves); a message about the whole
+	 * value resets it, and so does a failed `code` rule in CSS (its message names a line, but markup in stored CSS must
+	 * never be read). Who reads does not matter: nothing is filtered for the current user.
 	 *
 	 * @param mixed $raw Stored value.
 	 * @return mixed
 	 */
 	public function stored_value( $raw ) {
-		return $this->stored_unless_whole_error( $raw );
+		$this->reading = true;
+		try {
+			$value = $this->stored_unless_whole_error( $raw );
+		} finally {
+			$this->reading = false;
+		}
+
+		return 'css' === $this->config['language'] && null !== $this->failure( $value ) ? $this->default_value() : $value;
 	}
 
 	protected function client_extra(): array {

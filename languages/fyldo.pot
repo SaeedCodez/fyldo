@@ -1373,8 +1373,8 @@ msgstr ""
 #: build/fyldo/demo/demo.php:151
 #: demo/demo.php:151
 msgid ""
-"This demo is only added when Fyldo is installed as a plugin. Return false "
-"from the fyldo/fyldo-demo/enabled filter to hide it."
+"This demo shows because the fyldo/fyldo-demo/enabled filter returns true, "
+"and only while Fyldo is installed as a plugin. Remove that filter to hide it."
 msgstr ""
 
 #: build/fyldo/demo/demo.php:162

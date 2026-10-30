@@ -331,8 +331,12 @@ final class Announcements {
 		);
 	}
 
-	/** Registers the list, delete and duplicate routes (on `rest_api_init`). */
+	/** Registers the list, delete and duplicate routes (on `rest_api_init`), only while the demo is on. */
 	public static function routes(): void {
+		if ( ! Demo::enabled() ) {
+			return;
+		}
+
 		$can = static function (): bool {
 			return current_user_can( 'manage_options' );
 		};

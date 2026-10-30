@@ -117,6 +117,70 @@ final class GroupField extends AbstractField {
 		return $hidden;
 	}
 
+	/**
+	 * A sanitized value with what its items may not change put back. A sub-field that is disabled, or hidden by its
+	 * `dependency` in that item, keeps the incoming value only when an item of `$current` already holds exactly that
+	 * value (items have no stable id: a reordered item keeps its value, a duplicated one its copy); otherwise it takes
+	 * the value of the current item at the same index, else its own default. Saving only.
+	 *
+	 * @param mixed    $value   Sanitized value.
+	 * @param mixed    $current The group's value now (stored, or the default).
+	 * @param callable $outside `fn( string $id ): array{visible:bool,value:mixed}`: a field of the page.
+	 * @return mixed
+	 */
+	public function keep_locked( $value, $current, callable $outside ) {
+		if ( ! is_array( $value ) ) {
+			return $value;
+		}
+
+		$current  = is_array( $current ) ? array_values( $current ) : array();
+		$disabled = array();
+		foreach ( $this->subs as $sub_id => $sub ) {
+			if ( $sub->is_disabled() ) {
+				$disabled[ $sub_id ] = true;
+			}
+		}
+
+		foreach ( $value as $index => $item ) {
+			if ( ! is_array( $item ) ) {
+				continue;
+			}
+			// Disabled first: what the item hides depends on the values it really keeps.
+			$item            = $this->restore( $item, (int) $index, $disabled, $current );
+			$value[ $index ] = $this->restore( $item, (int) $index, $this->hidden_subs( $item, $outside ), $current );
+		}
+
+		return $value;
+	}
+
+	/**
+	 * keep_locked() for one item and one set of sub-fields.
+	 *
+	 * @param array<string,mixed>    $item    Sanitized item.
+	 * @param int                    $index   Its position.
+	 * @param array<string|int,true> $locked  Sub-field ids, as keys.
+	 * @param array<int,mixed>       $current The group's items now.
+	 * @return array<string,mixed>
+	 */
+	private function restore( array $item, int $index, array $locked, array $current ): array {
+		foreach ( $this->subs as $sub_id => $sub ) {
+			if ( ! isset( $locked[ $sub_id ] ) ) {
+				continue;
+			}
+			$incoming = array_key_exists( $sub_id, $item ) ? $item[ $sub_id ] : null;
+			foreach ( $current as $now ) {
+				if ( is_array( $now ) && array_key_exists( $sub_id, $now ) && $now[ $sub_id ] === $incoming ) {
+					continue 2;
+				}
+			}
+
+			$at              = $current[ $index ] ?? null;
+			$item[ $sub_id ] = is_array( $at ) && array_key_exists( $sub_id, $at ) ? $at[ $sub_id ] : $sub->default_value();
+		}
+
+		return $item;
+	}
+
 	public function is_addable(): bool {
 		return true === $this->config['addable'];
 	}

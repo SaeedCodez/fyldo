@@ -7,6 +7,7 @@
 
 namespace Fyldo\V1\Storage;
 
+use Fyldo\V1\Fields\GroupField;
 use Fyldo\V1\Instance;
 use Fyldo\V1\Schema\Page;
 use Fyldo\V1\Support\Naming;
@@ -47,7 +48,7 @@ final class Saver {
 			return $this->result( 'invalid', $checked['errors'], $page, $store );
 		}
 
-		$merged = array_merge( $stored, $checked['clean'] );
+		$merged = $checked['clean'] + $stored; // Not array_merge: a numeric field id ("2024") would be renumbered.
 
 		do_action( Naming::hook( $slug, 'before_save' ), $page->id(), $merged, $stored );
 
@@ -163,7 +164,8 @@ final class Saver {
 	 * page's `page/{page}/sanitize` / `page/{page}/validate`, a form's `form/{form}/sanitize` / `form/{form}/validate`).
 	 *
 	 * A field its `dependency` hides (for the values after this change) is not part of the form: it is not checked and
-	 * keeps what is stored.
+	 * keeps what is stored. Inside a group, a sub-field that is disabled or hidden in its item keeps what is stored
+	 * too (GroupField::keep_locked()), before the group is validated.
 	 *
 	 * @param Page                $page          Schema being saved.
 	 * @param array<string,mixed> $incoming      Untrusted values keyed by field id (partial).
@@ -197,7 +199,10 @@ final class Saver {
 				continue;
 			}
 
-			$field  = $page->fields()[ $id ];
+			$field = $page->fields()[ $id ];
+			if ( $field instanceof GroupField ) {
+				$value = $field->keep_locked( $value, $current[ $id ] ?? $field->default_value(), array( $visibility, 'resolve' ) );
+			}
 			$failed = $field->page_errors( $value, array( $visibility, 'resolve' ) );
 
 			// A group reports each invalid sub-field under `<group>.<index>.<sub-field>`.

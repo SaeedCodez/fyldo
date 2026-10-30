@@ -88,11 +88,14 @@ abstract class AbstractStore {
 		return $media;
 	}
 
-	/** Optimistic-concurrency token of what is stored right now. */
+	/**
+	 * Optimistic-concurrency token of what is stored right now. Keyed with a site secret: a plain hash of the stored
+	 * values (passwords included) would let anyone who sees the revision test guesses offline.
+	 */
 	public function revision( Page $page ): string {
 		$stored = $this->raw( $page );
 		ksort( $stored );
 
-		return md5( (string) wp_json_encode( $stored ) );
+		return hash_hmac( 'sha256', (string) wp_json_encode( $stored ), wp_salt( 'nonce' ) );
 	}
 }

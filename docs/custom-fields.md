@@ -47,7 +47,16 @@ string and in every key. Anything else becomes `null`. Your `sanitize_cb` then r
 `validate_cb` receives the sanitized value and returns `true`, `false` or a message; a message is shown under the field.
 For a value with parts (a list of items), it may return messages by path inside the value instead
 (`array( '2.link' => '…' )`, keyed `<field>.2.link`); a page that draws the value itself (`useForm`) shows each one
-under its control, and a stored value with such messages is kept as it is.
+under its control, and a stored value with such messages is kept as it is. The keys `__proto__`, `constructor` and
+`prototype` are dropped at every level.
+
+### Printing the value
+
+The value is **sanitized, not escaped**. Escape it where you print it: `esc_html()` for text, `esc_attr()` inside an
+attribute, `esc_url()` for a link. In a `mount` module, put labels and values in the DOM with `textContent`, never
+`innerHTML`. IDs inside the value (posts, terms, users) are not checked against the current user: check them yourself
+(in `validate_cb`) before you trust them. The same holds for `Instance::update()`, which stores IDs without a user check.
+For the other fields, see [Escaping](../README.md#escaping) in the README (`code`, `query_args`).
 
 ## JavaScript
 

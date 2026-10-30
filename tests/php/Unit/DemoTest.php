@@ -8,6 +8,7 @@
 
 namespace Fyldo\Tests\Unit;
 
+use Fyldo\V1\Demo\Announcements;
 use Fyldo\V1\Demo\Demo;
 use Fyldo\V1\Fyldo;
 use PHPUnit\Framework\TestCase;
@@ -17,6 +18,7 @@ final class DemoTest extends TestCase {
 	public static function setUpBeforeClass(): void {
 		// Not autoloaded: fyldo.php requires it only for a standalone plugin.
 		require_once dirname( __DIR__, 3 ) . '/demo/demo.php';
+		require_once dirname( __DIR__, 3 ) . '/demo/announcements.php';
 	}
 
 	protected function setUp(): void {
@@ -24,10 +26,28 @@ final class DemoTest extends TestCase {
 		$GLOBALS['__fyldo_test_wrong']   = array();
 		$GLOBALS['__fyldo_test_options'] = array();
 		$GLOBALS['__fyldo_test_actions'] = array();
+		$GLOBALS['__fyldo_test_routes']  = array();
+
+		$GLOBALS['__fyldo_test_filter_values'] = array( 'fyldo/fyldo-demo/enabled' => true );
 	}
 
 	protected function tearDown(): void {
 		$this->reset_facade();
+		unset( $GLOBALS['__fyldo_test_filter_values'] );
+	}
+
+	public function test_the_demo_is_off_until_the_filter_turns_it_on(): void {
+		unset( $GLOBALS['__fyldo_test_filter_values'] );
+
+		$this->assertFalse( Demo::enabled() );
+		Demo::register();
+		$this->assertArrayNotHasKey( Demo::SLUG, Fyldo::instances(), 'no pages' );
+		Announcements::routes();
+		$this->assertSame( array(), $GLOBALS['__fyldo_test_routes'], 'no REST routes (and so no table)' );
+		$this->assertSame( array( 'edit' => 'Edit' ), Demo::action_links( array( 'edit' => 'Edit' ), 'fyldo/fyldo.php' ), 'no "Open demo" link' );
+
+		$GLOBALS['__fyldo_test_filter_values'] = array( 'fyldo/fyldo-demo/enabled' => true );
+		$this->assertTrue( Demo::enabled() );
 	}
 
 	public function test_boot_hooks_init_and_the_plugin_action_link(): void {

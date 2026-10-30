@@ -66,7 +66,7 @@ final class FormRestTest extends TestCase {
 		$raw = $this->table->rows['b7'];
 		ksort( $raw );
 
-		return md5( (string) wp_json_encode( $raw ) );
+		return hash_hmac( 'sha256', (string) wp_json_encode( $raw ), wp_salt( 'nonce' ) );
 	}
 
 	public function test_the_routes_are_registered_under_the_form_permission_callback(): void {
@@ -217,11 +217,78 @@ final class FormRestTest extends TestCase {
 		$this->assertSame( array( 'fyldo_bad_nonce', 403 ), $status( $this->controller->authorize_form( $request( 'book', null ) ) ) );
 		$this->assertSame( array( 'fyldo_bad_nonce', 403 ), $status( $this->controller->authorize_form( $request( 'book', 'stale' ) ) ) );
 		$this->assertSame( array( 'fyldo_too_large', 413 ), $status( $this->controller->authorize_form( $request( 'book', 'good-nonce', 'POST', str_repeat( 'x', Controller::MAX_BODY + 1 ) ) ) ) );
+		// A multipart or form-encoded POST leaves the raw body empty: its `values` are measured.
+		$multipart = new \WP_REST_Request( array( 'form' => 'book', 'key' => 'b7', 'values' => array( 'title' => str_repeat( 'x', Controller::MAX_BODY ) ) ), array( 'X-Fyldo-Nonce' => 'good-nonce' ), 'POST' );
+		$this->assertSame( array( 'fyldo_too_large', 413 ), $status( $this->controller->authorize_form( $multipart ) ) );
 
 		// The form's capability, else the instance's.
 		$this->assertSame( array( 'fyldo_forbidden', 403 ), $status( $this->controller->authorize_form( $request( 'author' ) ) ) );
 		$GLOBALS['__fyldo_test_caps'] = array( 'edit_posts' );
 		$this->assertTrue( $this->controller->authorize_form( $request( 'author' ) ) );
 		$this->assertSame( array( 'fyldo_forbidden', 403 ), $status( $this->controller->authorize_form( $request( 'book' ) ) ) );
+	}
+
+	/**
+	 * A request whose path names `$key`; `$params` are what the query and the body carry (they may name another key).
+	 *
+	 * @param array<string,mixed> $params Query and body params.
+	 */
+	private function routed( string $key, array $params, string $method ): \WP_REST_Request {
+		$url = array(
+			'form' => 'book',
+			'key'  => $key,
+		);
+
+		return new \WP_REST_Request( array_merge( $url, $params ), array( 'X-Fyldo-Nonce' => 'good-nonce' ), $method, '', $url );
+	}
+
+	public function test_the_record_key_comes_from_the_path_only(): void {
+		$read = $this->controller->read_record( $this->routed( 'b7', array( 'key' => 'b404' ), 'GET' ) );
+		$this->assertSame( 'b7', $read->get_data()['key'], 'a query or body `key` is ignored' );
+
+		$this->controller->write_record( $this->routed( 'b7', array( 'key' => 'new', 'values' => array( 'title' => 'Dune II' ) ), 'POST' ) );
+		$this->assertSame( array( 'b7' ), array_keys( $this->table->rows ), '`?key=new` does not turn an update into a create' );
+		$this->assertSame( 'Dune II', $this->table->rows['b7']['title'] );
+		$this->assertSame( 'b7', $this->table->saves[0][1] );
+	}
+
+	public function test_a_locked_sub_field_of_a_record_keeps_what_is_stored_and_a_new_record_gets_the_default(): void {
+		$this->instance->add_form(
+			'shelf',
+			array(
+				'sections' => array(
+					array(
+						'id'     => 'main',
+						'title'  => 'Main',
+						'fields' => array(
+							array( 'id' => 'title', 'type' => 'text', 'label' => 'Title' ),
+							array(
+								'id'      => 'chapters',
+								'type'    => 'group',
+								'label'   => 'Chapters',
+								'addable' => true,
+								'fields'  => array(
+									array( 'id' => 'name', 'type' => 'text', 'label' => 'Name' ),
+									array( 'id' => 'isbn', 'type' => 'text', 'label' => 'ISBN', 'default' => 'none', 'disabled' => 'Set by the importer' ),
+								),
+							),
+						),
+					),
+				),
+				'load'     => array( $this->table, 'load' ),
+				'save'     => array( $this->table, 'save' ),
+			)
+		);
+		$this->table->rows['b7']['chapters'] = array( array( 'name' => 'One', 'isbn' => '111' ) );
+
+		$write = function ( string $key, array $chapters ): void {
+			$this->controller->write_record( $this->request( array( 'form' => 'shelf', 'key' => $key, 'values' => array( 'chapters' => $chapters ) ), 'POST' ) );
+		};
+
+		$write( 'new', array( array( 'name' => 'X', 'isbn' => '111' ) ) );
+		$this->assertSame( array( array( 'name' => 'X', 'isbn' => 'none' ) ), $this->table->rows['b1']['chapters'], 'nothing stored: the default' );
+
+		$write( 'b7', array( array( 'name' => 'Uno', 'isbn' => 'evil' ) ) );
+		$this->assertSame( array( array( 'name' => 'Uno', 'isbn' => '111' ) ), $this->table->rows['b7']['chapters'] );
 	}
 }

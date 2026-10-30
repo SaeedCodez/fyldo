@@ -85,6 +85,33 @@ final class SaverTest extends TestCase {
 		$this->assertSame( 'fixed', $this->instance->get( 'general', 'locked' ) );
 	}
 
+	public function test_a_numeric_field_id_keeps_its_value_across_saves(): void {
+		$instance = new Instance( 'acme-years', array( 'title' => 'Acme' ) );
+		$instance->add_page(
+			'years',
+			array(
+				'title'    => 'Years',
+				'sections' => array(
+					array(
+						'id'     => 'main',
+						'title'  => 'Main',
+						'fields' => array(
+							array( 'id' => '2024', 'type' => 'text', 'label' => '2024' ),
+							array( 'id' => 'name', 'type' => 'text', 'label' => 'Name' ),
+						),
+					),
+				),
+			)
+		);
+
+		$instance->update( 'years', array( '2024' => 'Leap' ) );
+		$instance->update( 'years', array( 'name' => 'Acme' ) );
+
+		$this->assertSame( 'Leap', $instance->get( 'years', '2024' ) );
+		$this->assertSame( 'Acme', $instance->get( 'years', 'name' ) );
+		$this->assertArrayHasKey( '2024', $GLOBALS['__fyldo_test_options']['acme-years_years'], 'not renumbered' );
+	}
+
 	public function test_a_stored_value_that_no_longer_validates_reads_as_the_default(): void {
 		$GLOBALS['__fyldo_test_options']['acme-seo_general'] = array( 'language' => 'removed_option', 'site_title' => 'Kept' );
 

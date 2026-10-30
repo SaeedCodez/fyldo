@@ -544,8 +544,8 @@ msgstr "هویت سایت شما و نحوه‌ی دیده‌شدنش در مو�
 msgid "“admin” is reserved. Choose another name."
 msgstr "«admin» رزرو شده است. نام دیگری انتخاب کنید."
 
-msgid "This demo is only added when Fyldo is installed as a plugin. Return false from the fyldo/fyldo-demo/enabled filter to hide it."
-msgstr "این دمو فقط وقتی اضافه می‌شود که فیلدو به‌صورت افزونه نصب شده باشد. برای پنهان کردن آن، فیلتر fyldo/fyldo-demo/enabled را false برگردانید."
+msgid "This demo shows because the fyldo/fyldo-demo/enabled filter returns true, and only while Fyldo is installed as a plugin. Remove that filter to hide it."
+msgstr "این دمو نمایش داده می‌شود چون فیلتر fyldo/fyldo-demo/enabled مقدار true برمی‌گرداند، و فقط تا وقتی که فیلدو به‌صورت افزونه نصب شده باشد. برای پنهان کردن آن، این فیلتر را بردارید."
 
 msgid "Pages, sections and fields come from one array. Change a value, save it and reload: it is stored in a normal WordPress option."
 msgstr "صفحه‌ها، بخش‌ها و فیلدها از یک آرایه می‌آیند. مقداری را تغییر دهید، ذخیره کنید و صفحه را دوباره باز کنید: در یک گزینه‌ی معمولی وردپرس ذخیره می‌شود."
