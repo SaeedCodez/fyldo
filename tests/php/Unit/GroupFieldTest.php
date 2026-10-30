@@ -249,6 +249,125 @@ final class GroupFieldTest extends TestCase {
 		$this->assertSame( array( 'B', 'A' ), array_column( $instance->get( 'header', 'header_buttons' ), 'label' ), 'stored in the order sent' );
 	}
 
+	/**
+	 * A page of links: `slug` is disabled, `note` shows only for `kind` b. Two items are stored.
+	 */
+	private function locked_instance(): Instance {
+		$instance = new Instance( 'acme-locked', array( 'title' => 'Acme' ) );
+		$instance->add_page(
+			'links',
+			array(
+				'title'    => 'Links',
+				'sections' => array(
+					array(
+						'id'     => 'main',
+						'title'  => 'Main',
+						'fields' => array(
+							array(
+								'id'      => 'links',
+								'type'    => 'group',
+								'label'   => 'Links',
+								'addable' => true,
+								'fields'  => array(
+									array( 'id' => 'label', 'type' => 'text', 'label' => 'Label' ),
+									array( 'id' => 'kind', 'type' => 'select', 'label' => 'Kind', 'options' => array( 'a' => 'A', 'b' => 'B' ), 'default' => 'a' ),
+									array( 'id' => 'slug', 'type' => 'text', 'label' => 'Slug', 'default' => 'auto', 'disabled' => 'Set by the importer' ),
+									array( 'id' => 'note', 'type' => 'text', 'label' => 'Note', 'validate' => array( 'max_length' => 5 ), 'dependency' => array( 'kind', '==', 'b' ) ),
+								),
+							),
+						),
+					),
+				),
+			)
+		);
+
+		$GLOBALS['__fyldo_test_options']['acme-locked_links'] = array(
+			'links' => array(
+				array( 'label' => 'A', 'kind' => 'a', 'slug' => 'alpha', 'note' => 'n1' ),
+				array( 'label' => 'B', 'kind' => 'b', 'slug' => 'beta', 'note' => 'n2' ),
+			),
+		);
+
+		return $instance;
+	}
+
+	public function test_a_disabled_sub_field_keeps_what_is_stored(): void {
+		$instance = $this->locked_instance();
+
+		$result = $instance->update(
+			'links',
+			array(
+				'links' => array(
+					array( 'label' => 'A2', 'kind' => 'a', 'slug' => 'hacked', 'note' => 'n1' ),
+					array( 'label' => 'B2', 'kind' => 'b', 'slug' => 'beta', 'note' => 'n2' ),
+				),
+			)
+		);
+
+		$this->assertSame( 'ok', $result['status'] );
+		$links = $instance->get( 'links', 'links' );
+		$this->assertSame( array( 'A2', 'B2' ), array_column( $links, 'label' ), 'the other sub-fields change' );
+		$this->assertSame( array( 'alpha', 'beta' ), array_column( $links, 'slug' ), 'a value no stored item holds takes the stored item at its index' );
+	}
+
+	public function test_a_sub_field_its_dependency_hides_keeps_what_is_stored_unvalidated_values_never_land(): void {
+		$instance = $this->locked_instance();
+
+		$result = $instance->update(
+			'links',
+			array(
+				'links' => array(
+					array( 'label' => 'A', 'kind' => 'a', 'slug' => 'alpha', 'note' => '<b>far too long</b>' ),
+					array( 'label' => 'B', 'kind' => 'b', 'slug' => 'beta', 'note' => 'n3' ),
+				),
+			)
+		);
+
+		$this->assertSame( 'ok', $result['status'] );
+		$this->assertSame( array( 'n1', 'n3' ), array_column( $instance->get( 'links', 'links' ), 'note' ), 'hidden: stored; shown: saved' );
+
+		$invalid = $instance->update( 'links', array( 'links' => array( array( 'label' => 'A', 'kind' => 'b', 'slug' => 'alpha', 'note' => 'far too long' ) ) ) );
+		$this->assertSame( array( 'links.0.note' ), array_keys( $invalid['errors'] ), 'a shown sub-field is still validated' );
+	}
+
+	public function test_reordered_items_keep_their_own_locked_values(): void {
+		$instance = $this->locked_instance();
+
+		$instance->update(
+			'links',
+			array(
+				'links' => array(
+					array( 'label' => 'B', 'kind' => 'a', 'slug' => 'beta', 'note' => 'n2' ),
+					array( 'label' => 'A', 'kind' => 'a', 'slug' => 'alpha', 'note' => 'n1' ),
+				),
+			)
+		);
+
+		$links = $instance->get( 'links', 'links' );
+		$this->assertSame( array( 'beta', 'alpha' ), array_column( $links, 'slug' ), 'neither swapped nor lost' );
+		$this->assertSame( array( 'n2', 'n1' ), array_column( $links, 'note' ), 'hidden now, but a stored item holds it' );
+	}
+
+	public function test_a_new_item_gets_the_defaults_and_a_duplicate_keeps_its_copy(): void {
+		$instance = $this->locked_instance();
+
+		$instance->update(
+			'links',
+			array(
+				'links' => array(
+					array( 'label' => 'A', 'kind' => 'a', 'slug' => 'alpha', 'note' => 'n1' ),
+					array( 'label' => 'B', 'kind' => 'b', 'slug' => 'beta', 'note' => 'n2' ),
+					array( 'label' => 'A copy', 'kind' => 'a', 'slug' => 'alpha', 'note' => 'n1' ),
+					array( 'label' => 'C', 'kind' => 'a', 'slug' => 'evil', 'note' => 'evil' ),
+				),
+			)
+		);
+
+		$links = $instance->get( 'links', 'links' );
+		$this->assertSame( array( 'alpha', 'beta', 'alpha', 'auto' ), array_column( $links, 'slug' ) );
+		$this->assertSame( array( 'n1', 'n2', 'n1', '' ), array_column( $links, 'note' ) );
+	}
+
 	/** A page of story sections, each picking stories of a post type that is not public (Pelk's `pelk_story`). */
 	private function stories_instance(): Instance {
 		$GLOBALS['__fyldo_test_posts'] = array(

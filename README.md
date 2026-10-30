@@ -12,7 +12,7 @@ One tree, three ways to load it. The code that uses Fyldo is the same in all thr
 
 ### 1. Standalone plugin (ZIP)
 
-Download `fyldo.zip` from the [GitHub Releases](https://github.com/SaeedCodez/fyldo/releases) page and install it from **Plugins → Add New → Upload Plugin**. Activate it, then use the API from your own plugin (a demo dashboard under **Settings → Fyldo demo** shows every field type; turn it off with the `fyldo/fyldo-demo/enabled` filter, and it never loads in drop-in or Composer mode):
+Download `fyldo.zip` from the [GitHub Releases](https://github.com/SaeedCodez/fyldo/releases) page and install it from **Plugins → Add New → Upload Plugin**. Activate it, then use the API from your own plugin (a demo dashboard under **Settings → Fyldo demo** shows every field type. It is off by default: turn it on with `add_filter( 'fyldo/fyldo-demo/enabled', '__return_true' );`, for example in a mu-plugin. It never loads in drop-in or Composer mode, and deleting the Fyldo plugin removes its table and options):
 
 ```php
 // my-plugin.php — header: "Requires Plugins: fyldo" only checks that Fyldo is active (WordPress cannot install it for the user).
@@ -102,7 +102,7 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `default_befo
 | `password` | Write-only: never sent to the browser. No `default`. |
 | `number` | `min` `max` `step`, set on the field (`validate` takes them too). Persian and Arabic-Indic digits are read as ASCII. |
 | `textarea` | `rows`. With `validate.max_length` it shows a live counter. |
-| `code` | Code in the Code Editor: line numbers, syntax colours, a copy button, Tab indents (Escape then Tab leaves), always left to right. `language` is `css`, `html`, `json` or `text` (default), `rows` the lines shown (default 7), `toolbar` and `line_numbers` (default true). **The value is the code as typed**: Fyldo never strips tags from it, so escape it where you print it (`wp_strip_all_tags()` for CSS in a `<style>`); HTML from someone who may not post unfiltered HTML goes through `wp_kses_post()`. JSON must parse and CSS may hold no markup (WordPress's own check); a CSS message names its line, and `validate_cb` may return messages by line (`[ 3 => '…' ]`). Layout default `stacked`, full width. |
+| `code` | Code in the Code Editor: line numbers, syntax colours, a copy button, Tab indents (Escape then Tab leaves), always left to right. `language` is `css`, `html`, `json` or `text` (default), `rows` the lines shown (default 7), `toolbar` and `line_numbers` (default true). **The value is the code as typed**, so escape it where you print it ([Escaping](#escaping)). Saved by someone who may not post unfiltered HTML, `html` and `text` go through `wp_kses_post()` and `json` has `<` and `>` written as `\u003C` and `\u003E` (the same JSON); `css` is kept as typed (`@import` and `url()` pass). This happens on save only, never when a value is read. JSON must parse and CSS may hold no markup (WordPress's own check; stored CSS with markup reads as the default); a CSS message names its line, and `validate_cb` may return messages by line (`[ 3 => '…' ]`). Layout default `stacked`, full width. |
 | `toggle` `checkbox` | A boolean. |
 | `checkbox_group` `radio` `select` `multi_select` | `options`: `[ 'value' => 'Label' ]`, a list of `[ 'value', 'label', 'disabled' ]`, or a callable. `radio` needs a `default`. `select` and `multi_select` take `searchable`. `checkbox_group` and `multi_select` take `min` / `max` (how many options may be chosen), set on the field (`validate` takes them too). |
 | `post` `term` `user` | Pick posts (pages, products, any post type), terms (categories, tags, any taxonomy) or users **by searching for them**: a Select (or, with `multiple`, a Multi Select) whose options come from the server while the user types, 20 at a time (more load as the menu is scrolled); before anything is typed it lists the most recent items (terms and users by name). `post_type` (a name or a list, default `post`) and `post_status` (default `publish`) for `post`, `taxonomy` (a name or a list, default `category`) for `term`, `role` (a name or a list; none = every user) for `user`. With several post types or taxonomies each result names its type (“Summer sale · Page”); a user shows the login when it differs from the display name. `multiple` (default `false`), `placeholder`, and `query_args` (extra arguments for `WP_Query` / `get_terms()` / `get_users()`, e.g. `[ 'author' => 3 ]`; the search, paging and source cannot be overridden). **The stored value is the ID** (an integer, `0` = none), or with `multiple` a list of IDs in the order they were picked; read it with `get_permalink( $id )`, `get_term( $id )` or `get_userdata( $id )`. Only items the current user may read are offered and saved (`read_post` for posts, the taxonomy's `assign_terms` for terms, `list_users` for users; email addresses are never searched or sent). An item that is deleted or no longer fits the field drops out of the value when it is read, so a page never shows a bare ID. `validate.required`; with `multiple`, `min` / `max` (the number of items), set on the field (`validate` takes them too). Works inside a `group`. Search route: `GET …/pages/{page}/fields/{field}/items` (`search`, `paged`, or `include` = comma-separated IDs), under the page's capability. Layout default `field`. |
@@ -141,7 +141,7 @@ Every field takes `id`, `type`, `label`, `description`, `default`, `default_befo
 - **Operators:** `==` `!=` `>` `>=` `<` `<=` `any` `not-any` (the value is a list) `contains` `not-contains` (text inside text, or a value in a list field) `empty` `not-empty` (no value: `[ 'logo', 'not-empty' ]`). A list field (`checkbox_group`, `multi_select`) `==` a value it holds; a toggle compares with `true`, `'true'` or `1`; numbers and numeric text compare as numbers, dates and times in their stored format compare in order. An image, file, post, term or user field with nothing chosen is `empty`.
 - **Where:** any field, a `notice`, a `group`'s sub-field (its conditions read the other sub-fields of the same item first, then the page) and a **section** (`'dependency'` on the section hides the whole card; a card whose fields are all hidden hides too). Conditions see every field of the page, in any section or tab.
 - **Hiding cascades:** a condition on a hidden field never holds, so in the example `host` hides when `cache` is switched off even though `driver` still says `redis`.
-- **A hidden field is not part of the form:** it is not checked (a hidden `required` field never blocks a save) and not saved; what is stored stays, and `get()` keeps returning it, so check the controlling value in your code too (`if ( $o['cache'] ) { … $o['host'] … }`). Edits made to a field before it was hidden wait in the page and are saved if it shows again. Inside a group item a hidden sub-field is only not checked.
+- **A hidden field is not part of the form:** it is not checked (a hidden `required` field never blocks a save) and not saved; what is stored stays, and `get()` keeps returning it, so check the controlling value in your code too (`if ( $o['cache'] ) { … $o['host'] … }`). Edits made to a field before it was hidden wait in the page and are saved if it shows again. Inside a group item a hidden sub-field, like a disabled one, is not checked and not saved: it keeps the value a stored item holds (the stored item at the same position; a new item gets the sub-field's `default`).
 - PHP checks the conditions when the page is registered: unknown ids, password fields (their value never reaches the browser), notices, a field or section that depends on itself, and circles (`a` shows when `b` does and `b` when `a` does) are configuration errors. The demo's General page shows a coming-soon message only while maintenance mode is on.
 
 ### Changing a default
@@ -235,7 +235,7 @@ React (a shadow root, a preview of your site) gets the same markup in the browse
 
 ### Uninstall
 
-Fyldo never deletes your data. In your plugin's `uninstall.php`, load Fyldo, register your instance and pages the same way as on `init` (keep that code in a function you can call), then call `delete_data()`. It deletes every registered page's option and Fyldo's own `{slug}__fyldo`, and fires no hooks.
+Fyldo never deletes your data (deleting the Fyldo plugin itself removes only its demo's table and options). In your plugin's `uninstall.php`, load Fyldo, register your instance and pages the same way as on `init` (keep that code in a function you can call), then call `delete_data()`. It deletes every registered page's option and Fyldo's own `{slug}__fyldo`, and fires no hooks.
 
 ```php
 // uninstall.php
@@ -270,6 +270,21 @@ A form (`add_form()`), with `{form}` its id. A form's save never fires a page's 
 | `fyldo/{slug}/form/{form}/saved` | action | `$key, $values, $stored`: after your `save` callback stored the record |
 
 And two more: `fyldo/{slug}/assets_url` (filter, `$url, $path`: the URL of Fyldo's `assets/dist` directory, for a symlinked or unusual install) and `fyldo/{slug}/config` (filter, internal: see below).
+
+### Escaping
+
+Fyldo **sanitizes** values when they are saved; it does not **escape** them for you. Escape where you print:
+`esc_html()` for text, `esc_attr()` inside an attribute, `esc_url()` for a link.
+
+- In a `custom` field's `mount` module, or a custom page drawn without React, put labels and values in the DOM with
+  `textContent`, never `innerHTML`.
+- `code` field: print CSS with `wp_add_inline_style()`. JSON inside a `<script>` tag is safe only as Fyldo stores it for
+  users without `unfiltered_html` (`<` and `>` written as `\u003C` and `\u003E`); an admin with that capability may
+  save anything, so if you build the JSON yourself, encode it with `wp_json_encode()`. CSS keeps `@import` and `url()`.
+- `query_args` of a `post`, `term` or `user` field only narrows the search; a request can still send another ID. To
+  enforce it, check the value in `validate_cb`.
+- IDs saved through `Instance::update()`, and IDs inside a `custom` field's value, are not checked against any user
+  (a `post`, `term` or `user` field saved from the screen is). Check them yourself when a user chose them.
 
 ### Good to know
 
@@ -323,7 +338,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
 
 سه راه برای بارگذاری یک پوشهٔ یکسان. کد استفاده از Fyldo در هر سه یکی است و فایل‌های ساخته‌شده همراه بسته هستند (نیازی به Node نیست).
 
-1. **افزونهٔ مستقل:** فایل `fyldo.zip` را از صفحهٔ [Releases](https://github.com/SaeedCodez/fyldo/releases) دانلود کنید و از **افزونه‌ها ← افزودن ← بارگذاری افزونه** نصب و فعال کنید (یک داشبورد دمو در **تنظیمات ← دموی فیلدو** همه‌ی انواع فیلد را نشان می‌دهد؛ با فیلتر `fyldo/fyldo-demo/enabled` خاموش می‌شود و در حالت drop-in و Composer هرگز بارگذاری نمی‌شود). سپس در افزونهٔ خودتان `Fyldo::create()` را روی `init` فراخوانی کنید (مثال بالا). سرآیند `Requires Plugins: fyldo` فقط بررسی می‌کند که Fyldo فعال باشد.
+1. **افزونهٔ مستقل:** فایل `fyldo.zip` را از صفحهٔ [Releases](https://github.com/SaeedCodez/fyldo/releases) دانلود کنید و از **افزونه‌ها ← افزودن ← بارگذاری افزونه** نصب و فعال کنید (یک داشبورد دمو در **تنظیمات ← دموی فیلدو** همه‌ی انواع فیلد را نشان می‌دهد. دمو به‌طور پیش‌فرض خاموش است؛ با یک خط روشنش کنید، مثلاً در یک mu-plugin: `add_filter( 'fyldo/fyldo-demo/enabled', '__return_true' );`. در حالت drop-in و Composer هرگز بارگذاری نمی‌شود و با حذف افزونهٔ فیلدو، جدول و گزینه‌هایش پاک می‌شوند). سپس در افزونهٔ خودتان `Fyldo::create()` را روی `init` فراخوانی کنید (مثال بالا). سرآیند `Requires Plugins: fyldo` فقط بررسی می‌کند که Fyldo فعال باشد.
 2. **پوشهٔ drop-in:** `fyldo.zip` را داخل افزونهٔ خود باز کنید و بنویسید:
    ```php
    require_once __DIR__ . '/fyldo/fyldo.php';

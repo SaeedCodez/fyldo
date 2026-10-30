@@ -5,7 +5,7 @@
  * file only declares the pages with the public API, exactly as a consumer plugin would (PHP, plus three tiny SVGs for the Choice Card demo).
  *
  * Strings use Fyldo's own text domain, so the demo follows the site (or profile) language: English or فارسی.
- * Turn it off with the `fyldo/fyldo-demo/enabled` filter.
+ * Off by default: turn it on with `add_filter( 'fyldo/fyldo-demo/enabled', '__return_true' );`.
  *
  * @package Fyldo
  */
@@ -87,7 +87,7 @@ final class Demo {
 	 * @return mixed
 	 */
 	public static function action_links( $actions, $plugin_file = '' ) {
-		if ( ! is_array( $actions ) || plugin_basename( self::$main_file ) !== $plugin_file || ! current_user_can( 'manage_options' ) || ! self::enabled() ) {
+		if ( ! self::enabled() || ! is_array( $actions ) || plugin_basename( self::$main_file ) !== $plugin_file || ! current_user_can( 'manage_options' ) ) {
 			return $actions;
 		}
 
@@ -96,9 +96,12 @@ final class Demo {
 		return array_merge( array( 'demo' => '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Open demo', 'fyldo' ) . '</a>' ), $actions );
 	}
 
-	/** Whether the demo is on (filter `fyldo/fyldo-demo/enabled`, default true). */
+	/**
+	 * Whether the demo is on (filter `fyldo/fyldo-demo/enabled`, default false). Without it nothing of the demo runs: no
+	 * pages, no REST routes, no table, no "Open demo" link.
+	 */
 	public static function enabled(): bool {
-		return (bool) apply_filters( Naming::hook( self::SLUG, 'enabled' ), true );
+		return (bool) apply_filters( Naming::hook( self::SLUG, 'enabled' ), false );
 	}
 
 	/** Creates the instance and its pages. Runs on `init`, like any consumer plugin. */
@@ -148,7 +151,7 @@ final class Demo {
 		Announcements::register( $fyldo, self::$main_file );
 
 		$fyldo->admin_notice(
-			__( 'This demo is only added when Fyldo is installed as a plugin. Return false from the fyldo/fyldo-demo/enabled filter to hide it.', 'fyldo' ),
+			__( 'This demo shows because the fyldo/fyldo-demo/enabled filter returns true, and only while Fyldo is installed as a plugin. Remove that filter to hide it.', 'fyldo' ),
 			array(
 				'id'   => 'demo-hint',
 				'page' => 'overview',

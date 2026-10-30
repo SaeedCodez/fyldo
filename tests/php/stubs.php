@@ -40,9 +40,10 @@ if ( ! function_exists( 'did_action' ) ) {
 }
 
 if ( ! function_exists( 'apply_filters' ) ) {
+	// A test may answer a filter with a fixed value: $GLOBALS['__fyldo_test_filter_values'][ $hook ].
 	function apply_filters( $hook, $value, ...$args ) {
 		$GLOBALS['__fyldo_test_filtered'][] = $hook;
-		return $value;
+		return array_key_exists( $hook, $GLOBALS['__fyldo_test_filter_values'] ?? array() ) ? $GLOBALS['__fyldo_test_filter_values'][ $hook ] : $value;
 	}
 }
 
@@ -171,6 +172,12 @@ if ( ! function_exists( 'wp_json_encode' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_salt' ) ) {
+	function wp_salt( $scheme = 'auth' ) {
+		return 'test-salt:' . $scheme;
+	}
+}
+
 // In-memory options.
 if ( ! function_exists( 'get_option' ) ) {
 	function get_option( $name, $default = false ) {
@@ -244,11 +251,20 @@ if ( ! class_exists( 'WP_REST_Request' ) ) {
 		private $headers;
 		private $method;
 		private $body;
-		public function __construct( array $params = array(), array $headers = array(), string $method = 'POST', string $body = '' ) {
+		private $url;
+		// $url: the path params; null treats every param as one (most tests put the route's names in $params).
+		public function __construct( array $params = array(), array $headers = array(), string $method = 'POST', string $body = '', ?array $url = null ) {
 			$this->params  = $params;
 			$this->headers = $headers;
 			$this->method  = $method;
 			$this->body    = $body;
+			$this->url     = $url;
+		}
+		public function get_url_params() {
+			return $this->url ?? $this->params;
+		}
+		public function get_param( $key ) {
+			return $this->params[ $key ] ?? null;
 		}
 		public function get_header( $key ) {
 			return $this->headers[ $key ] ?? null;

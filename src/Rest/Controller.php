@@ -228,11 +228,25 @@ final class Controller {
 			return new \WP_Error( 'fyldo_forbidden', $forbidden, array( 'status' => 403 ) );
 		}
 
-		if ( $request->get_method() !== 'GET' && strlen( (string) $request->get_body() ) > self::MAX_BODY ) {
+		if ( $request->get_method() !== 'GET' && self::too_large( $request ) ) {
 			return new \WP_Error( 'fyldo_too_large', __( 'The request is too large.', 'fyldo' ), array( 'status' => 413 ) );
 		}
 
 		return true;
+	}
+
+	/**
+	 * Whether a write is over MAX_BODY: the raw body, and the `values` param JSON-encoded (a multipart or form-encoded
+	 * POST leaves the raw body empty).
+	 */
+	private static function too_large( \WP_REST_Request $request ): bool {
+		if ( strlen( (string) $request->get_body() ) > self::MAX_BODY ) {
+			return true;
+		}
+
+		$values = $request->get_param( 'values' );
+
+		return null !== $values && strlen( (string) wp_json_encode( $values ) ) > self::MAX_BODY;
 	}
 
 	/**
@@ -489,9 +503,13 @@ final class Controller {
 		return $form;
 	}
 
-	/** The record the route names; the key `new` is a record not stored yet. */
+	/**
+	 * The record the route names; the key `new` is a record not stored yet. Read from the path only: `$request['key']`
+	 * would take a JSON, body or query `key` first, past KEY_REGEX.
+	 */
 	private function record( \WP_REST_Request $request ): RecordStore {
-		$key = (string) $request['key'];
+		$url = $request->get_url_params();
+		$key = isset( $url['key'] ) ? (string) $url['key'] : '';
 
 		return new RecordStore( $this->form( $request ), Form::NEW_KEY === $key ? '' : $key );
 	}

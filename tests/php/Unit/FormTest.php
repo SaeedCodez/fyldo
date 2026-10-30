@@ -165,15 +165,15 @@ final class FormTest extends TestCase {
 		$this->assertSame( array( 'b7' ), $this->table->loads, '`load` runs once per store' );
 	}
 
-	public function test_the_revision_is_the_md5_of_the_sorted_raw_record_and_a_new_record_has_none(): void {
+	public function test_the_revision_is_the_hmac_of_the_sorted_raw_record_and_a_new_record_has_none(): void {
 		$raw = $this->table->rows['b7'];
 		ksort( $raw );
 
-		$this->assertSame( md5( (string) wp_json_encode( $raw ) ), $this->record( 'b7' )->revision( $this->form()->schema() ) );
+		$this->assertSame( hash_hmac( 'sha256', (string) wp_json_encode( $raw ), wp_salt( 'nonce' ) ), $this->record( 'b7' )->revision( $this->form()->schema() ) );
 		$this->assertSame( '', $this->record( '' )->revision( $this->form()->schema() ) );
 
 		$this->table->rows['b7']['author'] = 'Someone else';
-		$this->assertNotSame( md5( (string) wp_json_encode( $raw ) ), $this->record( 'b7' )->revision( $this->form()->schema() ), 'any column counts' );
+		$this->assertNotSame( hash_hmac( 'sha256', (string) wp_json_encode( $raw ), wp_salt( 'nonce' ) ), $this->record( 'b7' )->revision( $this->form()->schema() ), 'any column counts' );
 	}
 
 	public function test_a_new_record_reads_the_defaults_without_asking_load(): void {
@@ -215,7 +215,7 @@ final class FormTest extends TestCase {
 		$raw    = $this->table->rows['b7'];
 		ksort( $raw );
 
-		$this->assertSame( md5( (string) wp_json_encode( $raw ) ), $result['revision'], 'what the next request will see' );
+		$this->assertSame( hash_hmac( 'sha256', (string) wp_json_encode( $raw ), wp_salt( 'nonce' ) ), $result['revision'], 'what the next request will see' );
 		$this->assertSame( array( 'b7', 'b7' ), $this->table->loads );
 	}
 

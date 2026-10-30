@@ -69,6 +69,51 @@ final class CodeFieldTest extends TestCase {
 		$this->assertSame( '<b onclick="x()">', self::code( array( 'language' => 'css' ) )->sanitize( '<b onclick="x()">' ), 'only HTML' );
 	}
 
+	public function test_json_and_text_are_filtered_on_save_for_someone_without_unfiltered_html(): void {
+		$json = "{\n  \"a\": \"</script><b>\"\n}";
+		$text = 'Hi <script>alert(1)</script>';
+		$this->assertSame( $json, self::code( array( 'language' => 'json' ) )->sanitize( $json ) );
+		$this->assertSame( $text, self::code()->sanitize( $text ) );
+
+		$GLOBALS['__fyldo_test_caps'] = array( 'manage_options' );
+		$escaped = self::code( array( 'language' => 'json' ) )->sanitize( $json );
+		$this->assertSame( "{\n  \"a\": \"\\u003C/script\\u003E\\u003Cb\\u003E\"\n}", $escaped, 'formatting kept' );
+		$this->assertSame( json_decode( $json, true ), json_decode( $escaped, true ), 'the same JSON' );
+		$this->assertSame( 'Hi ', self::code()->sanitize( $text ) );
+		$this->assertSame( 'a { background: url(x.png); }', self::code( array( 'language' => 'css' ) )->sanitize( 'a { background: url(x.png); }' ), 'CSS as typed' );
+	}
+
+	public function test_a_code_sub_field_of_a_group_is_filtered_on_save_too(): void {
+		$GLOBALS['__fyldo_test_caps'] = array( 'manage_options' );
+		$group = FieldFactory::create(
+			array(
+				'id'      => 'snippets',
+				'type'    => 'group',
+				'label'   => 'Snippets',
+				'addable' => true,
+				'fields'  => array( array( 'id' => 'data', 'type' => 'code', 'label' => 'Data', 'language' => 'json' ) ),
+			)
+		);
+
+		$this->assertSame( array( array( 'data' => '["\\u003Cb\\u003E"]' ) ), $group->sanitize( array( array( 'data' => '["<b>"]' ) ) ) );
+		$this->assertSame( array( array( 'data' => '["<b>"]' ) ), $group->stored_value( array( array( 'data' => '["<b>"]' ) ) ), 'not on read' );
+	}
+
+	public function test_reading_never_filters_for_the_current_user(): void {
+		$html = '<p onclick="x()">Hi</p><script>alert(1)</script>';
+		$GLOBALS['__fyldo_test_caps'] = array();
+
+		$this->assertSame( $html, self::code( array( 'language' => 'html' ) )->stored_value( $html ), 'what an admin with unfiltered_html saved' );
+		$this->assertSame( 'Hi <b>', self::code()->stored_value( 'Hi <b>' ) );
+	}
+
+	public function test_stored_css_with_markup_reads_as_the_default(): void {
+		$field = self::code( array( 'language' => 'css', 'default' => 'a {}' ) );
+
+		$this->assertSame( 'a {}', $field->stored_value( "a {\n}</style><script>alert(1)</script>" ) );
+		$this->assertSame( 'b { color: red; }', $field->stored_value( 'b { color: red; }' ) );
+	}
+
 	public function test_css_markup_is_reported_at_its_line(): void {
 		$field = self::code( array( 'language' => 'css' ) );
 

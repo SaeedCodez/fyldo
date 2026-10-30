@@ -222,6 +222,52 @@ $acme->add_form( 'story', array(
 - Hooks: `fyldo/{slug}/form/{id}/sanitize` and `fyldo/{slug}/form/{id}/validate` (filters, same arguments as the page
   ones), `fyldo/{slug}/form/{id}/saved` (action: `$key`, `$values`, `$stored`).
 
+### Who may read and change a record
+
+Fyldo checks only the form's capability (`capability`, else the instance's), never a record: anyone who has it can ask
+for any key. **Your callbacks authorize each record:**
+
+- `load` returns `null` for a record the current user may not read. Fyldo answers 404, for reading (GET) and for
+  saving (PATCH: `save` is not called).
+- `save` refuses a change the user may not make with a `WP_Error` (give it a `status`, such as 403).
+- `$key === ''` is a new record: check that the user may create one.
+
+```php
+function acme_story_load( string $key ): ?array {
+	$post = get_post( (int) $key );
+	if ( ! $post || 'acme_story' !== $post->post_type || ! current_user_can( 'edit_post', $post->ID ) ) {
+		return null; // 404: not found, or not yours
+	}
+
+	return array(
+		'title' => $post->post_title,
+		'cover' => (int) get_post_thumbnail_id( $post ),
+	);
+}
+
+function acme_story_save( array $values, string $key ) {
+	$allowed = '' === $key ? current_user_can( 'edit_posts' ) : current_user_can( 'edit_post', (int) $key );
+	if ( ! $allowed ) {
+		return new WP_Error( 'acme_forbidden', __( 'You may not edit this story.', 'acme' ), array( 'status' => 403 ) );
+	}
+
+	$id = wp_insert_post(
+		array(
+			'ID'         => (int) $key, // 0 creates
+			'post_type'  => 'acme_story',
+			'post_title' => $values['title'],
+		),
+		true
+	);
+	if ( is_wp_error( $id ) ) {
+		return $id;
+	}
+	$values['cover'] ? set_post_thumbnail( $id, $values['cover'] ) : delete_post_thumbnail( $id );
+
+	return (string) $id;
+}
+```
+
 REST routes (Fyldo's namespace, same nonces and capability check as settings pages):
 `GET|PATCH /forms/{form}/records/{key}` (`{key}` `new` is a new record) and `GET /forms/{form}/fields/{field}/items`
 (search of `post`, `term` and `user` fields).
