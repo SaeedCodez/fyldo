@@ -371,7 +371,7 @@ The controls Fyldo's `color`, `icon`, `date`, `time`, `datetime`, the range fiel
 a `group` draws, for a page that keeps its record in its own state (an editor whose fields depend on each other, with a
 live preview). They are the same components, so they look and behave exactly like Fyldo's fields.
 
-Put each control in a `ui.SettingRow` (inside a `ui.SectionCard`), as Fyldo does: the row's `title` names it, its
+Put each control in a `ui.SettingRow` (inside a `ui.SectionCard`, or inside a `ui.GroupItem`, where it draws without padding or a divider, the description under the control), as Fyldo does: the row's `title` names it, its
 `description` and `error` describe it. On its own (a filter in a toolbar), give it an `aria-label`. Every control writes
 in the screen's language (Persian numerals and month names on a Persian screen) unless you pass `locale`.
 

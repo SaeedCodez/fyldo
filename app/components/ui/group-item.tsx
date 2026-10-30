@@ -1,4 +1,4 @@
-import { forwardRef, useId, type CSSProperties, type ReactElement, type ReactNode } from 'react';
+import { createContext, forwardRef, useId, type CSSProperties, type ReactElement, type ReactNode } from 'react';
 import { _n, sprintf } from '../../i18n';
 import { Icon } from '../../icons/Icon';
 import { cn } from '../../lib/cn';
@@ -54,6 +54,9 @@ export interface GroupItemInternalProps extends GroupItemProps {
  * summary; the handle and the actions sit above it so they stay their own buttons, and a click anywhere else in the
  * header (the chevron too) opens or closes the item. The body holds the sub-fields, 20 padding, 16 apart.
  */
+/** Inside a Group Item's body: a Setting Row there draws Figma's "Input" anatomy (SettingRow's `item`). */
+export const InGroupItem = createContext(false);
+
 export const GroupItem = forwardRef<HTMLDivElement, GroupItemInternalProps>(function GroupItem(
   {
     title,
@@ -180,7 +183,7 @@ export const GroupItem = forwardRef<HTMLDivElement, GroupItemInternalProps>(func
           data-slot="fy-group-item-body"
           className="fy:border-t fy:border-border-subtle fy:p-5"
         >
-          {children}
+          <InGroupItem.Provider value={true}>{children}</InGroupItem.Provider>
         </div>
       ) : null}
     </div>

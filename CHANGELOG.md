@@ -4,6 +4,11 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Fixed
+
+- **`ui.SettingRow` inside a `ui.GroupItem`** (or a `ui.GroupList` item) draws as a sub-field again: no padding or divider, the description under the control, `field` as `stacked`. The API freeze took `variant="item"` out of the SDK with no replacement; it now follows from where the row is. Found by trying beta.7 on Pelk.
+- **`npm run i18n`** no longer picks up strings from `build/`, `e2e/` or `.claude/`: `make-pot`'s `--include` matches at any depth.
+
 ## [1.0.0-beta.7] - 2026-10-30
 
 ### Added
