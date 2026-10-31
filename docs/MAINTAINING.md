@@ -46,6 +46,7 @@ Do **not** use `figma_export_tokens`: it can return a stale cache.
 | `fyldo.php`, `src/` | PHP library (`Fyldo\V1`, PHP 7.4+): config API, fields, sanitize/validate, REST, admin screen |
 | `app/` | React app (Base UI + Tailwind v4): components in `app/components/ui`, shell in `app/components/fyldo` |
 | `demo/` | Demo dashboard, loaded only when Fyldo is installed as a plugin |
+| `examples/` | One small plugin per install mode (drop-in, Composer, Strauss, Requires Plugins) for developers to copy; never shipped, tested in CI |
 | `languages/` | `.pot`, Persian `fyldo-fa_IR.po` (+ generated `.mo`/`.json`) |
 | `tests/php`, `tests/js`, `e2e/` | PHPUnit, Vitest, Playwright (`e2e/harness` = no WordPress, `e2e/wp` = real WordPress) |
 | `app/sdk-types.ts`, `tests/types/` | The module SDK's public types: `npm run build` bundles them into `assets/dist/fyldo-sdk.d.ts` (shipped; `tools/types/build.ts`) and type-checks the sample modules in `tests/types` against it. A component's props are public API, so a prop type from a new package must be inlined there |
@@ -98,6 +99,7 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
    in `CHANGELOG.md` under `## [x.y.z] - YYYY-MM-DD`. Run `npm run i18n` if strings changed. Open a PR, wait for green CI, merge.
    The **Loader contract (old tags)** job and the upgrade spec (`e2e/wp/upgrade.spec.ts`, in the Playwright on wp-env job)
    must be green; both pick up a new tag by themselves (nothing to list or update).
+   `examples/` must keep working too: CI builds each example plugin from the current tree and tests it (`e2e/wp/examples.spec.ts`), so a change to the public API or the loading modes means updating the examples in the same PR.
 2. Tag the merged main:
    ```bash
    git checkout main && git pull && git tag vX.Y.Z && git push origin vX.Y.Z

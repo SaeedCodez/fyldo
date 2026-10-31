@@ -33,6 +33,8 @@ Unzip `fyldo.zip` into your plugin (you get `my-plugin/fyldo/`) and include it:
 require_once __DIR__ . '/fyldo/fyldo.php';   // then the same Fyldo::create() code as above, on `init`
 ```
 
+Example: [examples/acme-example-dropin](examples/acme-example-dropin) (with an `uninstall.php`).
+
 ### 3. Composer
 
 ```bash
@@ -45,6 +47,8 @@ Until Fyldo is on Packagist, add the repository first: `composer config reposito
 require_once __DIR__ . '/vendor/autoload.php';   // Composer only loads fyldo.php; there is no PSR-4 map on purpose
 // then the same Fyldo::create() code as above, on `init`
 ```
+
+Example: [examples/acme-example-composer](examples/acme-example-composer). All four examples are listed in [examples/README.md](examples/README.md) and tested in CI.
 
 ## Config reference
 
@@ -311,7 +315,7 @@ Fyldo **sanitizes** values when they are saved; it does not **escape** them for 
 ## Coexistence and Strauss
 
 - **Coexistence.** Any number of plugins may bundle Fyldo. The first copy loaded defines a tiny frozen `Loader`; every copy registers, and on `plugins_loaded` the **highest eligible `1.x`** wins and serves all consumers. So a plugin's bundled `1.0` may run on `1.4` from another plugin: inside a major, Fyldo follows strict semver. Options, REST routes, hooks, handles and DOM ids all derive from your slug, and one Fyldo screen per admin page keeps styles isolated both ways. A future `V2` lives beside `V1` with nothing shared.
-- **Strauss (full isolation).** If you want no negotiation at all and a pinned version, re-prefix Fyldo into your own namespace with [Strauss](https://github.com/BrianHenryIE/strauss). Add `"extra": { "strauss": { "namespace_prefix": "Acme\\Vendor\\", "classmap_prefix": "Acme_Vendor_", "constant_prefix": "ACME_VENDOR_", "packages": [ "fyldo/fyldo" ], "delete_vendor_packages": true, "update_call_sites": false } }`, then `use Acme\Vendor\Fyldo\V1\Fyldo;`. A prefixed copy never negotiates with unprefixed ones, but its slug must still be unique on the site. The exact, tested configuration is in [docs/ARCHITECTURE.md §7](docs/ARCHITECTURE.md#7-strauss-optional-full-isolation--exact-configuration).
+- **Strauss (full isolation).** If you want no negotiation at all and a pinned version, re-prefix Fyldo into your own namespace with [Strauss](https://github.com/BrianHenryIE/strauss). Add `"extra": { "strauss": { "namespace_prefix": "Acme\\Vendor\\", "classmap_prefix": "Acme_Vendor_", "constant_prefix": "ACME_VENDOR_", "packages": [ "fyldo/fyldo" ], "delete_vendor_packages": true, "update_call_sites": false } }`, then `use Acme\Vendor\Fyldo\V1\Fyldo;`. A prefixed copy never negotiates with unprefixed ones, but its slug must still be unique on the site. The exact, tested configuration is in [docs/ARCHITECTURE.md §7](docs/ARCHITECTURE.md#7-strauss-optional-full-isolation--exact-configuration), and a working plugin that uses it is [examples/acme-example-strauss](examples/acme-example-strauss).
 
 ## Contributing
 

@@ -11,10 +11,9 @@
  * spec and restored after it; acme-upgrade is mapped by .wp-env.json but only active here. WP-CLI runs in wp-env's cli
  * container, on the same database.
  */
-import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { probe, readConfig, settingsUrl } from './helpers';
+import { probe, readConfig, settingsUrl, wp, wpJson } from './helpers';
 
 const SLUG = 'acme-upgrade';
 const NS = 'fyldo-acme-upgrade/v1';
@@ -33,26 +32,6 @@ const SAVED = {
   launch: '2026-11-05',
   buttons: [{ label: 'Docs' }, { label: 'Shop' }],
 };
-
-/** WP-CLI in wp-env's cli container (the arguments after `--` reach `wp` untouched). */
-function wp(...args: string[]): string {
-  return execFileSync('npx', ['wp-env', 'run', 'cli', '--', 'wp', ...args], {
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-}
-
-/** `wp … --format=json`, parsed (the last line that is JSON: wp-env may print around it). */
-function wpJson<T = unknown>(...args: string[]): T {
-  const output = wp(...args, '--format=json');
-  const line = output
-    .split('\n')
-    .map((l) => l.trim())
-    .reverse()
-    .find((l) => /^[[{"]/.test(l));
-  if (line === undefined) throw new Error(`No JSON from wp ${args.join(' ')}:\n${output}`);
-  return JSON.parse(line) as T;
-}
 
 async function screenConfig(
   page: Page,
