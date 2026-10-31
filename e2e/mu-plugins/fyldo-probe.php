@@ -20,7 +20,7 @@ add_action(
 				'callback'            => static function () {
 					$state = array();
 					// Test-only literals: every namespace the fixtures may define.
-					foreach ( array( 'Fyldo\\V1', 'Fyldo\\V2', 'Omega\\Vendor\\Fyldo\\V1' ) as $ns ) {
+					foreach ( array( 'Fyldo\\V1', 'Fyldo\\V2', 'Omega\\Vendor\\Fyldo\\V1', 'Acme\\Vendor\\Fyldo\\V1' ) as $ns ) {
 						$loader = $ns . '\\Bootstrap\\Loader';
 						if ( ! class_exists( $loader, false ) ) {
 							continue;

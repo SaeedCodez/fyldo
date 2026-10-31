@@ -12,7 +12,12 @@
   ],
   "mappings": {
     "wp-content/mu-plugins": "./e2e/mu-plugins",
-    "wp-content/plugins/acme-upgrade": "./e2e/.generated/plugins/acme-upgrade"
+    "wp-content/plugins/acme-upgrade": "./e2e/.generated/plugins/acme-upgrade",
+    "wp-content/plugins/acme-example-dropin": "./e2e/.generated/plugins/acme-example-dropin",
+    "wp-content/plugins/acme-example-composer": "./e2e/.generated/plugins/acme-example-composer",
+    "wp-content/plugins/acme-example-strauss": "./e2e/.generated/plugins/acme-example-strauss",
+    "wp-content/plugins/acme-example-requires": "./e2e/.generated/plugins/acme-example-requires",
+    "wp-content/plugins/fyldo": "./e2e/.generated/plugins/fyldo"
   },
   "config": {
     "WP_DEBUG": true,

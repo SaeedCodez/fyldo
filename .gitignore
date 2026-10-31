@@ -1,6 +1,7 @@
 node_modules/
 vendor/
 vendor-prefixed/
+/examples/acme-example-dropin/fyldo/
 build/
 assets/dist/
 e2e/.generated/
