@@ -4,8 +4,13 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-01
+
+First stable release. Inside 1.x the public API only grows: what is public, and how a deprecation works, is in [docs/ARCHITECTURE.md §3.2](docs/ARCHITECTURE.md) and [docs/MAINTAINING.md](docs/MAINTAINING.md).
+
 ### Added
 
+- **Packagist**: `composer require fyldo/fyldo` works with no extra repository.
 - **Example plugins** in `examples/`, one per way of installing Fyldo (drop-in with `uninstall.php`, Composer, Strauss, `Requires Plugins`), each tested on a real WordPress in CI (`e2e/wp/examples.spec.ts`) and never shipped. `composer.json` now names the right `homepage` and has `support` URLs.
 
 ## [1.0.0-beta.8] - 2026-10-30
@@ -208,6 +213,7 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.0]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0
 [1.0.0-beta.8]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.8
 [1.0.0-beta.7]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.7
 [1.0.0-beta.6]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.6
