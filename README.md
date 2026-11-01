@@ -2,7 +2,7 @@
 
 A settings-page framework for WordPress plugin developers. Declare **pages → sections → fields** in PHP; Fyldo renders a React admin UI (Vercel/Geist look, English + Persian/RTL) and sanitizes, validates and saves the values through the REST API.
 
-> **Status: `1.0.0-beta.5`.** Feature-complete for 1.0, API not yet frozen. Requires PHP 7.4+ and WordPress 6.5+. Not published on wordpress.org. Version history: [CHANGELOG.md](CHANGELOG.md).
+> **Status: `1.0.0`.** Inside 1.x the public API only grows. Requires PHP 7.4+ and WordPress 6.5+. Not published on wordpress.org. Version history: [CHANGELOG.md](CHANGELOG.md).
 
 **Contents:** [Install](#install) · [Config reference](#config-reference) · [Coexistence and Strauss](#coexistence-and-strauss) · [Contributing](#contributing) · [فارسی](#فارسی)
 
@@ -41,7 +41,7 @@ Example: [examples/acme-example-dropin](examples/acme-example-dropin) (with an `
 composer require fyldo/fyldo
 ```
 
-Until Fyldo is on Packagist, add the repository first: `composer config repositories.fyldo vcs https://github.com/SaeedCodez/fyldo`. Release tags carry the prebuilt assets (`main` does not).
+Release tags carry the prebuilt assets (`main` does not).
 
 ```php
 require_once __DIR__ . '/vendor/autoload.php';   // Composer only loads fyldo.php; there is no PSR-4 map on purpose
@@ -336,7 +336,7 @@ Releases: bump the version (`fyldo.php`, `package.json`), add a `CHANGELOG.md` e
 
 Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهندگان افزونه‌های وردپرس است. **صفحه‌ها ← بخش‌ها ← فیلدها** را در PHP تعریف می‌کنید؛ Fyldo رابط کاربری React (با پشتیبانی کامل از فارسی و راست‌به‌چپ) را می‌سازد و مقادیر را از طریق REST API پاک‌سازی، اعتبارسنجی و ذخیره می‌کند.
 
-> **وضعیت: `1.0.0-beta.5`.** از نظر امکانات برای 1.0 کامل است، اما API هنوز قطعی نشده. به PHP 7.4+ و وردپرس 6.5+ نیاز دارد. در wordpress.org منتشر نشده است.
+> **وضعیت: `1.0.0`.** در نسخه‌های 1.x، API عمومی فقط گسترش پیدا می‌کند. به PHP 7.4+ و وردپرس 6.5+ نیاز دارد. در wordpress.org منتشر نشده است.
 
 ### نصب
 
@@ -351,7 +351,7 @@ Fyldo یک چارچوب صفحهٔ تنظیمات برای توسعه‌دهند
    ```bash
    composer require fyldo/fyldo
    ```
-   تا وقتی Fyldo در Packagist نیست، مخزن را اضافه کنید: `composer config repositories.fyldo vcs https://github.com/SaeedCodez/fyldo`. سپس `require_once __DIR__ . '/vendor/autoload.php';`.
+   سپس `require_once __DIR__ . '/vendor/autoload.php';`.
 
 ### مرجع پیکربندی (خلاصه)
 

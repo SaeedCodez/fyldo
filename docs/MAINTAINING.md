@@ -106,7 +106,7 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
    ```
 3. `release.yml` runs the full CI, builds `fyldo.zip`, moves the tag to a release commit that contains the built assets
    (for Composer; `main` never gets them) and creates the GitHub Release. A version with a `-` suffix (`-beta.3`) is marked pre-release.
-4. Packagist picks up the tag automatically once the package is registered there (packagist.org → Submit → the GitHub repo URL).
+4. Packagist picks up the tag through the repository's webhook (`packagist.org/api/github`). The tag moves once, so check that `https://repo.packagist.org/p2/fyldo/fyldo.json` shows the release commit for the new version; if not, press **Update** on the package's Packagist page.
    Not published on wordpress.org (decision O9).
 
 Versioning (O8): semver. Before `1.0.0` the API may still change. From `1.0.0` on, breaking changes (renamed options, a

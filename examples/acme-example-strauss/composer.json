@@ -3,11 +3,8 @@
   "description": "A Fyldo settings screen, Fyldo prefixed into the plugin's own namespace with Strauss.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
-  "repositories": [
-    { "type": "vcs", "url": "https://github.com/SaeedCodez/fyldo" }
-  ],
   "require": {
-    "fyldo/fyldo": "^1.0@beta"
+    "fyldo/fyldo": "^1.0"
   },
   "require-dev": {
     "brianhenryie/strauss": "^0.30"
