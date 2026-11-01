@@ -10,7 +10,11 @@
     "admin",
     "react"
   ],
-  "homepage": "https://github.com/fyldo/fyldo",
+  "homepage": "https://github.com/SaeedCodez/fyldo",
+  "support": {
+    "issues": "https://github.com/SaeedCodez/fyldo/issues",
+    "source": "https://github.com/SaeedCodez/fyldo"
+  },
   "require": {
     "php": ">=7.4"
   },

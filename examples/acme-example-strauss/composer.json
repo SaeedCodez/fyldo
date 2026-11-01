@@ -1,0 +1,38 @@
+{
+  "name": "acme/example-strauss",
+  "description": "A Fyldo settings screen, Fyldo prefixed into the plugin's own namespace with Strauss.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/SaeedCodez/fyldo" }
+  ],
+  "require": {
+    "fyldo/fyldo": "^1.0@beta"
+  },
+  "require-dev": {
+    "brianhenryie/strauss": "^0.30"
+  },
+  "extra": {
+    "strauss": {
+      "target_directory": "vendor-prefixed",
+      "namespace_prefix": "Acme\\Vendor\\",
+      "classmap_prefix": "Acme_Vendor_",
+      "constant_prefix": "ACME_VENDOR_",
+      "packages": [ "fyldo/fyldo" ],
+      "update_call_sites": false,
+      "delete_vendor_packages": true,
+      "exclude_from_prefix": { "file_patterns": [ "/^psr.*$/" ] }
+    }
+  },
+  "scripts": {
+    "prefix-namespaces": [
+      "@php vendor/bin/strauss",
+      "@composer dump-autoload"
+    ],
+    "post-install-cmd": [ "@prefix-namespaces" ],
+    "post-update-cmd": [ "@prefix-namespaces" ]
+  },
+  "autoload": {
+    "classmap": [ "vendor-prefixed/" ]
+  }
+}

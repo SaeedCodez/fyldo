@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import type { APIRequestContext, Page } from '@playwright/test';
 
 export const settingsUrl = (slug: string, extra = ''): string => `/wp-admin/options-general.php?page=${slug}${extra}`;
@@ -52,4 +53,24 @@ export async function resetData(request: APIRequestContext): Promise<void> {
   const nonce = await restNonce(request);
   const response = await request.post('/index.php?rest_route=/fyldo-probe/v1/reset', { headers: { 'X-WP-Nonce': nonce } });
   if (!response.ok()) throw new Error(`reset failed: ${response.status()}`);
+}
+
+/** WP-CLI in wp-env's cli container, on the same database (the arguments after `--` reach `wp` untouched). */
+export function wp(...args: string[]): string {
+  return execFileSync('npx', ['wp-env', 'run', 'cli', '--', 'wp', ...args], {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+/** `wp … --format=json`, parsed (the last line that is JSON: wp-env may print around it). */
+export function wpJson<T = unknown>(...args: string[]): T {
+  const output = wp(...args, '--format=json');
+  const line = output
+    .split('\n')
+    .map((l) => l.trim())
+    .reverse()
+    .find((l) => /^[[{"]/.test(l));
+  if (line === undefined) throw new Error(`No JSON from wp ${args.join(' ')}:\n${output}`);
+  return JSON.parse(line) as T;
 }

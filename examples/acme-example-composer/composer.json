@@ -1,0 +1,12 @@
+{
+  "name": "acme/example-composer",
+  "description": "A Fyldo settings screen, Fyldo installed with Composer.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "repositories": [
+    { "type": "vcs", "url": "https://github.com/SaeedCodez/fyldo" }
+  ],
+  "require": {
+    "fyldo/fyldo": "^1.0@beta"
+  }
+}

@@ -4,6 +4,10 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+### Added
+
+- **Example plugins** in `examples/`, one per way of installing Fyldo (drop-in with `uninstall.php`, Composer, Strauss, `Requires Plugins`), each tested on a real WordPress in CI (`e2e/wp/examples.spec.ts`) and never shipped. `composer.json` now names the right `homepage` and has `support` URLs.
+
 ## [1.0.0-beta.8] - 2026-10-30
 
 ### Fixed

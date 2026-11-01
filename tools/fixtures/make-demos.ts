@@ -11,10 +11,13 @@
  *
  * Plus the upgrade fixture (e2e/wp/upgrade.spec.ts), outside DEMOS: `acme-upgrade` bundles the newest released 1.x tag
  * lower than fyldo.php AND the current tree; see makeUpgradeFixture().
+ *
+ * Plus the example plugins (examples/, e2e/wp/examples.spec.ts), one per install mode, built from the CURRENT tree:
+ * see makeExampleFixtures().
  */
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -91,7 +94,25 @@ function ensureStrauss(): string {
   return phar;
 }
 
-function strauss(pluginDir: string, version: string): void {
+/** The Strauss settings of the `acme-omega` demo (the example plugin reads its own from examples/acme-example-strauss). */
+const OMEGA_STRAUSS = {
+  target_directory: 'vendor-prefixed',
+  namespace_prefix: 'Omega\\Vendor\\',
+  classmap_prefix: 'Omega_Vendor_',
+  constant_prefix: 'OMEGA_VENDOR_',
+  packages: ['fyldo/fyldo'],
+  update_call_sites: false,
+  delete_vendor_packages: true,
+};
+
+/** Composer's normalised form of a version, as far as Strauss reads it: 1.0.0-beta.8 → 1.0.0.0-beta8. */
+function normalizedVersion(version: string): string {
+  const parts = /^(\d+\.\d+\.\d+)(?:-([A-Za-z]+)\.?(\d*))?$/.exec(version);
+  if (!parts) throw new Error(`Not a semantic version: ${version}`);
+  return `${parts[1]}.0${parts[2] ? `-${parts[2]}${parts[3]}` : ''}`;
+}
+
+function strauss(pluginDir: string, version: string, name = 'omega/plugin', config: object = OMEGA_STRAUSS): void {
   const work = resolve(out, 'strauss-work');
   rmSync(work, { recursive: true, force: true });
   const pkg = resolve(work, 'vendor/fyldo/fyldo');
@@ -101,25 +122,7 @@ function strauss(pluginDir: string, version: string): void {
 
   writeFileSync(
     resolve(work, 'composer.json'),
-    JSON.stringify(
-      {
-        name: 'omega/plugin',
-        require: { 'fyldo/fyldo': version },
-        extra: {
-          strauss: {
-            target_directory: 'vendor-prefixed',
-            namespace_prefix: 'Omega\\Vendor\\',
-            classmap_prefix: 'Omega_Vendor_',
-            constant_prefix: 'OMEGA_VENDOR_',
-            packages: ['fyldo/fyldo'],
-            update_call_sites: false,
-            delete_vendor_packages: true,
-          },
-        },
-      },
-      null,
-      2,
-    ),
+    JSON.stringify({ name, require: { 'fyldo/fyldo': version }, extra: { strauss: config } }, null, 2),
   );
   mkdirSync(resolve(work, 'vendor/composer'), { recursive: true });
   writeFileSync(
@@ -129,7 +132,7 @@ function strauss(pluginDir: string, version: string): void {
         {
           name: 'fyldo/fyldo',
           version,
-          version_normalized: `${version}.0`,
+          version_normalized: normalizedVersion(version),
           type: 'library',
           'install-path': '../fyldo/fyldo',
           autoload: { files: ['fyldo.php'] },
@@ -351,6 +354,72 @@ function makeUpgradeFixture(plugins: string): void {
   console.log(`fixtures: acme-upgrade bundles Fyldo ${from} (${tag}) and ${current}`);
 }
 
+/** The example plugins' own files, without what a developer's own build leaves in the folder. */
+function copyExample(plugins: string, name: string): string {
+  const from = resolve(root, 'examples', name);
+  const dir = resolve(plugins, name);
+  rmSync(dir, { recursive: true, force: true });
+  mkdirSync(dir, { recursive: true });
+  const built = ['fyldo', 'vendor', 'vendor-prefixed', 'composer.lock'];
+  cpSync(from, dir, { recursive: true, filter: (src) => !built.includes(relative(from, src).split(sep)[0] ?? '') });
+  return dir;
+}
+
+/**
+ * The composer example: `composer install` against a `path` repository holding a copy of the current tree, in place of the
+ * VCS repository the example commits (Fyldo's tags are not the current tree). Only the generated copy is changed.
+ */
+function composerInstall(dir: string, version: string): void {
+  try {
+    execFileSync('composer', ['--version'], { stdio: 'pipe' });
+  } catch {
+    throw new Error('Composer is needed to build the composer example (it is preinstalled on GitHub runners).');
+  }
+  const work = resolve(out, 'composer-work');
+  rmSync(work, { recursive: true, force: true });
+  copyRuntime(work);
+  // A path repository takes its version from composer.json (the real one comes from the git tag).
+  const packageFile = resolve(work, 'composer.json');
+  const pkg = JSON.parse(readFileSync(packageFile, 'utf8')) as Record<string, unknown>;
+  writeFileSync(packageFile, JSON.stringify({ ...pkg, version }, null, 2));
+
+  const manifestFile = resolve(dir, 'composer.json');
+  const manifest = JSON.parse(readFileSync(manifestFile, 'utf8')) as Record<string, unknown>;
+  manifest.repositories = [{ type: 'path', url: work, options: { symlink: false } }, { 'packagist.org': false }];
+  writeFileSync(manifestFile, JSON.stringify(manifest, null, 2));
+
+  execFileSync('composer', ['install', '--no-dev', '--no-interaction', '--no-progress'], { cwd: dir, stdio: 'pipe' });
+  rmSync(work, { recursive: true, force: true });
+}
+
+/**
+ * The example plugins (examples/, e2e/wp/examples.spec.ts), one per install mode, each running the CURRENT tree:
+ *   acme-example-dropin     the runtime tree copied into fyldo/
+ *   acme-example-composer   vendor/ from `composer install` (composerInstall())
+ *   acme-example-strauss    vendor-prefixed/ from the Strauss step, with the example's own Strauss settings
+ *   acme-example-requires   no copy, plus the current tree as the plugin `fyldo` (the folder name is the slug WordPress resolves)
+ * .wp-env.json maps them without activating them; the spec runs each one alone with the shared demos deactivated.
+ */
+function makeExampleFixtures(plugins: string): void {
+  const version = headerVersion(resolve(root, 'fyldo.php'));
+
+  copyRuntime(resolve(copyExample(plugins, 'acme-example-dropin'), 'fyldo'));
+
+  composerInstall(copyExample(plugins, 'acme-example-composer'), version);
+
+  const straussDir = copyExample(plugins, 'acme-example-strauss');
+  const composer = JSON.parse(readFileSync(resolve(straussDir, 'composer.json'), 'utf8')) as { extra: { strauss: object } };
+  strauss(straussDir, version, 'acme/example-strauss', composer.extra.strauss);
+
+  copyExample(plugins, 'acme-example-requires');
+  const fyldo = resolve(plugins, 'fyldo');
+  rmSync(fyldo, { recursive: true, force: true });
+  mkdirSync(fyldo, { recursive: true });
+  copyRuntime(fyldo);
+
+  console.log(`fixtures: 4 example plugins and the plugin fyldo (${version}) in e2e/.generated/plugins`);
+}
+
 export function makeDemos(): void {
   const plugins = resolve(out, 'plugins');
   mkdirSync(plugins, { recursive: true });
@@ -390,6 +459,7 @@ export function makeDemos(): void {
   console.log(`fixtures: ${DEMOS.length} demo plugins in e2e/.generated/plugins`);
 
   makeUpgradeFixture(plugins);
+  makeExampleFixtures(plugins);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) makeDemos();
