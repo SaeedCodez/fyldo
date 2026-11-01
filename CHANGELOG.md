@@ -4,6 +4,16 @@ All notable changes to Fyldo are documented here. The format follows [Keep a Cha
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-01
+
+### Fixed
+
+- **Composer install**: the `1.0.0` package on Packagist has no built assets, so its screens cannot load. Packagist read the tag before the release workflow moved it to the release commit, and it does not read a moved tag. Use `1.0.1`; the `1.0.0` ZIP is not affected.
+
+### Changed
+
+- **Releases** start from the Release workflow on main (`gh workflow run release.yml -f version=X.Y.Z`), which pushes the tag once, on the release commit.
+
 ## [1.0.0] - 2026-11-01
 
 First stable release. Inside 1.x the public API only grows: what is public, and how a deprecation works, is in [docs/ARCHITECTURE.md §3.2](docs/ARCHITECTURE.md) and [docs/MAINTAINING.md](docs/MAINTAINING.md).
@@ -213,6 +223,7 @@ First public beta. The API is feature-complete for 1.0 but not yet frozen: expec
 
 WordPress version matrix, multisite, forced-colors styling and a manual screen-reader pass are planned after 1.0. Fyldo is not published on wordpress.org.
 
+[1.0.1]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.1
 [1.0.0]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0
 [1.0.0-beta.8]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.8
 [1.0.0-beta.7]: https://github.com/SaeedCodez/fyldo/releases/tag/v1.0.0-beta.7

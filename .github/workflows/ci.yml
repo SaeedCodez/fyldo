@@ -7,7 +7,7 @@ on:
   workflow_call: # the release workflow runs the full CI first
 
 concurrency:
-  group: ci-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }} # the release run's CI on main is apart from main's own
   cancel-in-progress: true
 
 jobs:

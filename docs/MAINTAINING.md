@@ -53,7 +53,7 @@ Do **not** use `figma_export_tokens`: it can return a stale cache.
 | `tests/fixtures/validation-cases.json` | Shared validation cases, run by both PHPUnit and Vitest |
 | `tools/` | Token generator, icon codegen, Figma export, release build |
 | `docs/` | `ARCHITECTURE.md` (design, storage contract, decisions), `component-map.md`, `design-spec.md`, `default-history.md` (how `default_before` keeps old defaults across plugin updates), `custom-fields.md` (the `custom` field: a developer's own React or JS control), `custom-pages.md` (custom pages and forms: screens a plugin draws itself, records it stores itself) |
-| `.github/workflows/` | `ci.yml` (every PR/push), `release.yml` (on a `v*` tag) |
+| `.github/workflows/` | `ci.yml` (every PR/push), `release.yml` (run by hand on main) |
 
 ## 4. Playbooks
 
@@ -100,13 +100,13 @@ Heavy components (repeater, date picker, anything with complex keyboard behaviou
    The **Loader contract (old tags)** job and the upgrade spec (`e2e/wp/upgrade.spec.ts`, in the Playwright on wp-env job)
    must be green; both pick up a new tag by themselves (nothing to list or update).
    `examples/` must keep working too: CI builds each example plugin from the current tree and tests it (`e2e/wp/examples.spec.ts`), so a change to the public API or the loading modes means updating the examples in the same PR.
-2. Tag the merged main:
+2. Start the release from the merged main (do not push a tag yourself):
    ```bash
-   git checkout main && git pull && git tag vX.Y.Z && git push origin vX.Y.Z
+   gh workflow run release.yml -f version=X.Y.Z
    ```
-3. `release.yml` runs the full CI, builds `fyldo.zip`, moves the tag to a release commit that contains the built assets
+3. `release.yml` runs the full CI, builds `fyldo.zip`, pushes the tag `vX.Y.Z` on a release commit that contains the built assets
    (for Composer; `main` never gets them) and creates the GitHub Release. A version with a `-` suffix (`-beta.3`) is marked pre-release.
-4. Packagist picks up the tag through the repository's webhook (`packagist.org/api/github`). The tag moves once, so check that `https://repo.packagist.org/p2/fyldo/fyldo.json` shows the release commit for the new version; if not, press **Update** on the package's Packagist page.
+4. Packagist picks up the tag through the repository's webhook (`packagist.org/api/github`). Packagist keeps the first commit it reads for a tag, and neither a webhook nor its **Update** button changes that, so a tag must never move: a bad release is fixed with a new version.
    Not published on wordpress.org (decision O9).
 
 Versioning (O8): semver. Before `1.0.0` the API may still change. From `1.0.0` on, breaking changes (renamed options, a

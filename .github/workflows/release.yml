@@ -1,10 +1,14 @@
 name: Release
 
-# Push a tag `vX.Y.Z` (or `vX.Y.Z-beta.1`) on a merged commit of main. The workflow runs the full CI, builds the ZIP,
-# turns the tag into the Composer release commit and creates the GitHub Release. See docs/ARCHITECTURE.md §5.
+# Run by hand on main: `gh workflow run release.yml -f version=X.Y.Z` (or `X.Y.Z-beta.1`). The workflow runs the full CI,
+# builds the ZIP, pushes the tag on the Composer release commit and creates the GitHub Release. See docs/ARCHITECTURE.md §5.
 on:
-  push:
-    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to release, without the v (it must match fyldo.php)
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -12,6 +16,7 @@ permissions:
 jobs:
   ci:
     name: CI
+    if: github.ref == 'refs/heads/main'
     uses: ./.github/workflows/ci.yml
 
   release:
@@ -19,9 +24,9 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     permissions:
-      contents: write # move the tag to the release commit, create the Release
+      contents: write # push the tag on the release commit, create the Release
     env:
-      TAG: ${{ github.ref_name }}
+      TAG: v${{ inputs.version }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
@@ -38,24 +43,24 @@ jobs:
       - name: Build the release artifacts
         run: npm run release -- --tag "$TAG"
 
-      # Packagist serves `git archive` of a tag, which cannot hold untracked files. So the tag moves to a release commit
-      # on top of the source commit that force-adds the built assets; `main` never gets them. Pushes made with the
-      # workflow token do not start another workflow run. A re-run finds the assets already committed and skips this.
+      # Packagist serves `git archive` of a tag, which cannot hold untracked files. So the tag goes on a release commit
+      # on top of the source commit that force-adds the built assets; `main` never gets them. The tag is pushed once and
+      # never moves: Packagist keeps the first commit it reads for a tag. A re-run finds the tag pushed and skips this.
       - name: Composer release commit and tag
         run: |
-          if git cat-file -e "HEAD:assets/dist/app.js" 2>/dev/null; then
-            echo "The tag already points at a release commit."
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
+            echo "$TAG is already pushed."
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add -f assets/dist languages
             git commit -m "Release ${TAG} (prebuilt assets)"
-            git tag -f "$TAG"
+            git tag "$TAG"
             # The tag's tree must be exactly what the ZIP contains.
             mkdir "$RUNNER_TEMP/archive"
             git archive "$TAG" | tar -x -C "$RUNNER_TEMP/archive"
             diff -r build/fyldo "$RUNNER_TEMP/archive"
-            git push --force origin "refs/tags/$TAG"
+            git push origin "refs/tags/$TAG"
           fi
 
       - name: GitHub Release
