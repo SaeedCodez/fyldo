@@ -1,0 +1,1 @@
+export default [["path",{"d":"M15 22H9c-2.5 0-4-1.8-4-4V6c0-2.2 1.5-4 4-4h6c2.5 0 4 1.8 4 4v12c0 2.2-1.5 4-4 4ZM5 16.01h14M2 4v16M22 4v16","stroke":"currentColor","strokeWidth":"1.5","strokeLinecap":"round","strokeLinejoin":"round"}]];
